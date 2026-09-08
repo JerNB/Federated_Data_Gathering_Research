@@ -4,6 +4,11 @@ Research code over the MovieLens `ml-latest` dataset (snapshot generated
 2023-07-20: 33,832,162 ratings and 2,328,315 tag applications across 86,537
 movies from 330,975 users).
 
+## Project documents
+
+1. [Data management](docs/data_management.md)
+2. [Research direction](docs/research_direction.md)
+
 ## Data setup
 
 The raw dataset is **not stored in this repository**. `ratings.csv` (890 MB) and
