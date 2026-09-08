@@ -32,19 +32,6 @@ Expected layout after fetching:
 | `ml-latest/genome-tags.csv` | 18 KB |
 | `ml-latest/README.txt` | 9.6 KB |
 
-### Upstream mirror
-
-The original source is
-`https://files.grouplens.org/datasets/movielens/ml-latest.zip`. It still serves
-this exact snapshot (`Last-Modified: Thu, 20 Jul 2023 20:20:32 GMT`), but as of
-2026-09 that host presents an **expired TLS certificate** (expired 2026-08-28),
-so automated HTTPS downloads from it fail. That is why the release asset is the
-primary source.
-
-Note also that `ml-latest` is a *development* dataset which GroupLens
-regenerates over time — the upstream URL is not a stable identifier for a
-specific snapshot. `data/ml-latest.sha256` is what pins this project to one.
-
 ## Dataset license and citation
 
 The MovieLens license permits redistribution, including transformations, as long
