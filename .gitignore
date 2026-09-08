@@ -1,0 +1,16 @@
+# Raw dataset: fetched with scripts/fetch_data.sh, never committed.
+# ratings.csv (890 MB) and genome-scores.csv (497 MB) exceed GitHub's
+# 100 MiB per-file hard limit.
+/ml-latest/
+/ml-latest.zip
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
