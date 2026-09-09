@@ -73,7 +73,6 @@ history, reviews, merges, and reverts.
 
 ## Data rules
 
-
 1. The original source snapshot is immutable.
 2. Separated package files preserve source bytes.
 3. Every package refresh must pass the chunk manifest verification.
