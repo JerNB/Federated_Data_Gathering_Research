@@ -10,6 +10,7 @@
     "status",
     "created_at_utc",
     "code_commit",
+    "worktree_clean",
     "dataset",
     "configuration",
     "formula",
@@ -38,6 +39,13 @@
     "code_commit": {
       "type": "string",
       "minLength": 7
+    },
+    "worktree_clean": {
+      "type": "boolean"
+    },
+    "worktree_status": {
+      "type": "array",
+      "items": {"type": "string"}
     },
     "dataset": {
       "type": "object",
@@ -93,10 +101,20 @@
     "support_report": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["support_check_passed", "eligible_item_count", "per_cluster"],
+      "required": ["support_check_passed", "eligible_item_count_by_cluster", "eligible_item_intersection_count", "per_cluster"],
       "properties": {
         "support_check_passed": {"type": "boolean"},
-        "eligible_item_count": {"type": "integer", "minimum": 0},
+        "eligible_item_count_by_cluster": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "eligible_item_intersection_count": {"type": "integer", "minimum": 0},
+        "observed_item_count": {"type": "integer", "minimum": 0},
+        "items_below_support_threshold_by_cluster": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "items_with_zero_cluster_support": {"type": "integer", "minimum": 0},
         "per_cluster": {
           "type": "array",
           "items": {
@@ -109,7 +127,9 @@
               "user_count": {"type": "integer", "minimum": 0},
               "item_count": {"type": "integer", "minimum": 0},
               "support_minimum": {"type": "integer", "minimum": 0},
-              "support_median": {"type": "number", "minimum": 0}
+              "support_median": {"type": "number", "minimum": 0},
+              "support_p10": {"type": "number", "minimum": 0},
+              "support_p90": {"type": "number", "minimum": 0}
             }
           }
         }

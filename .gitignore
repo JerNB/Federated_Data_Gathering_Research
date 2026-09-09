@@ -6,6 +6,9 @@
 *.zip
 *.sqlite
 *.parquet
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
 
 # Python
 __pycache__/

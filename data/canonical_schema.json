@@ -20,7 +20,8 @@
         "movie_id": "INTEGER PRIMARY KEY",
         "imdb_id": "TEXT",
         "tmdb_id": "TEXT"
-      }
+      },
+      "indexes": ["links_imdb_id"]
     },
     "ratings": {
       "columns": {
@@ -29,7 +30,7 @@
         "rating": "REAL NOT NULL",
         "timestamp": "INTEGER NOT NULL"
       },
-      "indexes": ["ratings_user_id", "ratings_movie_id", "ratings_timestamp"]
+      "indexes": ["ratings_movie_id", "ratings_user_timestamp"]
     },
     "tags": {
       "columns": {

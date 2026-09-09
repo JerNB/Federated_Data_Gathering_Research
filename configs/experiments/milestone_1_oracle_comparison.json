@@ -30,7 +30,7 @@
       "seed": 20260909,
       "eligibility_source": "pilot_train_only",
       "minimum_train_interactions_per_user": 20,
-      "method": "deterministic_uniform_sample_without_replacement"
+      "method": "stratified_by_oracle_cluster"
     },
     "oracle_clusters": {
       "count": 4,
@@ -40,28 +40,34 @@
     "support_filter": {
       "source": "pilot_train_only",
       "selector": "scripts/select_pilot_catalog.py",
+      "catalog_mode": "per_cluster_support_filtered",
       "minimum_interactions_per_item_per_cluster": 20,
-      "minimum_eligible_items": 1000,
-      "selection_rule": "retain an item only when every oracle cluster has at least the minimum training support",
+      "minimum_eligible_items_per_cluster": 1000,
+      "selection_rule": "retain an item separately for each cluster when that cluster has the minimum training support",
+      "secondary_catalog": "all_cluster_intersection",
       "failure_action": "increase the selected user population or reduce the cluster count before interpreting model differences",
       "required_report": [
         "selected_user_count",
+        "selected_user_count_by_cluster",
         "selected_rating_count",
-        "eligible_item_count",
+        "eligible_item_count_by_cluster",
+        "eligible_item_intersection_count",
         "per_cluster_rating_count",
         "per_cluster_user_count",
         "per_cluster_item_support_minimum",
         "per_cluster_item_support_median",
         "per_cluster_item_support_p10",
         "per_cluster_item_support_p90",
-        "items_below_support_threshold",
+        "items_below_support_threshold_by_cluster",
         "items_with_zero_cluster_support"
       ]
     },
     "evaluation": {
-      "sweep_user_population": "fixed_selected_users",
-      "sweep_catalog": "support_filtered_training_catalog",
-      "same_catalog_for_all_variants": true,
+      "sweep_user_population": "fixed_stratified_selected_users",
+      "sweep_catalog": "per_cluster_support_filtered_training_catalog",
+      "same_catalog_for_all_variants_within_each_cluster": true,
+      "secondary_sweep_catalog": "all_cluster_intersection",
+      "secondary_catalog_is_not_primary": true,
       "full_snapshot_confirmation": {
         "run_after": "pilot_protocol_and_hyperparameters_are_frozen",
         "user_population": "all_eligible_users",
@@ -116,8 +122,10 @@
     "training_time_seconds"
   ],
   "interpretation_gate": {
-    "support_must_pass_before_comparison": true,
-    "null_result_rule": "A small global to oracle difference is interpretable only after every cluster has adequate item support and capacity controls pass.",
+    "support_must_pass_for_every_cluster": true,
+    "primary_catalog": "per_cluster_support_filtered",
+    "secondary_catalog": "all_cluster_intersection",
+    "null_result_rule": "A small global to oracle difference is interpretable only after every cluster has an adequate support catalog and capacity controls pass.",
     "next_step_if_oracle_gain_is_meaningful": "add deployable routing methods after the oracle to feasible gap is measured",
     "next_step_if_oracle_gain_is_small_after_support_controls": "reassess the specialization premise before adding more model variants"
   }

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import sqlite3
 import json
 import sys
 from pathlib import Path
@@ -53,6 +54,51 @@ def read_checksum_manifest(path: Path) -> dict[str, str]:
             fail(f"invalid SHA 256 value on line {line_number} in {path}")
         checksums[relative_path] = checksum
     return checksums
+
+def validate_canonical_schema(database_path: Path) -> None:
+    schema = load_json(ROOT / "data/canonical_schema.json")
+    connection = sqlite3.connect(database_path)
+    try:
+        table_names = {
+            row[0]
+            for row in connection.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table'"
+            )
+        }
+        for table_name, specification in schema["tables"].items():
+            if specification.get("optional") and table_name not in table_names:
+                continue
+            if table_name not in table_names:
+                fail(f"canonical database is missing table {table_name}")
+            column_info = {
+                row[1]: (row[2].upper(), row[5])
+                for row in connection.execute(f"PRAGMA table_info({table_name})")
+            }
+            for column_name, declaration in specification["columns"].items():
+                if column_name not in column_info:
+                    fail(f"canonical database is missing {table_name}.{column_name}")
+                expected_type = declaration.split()[0].upper()
+                actual_type, primary_key = column_info[column_name]
+                if actual_type != expected_type:
+                    fail(
+                        f"canonical database type mismatch for {table_name}.{column_name}: "
+                        f"{actual_type} versus {expected_type}"
+                    )
+                if "PRIMARY KEY" in declaration and primary_key == 0:
+                    fail(f"canonical database is missing the primary key on {table_name}.{column_name}")
+            actual_indexes = {
+                row[0]
+                for row in connection.execute(
+                    "SELECT name FROM sqlite_master WHERE type = 'index' AND tbl_name = ?",
+                    (table_name,),
+                )
+            }
+            for index_name in specification.get("indexes", []):
+                if index_name not in actual_indexes:
+                    fail(f"canonical database is missing index {index_name}")
+    finally:
+        connection.close()
+    print(f"valid: canonical schema {database_path}")
 
 
 def validate_manifest(manifest_path: Path, dataset_root: Path | None, verify_files: bool) -> None:
@@ -120,9 +166,15 @@ def validate_experiment(config_path: Path, manifest_path: Path) -> None:
         fail("cluster and catalog construction must use training only data")
 
     pilot = config["pilot"]
+    oracle_clusters = pilot["oracle_clusters"]
+    cluster_count = oracle_clusters["count"]
     user_selection = pilot["user_selection"]
-    if user_selection["target_count"] != 5000:
-        fail("the pilot must use the fixed 5000 user target")
+    if user_selection["target_count"] <= 0:
+        fail("pilot user target must be positive")
+    if user_selection["target_count"] % cluster_count != 0:
+        fail("pilot user target must divide evenly across oracle clusters")
+    if user_selection["method"] != "stratified_by_oracle_cluster":
+        fail("pilot user selection must be stratified by oracle cluster")
     if user_selection["eligibility_source"] != "pilot_train_only":
         fail("pilot user eligibility must use pilot training data")
     support = pilot["support_filter"]
@@ -133,15 +185,21 @@ def validate_experiment(config_path: Path, manifest_path: Path) -> None:
         fail(f"support selector not found: {selector_path}")
     if support["minimum_interactions_per_item_per_cluster"] <= 0:
         fail("support threshold must be positive")
-    if support["minimum_eligible_items"] <= 0:
-        fail("minimum eligible item count must be positive")
+    if support["minimum_eligible_items_per_cluster"] <= 0:
+        fail("minimum eligible item count per cluster must be positive")
+    if support["secondary_catalog"] != "all_cluster_intersection":
+        fail("the all cluster intersection must remain a secondary catalog")
     if not support["required_report"]:
         fail("support report fields are required")
     evaluation = pilot["evaluation"]
-    if evaluation["sweep_catalog"] != "support_filtered_training_catalog":
-        fail("the pilot sweep must use the support filtered training catalog")
-    if evaluation["same_catalog_for_all_variants"] is not True:
-        fail("all pilot model variants must use the same catalog")
+    if evaluation["sweep_catalog"] != "per_cluster_support_filtered_training_catalog":
+        fail("the pilot sweep must use each cluster support filtered catalog")
+    if evaluation["same_catalog_for_all_variants_within_each_cluster"] is not True:
+        fail("both variants must share each cluster catalog")
+    if evaluation["secondary_sweep_catalog"] != "all_cluster_intersection":
+        fail("the all cluster intersection must remain a secondary sweep catalog")
+    if evaluation["secondary_catalog_is_not_primary"] is not True:
+        fail("the all cluster intersection cannot be the primary sweep catalog")
     confirmation = evaluation["full_snapshot_confirmation"]
     if confirmation["catalog"] != "all_declared_items":
         fail("final confirmation must use the full declared catalog")
@@ -157,6 +215,8 @@ def validate_experiment(config_path: Path, manifest_path: Path) -> None:
         fail("global_mf must have no routing")
     if oracle_variant["routing"] != "oracle_assignment":
         fail("oracle_clustered_mf must use declared oracle assignment")
+    if oracle_variant["cluster_count"] != cluster_count:
+        fail("oracle cluster count must match the pilot cluster count")
     if config["capacity"]["primary_policy"] != "equal_total_trainable_parameter_budget":
         fail("the primary capacity policy must match total trainable parameters")
     if not config["metrics"]:
@@ -189,6 +249,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="hash every raw file listed in the manifest",
     )
+    parser.add_argument(
+        "--canonical-db",
+        type=Path,
+        default=None,
+        help="optional derived SQLite package to check against data/canonical_schema.json",
+    )
     return parser.parse_args()
 
 
@@ -201,6 +267,8 @@ def main() -> int:
         fail("--verify-files requires --dataset-root")
     validate_manifest(manifest_path, dataset_root, args.verify_files)
     validate_experiment(config_path, manifest_path)
+    if args.canonical_db:
+        validate_canonical_schema(ROOT / args.canonical_db)
     print("validation passed")
     return 0
 

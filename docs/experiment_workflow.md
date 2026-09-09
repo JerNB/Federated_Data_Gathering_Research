@@ -33,6 +33,7 @@ reports/
 results/
   exported_metrics.csv
   run_registry.jsonl
+  run_records/
 ```
 
 Large data packages, checkpoints, and temporary files remain outside Git. The current ignore rules reserve `data_working/`, `runs/`, and `artifacts/` for these outputs.
@@ -44,17 +45,20 @@ Every run records:
 1. A stable run identifier.
 2. The experiment identifier.
 3. The code commit.
-4. The dataset identifier and version.
-5. The SHA 256 digest of the dataset manifest.
-6. The configuration path and digest.
-7. The model variant.
-8. The objective and score formula.
-9. The split method and seed.
-10. The selected user count and catalog count.
-11. The support report for every oracle cluster.
-12. Parameters, metrics, artifacts, and notes.
+4. Whether the worktree was clean when the record was created.
+5. The worktree status when it was not clean.
+6. The dataset identifier and version.
+7. The SHA 256 digest of the dataset manifest.
+8. The configuration path and digest.
+9. The model variant.
+10. The objective and score formula.
+11. The split method and seed.
+12. The selected user count and catalog counts.
+13. The support report for every oracle cluster.
+14. Parameters, metrics, artifacts, and notes.
 
-The schema is in `experiments/run_record.schema.json`.
+The full record is stored in `results/run_records/`. Its compact summary is appended to the tracked `results/run_registry.jsonl` file. The schema is in `experiments/run_record.schema.json`.
+
 
 ## Shared tracking
 
@@ -74,6 +78,14 @@ The repository remains independent of the tracker. A self hosted MLflow service 
 
 A completed result without its dataset version, formula, split, support report, or code commit is incomplete.
 
+Create a planned record with:
+
+```sh
+scripts/create_run_record.py --variant global_mf --run-id milestone_1_global_plan
+```
+
+The command writes one full record and appends one summary line. Completed records require a clean worktree, metrics, and a passed support report.
+
 ## First comparison
 
 The first experiment contains exactly two model variants:
@@ -81,13 +93,13 @@ The first experiment contains exactly two model variants:
 1. Global matrix factorization with local user factors and one shared item factor matrix.
 2. Capacity matched oracle clustered matrix factorization with local user factors and one item factor matrix per declared cluster.
 
-The pilot uses a fixed deterministic user sample. Its catalog is restricted using training only support. An item enters the pilot catalog only when every oracle cluster has at least the configured minimum number of training interactions for that item.
+The pilot uses a fixed deterministic user sample stratified across oracle clusters. Each cluster receives its configured support filtered catalog. Both model variants use the same catalog within each cluster. The all cluster intersection is retained as a secondary catalog for reporting.
 
-The support report includes item support statistics for every cluster. If the support condition fails, increase the user population or reduce the cluster count before interpreting a model difference. Full population and full catalog confirmation happens after the pilot protocol and hyperparameters are frozen.
+The support report includes item support statistics for every cluster, each cluster catalog size, and the all cluster intersection size. If any cluster fails its support condition, increase the user population or reduce the cluster count before interpreting a model difference. Full population and full catalog confirmation happens after the pilot protocol and hyperparameters are frozen.
 
 Routing methods are later model variants. They do not enter the first comparison.
 
-The support selection tool is `scripts/select_pilot_catalog.py`. It reads a training only interaction file and oracle cluster map, selects the fixed user population, filters the catalog, and writes the per cluster support report. A failed support check stops interpretation of the comparison.
+The support selection tool is `scripts/select_pilot_catalog.py`. It reads a training only interaction file and oracle cluster map, selects equal user counts per cluster, filters the catalog separately for each cluster, and writes the per cluster support report.
 
 ## Public report contents
 

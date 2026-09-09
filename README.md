@@ -30,7 +30,7 @@ scripts/build_dataset_sqlite.py --input ml-latest --output data_working/movielen
 
 See [`data/README.md`](data/README.md) for the public package layout and data rules.
 
-The script downloads a single 356 MB archive from this repository's
+The fetch script downloads a single 356 MB archive from this repository's
 [`data-2023-07-20` release](https://github.com/JerNB/Federated_Data_Gathering_Research/releases/tag/data-2023-07-20)
 and checks every extracted file against `data/ml-latest.sha256`, so a truncated
 or substituted download fails loudly instead of silently skewing results.

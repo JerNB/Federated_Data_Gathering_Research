@@ -75,11 +75,11 @@ The first comparison contains exactly two model variants:
 1. Global matrix factorization with local user factors and one shared item factor matrix.
 2. Capacity matched oracle clustered matrix factorization with local user factors and one item factor matrix per declared cluster.
 
-The pilot uses a fixed deterministic target of 5,000 users. User eligibility and item support are computed from pilot training data only. The initial oracle setting uses four clusters. An item enters the pilot catalog only when every cluster has at least 20 training interactions for that item. The pilot requires at least 1,000 eligible items.
+The pilot uses a fixed deterministic target of 5,000 users stratified equally across the four oracle clusters. User eligibility and item support are computed from pilot training data only. Each cluster receives its own catalog containing items with at least 20 training interactions in that cluster. The all cluster intersection is retained as a secondary catalog.
 
-The support report records selected users, ratings, eligible items, per cluster users and ratings, minimum support, median support, support percentiles, and items below the threshold. If the support requirement fails, increase the selected user population or reduce the cluster count before interpreting a model difference. A small gain or loss from an under supported catalog is a data power result.
+The support report records selected users by cluster, ratings by cluster, eligible item counts by cluster, the all cluster intersection count, minimum support, median support, support percentiles, and items below the threshold. If any cluster fails its minimum eligible item count, increase the selected user population or reduce the cluster count before interpreting a model difference. A small gain or loss from an under supported catalog is a data power result.
 
-The sweep uses the fixed selected users and the support filtered training catalog, with the same catalog for both variants. Full population and full catalog confirmation starts after the protocol and hyperparameters are frozen. Later model variants, including deployable routing, follow only after the oracle to global difference is measured under these controls.
+The sweep uses the fixed selected users and each cluster's support filtered training catalog. Both variants use the same catalog within each cluster. Full population and full catalog confirmation starts after the protocol and hyperparameters are frozen. Later model variants, including deployable routing, follow only after the oracle to global difference is measured under these controls.
 
 Use model variant, comparison, condition, milestone, run, and result table as the standard terms for experiment planning.
 

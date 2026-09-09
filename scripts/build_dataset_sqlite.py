@@ -173,9 +173,8 @@ def create_schema(connection: sqlite3.Connection, include_genome: bool) -> None:
 def add_indexes(connection: sqlite3.Connection, include_genome: bool) -> None:
     connection.executescript(
         """
-        CREATE INDEX ratings_user_id ON ratings (user_id);
         CREATE INDEX ratings_movie_id ON ratings (movie_id);
-        CREATE INDEX ratings_timestamp ON ratings (timestamp);
+        CREATE INDEX ratings_user_timestamp ON ratings (user_id, timestamp);
         CREATE INDEX links_imdb_id ON links (imdb_id);
         CREATE INDEX tags_user_id ON tags (user_id);
         CREATE INDEX tags_movie_id ON tags (movie_id);
@@ -322,7 +321,7 @@ def main() -> int:
         finally:
             connection.close()
         os.replace(temporary_path, args.output)
-    except Exception:
+    except BaseException:
         temporary_path.unlink(missing_ok=True)
         raise
 
