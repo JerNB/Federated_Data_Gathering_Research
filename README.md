@@ -7,7 +7,9 @@ movies from 330,975 users).
 ## Project documents
 
 1. [Data management](docs/data_management.md)
-2. [Research direction](docs/research_direction.md)
+2. [Experiment workflow](docs/experiment_workflow.md)
+3. [Research direction](docs/research_direction.md)
+4. [Dataset manifest](data/dataset_manifest.json)
 
 ## Data setup
 
@@ -19,6 +21,14 @@ a 1.5 GB working tree would make every clone expensive.
 scripts/fetch_data.sh            # download + verify into ./ml-latest
 scripts/fetch_data.sh --verify   # re-verify an existing ./ml-latest
 ```
+
+Build an indexed local package for modeling with:
+
+```sh
+scripts/build_dataset_sqlite.py --input ml-latest --output data_working/movielens.sqlite --manifest data/dataset_manifest.json
+```
+
+See [`data/README.md`](data/README.md) for the public package layout and data rules.
 
 The script downloads a single 356 MB archive from this repository's
 [`data-2023-07-20` release](https://github.com/JerNB/Federated_Data_Gathering_Research/releases/tag/data-2023-07-20)

@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JerNB/Federated_Data_Gathering_Research/schemas/run_record.schema.json",
+  "title": "Federated research run record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "experiment_id",
+    "status",
+    "created_at_utc",
+    "code_commit",
+    "dataset",
+    "configuration",
+    "formula",
+    "split",
+    "support_report",
+    "metrics",
+    "artifacts"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_]+$"
+    },
+    "experiment_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_]+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["planned", "running", "completed", "failed"]
+    },
+    "created_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "code_commit": {
+      "type": "string",
+      "minLength": 7
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_path", "dataset_id", "version", "manifest_sha256"],
+      "properties": {
+        "manifest_path": {"type": "string"},
+        "dataset_id": {"type": "string"},
+        "version": {"type": "string"},
+        "manifest_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "variant_id"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "variant_id": {"type": "string"}
+      }
+    },
+    "formula": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective_id", "score", "loss"],
+      "properties": {
+        "objective_id": {"type": "string"},
+        "score": {"type": "string"},
+        "loss": {"type": "string"}
+      }
+    },
+    "split": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "seed", "train_fraction", "validation_fraction", "test_fraction"],
+      "properties": {
+        "method": {"type": "string"},
+        "seed": {"type": "integer"},
+        "train_fraction": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "validation_fraction": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "test_fraction": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "user_count": {"type": "integer", "minimum": 1},
+        "catalog_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "support_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["support_check_passed", "eligible_item_count", "per_cluster"],
+      "properties": {
+        "support_check_passed": {"type": "boolean"},
+        "eligible_item_count": {"type": "integer", "minimum": 0},
+        "per_cluster": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["cluster_id", "rating_count", "user_count", "item_count", "support_minimum", "support_median"],
+            "properties": {
+              "cluster_id": {"type": "integer", "minimum": 0},
+              "rating_count": {"type": "integer", "minimum": 0},
+              "user_count": {"type": "integer", "minimum": 0},
+              "item_count": {"type": "integer", "minimum": 0},
+              "support_minimum": {"type": "integer", "minimum": 0},
+              "support_median": {"type": "number", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": {"type": "number"}
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "uri"],
+        "properties": {
+          "name": {"type": "string"},
+          "uri": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "completed"}}},
+      "then": {"properties": {"metrics": {"minProperties": 1}}}
+    }
+  ]
+}

@@ -4,10 +4,19 @@
 /ml-latest/
 /ml-latest.zip
 *.zip
+*.sqlite
+*.parquet
 
 # Python
 __pycache__/
 *.py[cod]
+
+# Derived dataset packages and experiment artifacts
+/data_working/
+/runs/
+/artifacts/
+/wandb/
+/mlruns/
 .venv/
 venv/
 .ipynb_checkpoints/

@@ -66,6 +66,23 @@ The study should separate exploitable preference structure from exposure, popula
 
    Start with a controlled empirical study. A method that estimates routing from privacy permitted signals can follow after the oracle to feasible gap is measured.
 
+## Execution order
+
+The data and experiment registry comes before model implementation. The source snapshot is frozen through `data/dataset_manifest.json`. A canonical working package, experiment configuration, objective formula, run record, and milestone report are separate tracked objects.
+
+The first comparison contains exactly two model variants:
+
+1. Global matrix factorization with local user factors and one shared item factor matrix.
+2. Capacity matched oracle clustered matrix factorization with local user factors and one item factor matrix per declared cluster.
+
+The pilot uses a fixed deterministic target of 5,000 users. User eligibility and item support are computed from pilot training data only. The initial oracle setting uses four clusters. An item enters the pilot catalog only when every cluster has at least 20 training interactions for that item. The pilot requires at least 1,000 eligible items.
+
+The support report records selected users, ratings, eligible items, per cluster users and ratings, minimum support, median support, support percentiles, and items below the threshold. If the support requirement fails, increase the selected user population or reduce the cluster count before interpreting a model difference. A small gain or loss from an under supported catalog is a data power result.
+
+The sweep uses the fixed selected users and the support filtered training catalog, with the same catalog for both variants. Full population and full catalog confirmation starts after the protocol and hyperparameters are frozen. Later model variants, including deployable routing, follow only after the oracle to global difference is measured under these controls.
+
+Use model variant, comparison, condition, milestone, run, and result table as the standard terms for experiment planning.
+
 ## Important risks
 
 1. **Global matrix factorization is already personalized.** Local user factors may absorb much of the preference variation. The specialist component must be defined precisely.
@@ -96,12 +113,14 @@ A conservative version compares global and oracle clustered matrix factorization
 
 ## First implementation artifacts
 
-1. A model ownership specification.
-2. A training only split specification.
-3. A synthetic heterogeneity generator with separate control axes.
-4. A baseline configuration for global, local, clustered, and soft models.
-5. An evaluation report with macro user and worst group results.
-6. A short privacy and license statement.
+1. A source dataset manifest and canonical package contract.
+2. A model ownership specification.
+3. A training only split and support selection specification.
+4. A synthetic heterogeneity generator with separate control axes.
+5. A first comparison configuration for global and oracle clustered models.
+6. A run record schema with formulas, dataset versions, metrics, and artifacts.
+7. An evaluation report with macro user and worst group results.
+8. A short privacy and license statement.
 
 ## Selected references
 

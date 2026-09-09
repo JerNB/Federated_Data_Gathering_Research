@@ -1,0 +1,22 @@
+{
+  "objective_id": "implicit_mf_bpr_v1",
+  "task": "implicit_feedback_ranking",
+  "positive_rule": "rating >= 4.0",
+  "negative_rule": "sampled from items without a positive training interaction for the user",
+  "score_symbol": "s(u,i)",
+  "loss": "L = -log sigmoid(s(u,i_positive) - s(u,i_negative)) + lambda * regularization",
+  "regularization": "0.5 * (||p_u||^2 + ||q_i_positive||^2 + ||q_i_negative||^2)",
+  "global_score": "s_global(u,i) = p_u^T q_i",
+  "oracle_clustered_score": "s_oracle(u,i) = p_u^T q_i,g(u)",
+  "required_reporting": [
+    "positive threshold",
+    "negative sampling seed",
+    "negative samples per positive",
+    "latent dimension",
+    "regularization coefficient",
+    "optimizer",
+    "learning rate",
+    "local update count",
+    "global round count"
+  ]
+}

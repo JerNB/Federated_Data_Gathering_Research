@@ -1,0 +1,124 @@
+{
+  "experiment_id": "milestone_1_oracle_comparison",
+  "title": "Global matrix factorization versus capacity matched oracle clustered item models",
+  "status": "planned",
+  "data_construction": "controlled_preference_generation_from_declared_source_snapshot",
+  "dataset": {
+    "manifest": "data/dataset_manifest.json",
+    "dataset_id": "movielens_ml_latest",
+    "version": "2023-07-20",
+    "source_snapshot_is_fixed": true
+  },
+  "objective": {
+    "path": "configs/objectives/implicit_mf_bpr.json",
+    "objective_id": "implicit_mf_bpr_v1"
+  },
+  "split": {
+    "unit": "user",
+    "method": "chronological_user_level",
+    "train_fraction": 0.8,
+    "validation_fraction": 0.1,
+    "test_fraction": 0.1,
+    "cluster_assignment_source": "declared_oracle_generator",
+    "cluster_fit_source": "training_only",
+    "catalog_fit_source": "training_only",
+    "negative_sampling_source": "training_only"
+  },
+  "pilot": {
+    "user_selection": {
+      "target_count": 5000,
+      "seed": 20260909,
+      "eligibility_source": "pilot_train_only",
+      "minimum_train_interactions_per_user": 20,
+      "method": "deterministic_uniform_sample_without_replacement"
+    },
+    "oracle_clusters": {
+      "count": 4,
+      "assignment_source": "controlled_generator",
+      "labels_are_available_only_for_oracle_comparison": true
+    },
+    "support_filter": {
+      "source": "pilot_train_only",
+      "selector": "scripts/select_pilot_catalog.py",
+      "minimum_interactions_per_item_per_cluster": 20,
+      "minimum_eligible_items": 1000,
+      "selection_rule": "retain an item only when every oracle cluster has at least the minimum training support",
+      "failure_action": "increase the selected user population or reduce the cluster count before interpreting model differences",
+      "required_report": [
+        "selected_user_count",
+        "selected_rating_count",
+        "eligible_item_count",
+        "per_cluster_rating_count",
+        "per_cluster_user_count",
+        "per_cluster_item_support_minimum",
+        "per_cluster_item_support_median",
+        "per_cluster_item_support_p10",
+        "per_cluster_item_support_p90",
+        "items_below_support_threshold",
+        "items_with_zero_cluster_support"
+      ]
+    },
+    "evaluation": {
+      "sweep_user_population": "fixed_selected_users",
+      "sweep_catalog": "support_filtered_training_catalog",
+      "same_catalog_for_all_variants": true,
+      "full_snapshot_confirmation": {
+        "run_after": "pilot_protocol_and_hyperparameters_are_frozen",
+        "user_population": "all_eligible_users",
+        "catalog": "all_declared_items",
+        "primary_ranking_evaluation": "full_catalog"
+      }
+    }
+  },
+  "model_variants": [
+    {
+      "variant_id": "global_mf",
+      "description": "Local user factors with one shared item factor matrix",
+      "routing": "none",
+      "score_formula": "s_global(u,i) = p_u^T q_i"
+    },
+    {
+      "variant_id": "oracle_clustered_mf",
+      "description": "Local user factors with an oracle selected cluster item factor matrix",
+      "routing": "oracle_assignment",
+      "score_formula": "s_oracle(u,i) = p_u^T q_i,g(u)",
+      "cluster_count": 4
+    }
+  ],
+  "capacity": {
+    "primary_policy": "equal_total_trainable_parameter_budget",
+    "secondary_policy": "equal_per_client_inference_budget",
+    "dimension_selection": "solve latent dimensions before training from the declared parameter budget",
+    "required_report": [
+      "global_trainable_parameter_count",
+      "oracle_trainable_parameter_count",
+      "global_per_client_parameter_count",
+      "oracle_per_client_parameter_count",
+      "communication_bytes_per_round",
+      "local_compute_budget"
+    ]
+  },
+  "training_controls": {
+    "same_initialization_seed": true,
+    "same_round_count": true,
+    "same_client_update_budget": true,
+    "same_tuning_budget": true,
+    "same_early_stopping_rule": true
+  },
+  "metrics": [
+    "macro_user_ndcg_at_10",
+    "macro_user_recall_at_10",
+    "interaction_weighted_ndcg_at_10",
+    "worst_cluster_ndcg_at_10",
+    "long_tail_ndcg_at_10",
+    "training_loss",
+    "communication_bytes",
+    "training_time_seconds"
+  ],
+  "interpretation_gate": {
+    "support_must_pass_before_comparison": true,
+    "null_result_rule": "A small global to oracle difference is interpretable only after every cluster has adequate item support and capacity controls pass.",
+    "next_step_if_oracle_gain_is_meaningful": "add deployable routing methods after the oracle to feasible gap is measured",
+    "next_step_if_oracle_gain_is_small_after_support_controls": "reassess the specialization premise before adding more model variants"
+  }
+}
