@@ -15,6 +15,8 @@ A command can execute a run. The configuration and run record explain what the c
 
 ## Repository layout
 
+Tracked now:
+
 ```text
 configs/
   objectives/
@@ -27,13 +29,20 @@ data/
 experiments/
   run_record.schema.json
 
-reports/
-  milestone_1/
+results/
+  README.md
+  run_registry.jsonl
+```
 
+Created on first use or during later milestones:
+
+```text
 results/
   exported_metrics.csv
-  run_registry.jsonl
   run_records/
+
+reports/
+  milestone_1/
 ```
 
 Large data packages, checkpoints, and temporary files remain outside Git. The current ignore rules reserve `data_working/`, `runs/`, and `artifacts/` for these outputs.
@@ -84,7 +93,7 @@ Create a planned record with:
 scripts/create_run_record.py --variant global_mf --run-id milestone_1_global_plan
 ```
 
-The command writes one full record and appends one summary line. Completed records require a clean worktree, metrics, and a passed support report.
+The command writes one full record and appends one summary line. Reusing a run identifier with `--force` replaces the full record and appends a new timestamped lifecycle entry to the registry. Completed records require a clean worktree, metrics, and a passed support report.
 
 ## First comparison
 

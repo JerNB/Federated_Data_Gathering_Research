@@ -12,9 +12,9 @@ scripts/fetch_data.sh --verify
 The complete machine readable description is in `data/dataset_manifest.json`.
 The canonical SQLite schema is in `data/canonical_schema.json`.
 
-## Working package
+## Planned public package layout
 
-The target public registry is one versioned Kaggle Dataset. Each version will contain a data card, the source notice, checksums, and a reproducible transformation record.
+The local SQLite file is the working package. The target public registry is one versioned Kaggle Dataset. Each version will contain a data card, the source notice, checksums, and a reproducible transformation record.
 
 ```text
 raw/

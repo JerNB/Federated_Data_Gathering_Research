@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -61,19 +62,98 @@ def git_state() -> tuple[str, list[str]]:
         fail(f"cannot determine Git state: {exc}")
     return commit_result.stdout.strip(), status_result.stdout.splitlines()
 
+def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[str]:
+    errors: list[str] = []
+    expected = schema.get("type")
+    if "const" in schema and value != schema["const"]:
+        errors.append(f"{path}: expected constant {schema['const']!r}")
+    if "enum" in schema and value not in schema["enum"]:
+        errors.append(f"{path}: value {value!r} is not in the allowed enum")
+    if expected == "object":
+        if not isinstance(value, dict):
+            return [f"{path}: expected object"]
+        properties = schema.get("properties", {})
+        for required in schema.get("required", []):
+            if required not in value:
+                errors.append(f"{path}: missing required property {required!r}")
+        additional = schema.get("additionalProperties", True)
+        for key, child in value.items():
+            child_path = f"{path}.{key}"
+            if key in properties:
+                errors.extend(schema_errors(child, properties[key], child_path))
+            elif additional is False:
+                errors.append(f"{child_path}: additional property is not allowed")
+            elif isinstance(additional, dict):
+                errors.extend(schema_errors(child, additional, child_path))
+        if "minProperties" in schema and len(value) < schema["minProperties"]:
+            errors.append(f"{path}: expected at least {schema['minProperties']} properties")
+    elif expected == "array":
+        if not isinstance(value, list):
+            return [f"{path}: expected array"]
+        item_schema = schema.get("items")
+        if isinstance(item_schema, dict):
+            for index, item in enumerate(value):
+                errors.extend(schema_errors(item, item_schema, f"{path}[{index}]"))
+    elif expected == "string":
+        if not isinstance(value, str):
+            return [f"{path}: expected string"]
+        if "pattern" in schema and re.search(schema["pattern"], value) is None:
+            errors.append(f"{path}: value does not match the required pattern")
+    elif expected == "integer":
+        if not isinstance(value, int) or isinstance(value, bool):
+            return [f"{path}: expected integer"]
+    elif expected == "number":
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            return [f"{path}: expected number"]
+    elif expected == "boolean" and not isinstance(value, bool):
+        return [f"{path}: expected boolean"]
+    if "minimum" in schema and isinstance(value, (int, float)) and value < schema["minimum"]:
+        errors.append(f"{path}: value is below the minimum")
+    for branch in schema.get("allOf", []):
+        condition = branch.get("if")
+        if isinstance(condition, dict) and not schema_errors(value, condition, path):
+            errors.extend(schema_errors(value, branch.get("then", {}), path))
+    return errors
+
+
+def validate_record_schema(record: dict[str, Any]) -> None:
+    schema_path = ROOT / "experiments" / "run_record.schema.json"
+    schema = load_json(schema_path)
+    errors = schema_errors(record, schema)
+    if errors:
+        fail(
+            f"run record does not match {schema_path}:\n"
+            + "\n".join(f"  {error}" for error in errors)
+        )
+
+
+def read_support_report(path: Path) -> dict[str, Any]:
+    payload = read_json_object(path)
+    if "support_report" not in payload:
+        return payload
+    support_report = payload["support_report"]
+    if not isinstance(support_report, dict):
+        fail(f"support_report in {path} must be an object")
+    return support_report
+
+
+def validate_registry(path: Path) -> None:
+    if not path.exists():
+        return
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            summary = json.loads(line)
+        except json.JSONDecodeError as exc:
+            fail(f"invalid registry JSON on line {line_number}: {exc}")
+        if not isinstance(summary, dict) or not summary.get("run_id"):
+            fail(f"registry line {line_number} must contain a run_id")
+
 
 def append_registry(path: Path, summary: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    if path.exists():
-        for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-            if not line.strip():
-                continue
-            try:
-                previous = json.loads(line)
-            except json.JSONDecodeError as exc:
-                fail(f"invalid registry JSON on line {line_number}: {exc}")
-            if previous.get("run_id") == summary["run_id"]:
-                fail(f"run_id already exists in registry: {summary['run_id']}")
+    validate_registry(path)
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(summary, sort_keys=True) + "\n")
 
@@ -88,7 +168,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--registry", type=Path, default=Path("results/run_registry.jsonl"))
     parser.add_argument("--status", choices=["planned", "running", "completed", "failed"], default="planned")
     parser.add_argument("--metrics", type=Path, help="JSON object containing completed run metrics")
-    parser.add_argument("--support-report", type=Path, help="JSON object containing the support report")
+    parser.add_argument("--support-report", type=Path, help="JSON object or selector output containing the support report")
     parser.add_argument("--artifacts", type=Path, help="JSON array containing artifact records")
     parser.add_argument("--notes", action="append", default=[])
     parser.add_argument("--force", action="store_true")
@@ -103,6 +183,7 @@ def main() -> int:
     registry_path = repo_path(args.registry)
     if output_path.exists() and not args.force:
         fail(f"output exists: {output_path}; use --force to replace it")
+    validate_registry(registry_path)
 
     validate_experiment(config_path, manifest_path)
     config = load_json(config_path)
@@ -118,7 +199,7 @@ def main() -> int:
     metrics: dict[str, Any] = {}
     if args.metrics:
         metrics = read_json_object(repo_path(args.metrics))
-        if not all(isinstance(value, (int, float)) for value in metrics.values()):
+        if not all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in metrics.values()):
             fail("metrics must contain only numeric values")
     support_report: dict[str, Any] = {
         "support_check_passed": False,
@@ -127,7 +208,7 @@ def main() -> int:
         "per_cluster": [],
     }
     if args.support_report:
-        support_report = read_json_object(repo_path(args.support_report))
+        support_report = read_support_report(repo_path(args.support_report))
     artifacts: list[Any] = []
     if args.artifacts:
         value = read_json_value(repo_path(args.artifacts))
@@ -182,6 +263,7 @@ def main() -> int:
         "artifacts": artifacts,
         "notes": args.notes,
     }
+    validate_record_schema(record)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
     append_registry(
