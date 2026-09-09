@@ -93,6 +93,7 @@ def main() -> int:
         assert_success(result, "planned record")
         record = json.loads(record_path.read_text(encoding="utf-8"))
         assert record["support_report"] == selector_document["support_report"]
+        assert not schema_errors(record, schema), "valid assembled record was rejected"
 
         invalid_record = dict(record)
         invalid_record["bogus_extra"] = True
