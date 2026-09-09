@@ -13,6 +13,13 @@ from typing import Any
 
 from validate_experiment import ROOT, load_json, sha256_file, validate_experiment
 
+LIFECYCLE_TRANSITIONS: dict[str, set[str]] = {
+    "planned": {"running"},
+    "running": {"completed", "failed"},
+    "completed": set(),
+    "failed": set(),
+}
+
 
 def fail(message: str) -> None:
     raise SystemExit(f"error: {message}")
@@ -69,9 +76,20 @@ def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[s
         errors.append(f"{path}: expected constant {schema['const']!r}")
     if "enum" in schema and value not in schema["enum"]:
         errors.append(f"{path}: value {value!r} is not in the allowed enum")
-    if expected == "object":
-        if not isinstance(value, dict):
-            return [f"{path}: expected object"]
+    if expected == "object" and not isinstance(value, dict):
+        return errors + [f"{path}: expected object"]
+    if expected == "array" and not isinstance(value, list):
+        return errors + [f"{path}: expected array"]
+    if expected == "string" and not isinstance(value, str):
+        return errors + [f"{path}: expected string"]
+    if expected == "integer" and (not isinstance(value, int) or isinstance(value, bool)):
+        return errors + [f"{path}: expected integer"]
+    if expected == "number" and (not isinstance(value, (int, float)) or isinstance(value, bool)):
+        return errors + [f"{path}: expected number"]
+    if expected == "boolean" and not isinstance(value, bool):
+        return errors + [f"{path}: expected boolean"]
+
+    if isinstance(value, dict):
         properties = schema.get("properties", {})
         for required in schema.get("required", []):
             if required not in value:
@@ -87,28 +105,17 @@ def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[s
                 errors.extend(schema_errors(child, additional, child_path))
         if "minProperties" in schema and len(value) < schema["minProperties"]:
             errors.append(f"{path}: expected at least {schema['minProperties']} properties")
-    elif expected == "array":
-        if not isinstance(value, list):
-            return [f"{path}: expected array"]
+    if isinstance(value, list):
         item_schema = schema.get("items")
         if isinstance(item_schema, dict):
             for index, item in enumerate(value):
                 errors.extend(schema_errors(item, item_schema, f"{path}[{index}]"))
-    elif expected == "string":
-        if not isinstance(value, str):
-            return [f"{path}: expected string"]
-        if "pattern" in schema and re.search(schema["pattern"], value) is None:
+    if isinstance(value, str) and "pattern" in schema:
+        if re.search(schema["pattern"], value) is None:
             errors.append(f"{path}: value does not match the required pattern")
-    elif expected == "integer":
-        if not isinstance(value, int) or isinstance(value, bool):
-            return [f"{path}: expected integer"]
-    elif expected == "number":
-        if not isinstance(value, (int, float)) or isinstance(value, bool):
-            return [f"{path}: expected number"]
-    elif expected == "boolean" and not isinstance(value, bool):
-        return [f"{path}: expected boolean"]
-    if "minimum" in schema and isinstance(value, (int, float)) and value < schema["minimum"]:
-        errors.append(f"{path}: value is below the minimum")
+    if isinstance(value, (int, float)) and not isinstance(value, bool) and "minimum" in schema:
+        if value < schema["minimum"]:
+            errors.append(f"{path}: value is below the minimum")
     for branch in schema.get("allOf", []):
         condition = branch.get("if")
         if isinstance(condition, dict) and not schema_errors(value, condition, path):
@@ -137,9 +144,10 @@ def read_support_report(path: Path) -> dict[str, Any]:
     return support_report
 
 
-def validate_registry(path: Path) -> None:
+def read_registry(path: Path) -> dict[str, dict[str, Any]]:
+    entries: dict[str, dict[str, Any]] = {}
     if not path.exists():
-        return
+        return entries
     for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         if not line.strip():
             continue
@@ -147,13 +155,18 @@ def validate_registry(path: Path) -> None:
             summary = json.loads(line)
         except json.JSONDecodeError as exc:
             fail(f"invalid registry JSON on line {line_number}: {exc}")
-        if not isinstance(summary, dict) or not summary.get("run_id"):
-            fail(f"registry line {line_number} must contain a run_id")
+        if not isinstance(summary, dict):
+            fail(f"registry line {line_number} must contain an object")
+        for field in ("run_id", "status", "created_at_utc", "record_path"):
+            if not summary.get(field):
+                fail(f"registry line {line_number} must contain {field}")
+        entries[summary["run_id"]] = summary
+    return entries
 
 
 def append_registry(path: Path, summary: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    validate_registry(path)
+    read_registry(path)
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(summary, sort_keys=True) + "\n")
 
@@ -171,7 +184,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--support-report", type=Path, help="JSON object or selector output containing the support report")
     parser.add_argument("--artifacts", type=Path, help="JSON array containing artifact records")
     parser.add_argument("--notes", action="append", default=[])
-    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--force", action="store_true", help="allow a valid lifecycle transition for an existing run")
     return parser.parse_args()
 
 
@@ -181,9 +194,37 @@ def main() -> int:
     manifest_path = repo_path(args.manifest)
     output_path = repo_path(args.output) if args.output else ROOT / "results" / "run_records" / f"{args.run_id}.json"
     registry_path = repo_path(args.registry)
-    if output_path.exists() and not args.force:
-        fail(f"output exists: {output_path}; use --force to replace it")
-    validate_registry(registry_path)
+    registry_entries = read_registry(registry_path)
+    previous_summary = registry_entries.get(args.run_id)
+    existing_record = read_json_object(output_path) if output_path.exists() else None
+    if existing_record is not None:
+        if not args.force:
+            fail(f"output exists: {output_path}; use --force for a lifecycle transition")
+        if existing_record.get("run_id") != args.run_id:
+            fail(f"output belongs to a different run_id: {output_path}")
+    if previous_summary is None:
+        if existing_record is not None:
+            fail(f"output exists without a registry entry: {output_path}; repair the registry or choose a new output")
+    else:
+        if not args.force:
+            fail(f"run_id already exists in registry: {args.run_id}; use --force for a lifecycle transition")
+        if existing_record is None:
+            fail(f"registry entry has no full record: {previous_summary['record_path']}")
+        if previous_summary["record_path"] != display_path(output_path):
+            fail(
+                f"run_id {args.run_id} must reuse record path {previous_summary['record_path']}"
+            )
+        if existing_record.get("created_at_utc") != previous_summary["created_at_utc"]:
+            fail(f"full record timestamp disagrees with registry for {args.run_id}")
+        if existing_record.get("status") != previous_summary["status"]:
+            fail(f"full record status disagrees with registry for {args.run_id}")
+        previous_status = previous_summary["status"]
+        allowed_statuses = LIFECYCLE_TRANSITIONS.get(previous_status, set())
+        if args.status not in allowed_statuses:
+            fail(
+                f"invalid lifecycle transition for {args.run_id}: "
+                f"{previous_status} -> {args.status}"
+            )
 
     validate_experiment(config_path, manifest_path)
     config = load_json(config_path)
@@ -225,7 +266,9 @@ def main() -> int:
     if args.status == "completed" and not worktree_clean:
         fail("completed runs require a clean worktree")
 
-    created_at = datetime.now(timezone.utc).isoformat()
+    current_at = datetime.now(timezone.utc).isoformat()
+    created_at = previous_summary["created_at_utc"] if previous_summary else current_at
+    updated_at = current_at if previous_summary else None
     record = {
         "run_id": args.run_id,
         "experiment_id": config["experiment_id"],
@@ -263,25 +306,27 @@ def main() -> int:
         "artifacts": artifacts,
         "notes": args.notes,
     }
+    if updated_at is not None:
+        record["updated_at_utc"] = updated_at
     validate_record_schema(record)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
-    append_registry(
-        registry_path,
-        {
-            "run_id": args.run_id,
-            "experiment_id": config["experiment_id"],
-            "status": args.status,
-            "created_at_utc": created_at,
-            "code_commit": code_commit,
-            "worktree_clean": worktree_clean,
-            "dataset_id": manifest["dataset_id"],
-            "dataset_version": manifest["version"],
-            "variant_id": args.variant,
-            "metrics": metrics,
-            "record_path": display_path(output_path),
-        },
-    )
+    summary = {
+        "run_id": args.run_id,
+        "experiment_id": config["experiment_id"],
+        "status": args.status,
+        "created_at_utc": created_at,
+        "code_commit": code_commit,
+        "worktree_clean": worktree_clean,
+        "dataset_id": manifest["dataset_id"],
+        "dataset_version": manifest["version"],
+        "variant_id": args.variant,
+        "metrics": metrics,
+        "record_path": display_path(output_path),
+    }
+    if updated_at is not None:
+        summary["updated_at_utc"] = updated_at
+    append_registry(registry_path, summary)
     print(f"created {output_path}")
     print(f"appended {registry_path}")
     return 0

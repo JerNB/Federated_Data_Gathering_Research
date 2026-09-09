@@ -36,6 +36,10 @@
       "type": "string",
       "format": "date-time"
     },
+    "updated_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
     "code_commit": {
       "type": "string",
       "minLength": 7

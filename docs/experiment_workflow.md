@@ -93,7 +93,7 @@ Create a planned record with:
 scripts/create_run_record.py --variant global_mf --run-id milestone_1_global_plan
 ```
 
-The command writes one full record and appends one summary line. Reusing a run identifier with `--force` replaces the full record and appends a new timestamped lifecycle entry to the registry. Completed records require a clean worktree, metrics, and a passed support report.
+The command writes one full record and appends one summary line. Lifecycle updates require `--force` and must follow `planned` to `running` to `completed` or `failed`. Updates preserve `created_at_utc` and add `updated_at_utc`. Completed records require a clean worktree, metrics, and a passed support report.
 
 ## First comparison
 
