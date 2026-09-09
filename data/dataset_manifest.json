@@ -84,7 +84,6 @@
     "package_format": "byte_preserving_csv_chunks",
     "package_manifest": "data/chunk_manifest.json",
     "package_builder": "scripts/separate_dataset.py",
-    "editorial_path": "data/editorial",
     "rule": "The frozen source snapshot is separated into stable Git-tracked chunks without changing bytes."
   }
 }

@@ -64,10 +64,6 @@ data/raw/
   links.csv
   genome-tags.csv
   README.txt
-
-data/editorial/
-  movies.csv
-  links.csv
 ```
 
 ## Dataset license and citation

@@ -35,10 +35,6 @@ data/raw/
   links.csv
   genome-tags.csv
   README.txt
-
-data/editorial/
-  movies.csv
-  links.csv
 ```
 
 The chunk manifest is:
@@ -69,12 +65,14 @@ continuation rows, so the chunks reassemble exactly to the original file.
 
 ## Collaboration
 
-`data/raw/` is an immutable source mirror. Do not edit it.
-Edit small curated tables under `data/editorial/` through normal Git branches
-and pull requests. Git preserves their diffs, history, merges, and reverts.
-The raw package remains independently verifiable against the frozen source.
+`data/raw/` is the single Git-tracked package. To publish a changed dataset,
+prepare its complete input snapshot, regenerate the package and manifest with
+`scripts/separate_dataset.py --force`, and commit the resulting files. Do not
+normalize line endings or edit chunk boundaries by hand; Git preserves package
+history, reviews, merges, and reverts.
 
 ## Data rules
+
 
 1. The original source snapshot is immutable.
 2. Separated package files preserve source bytes.

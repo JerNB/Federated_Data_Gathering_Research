@@ -3,7 +3,7 @@
   "version": "1",
   "source_dataset_id": "movielens_ml_latest",
   "source_version": "2023-07-20",
-  "source_manifest_sha256": "d05991d970c1da3e00e43190fd7ec747329874cad8ea3d9df708ad370841c35e",
+  "source_manifest_sha256": "11ebd0466546139c06b80ebcca20a535a490a8f94d985a3fbd3f5c447bafdc0b",
   "output_root": "data/raw",
   "chunk_size_bytes": 83886080,
   "line_endings": "preserved",

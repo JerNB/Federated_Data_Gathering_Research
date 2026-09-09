@@ -27,7 +27,6 @@ data/
   ml-latest.sha256
   chunk_manifest.json
   raw/
-  editorial/
 
 experiments/
   run_record.schema.json
@@ -35,6 +34,7 @@ experiments/
 results/
   README.md
   run_registry.jsonl
+```
 
 Created on first use or during later milestones:
 

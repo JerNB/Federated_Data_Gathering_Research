@@ -56,24 +56,24 @@ Git from changing source line endings or attempting huge text diffs.
 ## Collaboration workflow
 
 1. Pull the latest Git branch.
-2. Edit small curated tables under `data/editorial/`.
-3. Run `python3 scripts/separate_dataset.py --verify` to check the immutable raw mirror.
-4. Commit the data change on a branch.
-5. Open a pull request.
+2. Prepare the complete input snapshot for the intended dataset version.
+3. Run the documented separation command with `--force`.
+4. Run `python3 scripts/separate_dataset.py --verify`.
+5. Commit the generated data package and open a pull request.
 6. Merge after review and validation.
 
-`data/raw/` is an immutable source mirror. Coworker edits belong in
-`data/editorial/`, where ordinary Git diffs and history remain useful.
+`data/raw/` is the single Git-tracked data package. The frozen upstream
+snapshot remains available from the dated release; Git history records every
+package change, review, merge, and revert.
 
 ## Files in Git
 
-1. `data/raw/` separated immutable CSV files.
-2. `data/editorial/` small curated tables.
-3. `data/chunk_manifest.json`.
-4. `data/dataset_manifest.json`.
-5. `data/ml-latest.sha256`.
-6. Separation and validation scripts.
-7. Experiment configurations and run records.
+1. `data/raw/` separated CSV files.
+2. `data/chunk_manifest.json`.
+3. `data/dataset_manifest.json`.
+4. `data/ml-latest.sha256`.
+5. Separation and validation scripts.
+6. Experiment configurations and run records.
 
 The ignored `ml-latest/` directory is only a local staging copy used to
 rebuild or independently verify the tracked package.

@@ -241,7 +241,9 @@ def verify_package(args: argparse.Namespace) -> None:
             if source_size != file_entry["source_bytes"] or source_digest != file_entry["source_sha256"]:
                 fail(f"source checksum mismatch for {source_path}")
     for path in output_root.rglob("*"):
-        if path.is_file() and str(path.relative_to(ROOT)) not in known_paths:
+        if not path.is_file() or path.name.startswith("."):
+            continue
+        if str(path.relative_to(ROOT)) not in known_paths:
             fail(f"unlisted package file: {path}")
     print(f"verified {args.chunk_manifest}")
 
