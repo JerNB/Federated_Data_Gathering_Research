@@ -95,6 +95,14 @@ scripts/create_run_record.py --variant global_mf --run-id milestone_1_global_pla
 
 The command writes one full record and appends one summary line. Lifecycle updates require `--force` and must follow `planned` to `running` to `completed` or `failed`. Updates preserve `created_at_utc` and add `updated_at_utc`. Completed records require a clean worktree, metrics, and a passed support report.
 
+Run the standard-library contract self-test with:
+
+```sh
+python3 scripts/selftest.py
+```
+
+It exercises selector composition, schema rejection, identity pinning, and lifecycle transitions.
+
 ## First comparison
 
 The first experiment contains exactly two model variants:

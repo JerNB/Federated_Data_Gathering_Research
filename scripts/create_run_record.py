@@ -19,6 +19,30 @@ LIFECYCLE_TRANSITIONS: dict[str, set[str]] = {
     "completed": set(),
     "failed": set(),
 }
+SUPPORTED_SCHEMA_KEYWORDS = frozenset(
+    {
+        "$id",
+        "$schema",
+        "additionalProperties",
+        "allOf",
+        "const",
+        "enum",
+        "exclusiveMaximum",
+        "exclusiveMinimum",
+        "format",
+        "if",
+        "items",
+        "minLength",
+        "minimum",
+        "minProperties",
+        "pattern",
+        "properties",
+        "required",
+        "then",
+        "title",
+        "type",
+    }
+)
 
 
 def fail(message: str) -> None:
@@ -69,6 +93,28 @@ def git_state() -> tuple[str, list[str]]:
         fail(f"cannot determine Git state: {exc}")
     return commit_result.stdout.strip(), status_result.stdout.splitlines()
 
+def schema_keyword_errors(schema: Any, path: str = "$") -> list[str]:
+    if not isinstance(schema, dict):
+        return [f"{path}: schema node must be an object"]
+    errors = [
+        f"{path}: unsupported schema keyword {keyword!r}"
+        for keyword in schema
+        if keyword not in SUPPORTED_SCHEMA_KEYWORDS
+    ]
+    for keyword, child in schema.items():
+        if keyword == "properties" and isinstance(child, dict):
+            for property_name, property_schema in child.items():
+                errors.extend(
+                    schema_keyword_errors(property_schema, f"{path}.properties.{property_name}")
+                )
+        elif keyword in {"additionalProperties", "if", "items", "then"} and isinstance(child, dict):
+            errors.extend(schema_keyword_errors(child, f"{path}.{keyword}"))
+        elif keyword == "allOf" and isinstance(child, list):
+            for index, branch in enumerate(child):
+                errors.extend(schema_keyword_errors(branch, f"{path}.allOf[{index}]"))
+    return errors
+
+
 def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[str]:
     errors: list[str] = []
     expected = schema.get("type")
@@ -110,12 +156,18 @@ def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[s
         if isinstance(item_schema, dict):
             for index, item in enumerate(value):
                 errors.extend(schema_errors(item, item_schema, f"{path}[{index}]"))
-    if isinstance(value, str) and "pattern" in schema:
-        if re.search(schema["pattern"], value) is None:
+    if isinstance(value, str):
+        if "minLength" in schema and len(value) < schema["minLength"]:
+            errors.append(f"{path}: string is shorter than the minimum length")
+        if "pattern" in schema and re.search(schema["pattern"], value) is None:
             errors.append(f"{path}: value does not match the required pattern")
-    if isinstance(value, (int, float)) and not isinstance(value, bool) and "minimum" in schema:
-        if value < schema["minimum"]:
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if "minimum" in schema and value < schema["minimum"]:
             errors.append(f"{path}: value is below the minimum")
+        if "exclusiveMinimum" in schema and value <= schema["exclusiveMinimum"]:
+            errors.append(f"{path}: value must be greater than the exclusive minimum")
+        if "exclusiveMaximum" in schema and value >= schema["exclusiveMaximum"]:
+            errors.append(f"{path}: value must be less than the exclusive maximum")
     for branch in schema.get("allOf", []):
         condition = branch.get("if")
         if isinstance(condition, dict) and not schema_errors(value, condition, path):
@@ -126,6 +178,12 @@ def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[s
 def validate_record_schema(record: dict[str, Any]) -> None:
     schema_path = ROOT / "experiments" / "run_record.schema.json"
     schema = load_json(schema_path)
+    unsupported = schema_keyword_errors(schema)
+    if unsupported:
+        fail(
+            f"unsupported keywords in {schema_path}:\n"
+            + "\n".join(f"  {error}" for error in unsupported)
+        )
     errors = schema_errors(record, schema)
     if errors:
         fail(
@@ -235,6 +293,19 @@ def main() -> int:
     )
     if variant is None:
         fail(f"unknown model variant: {args.variant}")
+    if previous_summary is not None:
+        identity = {
+            "experiment_id": config["experiment_id"],
+            "variant_id": args.variant,
+            "dataset_id": manifest["dataset_id"],
+            "dataset_version": manifest["version"],
+        }
+        for field, expected in identity.items():
+            if previous_summary.get(field) != expected:
+                fail(
+                    f"run identity mismatch for {args.run_id}: "
+                    f"{field} is {previous_summary.get(field)!r}, expected {expected!r}"
+                )
 
     objective = load_json(repo_path(Path(config["objective"]["path"])))
     metrics: dict[str, Any] = {}
