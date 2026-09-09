@@ -79,10 +79,12 @@
     "verification_command": "scripts/fetch_data.sh --verify"
   },
   "working_package": {
-    "public_registry": "Kaggle Dataset",
-    "registry_status": "planned",
-    "canonical_local_format": "SQLite",
-    "canonical_builder": "scripts/build_dataset_sqlite.py",
-    "rule": "Raw source files remain unchanged. Every derived package receives a new version and a new manifest."
+    "public_registry": "Git repository",
+    "registry_status": "active",
+    "package_format": "byte_preserving_csv_chunks",
+    "package_manifest": "data/chunk_manifest.json",
+    "package_builder": "scripts/separate_dataset.py",
+    "editorial_path": "data/editorial",
+    "rule": "The frozen source snapshot is separated into stable Git-tracked chunks without changing bytes."
   }
 }

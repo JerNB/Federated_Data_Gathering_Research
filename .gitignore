@@ -1,21 +1,14 @@
-# Raw dataset: fetched with scripts/fetch_data.sh, never committed.
-# ratings.csv (890 MB) and genome-scores.csv (497 MB) exceed GitHub's
-# 100 MiB per-file hard limit.
+# Local source download. The Git-tracked separated package lives under data/raw/.
 /ml-latest/
 /ml-latest.zip
 *.zip
-*.sqlite
 *.parquet
-*.sqlite-journal
-*.sqlite-wal
-*.sqlite-shm
 
 # Python
 __pycache__/
 *.py[cod]
 
-# Derived dataset packages and experiment artifacts
-/data_working/
+# Local experiment artifacts
 /runs/
 /artifacts/
 /wandb/

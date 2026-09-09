@@ -1,0 +1,221 @@
+{
+  "format": "git_csv_package",
+  "version": "1",
+  "source_dataset_id": "movielens_ml_latest",
+  "source_version": "2023-07-20",
+  "source_manifest_sha256": "d05991d970c1da3e00e43190fd7ec747329874cad8ea3d9df708ad370841c35e",
+  "output_root": "data/raw",
+  "chunk_size_bytes": 83886080,
+  "line_endings": "preserved",
+  "files": [
+    {
+      "source_path": "ml-latest/README.txt",
+      "source_bytes": 9839,
+      "source_sha256": "eea01c995f77101c8c8628c915b794035eaf81ddbf1579ac497bef15f3f731e5",
+      "editable": false,
+      "chunked": false,
+      "header_in_first_chunk_only": false,
+      "reassembled_bytes": 9839,
+      "reassembled_sha256": "eea01c995f77101c8c8628c915b794035eaf81ddbf1579ac497bef15f3f731e5",
+      "chunks": [
+        {
+          "path": "data/raw/README.txt",
+          "bytes": 9839,
+          "sha256": "eea01c995f77101c8c8628c915b794035eaf81ddbf1579ac497bef15f3f731e5"
+        }
+      ]
+    },
+    {
+      "source_path": "ml-latest/genome-scores.csv",
+      "source_bytes": 521514541,
+      "source_sha256": "72a2d7460f30b2f3ac68bdda9e46c8320a8019faf1a7b7b79aa0e9d794902b86",
+      "editable": false,
+      "chunked": true,
+      "header_in_first_chunk_only": true,
+      "reassembled_bytes": 521514541,
+      "reassembled_sha256": "72a2d7460f30b2f3ac68bdda9e46c8320a8019faf1a7b7b79aa0e9d794902b86",
+      "chunks": [
+        {
+          "path": "data/raw/genome-scores/genome-scores-000.csv",
+          "bytes": 83886054,
+          "sha256": "718cdbfdf423b3a70abe58a1117d87d67fd46a316cbb6c324a730d83ab3db640"
+        },
+        {
+          "path": "data/raw/genome-scores/genome-scores-001.csv",
+          "bytes": 83886076,
+          "sha256": "df6961535ebbc23b5cecc80006f653190cc3d0de27e509277fa5cb6615b0f62a"
+        },
+        {
+          "path": "data/raw/genome-scores/genome-scores-002.csv",
+          "bytes": 83886067,
+          "sha256": "584e8353bf3e13caa0cac1ddb6123e50a669f2f66eb809195c211cf2f09c97b0"
+        },
+        {
+          "path": "data/raw/genome-scores/genome-scores-003.csv",
+          "bytes": 83886059,
+          "sha256": "da3ab33af11e12a4a63a638cdbdd490d6f08f0e5538cf2207a88a5f778c9722a"
+        },
+        {
+          "path": "data/raw/genome-scores/genome-scores-004.csv",
+          "bytes": 83886062,
+          "sha256": "fd73d8876f70a4b5ceb5f5a267fdf97ca6ac26b3c09bd6b1922443877f1c85d6"
+        },
+        {
+          "path": "data/raw/genome-scores/genome-scores-005.csv",
+          "bytes": 83886057,
+          "sha256": "64bb7863ba06b6cbcf12ab9a9f0b4605de365613916bb61a2340c0591c91f3e0"
+        },
+        {
+          "path": "data/raw/genome-scores/genome-scores-006.csv",
+          "bytes": 18198166,
+          "sha256": "462447c9a0c496099dfb6e415b9f9e8f4947f717b57cd170620bd1e3400df4d4"
+        }
+      ]
+    },
+    {
+      "source_path": "ml-latest/genome-tags.csv",
+      "source_bytes": 18103,
+      "source_sha256": "c84bf1e2addbf38432426a2bb2a117a59d76c0873fc875fe8764e92842fd3bfb",
+      "editable": false,
+      "chunked": false,
+      "header_in_first_chunk_only": false,
+      "reassembled_bytes": 18103,
+      "reassembled_sha256": "c84bf1e2addbf38432426a2bb2a117a59d76c0873fc875fe8764e92842fd3bfb",
+      "chunks": [
+        {
+          "path": "data/raw/genome-tags.csv",
+          "bytes": 18103,
+          "sha256": "c84bf1e2addbf38432426a2bb2a117a59d76c0873fc875fe8764e92842fd3bfb"
+        }
+      ]
+    },
+    {
+      "source_path": "ml-latest/links.csv",
+      "source_bytes": 1925962,
+      "source_sha256": "92f18202228071d5dc56a5bc7fd7ccbd06ff355c54bc48e55a059cd4896966d7",
+      "editable": false,
+      "chunked": false,
+      "header_in_first_chunk_only": false,
+      "reassembled_bytes": 1925962,
+      "reassembled_sha256": "92f18202228071d5dc56a5bc7fd7ccbd06ff355c54bc48e55a059cd4896966d7",
+      "chunks": [
+        {
+          "path": "data/raw/links.csv",
+          "bytes": 1925962,
+          "sha256": "92f18202228071d5dc56a5bc7fd7ccbd06ff355c54bc48e55a059cd4896966d7"
+        }
+      ]
+    },
+    {
+      "source_path": "ml-latest/movies.csv",
+      "source_bytes": 4192335,
+      "source_sha256": "dd78a76a44b5ff159e66571992bac5208255f86c1a3acbbe7fcd9bbb29d87b3c",
+      "editable": false,
+      "chunked": false,
+      "header_in_first_chunk_only": false,
+      "reassembled_bytes": 4192335,
+      "reassembled_sha256": "dd78a76a44b5ff159e66571992bac5208255f86c1a3acbbe7fcd9bbb29d87b3c",
+      "chunks": [
+        {
+          "path": "data/raw/movies.csv",
+          "bytes": 4192335,
+          "sha256": "dd78a76a44b5ff159e66571992bac5208255f86c1a3acbbe7fcd9bbb29d87b3c"
+        }
+      ]
+    },
+    {
+      "source_path": "ml-latest/ratings.csv",
+      "source_bytes": 933898879,
+      "source_sha256": "ae77c01e7c895e7d61ba3594a1c5ff191b5f7f3a9d788000315a463322fa44f6",
+      "editable": false,
+      "chunked": true,
+      "header_in_first_chunk_only": true,
+      "reassembled_bytes": 933898879,
+      "reassembled_sha256": "ae77c01e7c895e7d61ba3594a1c5ff191b5f7f3a9d788000315a463322fa44f6",
+      "chunks": [
+        {
+          "path": "data/raw/ratings/ratings-000.csv",
+          "bytes": 83886060,
+          "sha256": "8d56521308f87492154c8b0444899cf322c0816f1b92b3dbd2c511e2e9595b7f"
+        },
+        {
+          "path": "data/raw/ratings/ratings-001.csv",
+          "bytes": 83886057,
+          "sha256": "a369b3e00fbccbfe16d6851d446599e824cd217817536d74e8e017caff02748f"
+        },
+        {
+          "path": "data/raw/ratings/ratings-002.csv",
+          "bytes": 83886070,
+          "sha256": "0911e1f91de3de0c376eda9ef8e9accc2814d4b4305fab28043b1c0ed760aa03"
+        },
+        {
+          "path": "data/raw/ratings/ratings-003.csv",
+          "bytes": 83886055,
+          "sha256": "276081ce3ed7acc688bc5ce3121c65186698441522079ee2f19921d4678d51d0"
+        },
+        {
+          "path": "data/raw/ratings/ratings-004.csv",
+          "bytes": 83886072,
+          "sha256": "b103797915b243ea6180b4ff3d5b132bb549f12fb19bbd0c2010b55e28a926d6"
+        },
+        {
+          "path": "data/raw/ratings/ratings-005.csv",
+          "bytes": 83886073,
+          "sha256": "721a3dc5b8034f13057e3c6e3eaaf9c81e3500638bbfa1d6bb320e7bcf5420cb"
+        },
+        {
+          "path": "data/raw/ratings/ratings-006.csv",
+          "bytes": 83886077,
+          "sha256": "70df3d4abae77e7c5285536205024b02a36027065a214524c1e6bbd05a4840d7"
+        },
+        {
+          "path": "data/raw/ratings/ratings-007.csv",
+          "bytes": 83886072,
+          "sha256": "e25896188e801d226dd142778f484b17bc0434de995ba4113a7e957c7ea15a49"
+        },
+        {
+          "path": "data/raw/ratings/ratings-008.csv",
+          "bytes": 83886058,
+          "sha256": "418d07746d4b7c25b5155d525ba5c075c49b6fc310f6e7a2d51f74956f8fb1a0"
+        },
+        {
+          "path": "data/raw/ratings/ratings-009.csv",
+          "bytes": 83886065,
+          "sha256": "3abb372b6594b3eb7fc3148d9733c34b92165b408b31096d349a36d387942f58"
+        },
+        {
+          "path": "data/raw/ratings/ratings-010.csv",
+          "bytes": 83886080,
+          "sha256": "5808ea5b2fc8c04e206bea70c7536193ebe7a7814deab9cf8792c72c8330f73f"
+        },
+        {
+          "path": "data/raw/ratings/ratings-011.csv",
+          "bytes": 11152140,
+          "sha256": "47ff535a8aaafe58d25b4aea7c146fc4a7c5e9aa346c89b7ef33c48cf48675d3"
+        }
+      ]
+    },
+    {
+      "source_path": "ml-latest/tags.csv",
+      "source_bytes": 85361813,
+      "source_sha256": "d485c3fff0c4b4c215ef3c213ba0b68748e805ac0f07dcba2369582b7343bd0b",
+      "editable": false,
+      "chunked": true,
+      "header_in_first_chunk_only": true,
+      "reassembled_bytes": 85361813,
+      "reassembled_sha256": "d485c3fff0c4b4c215ef3c213ba0b68748e805ac0f07dcba2369582b7343bd0b",
+      "chunks": [
+        {
+          "path": "data/raw/tags/tags-000.csv",
+          "bytes": 83886071,
+          "sha256": "1d41d08af631c081ec41c6792ecf6826f38c5882f1bad32ef29730d1b05ce53d"
+        },
+        {
+          "path": "data/raw/tags/tags-001.csv",
+          "bytes": 1475742,
+          "sha256": "2c0e725a96ca2143cb44ad275d39bd2d00875e3197958de12f27096f6f4d143c"
+        }
+      ]
+    }
+  ]
+}

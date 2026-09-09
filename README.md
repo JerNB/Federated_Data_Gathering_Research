@@ -10,42 +10,65 @@ movies from 330,975 users).
 2. [Experiment workflow](docs/experiment_workflow.md)
 3. [Research direction](docs/research_direction.md)
 4. [Dataset manifest](data/dataset_manifest.json)
+5. [Chunk manifest](data/chunk_manifest.json)
 
 ## Data setup
 
-The raw dataset is **not stored in this repository**. `ratings.csv` (890 MB) and
-`genome-scores.csv` (497 MB) exceed GitHub's hard limit of 100 MiB per file, and
-a 1.5 GB working tree would make every clone expensive.
+The repository contains a Git-tracked, byte-preserving CSV package under
+`data/raw/`. The large source tables are separated into deterministic chunks
+below GitHub's 100 MiB per-file limit. The original archive remains available
+from the `data-2023-07-20` release for provenance and independent verification.
+
+Fetch and verify the original source snapshot when a clean source copy is needed:
 
 ```sh
-scripts/fetch_data.sh            # download + verify into ./ml-latest
-scripts/fetch_data.sh --verify   # re-verify an existing ./ml-latest
+scripts/fetch_data.sh
+scripts/fetch_data.sh --verify
 ```
 
-Build an indexed local package for modeling with:
+Create or refresh the separated package with:
 
 ```sh
-scripts/build_dataset_sqlite.py --input ml-latest --output data_working/movielens.sqlite --manifest data/dataset_manifest.json
+python3 scripts/separate_dataset.py \
+  --input ml-latest \
+  --output-root data/raw \
+  --source-manifest data/dataset_manifest.json \
+  --chunk-manifest data/chunk_manifest.json \
+  --force
 ```
 
-See [`data/README.md`](data/README.md) for the public package layout and data rules.
+Verify every tracked chunk and its byte-for-byte reassembly with:
 
-The fetch script downloads a single 356 MB archive from this repository's
-[`data-2023-07-20` release](https://github.com/JerNB/Federated_Data_Gathering_Research/releases/tag/data-2023-07-20)
-and checks every extracted file against `data/ml-latest.sha256`, so a truncated
-or substituted download fails loudly instead of silently skewing results.
+```sh
+python3 scripts/separate_dataset.py --verify
+```
 
-Expected layout after fetching:
+The chunk manifest records the source checksum, every chunk checksum, the
+reassembled checksum, and the source manifest checksum. Git tracks the
+separated files and their history. No database conversion step is required.
 
-| file | size |
-| --- | --- |
-| `ml-latest/ratings.csv` | 890 MB |
-| `ml-latest/genome-scores.csv` | 497 MB |
-| `ml-latest/tags.csv` | 81 MB |
-| `ml-latest/movies.csv` | 4.0 MB |
-| `ml-latest/links.csv` | 1.8 MB |
-| `ml-latest/genome-tags.csv` | 18 KB |
-| `ml-latest/README.txt` | 9.6 KB |
+Expected layout:
+
+```text
+data/raw/
+  ratings/
+    ratings-000.csv
+    ratings-001.csv
+  genome-scores/
+    genome-scores-000.csv
+    genome-scores-001.csv
+  tags/
+    tags-000.csv
+    tags-001.csv
+  movies.csv
+  links.csv
+  genome-tags.csv
+  README.txt
+
+data/editorial/
+  movies.csv
+  links.csv
+```
 
 ## Dataset license and citation
 

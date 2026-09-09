@@ -68,7 +68,7 @@ The study should separate exploitable preference structure from exposure, popula
 
 ## Execution order
 
-The data and experiment registry comes before model implementation. The source snapshot is frozen through `data/dataset_manifest.json`. A canonical working package, experiment configuration, objective formula, run record, and milestone report are separate tracked objects.
+The data and experiment registry comes before model implementation. The source snapshot is frozen through `data/dataset_manifest.json`; the Git tracked separated CSV package is pinned by `data/chunk_manifest.json`. Experiment configuration, objective formula, run record, and milestone report remain separate tracked objects.
 
 The first comparison contains exactly two model variants:
 
@@ -113,7 +113,7 @@ A conservative version compares global and oracle clustered matrix factorization
 
 ## First implementation artifacts
 
-1. A source dataset manifest and canonical package contract.
+1. A source dataset manifest and Git CSV chunk manifest contract.
 2. A model ownership specification.
 3. A training only split and support selection specification.
 4. A synthetic heterogeneity generator with separate control axes.

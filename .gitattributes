@@ -1,0 +1,6 @@
+# Preserve upstream source bytes. Large data trees suppress huge diffs.
+data/raw/** -text
+data/raw/ratings/** -text -diff
+data/raw/genome-scores/** -text -diff
+data/raw/tags/** -text -diff
+data/editorial/** -text

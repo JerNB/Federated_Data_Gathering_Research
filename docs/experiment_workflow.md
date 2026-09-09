@@ -7,9 +7,9 @@ The repository stores the research contract. A shared experiment tracker stores 
 The workflow has four layers:
 
 1. **Source data**: the pinned MovieLens snapshot and its manifest.
-2. **Data package**: a versioned canonical package derived from the source snapshot.
+2. **Git data package**: byte-preserving separated CSV files and their chunk manifest.
 3. **Experiment configuration**: the formula, split, model variant, capacity budget, and evaluation rules.
-4. **Run record**: the code commit, dataset version, support report, metrics, and artifacts.
+4. **Run record**: the Git commit, data package manifest, support report, metrics, and artifacts.
 
 A command can execute a run. The configuration and run record explain what the command means.
 
@@ -25,6 +25,9 @@ configs/
 data/
   dataset_manifest.json
   ml-latest.sha256
+  chunk_manifest.json
+  raw/
+  editorial/
 
 experiments/
   run_record.schema.json
@@ -32,7 +35,6 @@ experiments/
 results/
   README.md
   run_registry.jsonl
-```
 
 Created on first use or during later milestones:
 
@@ -45,7 +47,7 @@ reports/
   milestone_1/
 ```
 
-Large data packages, checkpoints, and temporary files remain outside Git. The current ignore rules reserve `data_working/`, `runs/`, and `artifacts/` for these outputs.
+The separated data package is tracked in Git. Checkpoints and temporary model outputs remain outside Git in `runs/` and `artifacts/`.
 
 ## Run identity
 
@@ -56,15 +58,16 @@ Every run records:
 3. The code commit.
 4. Whether the worktree was clean when the record was created.
 5. The worktree status when it was not clean.
-6. The dataset identifier and version.
-7. The SHA 256 digest of the dataset manifest.
-8. The configuration path and digest.
-9. The model variant.
-10. The objective and score formula.
-11. The split method and seed.
-12. The selected user count and catalog counts.
-13. The support report for every oracle cluster.
-14. Parameters, metrics, artifacts, and notes.
+6. The dataset identifier and source version.
+7. The source manifest SHA 256 digest.
+8. The Git package chunk manifest SHA 256 digest.
+9. The configuration path and digest.
+10. The model variant.
+11. The objective and score formula.
+12. The split method and seed.
+13. The selected user count and catalog counts.
+14. The support report for every oracle cluster.
+15. Parameters, metrics, artifacts, and notes.
 
 The full record is stored in `results/run_records/`. Its compact summary is appended to the tracked `results/run_registry.jsonl` file. The schema is in `experiments/run_record.schema.json`.
 
@@ -79,11 +82,11 @@ The repository remains independent of the tracker. A self hosted MLflow service 
 
 1. Commit an experiment configuration before running it.
 2. Create a planned run record from that configuration.
-3. Load the pinned dataset package and record its manifest digest.
+3. Verify the pinned Git data package and record its source and chunk manifest digests.
 4. Log the formula, parameters, metrics, and artifacts during execution.
 5. Record the support report before interpreting ranking results.
 6. Export a compact result row and report after the run finishes.
-7. Link the public report to the dataset version, code commit, and tracker run.
+7. Link the public report to the data package commit, dataset version, and tracker run.
 
 A completed result without its dataset version, formula, split, support report, or code commit is incomplete.
 

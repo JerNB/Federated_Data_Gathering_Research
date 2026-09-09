@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import sqlite3
 import json
 import sys
 from pathlib import Path
@@ -55,50 +54,6 @@ def read_checksum_manifest(path: Path) -> dict[str, str]:
         checksums[relative_path] = checksum
     return checksums
 
-def validate_canonical_schema(database_path: Path) -> None:
-    schema = load_json(ROOT / "data/canonical_schema.json")
-    connection = sqlite3.connect(database_path)
-    try:
-        table_names = {
-            row[0]
-            for row in connection.execute(
-                "SELECT name FROM sqlite_master WHERE type = 'table'"
-            )
-        }
-        for table_name, specification in schema["tables"].items():
-            if specification.get("optional") and table_name not in table_names:
-                continue
-            if table_name not in table_names:
-                fail(f"canonical database is missing table {table_name}")
-            column_info = {
-                row[1]: (row[2].upper(), row[5])
-                for row in connection.execute(f"PRAGMA table_info({table_name})")
-            }
-            for column_name, declaration in specification["columns"].items():
-                if column_name not in column_info:
-                    fail(f"canonical database is missing {table_name}.{column_name}")
-                expected_type = declaration.split()[0].upper()
-                actual_type, primary_key = column_info[column_name]
-                if actual_type != expected_type:
-                    fail(
-                        f"canonical database type mismatch for {table_name}.{column_name}: "
-                        f"{actual_type} versus {expected_type}"
-                    )
-                if "PRIMARY KEY" in declaration and primary_key == 0:
-                    fail(f"canonical database is missing the primary key on {table_name}.{column_name}")
-            actual_indexes = {
-                row[0]
-                for row in connection.execute(
-                    "SELECT name FROM sqlite_master WHERE type = 'index' AND tbl_name = ?",
-                    (table_name,),
-                )
-            }
-            for index_name in specification.get("indexes", []):
-                if index_name not in actual_indexes:
-                    fail(f"canonical database is missing index {index_name}")
-    finally:
-        connection.close()
-    print(f"valid: canonical schema {database_path}")
 
 
 def validate_manifest(manifest_path: Path, dataset_root: Path | None, verify_files: bool) -> None:
@@ -249,12 +204,6 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="hash every raw file listed in the manifest",
     )
-    parser.add_argument(
-        "--canonical-db",
-        type=Path,
-        default=None,
-        help="optional derived SQLite package to check against data/canonical_schema.json",
-    )
     return parser.parse_args()
 
 
@@ -267,8 +216,6 @@ def main() -> int:
         fail("--verify-files requires --dataset-root")
     validate_manifest(manifest_path, dataset_root, args.verify_files)
     validate_experiment(config_path, manifest_path)
-    if args.canonical_db:
-        validate_canonical_schema(ROOT / args.canonical_db)
     print("validation passed")
     return 0
 

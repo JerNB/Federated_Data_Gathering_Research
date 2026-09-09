@@ -54,12 +54,24 @@
     "dataset": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["manifest_path", "dataset_id", "version", "manifest_sha256"],
+      "required": [
+        "manifest_path",
+        "dataset_id",
+        "version",
+        "manifest_sha256",
+        "package_manifest_path",
+        "package_manifest_sha256"
+      ],
       "properties": {
         "manifest_path": {"type": "string"},
         "dataset_id": {"type": "string"},
         "version": {"type": "string"},
         "manifest_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "package_manifest_path": {"type": "string"},
+        "package_manifest_sha256": {
           "type": "string",
           "pattern": "^[a-f0-9]{64}$"
         }

@@ -233,6 +233,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=Path("configs/experiments/milestone_1_oracle_comparison.json"))
     parser.add_argument("--manifest", type=Path, default=Path("data/dataset_manifest.json"))
+    parser.add_argument("--package-manifest", type=Path, default=Path("data/chunk_manifest.json"))
     parser.add_argument("--variant", required=True, help="model variant identifier from the experiment config")
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--output", type=Path, help="full run record path; defaults to results/run_records/<run_id>.json")
@@ -250,6 +251,7 @@ def main() -> int:
     args = parse_args()
     config_path = repo_path(args.config)
     manifest_path = repo_path(args.manifest)
+    package_manifest_path = repo_path(args.package_manifest)
     output_path = repo_path(args.output) if args.output else ROOT / "results" / "run_records" / f"{args.run_id}.json"
     registry_path = repo_path(args.registry)
     registry_entries = read_registry(registry_path)
@@ -287,6 +289,13 @@ def main() -> int:
     validate_experiment(config_path, manifest_path)
     config = load_json(config_path)
     manifest = load_json(manifest_path)
+    package_manifest = read_json_object(package_manifest_path)
+    if package_manifest.get("source_dataset_id") != manifest["dataset_id"]:
+        fail("package manifest dataset_id does not match the source manifest")
+    if package_manifest.get("source_version") != manifest["version"]:
+        fail("package manifest version does not match the source manifest")
+    manifest_sha256 = sha256_file(manifest_path)
+    package_manifest_sha256 = sha256_file(package_manifest_path)
     variant = next(
         (item for item in config["model_variants"] if item["variant_id"] == args.variant),
         None,
@@ -299,6 +308,7 @@ def main() -> int:
             "variant_id": args.variant,
             "dataset_id": manifest["dataset_id"],
             "dataset_version": manifest["version"],
+            "package_manifest_sha256": package_manifest_sha256,
         }
         for field, expected in identity.items():
             if previous_summary.get(field) != expected:
@@ -352,7 +362,9 @@ def main() -> int:
             "manifest_path": display_path(manifest_path),
             "dataset_id": manifest["dataset_id"],
             "version": manifest["version"],
-            "manifest_sha256": sha256_file(manifest_path),
+            "manifest_sha256": manifest_sha256,
+            "package_manifest_path": display_path(package_manifest_path),
+            "package_manifest_sha256": package_manifest_sha256,
         },
         "configuration": {
             "path": display_path(config_path),
@@ -392,6 +404,7 @@ def main() -> int:
         "dataset_id": manifest["dataset_id"],
         "dataset_version": manifest["version"],
         "variant_id": args.variant,
+        "package_manifest_sha256": package_manifest_sha256,
         "metrics": metrics,
         "record_path": display_path(output_path),
     }
