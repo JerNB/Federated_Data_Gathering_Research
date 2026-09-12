@@ -2,8 +2,8 @@
   "run_id": "milestone_1_global_plan",
   "experiment_id": "milestone_1_oracle_comparison",
   "status": "planned",
-  "created_at_utc": "2026-09-12T06:50:35.581996+00:00",
-  "code_commit": "c6d599c70010cde3b23ac47c620c8d9dcaf895c8",
+  "created_at_utc": "2026-09-12T06:51:12.141565+00:00",
+  "code_commit": "c8b168ecaa9805d8d2ff2a4c84e046df75afb117",
   "worktree_clean": false,
   "worktree_status": [
     " D results/run_records/milestone_1_global_plan.json",
