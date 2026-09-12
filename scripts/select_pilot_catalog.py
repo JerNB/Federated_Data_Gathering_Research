@@ -27,7 +27,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--interactions", type=Path, required=True, help="training only interaction CSV")
     parser.add_argument("--cluster-map", type=Path, required=True, help="training only user to oracle cluster CSV")
     parser.add_argument("--output", type=Path, required=True, help="pilot selection JSON")
-    parser.add_argument("--users", type=int, default=5000)
+    parser.add_argument("--users", type=int, default=10000)
     parser.add_argument("--clusters", type=int, default=4)
     parser.add_argument("--seed", type=int, default=20260909)
     parser.add_argument("--min-user-interactions", type=int, default=20)

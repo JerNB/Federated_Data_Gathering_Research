@@ -16,17 +16,27 @@
   "split": {
     "unit": "user",
     "method": "chronological_user_level",
+    "partition_object": "all_user_ratings",
+    "ordering": "timestamp_ascending_then_seeded_sha256_user_item",
+    "tie_break": "sha256(seed:userId:movieId)",
+    "tie_break_seed": 20260910,
+    "boundary_rounding": "floor",
+    "positive_filter_timing": "after_partition",
     "train_fraction": 0.8,
     "validation_fraction": 0.1,
     "test_fraction": 0.1,
     "cluster_assignment_source": "declared_oracle_generator",
     "cluster_fit_source": "training_only",
     "catalog_fit_source": "training_only",
-    "negative_sampling_source": "training_only"
+    "negative_sampling_source": "training_only",
+    "evaluation_eligibility": {
+      "minimum_positive_test_interactions": 1,
+      "zero_positive_test_policy": "exclude_from_primary_metrics"
+    }
   },
   "pilot": {
     "user_selection": {
-      "target_count": 5000,
+      "target_count": 10000,
       "seed": 20260909,
       "eligibility_source": "pilot_train_only",
       "minimum_train_interactions_per_user": 20,

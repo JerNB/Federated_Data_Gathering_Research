@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d1726" />
+    <title>Federated Research Console</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Federated Research Console home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>
+            <strong>Federated Research</strong>
+            <small>evidence console</small>
+          </span>
+        </a>
+        <div class="topbar-meta">
+          <span class="status-dot" id="service-dot"></span>
+          <span id="service-status">Connecting</span>
+          <span class="separator">/</span>
+          <span>MovieLens ml-latest</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="eyebrow">MILESTONE 01 &nbsp;·&nbsp; ORACLE COMPARISON</div>
+          <h1>See the evidence before the model run.</h1>
+          <p>
+            A live view of dataset scale, deterministic split semantics, catalog support,
+            and planned comparison runs. Every number below comes from the tracked research
+            records rather than an ad hoc notebook.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#protocol">Inspect protocol <span>↓</span></a>
+            <a class="button button-quiet" href="#runs">Review run plans <span>→</span></a>
+          </div>
+        </section>
+
+        <section class="control-strip" aria-label="Dashboard controls">
+          <div class="control-copy">
+            <span class="control-label">Evidence snapshot</span>
+            <span class="control-help">Switch between tracked exploration outputs.</span>
+          </div>
+          <label class="select-wrap" for="run-select">
+            <span class="sr-only">Select an exploration snapshot</span>
+            <select id="run-select"></select>
+          </label>
+          <button class="button button-outline" id="refresh-button" type="button">
+            <span class="refresh-icon" aria-hidden="true">↻</span> Refresh
+          </button>
+          <span class="last-updated" id="last-updated">Waiting for data</span>
+        </section>
+
+        <section class="alert" id="error-banner" hidden role="alert">
+          <strong>Dashboard data unavailable.</strong>
+          <span id="error-message">Start the local dashboard server and try again.</span>
+        </section>
+
+        <section class="panel board-panel" id="board">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">EDITABLE RESEARCH BOARD</div>
+              <h2>Change the work, not just the view.</h2>
+            </div>
+            <span class="panel-chip">saved to results/research_board.json</span>
+          </div>
+          <form class="board-form" id="board-form">
+            <input id="board-title" name="title" placeholder="Add a research task..." required maxlength="120" />
+            <select id="board-status" name="status" aria-label="New task status">
+              <option value="todo">To do</option>
+              <option value="doing">In progress</option>
+              <option value="blocked">Blocked</option>
+              <option value="done">Done</option>
+            </select>
+            <select id="board-priority" name="priority" aria-label="New task priority">
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
+            </select>
+            <select id="board-command" name="command" aria-label="Command">
+              <option value="make explore">make explore</option>
+              <option value="make validate-experiment">make validate-experiment</option>
+              <option value="create_run_record.py">create_run_record.py</option>
+            </select>
+            <input id="board-parameters" name="parameters" value="RUN_ID=exploration" placeholder="KEY=value ..." maxlength="400" />
+            <input id="board-owner" name="owner" placeholder="Owner" maxlength="40" />
+            <button class="button button-primary" type="submit">Add task</button>
+          </form>
+          <div class="board-message" id="board-message" role="status"></div>
+          <div class="table-wrap board-table-wrap">
+            <table class="board-table">
+              <thead><tr><th>Task</th><th>Status</th><th>Priority</th><th>Command</th><th>Parameters</th><th>Owner</th><th>Notes</th><th></th></tr></thead>
+              <tbody id="board-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel proposal-panel" id="proposal">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">PROPOSAL / LITERATURE REVIEW</div>
+              <h2>Questions and decisions</h2>
+            </div>
+            <a class="button button-quiet" href="/docs/research_proposal.md" target="_blank" rel="noreferrer">Open Markdown source ↗</a>
+          </div>
+          <div class="proposal-content" id="proposal-content"><p>Loading proposal...</p></div>
+        </section>
+
+        <section class="kpi-grid" id="overview" aria-label="Dataset overview">
+          <article class="kpi-card kpi-accent-blue">
+            <div class="kpi-label">Raw ratings</div>
+            <div class="kpi-value" id="kpi-ratings">—</div>
+            <div class="kpi-foot">MovieLens snapshot</div>
+          </article>
+          <article class="kpi-card kpi-accent-teal">
+            <div class="kpi-label">Users</div>
+            <div class="kpi-value" id="kpi-users">—</div>
+            <div class="kpi-foot">full population</div>
+          </article>
+          <article class="kpi-card kpi-accent-violet">
+            <div class="kpi-label">Movies</div>
+            <div class="kpi-value" id="kpi-items">—</div>
+            <div class="kpi-foot">rating-bearing items</div>
+          </article>
+          <article class="kpi-card kpi-accent-orange">
+            <div class="kpi-label">Evaluation users</div>
+            <div class="kpi-value" id="kpi-eval-users">—</div>
+            <div class="kpi-foot">eligible after split</div>
+          </article>
+          <article class="kpi-card kpi-accent-pink">
+            <div class="kpi-label">Support catalog</div>
+            <div class="kpi-value" id="kpi-support-items">—</div>
+            <div class="kpi-foot" id="kpi-support-foot">20 positives / item</div>
+          </article>
+        </section>
+
+        <section class="main-grid">
+          <article class="panel panel-large" id="support">
+            <div class="panel-heading">
+              <div>
+                <div class="eyebrow">CATALOG POWER</div>
+                <h2>Global support probe</h2>
+              </div>
+              <span class="panel-chip" id="probe-size">— users</span>
+            </div>
+            <div class="support-layout">
+              <div class="support-hero-number">
+                <span class="support-number" id="support-number">—</span>
+                <span class="support-caption">items clear the threshold</span>
+                <div class="support-bar"><span id="support-bar-fill"></span></div>
+                <span class="support-ratio" id="support-ratio">—</span>
+              </div>
+              <div class="quantile-chart" id="quantile-chart" aria-label="Item support quantiles"></div>
+            </div>
+            <div class="metric-row">
+              <div><span>Observed items</span><strong id="observed-items">—</strong></div>
+              <div><span>Positive interactions</span><strong id="probe-interactions">—</strong></div>
+              <div><span>Minimum support</span><strong id="minimum-support">—</strong></div>
+            </div>
+          </article>
+
+          <article class="panel" id="protocol">
+            <div class="panel-heading">
+              <div>
+                <div class="eyebrow">RESEARCH CONTRACT</div>
+                <h2>Split protocol</h2>
+              </div>
+              <span class="lock-icon" aria-label="Pinned semantics">⌘</span>
+            </div>
+            <dl class="detail-list">
+              <div><dt>Partition object</dt><dd id="split-partition">—</dd></div>
+              <div><dt>Ordering</dt><dd id="split-ordering">—</dd></div>
+              <div><dt>Fractions</dt><dd id="split-fractions">—</dd></div>
+              <div><dt>Tie-break seed</dt><dd id="split-tie-seed">—</dd></div>
+              <div><dt>Positive filter</dt><dd id="split-positive-filter">—</dd></div>
+            </dl>
+            <div class="protocol-note">
+              <span class="note-icon">✓</span>
+              <span><strong id="tie-groups">—</strong> timestamp tie groups are resolved deterministically.</span>
+            </div>
+          </article>
+
+          <article class="panel" id="ratings">
+            <div class="panel-heading">
+              <div>
+                <div class="eyebrow">RAW DATA PROFILE</div>
+                <h2>Rating distribution</h2>
+              </div>
+              <span class="panel-chip">≥ 4.0 positive</span>
+            </div>
+            <div class="rating-chart" id="rating-chart" aria-label="Rating value distribution"></div>
+            <div class="chart-legend"><span class="legend-swatch positive"></span> positive <span class="legend-swatch neutral"></span> other</div>
+          </article>
+
+          <article class="panel panel-large" id="runs">
+            <div class="panel-heading">
+              <div>
+                <div class="eyebrow">EXECUTION QUEUE</div>
+                <h2>Planned comparison runs</h2>
+              </div>
+              <span class="panel-chip">tracked records</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Run</th><th>Variant</th><th>Status</th><th>Support</th><th>Worktree</th></tr></thead>
+                <tbody id="run-table-body"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel panel-wide" id="evidence">
+            <div class="panel-heading">
+              <div>
+                <div class="eyebrow">VISUAL EVIDENCE</div>
+                <h2>Exploration figures</h2>
+              </div>
+              <span class="panel-chip" id="figure-count">— figures</span>
+            </div>
+            <div class="figure-gallery" id="figure-gallery"></div>
+          </article>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>Local research console</span>
+        <span id="footer-dataset">Tracked metadata · no model run executed</span>
+      </footer>
+    </div>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

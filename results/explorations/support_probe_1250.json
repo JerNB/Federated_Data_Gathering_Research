@@ -1,0 +1,282 @@
+{
+  "run_id": "support_probe_1250",
+  "created_at_utc": "2026-09-12T02:34:17.970894+00:00",
+  "command": [
+    "scripts/explore_dataset.py",
+    "--config",
+    "configs/experiments/milestone_1_oracle_comparison.json",
+    "--run-id",
+    "support_probe_1250",
+    "--output-root",
+    "artifacts",
+    "--metadata-root",
+    "results/explorations",
+    "--support-probe-users",
+    "1250"
+  ],
+  "script": {
+    "path": "scripts/explore_dataset.py",
+    "sha256": "c6c13b49fd323e6a3554825ca326de11cdde55a4a26cf05e2bc424607fc92e26"
+  },
+  "pilot_support_probe": {
+    "user_count": 1250,
+    "seed": 20260909,
+    "population": "uniform_without_replacement_users_with_minimum_positive_train_interactions",
+    "minimum_train_positive_interactions": 20,
+    "support_threshold": 20,
+    "positive_train_interaction_count": 111539,
+    "observed_item_count": 8889,
+    "eligible_item_count": 1261,
+    "item_support_quantiles": {
+      "0": 1,
+      "0.1": 1.0,
+      "0.25": 1.0,
+      "0.5": 2.0,
+      "0.75": 8.0,
+      "0.9": 29.0,
+      "0.99": 170.4800000000032,
+      "1": 594
+    }
+  },
+  "inputs": {
+    "config_path": "configs/experiments/milestone_1_oracle_comparison.json",
+    "config_sha256": "f0f24f8ee55f71af038e6e629fe762720f3a1d99062f95a20e5838d478d5d752",
+    "manifest_path": "data/dataset_manifest.json",
+    "manifest_sha256": "11ebd0466546139c06b80ebcca20a535a490a8f94d985a3fbd3f5c447bafdc0b",
+    "package_manifest_path": "data/chunk_manifest.json",
+    "package_manifest_sha256": "8066c7016dc078d94b7bafbc50d708c712ced532e20d997f8d0e868f7b0c16fa",
+    "dataset_id": "movielens_ml_latest",
+    "dataset_version": "2023-07-20",
+    "ratings_chunks": [
+      "data/raw/ratings/ratings-000.csv",
+      "data/raw/ratings/ratings-001.csv",
+      "data/raw/ratings/ratings-002.csv",
+      "data/raw/ratings/ratings-003.csv",
+      "data/raw/ratings/ratings-004.csv",
+      "data/raw/ratings/ratings-005.csv",
+      "data/raw/ratings/ratings-006.csv",
+      "data/raw/ratings/ratings-007.csv",
+      "data/raw/ratings/ratings-008.csv",
+      "data/raw/ratings/ratings-009.csv",
+      "data/raw/ratings/ratings-010.csv",
+      "data/raw/ratings/ratings-011.csv"
+    ],
+    "movies_path": "data/raw/movies.csv",
+    "cluster_map_path": null,
+    "cluster_map_sha256": null
+  },
+  "chunk_headers": {
+    "data/raw/ratings/ratings-000.csv": "userId,movieId,rating,timestamp",
+    "data/raw/ratings/ratings-001.csv": "31027,1483,3.0,1212304311",
+    "data/raw/ratings/ratings-002.csv": "61221,608,2.0,949553192",
+    "data/raw/ratings/ratings-003.csv": "92256,71057,4.5,1492289062",
+    "data/raw/ratings/ratings-004.csv": "122066,48774,3.0,1652320215",
+    "data/raw/ratings/ratings-005.csv": "151529,163134,3.0,1539528042",
+    "data/raw/ratings/ratings-006.csv": "180468,349,3.0,831390607",
+    "data/raw/ratings/ratings-007.csv": "208986,7361,5.0,1101085769",
+    "data/raw/ratings/ratings-008.csv": "237745,108932,5.0,1488095083",
+    "data/raw/ratings/ratings-009.csv": "267691,5400,4.0,1111933019",
+    "data/raw/ratings/ratings-010.csv": "297517,788,3.0,867156468",
+    "data/raw/ratings/ratings-011.csv": "327262,2012,4.0,1086798725"
+  },
+  "dimensions": {
+    "user_count": 330975,
+    "item_count": 83239,
+    "movie_metadata_count": 86537,
+    "rating_count": 33832162,
+    "positive_rating_count": 16916912,
+    "dense_cells": 27550028025,
+    "observed_density": 0.001228026409602899,
+    "positive_density": 0.0006140433681101491
+  },
+  "ratings": {
+    "count_by_value": {
+      "0.5": 566306,
+      "1.0": 1013645,
+      "1.5": 562409,
+      "2.0": 2146492,
+      "2.5": 1760733,
+      "3.0": 6400664,
+      "3.5": 4465001,
+      "4.0": 8835955,
+      "4.5": 3123055,
+      "5.0": 4957902
+    },
+    "timestamp_range": [
+      789652004,
+      1689843213
+    ],
+    "user_count_quantiles": {
+      "0": 1,
+      "0.1": 6.0,
+      "0.25": 15.0,
+      "0.5": 31.0,
+      "0.75": 98.0,
+      "0.9": 250.0,
+      "0.99": 1046.0,
+      "1": 33332
+    },
+    "item_count_quantiles": {
+      "0": 1,
+      "0.1": 1.0,
+      "0.25": 2.0,
+      "0.5": 5.0,
+      "0.75": 26.0,
+      "0.9": 263.0,
+      "0.99": 10068.959999999963,
+      "1": 122296
+    },
+    "positive_train_item_support_quantiles": {
+      "0": 1,
+      "0.1": 1.0,
+      "0.25": 1.0,
+      "0.5": 4.0,
+      "0.75": 24.0,
+      "0.9": 233.0,
+      "0.99": 6390.880000000019,
+      "1": 96117
+    },
+    "positive_train_item_support_threshold": 20,
+    "positive_train_items_at_support_threshold": 12554
+  },
+  "split": {
+    "partition_object": "all_user_ratings",
+    "ordering": "timestamp_ascending_then_seeded_sha256_user_item",
+    "tie_break": "sha256(seed:userId:movieId)",
+    "tie_break_seed": 20260910,
+    "boundary_rounding": "floor",
+    "positive_filter_timing": "after_partition",
+    "train_fraction": 0.8,
+    "validation_fraction": 0.1,
+    "test_fraction": 0.1,
+    "positive_threshold": 4.0,
+    "minimum_train_positive_interactions": 20,
+    "minimum_test_positive_interactions": 1,
+    "timestamp_tie_groups": 2145582,
+    "timestamp_tie_participating_rows": 7701744,
+    "timestamp_tie_excess_rows": 5556162,
+    "users_with_timestamp_ties": 131654,
+    "timestamp_tie_excess_fraction_of_rows": 0.16422722260551956,
+    "all_user_test_positive_quantiles": {
+      "0": 0,
+      "0.1": 0.0,
+      "0.25": 1.0,
+      "0.5": 2.0,
+      "0.75": 6.0,
+      "0.9": 13.0,
+      "0.99": 43.0,
+      "1": 553
+    },
+    "eligible_user_count": 141484,
+    "eligible_user_train_positive_quantiles": {
+      "0": 20,
+      "0.1": 24.0,
+      "0.25": 32.0,
+      "0.5": 53.0,
+      "0.75": 102.0,
+      "0.9": 185.0,
+      "0.99": 503.0,
+      "1": 4420
+    },
+    "eligible_user_validation_positive_quantiles": {
+      "0": 0,
+      "0.1": 2.0,
+      "0.25": 4.0,
+      "0.5": 6.0,
+      "0.75": 12.0,
+      "0.9": 21.0,
+      "0.99": 59.0,
+      "1": 552
+    },
+    "eligible_user_test_positive_quantiles": {
+      "0": 0,
+      "0.1": 2.0,
+      "0.25": 4.0,
+      "0.5": 7.0,
+      "0.75": 12.0,
+      "0.9": 22.0,
+      "0.99": 60.0,
+      "1": 553
+    },
+    "eligible_user_zero_test_positive_count": 2294,
+    "evaluation_eligible_user_count": 139190,
+    "evaluation_excluded_zero_test_positive_count": 2294
+  },
+  "sparsity_sampling": {
+    "seed": 20260909,
+    "heatmap_shape": [
+      200,
+      200
+    ],
+    "user_axis_order": "descending_raw_rating_count_then_user_id",
+    "item_axis_order": "descending_raw_rating_count_then_item_id",
+    "views": {
+      "random_head": {
+        "user_count": 200,
+        "user_selection": "uniform_without_replacement_all_users",
+        "user_axis_order": "descending_raw_rating_count_then_user_id",
+        "item_count": 200,
+        "item_selection": "top_items_by_raw_rating_count",
+        "item_axis_order": "descending_raw_rating_count_then_item_id",
+        "item_rank_range_1_indexed": [
+          1,
+          200
+        ],
+        "density": 0.1423
+      },
+      "top_head": {
+        "user_count": 200,
+        "user_selection": "top_activity_by_raw_rating_count",
+        "user_axis_order": "descending_raw_rating_count_then_user_id",
+        "item_count": 200,
+        "item_selection": "top_items_by_raw_rating_count",
+        "item_axis_order": "descending_raw_rating_count_then_item_id",
+        "item_rank_range_1_indexed": [
+          1,
+          200
+        ],
+        "density": 0.884225
+      },
+      "random_mid_tail": {
+        "user_count": 200,
+        "user_selection": "uniform_without_replacement_all_users",
+        "user_axis_order": "descending_raw_rating_count_then_user_id",
+        "item_count": 200,
+        "item_selection": "uniform_without_replacement_from_item_rank_band",
+        "item_axis_order": "descending_raw_rating_count_then_item_id",
+        "item_rank_range_1_indexed": [
+          1001,
+          5000
+        ],
+        "density": 0.009625
+      }
+    }
+  },
+  "figures": [
+    {
+      "path": "artifacts/support_probe_1250/figures/00_dashboard.png",
+      "sha256": "e2b962a1f29cf8b3dbf5f553d7827640375e034cd78dd351a9467b800f0675b7"
+    },
+    {
+      "path": "artifacts/support_probe_1250/figures/01_rating_distribution.png",
+      "sha256": "bea6ccf7b6fc3d5d16b477d1570e85ed90762f5ff0f719c457be626befadfcd7"
+    },
+    {
+      "path": "artifacts/support_probe_1250/figures/02_user_item_distributions.png",
+      "sha256": "28bbc741ba5063c5d103aecc61c358e5d9ccd3429c58fc68431ebbbebb44ef9e"
+    },
+    {
+      "path": "artifacts/support_probe_1250/figures/03_sparsity_heatmaps.png",
+      "sha256": "225f0e52db96f0b763562f3eddb6f0e5719689fab09982a1a3a4448a29f36a4b"
+    },
+    {
+      "path": "artifacts/support_probe_1250/figures/04_split_and_dimensions.png",
+      "sha256": "c0bcde6bf44a97cf07fdb4b6ca1b6c91b656a2aa2d512014c5a6b971d8ee993e"
+    },
+    {
+      "path": "artifacts/support_probe_1250/figures/05_global_support_probe.png",
+      "sha256": "426f91cf688fd1eef8bd753eaa90cc5a4268faabf3f7d982fe647d77571362ed"
+    }
+  ],
+  "cluster_summary": null
+}

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "verify-data-package",
+      "title": "Verify tracked data package",
+      "status": "done",
+      "owner": "research",
+      "priority": "high",
+      "notes": "Checksum validation passed for the separated MovieLens package.",
+      "command": "make validate-experiment",
+      "parameters": {}
+    },
+    {
+      "id": "freeze-protocol",
+      "title": "Freeze split and support protocol",
+      "status": "done",
+      "owner": "research",
+      "priority": "high",
+      "notes": "Chronological 80/10/10 split, seeded tie handling, and support threshold are pinned.",
+      "command": "make validate-experiment",
+      "parameters": {}
+    },
+    {
+      "id": "implement-model-runners",
+      "title": "Create global BPR run plan",
+      "status": "todo",
+      "owner": "",
+      "priority": "high",
+      "notes": "Creates a fresh run-record draft; model training is not implemented yet.",
+      "command": "create_run_record.py",
+      "parameters": {
+        "--variant": "global_mf",
+        "--run-id": "milestone_1_global_draft",
+        "--status": "planned"
+      }
+    },
+    {
+      "id": "execute-pilot",
+      "title": "Execute matched pilot comparison",
+      "status": "todo",
+      "owner": "",
+      "priority": "normal",
+      "notes": "Run only after both model runners and the training-only support report are ready.",
+      "command": "make explore",
+      "parameters": {
+        "RUN_ID": "raw_snapshot_preflight"
+      }
+    }
+  ]
+}

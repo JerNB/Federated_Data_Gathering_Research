@@ -117,6 +117,26 @@ def validate_experiment(config_path: Path, manifest_path: Path) -> None:
     fractions = [split["train_fraction"], split["validation_fraction"], split["test_fraction"]]
     if abs(sum(fractions) - 1.0) > 1e-9:
         fail("split fractions must sum to one")
+    if split["partition_object"] != "all_user_ratings":
+        fail("chronological splits must partition all user ratings before positive filtering")
+    if split["ordering"] != "timestamp_ascending_then_seeded_sha256_user_item":
+        fail("chronological splits must order by timestamp with the declared seeded SHA-256 tie-break")
+    if split["tie_break"] != "sha256(seed:userId:movieId)":
+        fail("chronological split ties must use the declared seeded SHA-256 user-item key")
+    if (
+        not isinstance(split["tie_break_seed"], int)
+        or isinstance(split["tie_break_seed"], bool)
+    ):
+        fail("split tie-break seed must be an integer independent of the user-selection seed")
+    if split["boundary_rounding"] != "floor":
+        fail("chronological split boundaries must use floor rounding")
+    if split["positive_filter_timing"] != "after_partition":
+        fail("the positive rule must be applied after the chronological partition")
+    evaluation_eligibility = split["evaluation_eligibility"]
+    if evaluation_eligibility["minimum_positive_test_interactions"] != 1:
+        fail("primary ranking evaluation requires at least one positive test interaction")
+    if evaluation_eligibility["zero_positive_test_policy"] != "exclude_from_primary_metrics":
+        fail("users without positive test interactions must be excluded from primary metrics")
     if split["cluster_fit_source"] != "training_only" or split["catalog_fit_source"] != "training_only":
         fail("cluster and catalog construction must use training only data")
 

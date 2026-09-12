@@ -1,0 +1,58 @@
+{
+  "run_id": "milestone_1_oracle_clustered_plan",
+  "experiment_id": "milestone_1_oracle_comparison",
+  "status": "planned",
+  "created_at_utc": "2026-09-12T06:50:35.654703+00:00",
+  "code_commit": "c6d599c70010cde3b23ac47c620c8d9dcaf895c8",
+  "worktree_clean": false,
+  "worktree_status": [
+    " M results/run_records/milestone_1_global_plan.json",
+    " D results/run_records/milestone_1_oracle_clustered_plan.json",
+    " M results/run_registry.jsonl"
+  ],
+  "dataset": {
+    "manifest_path": "data/dataset_manifest.json",
+    "dataset_id": "movielens_ml_latest",
+    "version": "2023-07-20",
+    "manifest_sha256": "11ebd0466546139c06b80ebcca20a535a490a8f94d985a3fbd3f5c447bafdc0b",
+    "package_manifest_path": "data/chunk_manifest.json",
+    "package_manifest_sha256": "8066c7016dc078d94b7bafbc50d708c712ced532e20d997f8d0e868f7b0c16fa"
+  },
+  "configuration": {
+    "path": "configs/experiments/milestone_1_oracle_comparison.json",
+    "sha256": "f0f24f8ee55f71af038e6e629fe762720f3a1d99062f95a20e5838d478d5d752",
+    "variant_id": "oracle_clustered_mf"
+  },
+  "formula": {
+    "objective_id": "implicit_mf_bpr_v1",
+    "score": "s_oracle(u,i) = p_u^T q_i,g(u)",
+    "loss": "L = -log sigmoid(s(u,i_positive) - s(u,i_negative)) + lambda * regularization"
+  },
+  "split": {
+    "method": "chronological_user_level",
+    "seed": 20260909,
+    "train_fraction": 0.8,
+    "validation_fraction": 0.1,
+    "test_fraction": 0.1,
+    "user_count": 10000,
+    "partition_object": "all_user_ratings",
+    "ordering": "timestamp_ascending_then_seeded_sha256_user_item",
+    "tie_break": "sha256(seed:userId:movieId)",
+    "tie_break_seed": 20260910,
+    "boundary_rounding": "floor",
+    "positive_filter_timing": "after_partition",
+    "evaluation_eligibility": {
+      "minimum_positive_test_interactions": 1,
+      "zero_positive_test_policy": "exclude_from_primary_metrics"
+    }
+  },
+  "support_report": {
+    "support_check_passed": false,
+    "eligible_item_count_by_cluster": {},
+    "eligible_item_intersection_count": 0,
+    "per_cluster": []
+  },
+  "metrics": {},
+  "artifacts": [],
+  "notes": []
+}

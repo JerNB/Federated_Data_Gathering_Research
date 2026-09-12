@@ -111,7 +111,22 @@
         "validation_fraction": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
         "test_fraction": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
         "user_count": {"type": "integer", "minimum": 1},
-        "catalog_count": {"type": "integer", "minimum": 1}
+        "catalog_count": {"type": "integer", "minimum": 1},
+        "partition_object": {"type": "string"},
+        "tie_break": {"type": "string"},
+        "tie_break_seed": {"type": "integer"},
+        "ordering": {"type": "string"},
+        "boundary_rounding": {"type": "string"},
+        "positive_filter_timing": {"type": "string"},
+        "evaluation_eligibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minimum_positive_test_interactions", "zero_positive_test_policy"],
+          "properties": {
+            "minimum_positive_test_interactions": {"type": "integer", "minimum": 1},
+            "zero_positive_test_policy": {"type": "string"}
+          }
+        }
       }
     },
     "support_report": {

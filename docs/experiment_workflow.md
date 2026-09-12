@@ -48,6 +48,32 @@ reports/
 ```
 
 The separated data package is tracked in Git. Checkpoints and temporary model outputs remain outside Git in `runs/` and `artifacts/`.
+## Reproducible exploration
+
+The raw-data visualization pass is implemented in `scripts/explore_dataset.py`
+and exposed through the repository `Makefile`:
+
+```sh
+make explore RUN_ID=raw_snapshot_preflight
+```
+`make explore` reads the tracked `data/raw/` package. It does not require the
+ignored `ml-latest/` staging directory. Use `make verify-source` separately
+when the full upstream staging snapshot also needs checksum verification.
+
+The command validates the pinned source package first, then writes the tracked
+metadata file `results/explorations/<run_id>.json` and local figures under
+`artifacts/<run_id>/figures`. The metadata records the script hash,
+configuration and manifest hashes, chunk headers, split semantics, seeded
+timestamp tie handling, sampling seed, rank-ordered heatmap strata, optional
+cluster-map hash, and the configured per-cluster-equivalent global support
+probe. Use `CLUSTER_MAP=path/to/user_clusters.csv` to add cluster-conditioned
+descriptives without changing the exploration code.
+
+Figure artifacts are local and ignored; run metadata under
+`results/explorations/`, the script, and the command contract are tracked.
+Exploration is not a model run and therefore does not create a completed
+`results/run_records/` entry: the model-run lifecycle requires a training-only
+support report and a clean worktree.
 
 ## Run identity
 
