@@ -121,19 +121,7 @@ explanation quality, or a measurable proxy. Keep ranking accuracy and user
 utility as separate dimensions until the review supports a defensible combined
 score.
 
-### Q5. What does “挖因子” mean for this project?
-
-Possible meanings to distinguish:
-
-1. Interpret or ablate learned latent user/item factors.
-2. Attribute metric changes to user, item, client, or data-quality factors.
-3. Study observable features or causal drivers.
-4. Discover cluster-specific factors in the oracle/federated setting.
-
-Do not choose among these until the proposal states what decision the factor
-analysis should support.
-
-### Q6. Are additional datasets necessary?
+### Q5. Are additional datasets necessary?
 
 Use the literature review to decide whether MovieLens is sufficient for the
 small-to-large claim. Add datasets only if they introduce a required shift,
@@ -141,7 +129,7 @@ such as different sparsity, temporal behavior, client structure, item cold
 start, or privacy setting. Each added dataset must have a stated role rather
 than serving as an unbounded collection.
 
-### Q7. Should AI, transformer, or other model plugins be included?
+### Q6. Should AI, transformer, or other model plugins be included?
 
 **Current answer:** not in the first frozen comparison. First determine from
 the literature whether a transformer or other AI model tests the same research
@@ -155,7 +143,7 @@ If included later, require one narrow adapter contract for:
 - runtime and memory accounting;
 - model and checkpoint provenance.
 
-### Q8. What should the literature review produce?
+### Q7. What should the literature review produce?
 
 The review should happen before the benchmark is frozen and in parallel with
 proposal refinement. Use a combined decision and reproducibility matrix for
@@ -172,14 +160,14 @@ each relevant strategy:
 - reported result and limitation;
 - reusable idea and implication for this proposal.
 
-### Q9. How long should a run take?
+### Q8. How long should a run take?
 
 Measure end-to-end wall time separately for data preparation, training,
 evaluation, communication, and reporting. Report hardware and scale with every
 measurement. Do not set a target runtime until comparable literature evidence
 and a first baseline implementation exist.
 
-### Q10. Should algorithms be optimized for the current data structure?
+### Q9. Should algorithms be optimized for the current data structure?
 
 Treat this as a controlled trade-off:
 
@@ -192,7 +180,7 @@ Treat this as a controlled trade-off:
 An optimization is not a research improvement if it only works for one
 serialization, schema, or dataset layout.
 
-### Q11. What does “federated data gathering” mean here?
+### Q10. What does “federated data gathering” mean here?
 
 **Current answer:** open. The proposal must separate at least:
 
