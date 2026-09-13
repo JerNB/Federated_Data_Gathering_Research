@@ -1,0 +1,57 @@
+{
+  "experiment_id": "fixed_cohort_budget_v1",
+  "title": "Fixed-cohort chronological local-data budget replay",
+  "status": "executed_exploratory_real_data_validation",
+  "dataset": {
+    "dataset_id": "movielens_ml_latest",
+    "version": "2023-07-20",
+    "manifest": "data/dataset_manifest.json",
+    "ratings_dir": "data/raw/ratings"
+  },
+  "estimand": {
+    "reference": "all permitted positive pilot and collection-window history from one fixed eligible cohort",
+    "sample": "same cohort with a local chronological history cap or item-tail reserve cap",
+    "measured_claim": "policy-specific fixed-cohort sample-to-reference fidelity",
+    "claim_boundary": "offline MovieLens replay; no device availability, dropout, secure aggregation, consent, bytes, rounds, or federated convergence claim"
+  },
+  "windows": {
+    "method": "global chronological positive-rating day cutoffs",
+    "pilot_fraction": 0.9,
+    "collection_fraction": 0.05,
+    "future_test_fraction": 0.05
+  },
+  "cohort": {
+    "selection": "deterministic lowest keyed hash among users with the pilot minimum and a positive interaction in the final 365 pilot days",
+    "panel_size": 2000,
+    "minimum_pilot_positive_interactions": 5,
+    "recent_pilot_activity_days": 365,
+    "seed": 20261001
+  },
+  "policies": {
+    "equal_chronological_cap": "retain each client's first k positive collection-window events",
+    "tail_reserve_cap": "retain up to k events per client; reserve half of capacity for the client's earliest collection events whose item has pilot popularity at or below the pilot 20th-percentile count, then fill by chronological order"
+  },
+  "caps": [1, 2, 5, 10, 20, 50],
+  "tail": {
+    "pilot_item_count_quantile": 0.2,
+    "reserve_fraction": 0.5
+  },
+  "evaluation": {
+    "positive_rule": "rating >= 4.0",
+    "candidate_catalog": "all rating-bearing items in the pinned snapshot",
+    "fixed_exclusion": "all pilot and collection-window items seen by each cohort client, independent of policy",
+    "cutoff": 10,
+    "models": ["popularity", "rating_weighted_popularity"],
+    "smoothing_count": 20.0,
+    "bootstrap_replicates": 1000,
+    "bootstrap_seed": 20261002,
+    "exploratory_mean_absolute_ndcg_tolerance": 0.005
+  },
+  "invariants": {
+    "fixed_cohort": true,
+    "future_test_hidden_from_policy": true,
+    "full_reference_reused": true,
+    "same_cap_per_client": true,
+    "tail_policy_uses_only_pilot_item_popularity_and_collection_events": true
+  }
+}

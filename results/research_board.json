@@ -12,39 +12,56 @@
       "parameters": {}
     },
     {
-      "id": "freeze-protocol",
-      "title": "Freeze split and support protocol",
+      "id": "freeze-sample-generalization-contract",
+      "title": "Freeze sample-generalization contract",
       "status": "done",
       "owner": "research",
       "priority": "high",
-      "notes": "Chronological 80/10/10 split, seeded tie handling, and support threshold are pinned.",
+      "notes": "Four primary samplers, frozen chronological target, fixed controls, and independent-draw design are recorded.",
       "command": "make validate-experiment",
       "parameters": {}
     },
     {
-      "id": "implement-model-runners",
-      "title": "Create global BPR run plan",
-      "status": "todo",
-      "owner": "",
+      "id": "run-candidate-matrix",
+      "title": "Run full candidate matrix",
+      "status": "done",
+      "owner": "research",
       "priority": "high",
-      "notes": "Creates a fresh run-record draft; model training is not implemented yet.",
-      "command": "create_run_record.py",
-      "parameters": {
-        "--variant": "global_mf",
-        "--run-id": "milestone_1_global_draft",
-        "--status": "planned"
-      }
+      "notes": "Executed 4 schemes × 3 models × 7 fractions; 732 draw rows, 84 aggregate rows, six figures, and exact full-reference checks.",
+      "command": "make validate-sample-generalization",
+      "parameters": {}
     },
     {
-      "id": "execute-pilot",
-      "title": "Execute matched pilot comparison",
+      "id": "review-approximation-evidence",
+      "status": "done",
+      "owner": "research",
+      "priority": "high",
+      "notes": "Reviewed fixed-frame error, native-exclusion gaps, support coverage, ordering stability, and local resource measurements in the executed report.",
+      "command": "make validate-sample-generalization",
+      "parameters": {}
+    },
+    {
+      "id": "run-fixed-cohort-budget-replay",
+      "title": "Run fixed-cohort local-data budget replay",
+      "status": "done",
+      "owner": "research",
+      "priority": "high",
+      "notes": "Executed one real MovieLens chronological replay: 2,000 users from 16,084 recent pilot-eligible users, 24 policy/model cells. The item-tail reserve cap did not beat the equal chronological cap and was not promoted.",
+      "command": "make validate-fixed-cohort-budget",
+      "parameters": {}
+    },
+    {
+      "id": "bpr-confirmation",
+      "title": "Add BPR confirmation runner",
       "status": "todo",
       "owner": "",
       "priority": "normal",
-      "notes": "Run only after both model runners and the training-only support report are ready.",
-      "command": "make explore",
+      "notes": "Only after the cheap full-snapshot matrix is interpreted; preserve the same sampling and evaluation controls.",
+      "command": "create_run_record.py",
       "parameters": {
-        "RUN_ID": "raw_snapshot_preflight"
+        "--variant": "global_mf",
+        "--run-id": "sample_generalization_bpr_plan",
+        "--status": "planned"
       }
     }
   ]

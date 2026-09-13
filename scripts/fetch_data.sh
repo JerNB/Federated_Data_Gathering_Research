@@ -16,8 +16,9 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
-# Release asset on this repo. Primary source, because the upstream GroupLens
-# host served an expired TLS certificate as of 2026-09 (see README).
+# The release URL is a pinned provenance source when its asset is available.
+# The tracked data/raw package is sufficient for experiments; any alternate
+# source must pass the checksum manifest below.
 DATA_URL="${DATA_URL:-https://github.com/JerNB/Federated_Data_Gathering_Research/releases/download/data-2023-07-20/ml-latest.zip}"
 UPSTREAM_URL="https://files.grouplens.org/datasets/movielens/ml-latest.zip"
 
@@ -77,10 +78,10 @@ zip="$tmp/ml-latest.zip"
 
 echo "downloading $DATA_URL"
 if ! curl -fL --retry 3 --retry-delay 2 --progress-bar -o "$zip" "$DATA_URL"; then
-  die "download failed. The upstream mirror is $UPSTREAM_URL (note: its TLS
-certificate was expired as of 2026-09; if curl reports a certificate error the
-host, not this script, is at fault). Download the archive by hand, place it
-next to this repo, then run: DATA_URL=file:///abs/path/ml-latest.zip $0"
+  die "download failed from $DATA_URL. The tracked data/raw package is the
+authoritative working copy. If you obtain an archive from $UPSTREAM_URL or
+another source, verify every file against $checksums and pass it explicitly with:
+DATA_URL=file:///abs/path/ml-latest.zip $0"
 fi
 
 extract "$zip"

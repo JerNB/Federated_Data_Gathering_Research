@@ -1,0 +1,103 @@
+{
+  "experiment_id": "sample_generalization_v1",
+  "title": "Sampling generalization under fixed recommendation controls",
+  "status": "executed_exploratory",
+  "dataset": {
+    "dataset_id": "movielens_ml_latest",
+    "version": "2023-07-20",
+    "manifest": "data/dataset_manifest.json",
+    "manifest_sha256": "11ebd0466546139c06b80ebcca20a535a490a8f94d985a3fbd3f5c447bafdc0b",
+    "raw_ratings": 33832162,
+    "users": 330975,
+    "rating_bearing_items": 83239
+  },
+  "estimand": {
+    "reference": "full_snapshot_once",
+    "sample": "expected fixed-panel test metric for a prescribed training sample",
+    "claim_boundary": "in-reference approximation to frozen full-snapshot test behavior; not independent external generalization",
+    "measured_claim": "sample-to-reference fidelity",
+    "experimental_factors": ["sampling method", "executed model"],
+    "not_measured": ["model-family selection", "temporal generalization", "population or subgroup generalization", "external-domain generalization", "federated or client generalization"]
+  },
+  "constant_controls": {
+    "positive_rule": "rating >= 4.0",
+    "split": {
+      "method": "chronological_per_user",
+      "fractions": [0.8, 0.1, 0.1],
+      "tie_break": "sha256(seed:userId:movieId)",
+      "tie_break_seed": 20260910,
+      "boundary_rounding": "floor",
+      "positive_filter_timing": "after_partition"
+    },
+    "panel_size": 2000,
+    "panel_selection": "deterministic eligible-user selection",
+    "candidate_catalog": "all full-snapshot items",
+    "full_reference_exclusion": true,
+    "sample_native_exclusion": "sensitivity_only",
+    "cutoff": 10,
+    "support_threshold": 20,
+    "item_item_top_k": 100,
+    "smoothing_count": 20.0,
+    "seed": 20260909
+  },
+  "sampling_candidates": [
+    {"id": "uniform_user", "area": "user-level", "role": "primary", "implemented": true},
+    {"id": "activity_stratified_user", "area": "user heterogeneity", "role": "primary", "implemented": true},
+    {"id": "uniform_interaction", "area": "interaction-level", "role": "primary", "implemented": true},
+    {"id": "within_user_history", "area": "longitudinal/user history", "role": "primary", "implemented": true},
+    {"id": "item_stratified", "area": "item coverage", "role": "secondary", "implemented": false},
+    {"id": "recent_window", "area": "time/exposure", "role": "stress", "implemented": false},
+    {"id": "cluster_stratified_user", "area": "federated clients", "role": "secondary", "implemented": false},
+    {"id": "local_client_history", "area": "federated/local sparsity", "role": "stress", "implemented": false},
+    {"id": "long_tail_boost", "area": "coverage/fairness", "role": "stress", "implemented": false},
+    {"id": "cold_start_holdout", "area": "robustness", "role": "stress", "implemented": false}
+  ],
+  "model_candidates": [
+    {"id": "popularity", "area": "global control", "role": "primary_control", "implemented": true},
+    {"id": "rating_weighted_popularity", "area": "global control", "role": "primary_control", "implemented": true},
+    {"id": "item_item_cosine", "area": "collaborative", "role": "primary_collaborative", "implemented": true},
+    {"id": "bpr_mf", "area": "learned collaborative", "role": "deferred", "implemented": false},
+    {"id": "implicit_als", "area": "learned collaborative", "role": "deferred", "implemented": false},
+    {"id": "neural_two_tower", "area": "representation learning", "role": "deferred", "implemented": false},
+    {"id": "sequence_transformer", "area": "temporal modeling", "role": "deferred", "implemented": false},
+    {"id": "federated_fedmf", "area": "federated optimization", "role": "deferred", "implemented": false}
+  ],
+  "fractions": [0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0],
+  "replicates_below_full": 10,
+  "executed_matrix": {
+    "sampling_schemes": ["uniform_user", "activity_stratified_user", "uniform_interaction", "within_user_history"],
+    "models": ["popularity", "rating_weighted_popularity", "item_item_cosine"],
+    "draw_rows": 732,
+    "aggregate_rows": 84,
+    "full_fraction_rows": 12,
+    "full_fraction_absolute_ndcg_error": 0.0,
+    "result_root": "results/explorations/sample_generalization_full",
+    "summary": "results/explorations/sample_generalization_full/candidate_summary.json",
+    "report": "results/explorations/sample_generalization_full/report.md"
+  },
+  "metrics": [
+    "ndcg_at_10",
+    "absolute_ndcg_error",
+    "native_minus_fixed_ndcg",
+    "coverage",
+    "kendall_tau",
+    "top_choice_agreement",
+    "sample_rows",
+    "evaluation_seconds",
+    "peak_rss_mb"
+  ],
+  "interpretation_gate": {
+    "requires_metric_tolerance": true,
+    "requires_order_stability": true,
+    "requires_coverage_check": true,
+    "requires_cross_scheme_replication": true,
+    "requires_full_fraction_zero_error": true,
+    "does_not_claim_external_generalization": true
+  },
+  "reproduction": {
+    "runner": "scripts/run_sample_generalization.py",
+    "command": "python3 scripts/run_sample_generalization.py --panel-size 2000 --fractions 0.01,0.025,0.05,0.1,0.25,0.5,1.0 --replicates 10 --models popularity,rating_weighted_popularity,item_item_cosine --support-threshold 20 --item-item-top-k 100 --output results/explorations/sample_generalization_full",
+    "reference_cache": "artifacts/sample_generalization_full_cache",
+    "data_package": "data/raw/ratings/"
+  }
+}

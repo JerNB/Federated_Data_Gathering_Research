@@ -19,35 +19,60 @@ Tracked now:
 
 ```text
 configs/
-  objectives/
-  experiments/
+  objectives/                objective files
+  experiments/               primary and deferred experiment contracts
 
 data/
-  dataset_manifest.json
-  ml-latest.sha256
-  chunk_manifest.json
-  raw/
+  dataset_manifest.json      source snapshot identity
+  chunk_manifest.json        Git package identity
+  raw/                       separated CSV package
+
+docs/
+  data_management.md
+  experiment_workflow.md
+  literature_sources.md      cited-source register
+  research_direction.md      deferred candidate tracks
+  research_proposal.md       canonical primary proposal
 
 experiments/
   run_record.schema.json
 
 results/
+  explorations/              tracked preflight and full candidate outputs
+  run_records/               planned/completed run records
+  research_board.json        editable research tasks
+  run_registry.jsonl         compact run index
   README.md
-  run_registry.jsonl
+
+scripts/
+  run_sample_generalization.py
+  create_run_record.py
+  explore_dataset.py
+  select_pilot_catalog.py
+  validate_experiment.py
+  selftest.py
+  dashboard_server.py
+
+web/
+  index.html
+  app.js
+  styles.css
+
+Makefile
+requirements-exploration.txt
 ```
 
-Created on first use or during later milestones:
+Generated local outputs are intentionally not tracked:
 
 ```text
-results/
-  exported_metrics.csv
-  run_records/
-
-reports/
-  milestone_1/
+artifacts/<run_id>/            exploration figures and dashboard job logs
+ml-latest/                     full upstream source snapshot
 ```
 
-The separated data package is tracked in Git. Checkpoints and temporary model outputs remain outside Git in `runs/` and `artifacts/`.
+The separated data package is tracked in Git. Checkpoints and temporary model
+outputs remain outside Git. Tracked exploration metadata, run records, the
+proposal, and the research board are part of the reproducible project record.
+
 ## Reproducible exploration
 
 The raw-data visualization pass is implemented in `scripts/explore_dataset.py`
@@ -77,25 +102,20 @@ support report and a clean worktree.
 
 ## Run identity
 
-Every run records:
+Every run record must identify:
 
 1. A stable run identifier.
-2. The experiment identifier.
-3. The code commit.
-4. Whether the worktree was clean when the record was created.
-5. The worktree status when it was not clean.
-6. The dataset identifier and source version.
-7. The source manifest SHA 256 digest.
-8. The Git package chunk manifest SHA 256 digest.
-9. The configuration path and digest.
-10. The model variant.
-11. The objective and score formula.
-12. The split method and seed.
-13. The selected user count and catalog counts.
-14. The support report for every oracle cluster.
-15. Parameters, metrics, artifacts, and notes.
+2. The experiment and sampling scheme.
+3. The Git commit and worktree state.
+4. The dataset version and manifest digests.
+5. The model, objective, split, sample fraction, replicate, and seed.
+6. Realized users, items, interactions, support, and evaluation-panel counts.
+7. Metrics, uncertainty, figures, interpretation, and artifact paths.
 
-The full record is stored in `results/run_records/`. Its compact summary is appended to the tracked `results/run_registry.jsonl` file. The schema is in `experiments/run_record.schema.json`.
+The full record is stored in `results/run_records/`. The compact summary is
+appended to `results/run_registry.jsonl`. The primary candidate matrix is
+stored in `results/sample_generalization/candidate_summary.json`.
+
 
 
 ## Shared tracking
@@ -132,20 +152,47 @@ python3 scripts/selftest.py
 
 It exercises selector composition, schema rejection, identity pinning, and lifecycle transitions.
 
-## First comparison
+## Full-data sampling-generalization run
 
-The first experiment contains exactly two model variants:
+The primary experiment is `configs/experiments/sample_generalization_v1.json`.
+Its candidate catalog and status labels are documented in
+`docs/candidate_matrix.md`. The reproducible runner is
+`scripts/run_sample_generalization.py`.
 
-1. Global matrix factorization with local user factors and one shared item factor matrix.
-2. Capacity matched oracle clustered matrix factorization with local user factors and one item factor matrix per declared cluster.
+The executed result is tracked under
+`results/explorations/sample_generalization_full/`:
 
-The pilot uses a fixed deterministic user sample stratified across oracle clusters. Each cluster receives its configured support filtered catalog. Both model variants use the same catalog within each cluster. The all cluster intersection is retained as a secondary catalog for reporting.
+```text
+results/explorations/sample_generalization_full/
+  candidate_summary.json
+  reference_artifact.json
+  report.md
+  figures/*.png
+```
 
-The support report includes item support statistics for every cluster, each cluster catalog size, and the all cluster intersection size. If any cluster fails its support condition, increase the user population or reduce the cluster count before interpreting a model difference. Full population and full catalog confirmation happens after the pilot protocol and hyperparameters are frozen.
+The full matrix uses one frozen full-data reference, the same panel, catalog,
+split, metrics, exclusions, and seeds for every sample cell:
 
-Routing methods are later model variants. They do not enter the first comparison.
+```sh
+python3 scripts/run_sample_generalization.py \
+  --panel-size 2000 \
+  --fractions 0.01,0.025,0.05,0.1,0.25,0.5,1.0 \
+  --replicates 10 \
+  --models popularity,rating_weighted_popularity,item_item_cosine \
+  --support-threshold 20 \
+  --item-item-top-k 100 \
+  --output results/explorations/sample_generalization_full
+```
 
-The support selection tool is `scripts/select_pilot_catalog.py`. It reads a training only interaction file and oracle cluster map, selects equal user counts per cluster, filters the catalog separately for each cluster, and writes the per cluster support report.
+Validate the stored contract and artifact tree with:
+
+```sh
+make validate-sample-generalization
+```
+
+The result is an in-reference approximation study. It does not claim
+independent external generalization. Deferred model and sampling candidates are
+listed explicitly rather than being presented as executed evidence.
 
 ## Public report contents
 

@@ -2,9 +2,10 @@
 
 ## Decision
 
-Use ordinary Git for the working dataset. Keep the original MovieLens archive
-in the GitHub Release as frozen provenance, and commit a byte-preserving
-separated CSV package under `data/raw/`.
+Use ordinary Git for the working dataset. Treat the byte-preserving separated
+CSV package under `data/raw/` as the authoritative working copy. The dated
+GitHub tag records the intended source provenance; any external archive copy is
+usable only after every manifest checksum passes.
 
 The large CSV files are split into deterministic chunks below GitHub's 100 MiB
 per-file limit. Git then provides ordinary branches, pull requests, diffs,
@@ -20,17 +21,21 @@ history, reverts, and blame for dataset changes.
 6. Archive SHA 256: `21c09ce12e8062c6237011432fbd3acacb9e80d094f8400b1ce8c7592f725804`.
 7. File checksums: `data/ml-latest.sha256`.
 
-The release is immutable. A new upstream snapshot receives a new release,
-manifest version, and Git package update.
+The manifest and Git package are the reproducibility anchor. A new upstream
+snapshot receives a new manifest version and Git package update; do not replace
+this snapshot with the rolling `ml-latest` URL.
 
 ## Package workflow
 
-Fetch and verify the original source:
+Fetch and verify an independently obtained source archive only when needed:
 
 ```sh
-scripts/fetch_data.sh
+DATA_URL=file:///abs/path/ml-latest.zip scripts/fetch_data.sh
 scripts/fetch_data.sh --verify
 ```
+
+The dated release-download asset may be unavailable. The tracked `data/raw/`
+package is sufficient for the experiment and remains the default working source.
 
 Create or refresh the Git package:
 
@@ -62,9 +67,9 @@ Git from changing source line endings or attempting huge text diffs.
 5. Commit the generated data package and open a pull request.
 6. Merge after review and validation.
 
-`data/raw/` is the single Git-tracked data package. The frozen upstream
-snapshot remains available from the dated release; Git history records every
-package change, review, merge, and revert.
+`data/raw/` is the single Git-tracked data package. The dated tag and manifest
+record the frozen source provenance; Git history records every package change,
+review, merge, and revert.
 
 ## Files in Git
 

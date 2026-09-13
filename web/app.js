@@ -192,6 +192,8 @@ function boardCell(child) {
 
 const BOARD_COMMAND_OPTIONS = [
   ["make explore", "make explore"],
+  ["make sample-generalization", "make sample-generalization"],
+  ["make validate-sample-generalization", "make validate-sample-generalization"],
   ["make validate-experiment", "make validate-experiment"],
   ["create_run_record.py", "create_run_record.py"],
 ];
@@ -475,6 +477,154 @@ function renderFigures(data) {
     gallery.append(card);
   });
 }
+function resultNumber(value, digits = 4) {
+  if (value === null || value === undefined || value === "") return "—";
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric.toFixed(digits) : String(value);
+}
+
+function resultValue(value, format = "text") {
+  if (format === "integer") return value === null || value === undefined ? "—" : number(value);
+  if (format === "fraction") return resultNumber(value, 3).replace(/\.?0+$/, "");
+  if (format === "decimal") return resultNumber(value, 4);
+  if (format === "seconds") return resultNumber(value, 2);
+  if (format === "percent") return value === null || value === undefined ? "—" : `${resultNumber(Number(value) * 100, 1)}%`;
+  if (format === "boolean") return value ? "yes" : "no";
+  return value === null || value === undefined ? "—" : String(value);
+}
+
+const SAMPLING_DECISION_COLUMNS = [
+  "Sampler",
+  "10% item-item error",
+  "10% supported",
+  "50% item-item error",
+  "50% supported",
+  "50% full-order τ",
+  "Use for current claim",
+];
+
+const SAMPLING_DECISIONS = {
+  uniform_interaction: "Conditional: model ranking",
+  within_user_history: "Cross-check",
+  uniform_user: "Fails at 50%",
+  activity_stratified_user: "Fails at 50%",
+};
+
+function itemItemAggregate(aggregates, scheme, fraction) {
+  return aggregates.find(
+    (row) => row.scheme === scheme && row.model === "item_item_cosine" && Number(row.fraction) === fraction,
+  );
+}
+
+function supportText(row, panelSize) {
+  if (!row) return "—";
+  return `${number(Math.round(row.mean_sample_supported_users))} / ${number(panelSize)}`;
+}
+
+function renderSamplingDecision(data) {
+  const aggregates = data.aggregates || [];
+  const panelSize = Number(data.dataset?.panel_user_count || 0);
+  const schemes = data.design?.schemes || [];
+  const head = $("sample-proposal-head");
+  const body = $("sample-proposal-body");
+  head.replaceChildren();
+  body.replaceChildren();
+
+  const header = document.createElement("tr");
+  SAMPLING_DECISION_COLUMNS.forEach((label) => {
+    const cell = document.createElement("th");
+    cell.scope = "col";
+    cell.textContent = label;
+    header.append(cell);
+  });
+  head.append(header);
+
+  schemes.forEach((scheme) => {
+    const tenPercent = itemItemAggregate(aggregates, scheme, 0.1);
+    const fiftyPercent = itemItemAggregate(aggregates, scheme, 0.5);
+    const values = [
+      titleize(scheme),
+      resultValue(tenPercent?.mean_absolute_ndcg_error, "decimal"),
+      supportText(tenPercent, panelSize),
+      resultValue(fiftyPercent?.mean_absolute_ndcg_error, "decimal"),
+      supportText(fiftyPercent, panelSize),
+      resultValue(fiftyPercent?.mean_algorithm_order_kendall_tau, "decimal"),
+      SAMPLING_DECISIONS[scheme] || "Deferred",
+    ];
+    const tableRow = document.createElement("tr");
+    values.forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      tableRow.append(cell);
+    });
+    body.append(tableRow);
+  });
+
+  const primary = itemItemAggregate(aggregates, "uniform_interaction", 0.5);
+  const check = itemItemAggregate(aggregates, "within_user_history", 0.5);
+  const referenceModels = aggregates
+    .filter((row) => row.scheme === "uniform_interaction" && Number(row.fraction) === 1.0)
+    .sort((left, right) => right.mean_reference_ndcg_at_10 - left.mean_reference_ndcg_at_10);
+  if (referenceModels.length) {
+    const [winner, runnerUp] = referenceModels;
+    setText(
+      "sample-model-status",
+      `Current model comparison: ${titleize(winner.model)} is first on the full reference (${resultValue(winner.mean_reference_ndcg_at_10, "decimal")} NDCG@10) versus ${titleize(runnerUp.model)} (${resultValue(runnerUp.mean_reference_ndcg_at_10, "decimal")}). This is not a recommender-family selection: only three models have run.`,
+    );
+  }
+  if (primary && check) {
+    setText(
+      "sample-decision",
+      `Scope: sampling-design robustness. For the fixed model, split, and panel, this run tests whether changing the training sampling method or fraction changes the reported result relative to full training data. It does not measure temporal, subgroup, external-domain, or federated generalizability. Conditional result: when choosing only among the three executed models from a 50% sample, uniform interaction has stronger full-order agreement (${resultValue(primary.mean_algorithm_order_kendall_tau, "decimal")}) than the within-user-history cross-check (${resultValue(check.mean_algorithm_order_kendall_tau, "decimal")}).`,
+    );
+  }
+}
+
+function renderSampleGeneralization(data) {
+  const dataset = data.dataset || {};
+  const design = data.design || {};
+  const schemes = design.schemes || [];
+  const models = design.models || [];
+  const fractions = design.fractions || [];
+  setText(
+    "sample-run-summary",
+    `${number(dataset.raw_rows)} ratings · ${number(dataset.panel_user_count)} panel users · ${schemes.length} sampling schemes · ${models.length} models · fractions ${fractions.join(", ")} · created ${formatDate(data.created_at_utc)}`,
+  );
+  const metrics = $("sample-run-metrics");
+  metrics.replaceChildren();
+  [
+    ["Draw rows", data.draw_rows],
+    ["Aggregate rows", data.aggregate_rows],
+    ["Full-fraction error", data.full_fraction_error],
+    ["Item-item score limit", design.item_item_score_limit],
+  ].forEach(([label, value]) => {
+    const cell = document.createElement("div");
+    const caption = document.createElement("span");
+    caption.textContent = label;
+    const strong = document.createElement("strong");
+    strong.textContent = label === "Full-fraction error" ? Number(value || 0).toFixed(4) : number(value);
+    cell.append(caption, strong);
+    metrics.append(cell);
+  });
+
+  const gallery = $("sample-figure-gallery");
+  gallery.replaceChildren();
+  (data.figures || []).forEach((figurePath) => {
+    const card = document.createElement("figure");
+    card.className = "figure-card";
+    const image = document.createElement("img");
+    image.src = `/${figurePath}`;
+    image.alt = `${figurePath.split("/").pop()} full-data result`;
+    image.loading = "lazy";
+    const caption = document.createElement("figcaption");
+    caption.className = "figure-caption";
+    caption.textContent = titleize(figurePath.split("/").pop().replace(/\.png$/, ""));
+    card.append(image, caption);
+    gallery.append(card);
+  });
+  renderSamplingDecision(data);
+}
+
 
 function render(data) {
   state.exploration = data;
@@ -485,7 +635,7 @@ function render(data) {
   renderFigures(data);
   setText("last-updated", `Snapshot created ${formatDate(data.created_at_utc)}`);
   const inputs = data.inputs || {};
-  setText("footer-dataset", `${inputs.dataset_id || "Tracked metadata"} · ${inputs.dataset_version || "no version"} · no model run executed`);
+  setText("footer-dataset", `${inputs.dataset_id || "Tracked metadata"} · ${inputs.dataset_version || "no version"} · full-data matrix available`);
 }
 
 async function loadExploration(runId) {
@@ -508,6 +658,12 @@ async function loadDashboard() {
     renderBoard(summary.board || { version: 1, items: [] });
     await loadProposal();
     await loadExploration($("run-select").value || summary.default_run_id);
+    try {
+      const sample = await fetchJson("/api/sample-generalization");
+      renderSampleGeneralization(sample);
+    } catch (error) {
+      setText("sample-run-summary", `Full-data result unavailable: ${error.message}`);
+    }
     showOnline();
   } catch (error) {
     showError(error);

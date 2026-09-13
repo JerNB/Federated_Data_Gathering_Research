@@ -27,12 +27,11 @@
 
       <main>
         <section class="hero">
-          <div class="eyebrow">MILESTONE 01 &nbsp;·&nbsp; ORACLE COMPARISON</div>
-          <h1>See the evidence before the model run.</h1>
+          <div class="eyebrow">PRIMARY STUDY &nbsp;·&nbsp; SMALL-SAMPLE GENERALIZATION</div>
+          <h1>Can a small sample stand in for the full result?</h1>
           <p>
-            A live view of dataset scale, deterministic split semantics, catalog support,
-            and planned comparison runs. Every number below comes from the tracked research
-            records rather than an ad hoc notebook.
+            Repeated full-snapshot samples, fixed recommendation controls, and a frozen
+            reference target make approximation error visible before expensive model runs.
           </p>
           <div class="hero-actions">
             <a class="button button-primary" href="#protocol">Inspect protocol <span>↓</span></a>
@@ -83,7 +82,9 @@
             </select>
             <select id="board-command" name="command" aria-label="Command">
               <option value="make explore">make explore</option>
+              <option value="make sample-generalization">make sample-generalization</option>
               <option value="make validate-experiment">make validate-experiment</option>
+              <option value="make validate-sample-generalization">make validate-sample-generalization</option>
               <option value="create_run_record.py">create_run_record.py</option>
             </select>
             <input id="board-parameters" name="parameters" value="RUN_ID=exploration" placeholder="KEY=value ..." maxlength="400" />
@@ -102,12 +103,41 @@
         <section class="panel proposal-panel" id="proposal">
           <div class="panel-heading">
             <div>
-              <div class="eyebrow">PROPOSAL / LITERATURE REVIEW</div>
-              <h2>Questions and decisions</h2>
+              <div class="eyebrow">PRIMARY PROPOSAL / EVIDENCE</div>
+              <h2>Sample the data. Check the conclusion.</h2>
             </div>
             <a class="button button-quiet" href="/docs/research_proposal.md" target="_blank" rel="noreferrer">Open Markdown source ↗</a>
           </div>
           <div class="proposal-content" id="proposal-content"><p>Loading proposal...</p></div>
+        </section>
+
+        <section class="panel panel-wide" id="sample-generalization">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">CURRENT EVIDENCE SCOPE</div>
+              <h2>What does this study measure?</h2>
+            </div>
+            <a class="button button-quiet" id="sample-report-link" href="/results/explorations/sample_generalization_full/report.md" target="_blank" rel="noreferrer">Open report ↗</a>
+          </div>
+          <p class="panel-lead" id="sample-run-summary">Loading executed candidate matrix...</p>
+          <p class="panel-lead" id="sample-model-status">Loading model-comparison status...</p>
+          <p class="decision-recommendation" id="sample-decision">Loading recommendation...</p>
+          <div class="table-wrap proposal-table-wrap">
+            <table class="proposal-table">
+              <thead id="sample-proposal-head"></thead>
+              <tbody id="sample-proposal-body"></tbody>
+            </table>
+          </div>
+          <div class="metric-row" id="sample-run-metrics"></div>
+          <div class="sample-downloads">
+            <a class="button button-outline" href="/results/explorations/sample_generalization_full/report.md" target="_blank" rel="noreferrer">Read the concise report ↗</a>
+            <a class="button button-outline" href="/docs/research_proposal.md" target="_blank" rel="noreferrer">Open measurement framework ↗</a>
+            <a class="button button-outline" href="/results/explorations/sample_generalization_full/candidate_summary.json" target="_blank" rel="noreferrer">Download complete evidence ↗</a>
+          </div>
+          <details class="sample-figures">
+            <summary>Show six detailed charts</summary>
+            <div class="figure-gallery" id="sample-figure-gallery"></div>
+          </details>
         </section>
 
         <section class="kpi-grid" id="overview" aria-label="Dataset overview">

@@ -11,8 +11,10 @@ scripts/fetch_data.sh
 scripts/fetch_data.sh --verify
 ```
 
-The download creates the ignored `ml-latest/` staging directory. The original
-archive remains frozen in the GitHub Release.
+The download creates the ignored `ml-latest/` staging directory. The tracked
+`data/raw/` package is the authoritative working copy; the documented GitHub
+release URL records provenance but currently may not serve the archive asset.
+Any separately obtained archive must pass every checksum before use.
 
 ## Git-tracked package
 

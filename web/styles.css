@@ -108,6 +108,7 @@ select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(47,109,246,
 .metric-row div { min-width: 0; }
 .metric-row span { display: block; color: var(--muted); font-size: 10px; }
 .metric-row strong { display: block; margin-top: 7px; color: var(--ink); font-size: 16px; }
+.panel-lead { margin: 0; color: var(--muted); line-height: 1.55; }
 
 .detail-list { margin: 0; }
 .detail-list div { display: grid; grid-template-columns: 42% 58%; gap: 8px; padding: 11px 0; border-bottom: 1px solid #eef1f5; }
@@ -153,13 +154,21 @@ select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(47,109,246,
 .proposal-content p { margin: 7px 0; }
 .proposal-content ul, .proposal-content ol { padding-left: 20px; margin: 8px 0 13px; }
 .proposal-content li { padding: 2px 0; }
-.proposal-table { margin: 10px 0 17px; min-width: 760px; }
+.proposal-table { margin: 0; min-width: 760px; }
 .proposal-table th { padding: 9px; background: #f6f8fb; }
 .proposal-table td { padding: 9px; vertical-align: top; }
 
 
 .table-wrap { overflow-x: auto; }
+.sample-downloads { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.decision-recommendation { margin: 20px 0 0; padding: 14px; color: #295b4b; background: #effaf5; border: 1px solid #c7e9d9; border-radius: 8px; line-height: 1.55; }
+.proposal-table-wrap { margin-top: 12px; border: 1px solid var(--line); border-radius: 7px; }
+.proposal-table th, .proposal-table td { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.proposal-table tbody tr:nth-child(even) { background: #fbfcfe; }
 table { width: 100%; border-collapse: collapse; text-align: left; }
+.sample-figures { margin-top: 18px; border-top: 1px solid var(--line); }
+.sample-figures summary { padding-top: 14px; color: var(--ink-soft); cursor: pointer; font-size: 11px; font-weight: 700; }
+.sample-figures .figure-gallery { margin-top: 14px; }
 th { padding: 0 12px 11px; color: var(--muted); border-bottom: 1px solid var(--line); font-size: 9px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
 td { padding: 15px 12px; color: var(--ink-soft); border-bottom: 1px solid #eef1f5; font-size: 11px; }
 td:first-child { color: var(--ink); font-weight: 720; }

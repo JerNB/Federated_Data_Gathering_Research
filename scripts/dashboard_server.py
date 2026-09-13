@@ -20,6 +20,8 @@ ROOT = Path(__file__).resolve().parents[1]
 WEB_ROOT = ROOT / "web"
 EXPLORATION_ROOT = ROOT / "results" / "explorations"
 RUN_ROOT = ROOT / "results" / "run_records"
+RESULT_ROOT = ROOT / "results"
+SAMPLE_RESULT_ROOT = RESULT_ROOT / "explorations" / "sample_generalization_full"
 ARTIFACT_ROOT = ROOT / "artifacts"
 BOARD_PATH = ROOT / "results" / "research_board.json"
 PROPOSAL_PATH = ROOT / "docs" / "research_proposal.md"
@@ -40,6 +42,8 @@ ACTIVE_JOBS: dict[str, dict] = {}
 BOARD_COMMANDS = {
     "make validate-experiment": {"target": "validate-experiment", "parameters": set()},
     "make explore": {"target": "explore", "parameters": {"RUN_ID", "SUPPORT_PROBE_USERS"}},
+    "make sample-generalization": {"target": "sample-generalization", "parameters": set()},
+    "make validate-sample-generalization": {"target": "validate-sample-generalization", "parameters": set()},
     "create_run_record.py": {
         "args": ["scripts/create_run_record.py"],
         "parameters": {"--variant", "--run-id", "--status"},
@@ -341,6 +345,38 @@ def proposal_payload() -> dict:
         "path": "docs/research_proposal.md",
         "markdown": PROPOSAL_PATH.read_text(encoding="utf-8"),
     }
+def sample_generalization_payload() -> dict:
+    summary_path = SAMPLE_RESULT_ROOT / "candidate_summary.json"
+    payload = load_json(summary_path)
+    report_path = SAMPLE_RESULT_ROOT / "report.md"
+    figures = [
+        f"results/explorations/sample_generalization_full/{figure}"
+        for figure in payload.get("figures", [])
+    ]
+    return {
+        "run_id": payload.get("run_id"),
+        "created_at_utc": payload.get("created_at_utc"),
+        "dataset": payload.get("dataset", {}),
+        "design": payload.get("design", {}),
+        "script": payload.get("script", {}),
+        "inputs": payload.get("inputs", {}),
+        "aggregates": payload.get("aggregates", []),
+        "draw_rows": len(payload.get("rows", [])),
+        "aggregate_rows": len(payload.get("aggregates", [])),
+        "full_fraction_error": max(
+            (
+                float(row.get("absolute_ndcg_error", 0.0))
+                for row in payload.get("rows", [])
+                if float(row.get("fraction", -1)) == 1.0
+            ),
+            default=0.0,
+        ),
+        "figures": figures,
+        "report_path": "results/explorations/sample_generalization_full/report.md",
+        "report_available": report_path.is_file(),
+    }
+
+
 
 
 
@@ -387,10 +423,14 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 self.send_json(board_job_status(job_id))
             elif path == "/api/proposal":
                 self.send_json(proposal_payload())
+            elif path == "/api/sample-generalization":
+                self.send_json(sample_generalization_payload())
             elif path == "/docs/research_proposal.md":
                 self.send_file(ROOT, "docs/research_proposal.md", content_type="text/plain; charset=utf-8")
             elif path.startswith("/artifacts/"):
                 self.send_file(ARTIFACT_ROOT, path.removeprefix("/artifacts/"))
+            elif path.startswith("/results/"):
+                self.send_file(RESULT_ROOT, path.removeprefix("/results/"))
             else:
                 self.send_file(WEB_ROOT, "index.html" if path == "/" else path.removeprefix("/"))
         except FileNotFoundError:
