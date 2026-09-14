@@ -88,5 +88,25 @@
     "rating_weighted_popularity": 0.04150090048480624,
     "item_item_cosine": 0.04767343527399368,
     "implicit_als": 0.04397324206387093
+  },
+  "full_mean_hit_rate_at_10": {
+    "popularity": 0.08831272893772894,
+    "rating_weighted_popularity": 0.08788003663003663,
+    "item_item_cosine": 0.11033043345543343,
+    "implicit_als": 0.09992521367521368
+  },
+  "evaluation_ceilings": {
+    "definition": "Recall@K divides by the full relevant set, so a user with more than K future positives cannot exceed K/|relevant|. NDCG@K already normalizes by min(K, |relevant|); the cap-aware hit rate divides by that same term.",
+    "cutoff": 10,
+    "relevant_set_size": {
+      "mean": 29.04423076923077,
+      "median": 16.0,
+      "p90": 69.0,
+      "max": 562.0
+    },
+    "users_with_relevant_above_cutoff": 325,
+    "share_with_relevant_above_cutoff": 0.625,
+    "mean_recall_ceiling": 0.6278351818872209,
+    "min_recall_ceiling": 0.017793594306049824
   }
 }

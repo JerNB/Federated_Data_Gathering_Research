@@ -424,7 +424,7 @@ def evaluate_orders(
     als_runs: list[tuple[np.ndarray, np.ndarray]], user_ids: list[int],
     user_row: dict[int, int], item_ids: np.ndarray,
     clients: dict[int, Client], cutoff: int,
-) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], np.ndarray]:
+) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], dict[str, np.ndarray], np.ndarray]:
     if not als_runs:
         fail("at least one ALS seed run is required")
     if len(item_item_rows) != len(user_ids):
@@ -458,7 +458,42 @@ def evaluate_orders(
             )
         recall["implicit_als"][row] = float(seed_recall[:, row].mean())
         ndcg["implicit_als"][row] = float(seed_ndcg[:, row].mean())
-    return recall, ndcg, seed_ndcg
+    ratio = recall_ceiling_ratio(clients, user_ids, cutoff)
+    hit_rate = {model: recall[model] * ratio for model in MODELS}
+    return recall, ndcg, hit_rate, seed_ndcg
+
+
+def recall_ceiling_ratio(clients: dict[int, Client], user_ids: list[int], cutoff: int) -> np.ndarray:
+    """Per-user factor converting Recall@K into its cap-aware hit rate."""
+    sizes = np.array([len(clients[user_id].test) for user_id in user_ids], dtype=np.float64)
+    return sizes / np.minimum(sizes, float(cutoff))
+
+
+def evaluation_ceilings(
+    clients: dict[int, Client], user_ids: list[int], cutoff: int
+) -> dict[str, object]:
+    """Report where Recall@K is structurally capped by the relevant-set size."""
+    sizes = np.array([len(clients[user_id].test) for user_id in user_ids], dtype=np.float64)
+    ceilings = np.minimum(sizes, float(cutoff)) / sizes
+    capped = sizes > float(cutoff)
+    return {
+        "definition": (
+            "Recall@K divides by the full relevant set, so a user with more than K "
+            "future positives cannot exceed K/|relevant|. NDCG@K already normalizes "
+            "by min(K, |relevant|); the cap-aware hit rate divides by that same term."
+        ),
+        "cutoff": int(cutoff),
+        "relevant_set_size": {
+            "mean": float(sizes.mean()),
+            "median": float(np.median(sizes)),
+            "p90": float(np.quantile(sizes, 0.9)),
+            "max": float(sizes.max()),
+        },
+        "users_with_relevant_above_cutoff": int(capped.sum()),
+        "share_with_relevant_above_cutoff": float(capped.mean()),
+        "mean_recall_ceiling": float(ceilings.mean()),
+        "min_recall_ceiling": float(ceilings.min()),
+    }
 
 
 def train_als_runs(
@@ -557,19 +592,23 @@ def write_report(output_dir: Path, summary: dict[str, object]) -> None:
         + "; ".join(f"{model} {value:.4f}" for model, value in reference["full_mean_ndcg_at_10"].items())
         + ".",
         f"- ALS control: per-user metrics are averaged over seeds {reference['als']['seeds']}; the same-data seed floor is {reference['als']['seed_variance_control']['max_mean_absolute_ndcg_difference']:.4f} mean per-user absolute NDCG difference with a {reference['als']['seed_variance_control']['mean_ndcg_spread']:.4f} mean-NDCG spread.",
+        f"- Metric ceilings: {reference['evaluation_ceilings']['users_with_relevant_above_cutoff']:,} of {reference['evaluated_user_count']:,} evaluated users "
+        f"({reference['evaluation_ceilings']['share_with_relevant_above_cutoff']:.1%}) have more than {reference['evaluation_ceilings']['cutoff']} future positives, "
+        f"so their Recall@10 is structurally capped; the mean recall ceiling is {reference['evaluation_ceilings']['mean_recall_ceiling']:.3f} "
+        f"(minimum {reference['evaluation_ceilings']['min_recall_ceiling']:.3f}). NDCG@10 and the cap-aware HitRate@10 divide by min(K, |relevant|) instead.",
         "- Policies differ only in collection-window local-record retention; evaluation excludes the same full pre-test seen set for every policy.",
         "",
         "## Policy evidence",
         "",
-        "| Policy | Cap | Model | Mean NDCG@10 | Mean abs. NDCG error | 95% CI of NDCG delta vs full | Mean Recall@10 | Collection rows | Tail share | Tail-vs-equal abs.-error improvement (95% CI) |",
-        "| --- | ---: | --- | ---: | ---: | --- | ---: | ---: | ---: | --- |",
+        "| Policy | Cap | Model | Mean NDCG@10 | Mean abs. NDCG error | 95% CI of NDCG delta vs full | Mean Recall@10 | Mean HitRate@10 | Collection rows | Tail share | Tail-vs-equal abs.-error improvement (95% CI) |",
+        "| --- | ---: | --- | ---: | ---: | --- | ---: | ---: | ---: | ---: | --- |",
     ]
     for row in rows:
         lines.append(
             f"| {row['policy']} | {row['cap']} | {row['model']} | "
             f"{row['mean_ndcg_at_10']:.4f} | {row['mean_absolute_ndcg_error']:.4f} | "
             f"[{row['ndcg_delta_ci_low']:.4f}, {row['ndcg_delta_ci_high']:.4f}] | "
-            f"{row['mean_recall_at_10']:.4f} | {row['selected_collection_interactions']:,} | "
+            f"{row['mean_recall_at_10']:.4f} | {row['mean_hit_rate_at_10']:.4f} | {row['selected_collection_interactions']:,} | "
             f"{row['selected_tail_share']:.3f} | "
             f"{row['tail_vs_equal_absolute_error_improvement']:.4f} "
             f"[{row['tail_vs_equal_absolute_error_improvement_ci_low']:.4f}, "
@@ -721,7 +760,7 @@ def main() -> int:
     )
     print(f"training full-reference implicit ALS over {len(als_seeds)} seeds", flush=True)
     full_als = train_als_runs(full_matrix, als_config)
-    full_recall, full_ndcg, full_seed_ndcg = evaluate_orders(
+    full_recall, full_ndcg, full_hit_rate, full_seed_ndcg = evaluate_orders(
         full_orders, full_item_item, full_als, evaluated_users, user_row,
         item_ids, clients, int(evaluation["cutoff"]),
     )
@@ -763,6 +802,10 @@ def main() -> int:
         },
         "full_mean_ndcg_at_10": {model: float(full_ndcg[model].mean()) for model in MODELS},
         "full_mean_recall_at_10": {model: float(full_recall[model].mean()) for model in MODELS},
+        "full_mean_hit_rate_at_10": {model: float(full_hit_rate[model].mean()) for model in MODELS},
+        "evaluation_ceilings": evaluation_ceilings(
+            clients, evaluated_users, int(evaluation["cutoff"])
+        ),
     }
     (output_dir / "reference_artifact.json").write_text(
         json.dumps(reference, indent=2) + "\n", encoding="utf-8"
@@ -789,7 +832,7 @@ def main() -> int:
                 policy_matrix, evaluated_rows, support_indices, score_limit
             )
             policy_als = train_als_runs(policy_matrix, als_config)
-            recall, ndcg, _ = evaluate_orders(
+            recall, ndcg, hit_rate, _ = evaluate_orders(
                 orders, policy_item_item, policy_als, evaluated_users, user_row,
                 item_ids, clients, int(evaluation["cutoff"]),
             )
@@ -814,6 +857,8 @@ def main() -> int:
                     "ndcg_delta_ci_low": ci_low,
                     "ndcg_delta_ci_high": ci_high,
                     "mean_recall_delta_vs_full": float((recall[model] - full_recall[model]).mean()),
+                    "mean_hit_rate_at_10": float(hit_rate[model].mean()),
+                    "mean_hit_rate_delta_vs_full": float((hit_rate[model] - full_hit_rate[model]).mean()),
                     "exploratory_tolerance_pass": bool(
                         float(np.abs(delta).mean()) <= float(evaluation["exploratory_mean_absolute_ndcg_tolerance"])
                     ),

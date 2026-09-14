@@ -42,6 +42,14 @@
     "fixed_exclusion": "all pilot and collection-window items seen by each cohort client, independent of policy",
     "cutoff": 10,
     "models": ["popularity", "rating_weighted_popularity", "item_item_cosine", "implicit_als"],
+    "primary_metric": "ndcg_at_10",
+    "secondary_metrics": ["hit_rate_at_10", "recall_at_10"],
+    "metric_notes": {
+      "ndcg_at_10": "normalized by min(K, |relevant|); not capped by relevant-set size",
+      "hit_rate_at_10": "hits / min(K, |relevant|); cap-aware retrieval metric",
+      "recall_at_10": "hits / |relevant|; structurally capped at K/|relevant| for heavy users",
+      "not_measured": ["MRR", "catalog coverage of recommendations", "per-activity-group breakdown"]
+    },
     "smoothing_count": 20.0,
     "bootstrap_replicates": 1000,
     "bootstrap_seed": 20261002,

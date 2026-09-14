@@ -50,6 +50,38 @@ existing permitted local events; it does not mean inducing users to create new
 events or uploading their histories. A policy that changes consent or user
 behavior requires a prospective randomized study, not this historical replay.
 
+### Federation topology: horizontal only
+
+This study is **horizontal (cross-device) federated recommendation**: one user
+is one client, every client holds the same feature schema
+`(user, item, rating, timestamp)`, and clients are partitioned by *sample*, not
+by feature. The local-data budget is therefore a per-client row budget.
+
+**Vertical federated learning is explicitly out of scope for the current
+claim.** In a vertical setting the same users are shared across parties that
+each hold *different features*—for example a ratings platform, a tagging
+service, and a content-metadata provider—so the open problems change:
+
+| Concern | Horizontal (this study) | Vertical (not studied) |
+| --- | --- | --- |
+| Partition | by user/sample | by feature/party |
+| Budget unit | local interactions per client | shared feature blocks and aligned entities per party |
+| Prerequisite | client eligibility and availability | private entity alignment across parties |
+| Label location | every client has its own interactions | labels usually sit with one party only |
+| Per-round traffic | model updates per device | intermediate representations per aligned batch |
+| Main leakage risk | update inversion | intermediate-representation and alignment leakage |
+
+A vertical variant is constructible from this snapshot, because `ratings.csv`,
+`tags.csv`, and `genome-scores.csv` share `movieId` and `userId` while carrying
+different feature blocks. That is recorded as a separate future track with its
+own estimand, alignment protocol, and cost model. It is **not** evidence for or
+against the horizontal local-data-budget claim, and results from the two
+topologies must never be pooled.
+
+The executed replay is a centralized *emulator* of the horizontal data
+partition. It fixes who contributes and varies how much each contributes; it
+does not yet run federated rounds.
+
 The existing snapshot comparison—fixed-protocol recommendation result
 `R_a(D_N)` versus `R_a(S_s(D_N, n, r))`—remains a calibration study. It
 measures which sampling mechanisms can distort a full-data result before the
@@ -124,12 +156,42 @@ decision rule, or coverage requirement. The chronological test target measures
 held-out prediction performance, but one snapshot and one cutoff do not
 estimate temporal, client, external-domain, or federated-system robustness.
 
-For every future claim, use NDCG@10 as the primary ranking outcome and Recall@10
-as its secondary retrieval check. Also report uncertainty over the natural unit
-(clients, episodes, time windows, groups, datasets, or sample draws), coverage,
-and resource cost. Use algorithm ordering only when the decision is specifically
-“which model should be selected.” Practical tolerances must be declared for
-that decision; there is no universal acceptable NDCG error.
+### Metric contract and structural ceilings
+
+Metric choice is a control, not a presentation detail. Top-`K` retrieval metrics
+have different ceilings, and those ceilings vary systematically with exactly the
+user property this study manipulates—how much history a client has.
+
+| Metric | Definition at `K` | Ceiling behaviour |
+| --- | --- | --- |
+| `NDCG@K` | `DCG@K / IDCG` with `IDCG` over `min(K, R)` | Reaches 1.0 for any `R`; **not** capped. Primary outcome. |
+| `HitRate@K` | `hits / min(K, R)` | Reaches 1.0 for any `R`; cap-aware retrieval check. Secondary outcome. |
+| `Recall@K` | `hits / R` | Capped at `K / R`. A user with 50 future positives cannot exceed 0.20 at `K = 10`. |
+| `Precision@K` | `hits / K` | Capped at `R / K`. A user with 3 future positives cannot exceed 0.30 at `K = 10`. |
+
+Here `R` is the size of a user's relevant set after the fixed seen-item
+exclusion. The consequence is a real confound, not a cosmetic one: heavy users
+have large `R`, so their `Recall@K` ceiling is low, and heavy users are also the
+clients whose histories a per-client cap truncates most. A raw-recall comparison
+across caps therefore mixes a data effect with a metric-ceiling effect.
+
+Rules:
+
+- Report `NDCG@10` as primary and the cap-aware `HitRate@10` as the retrieval
+  secondary. Raw `Recall@10` may be reported for continuity, never alone.
+- Publish the ceiling audit beside the results: relevant-set size distribution,
+  the share of users above `K`, and the mean and minimum recall ceiling.
+- Never compare `Recall@K` or `Precision@K` across groups whose relevant-set
+  sizes differ without stating both ceilings.
+- Use algorithm ordering only when the decision is specifically “which model
+  should be selected.” Practical tolerances must be declared for that decision;
+  there is no universal acceptable NDCG error.
+- Also report uncertainty over the natural unit (clients, episodes, time
+  windows, groups, datasets, or sample draws), coverage, and resource cost.
+
+Not yet measured, and therefore not claimed: MRR, catalog coverage of the
+recommendations themselves, per-activity-group metric breakdowns, and any
+beyond-accuracy objective such as diversity or novelty.
 
 ## 4. Calibration estimand and controller controls
 

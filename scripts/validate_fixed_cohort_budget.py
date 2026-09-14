@@ -132,6 +132,18 @@ def validate(config_path: Path, result_root: Path) -> None:
         fail("item-item support threshold must be positive")
     if int(item_item.get("score_limit", 0)) < int(item_item.get("top_k", 0)):
         fail("item-item score limit must cover the configured neighborhood size")
+    ceilings = reference.get("evaluation_ceilings")
+    if not isinstance(ceilings, dict):
+        fail("evaluation ceiling audit missing")
+    if int(ceilings.get("cutoff", 0)) <= 0:
+        fail("evaluation ceiling cutoff must be positive")
+    finite_probability(ceilings.get("share_with_relevant_above_cutoff"), "capped-user share")
+    finite_probability(ceilings.get("mean_recall_ceiling"), "mean recall ceiling")
+    finite_probability(ceilings.get("min_recall_ceiling"), "minimum recall ceiling")
+    if float(ceilings.get("min_recall_ceiling", 1.0)) > float(ceilings.get("mean_recall_ceiling", 0.0)):
+        fail("minimum recall ceiling exceeds the mean recall ceiling")
+    if not isinstance(reference.get("full_mean_hit_rate_at_10"), dict):
+        fail("cap-aware full-reference hit rate missing")
     for row in rows:
         if not isinstance(row, dict):
             fail("non-object row")
@@ -146,9 +158,11 @@ def validate(config_path: Path, result_root: Path) -> None:
             fail(f"client coverage invariant failed for {row['policy']}/{cap}")
         if int(row["collection_clients"]) > cohort:
             fail(f"collection client count exceeds cohort for {row['policy']}/{cap}")
-        for key in ("mean_ndcg_at_10", "mean_recall_at_10", "mean_absolute_ndcg_error", "selected_tail_share"):
+        for key in ("mean_ndcg_at_10", "mean_recall_at_10", "mean_hit_rate_at_10", "mean_absolute_ndcg_error", "selected_tail_share"):
             finite_probability(row.get(key), f"{row['policy']}/{cap}/{row['model']} {key}")
-        for key in ("ndcg_delta_ci_low", "ndcg_delta_ci_high", "mean_ndcg_delta_vs_full", "mean_recall_delta_vs_full", "tail_vs_equal_absolute_error_improvement", "tail_vs_equal_absolute_error_improvement_ci_low", "tail_vs_equal_absolute_error_improvement_ci_high"):
+        if float(row["mean_hit_rate_at_10"]) < float(row["mean_recall_at_10"]) - 1e-12:
+            fail(f"cap-aware hit rate below raw recall for {row['policy']}/{cap}/{row['model']}")
+        for key in ("ndcg_delta_ci_low", "ndcg_delta_ci_high", "mean_ndcg_delta_vs_full", "mean_recall_delta_vs_full", "mean_hit_rate_delta_vs_full", "tail_vs_equal_absolute_error_improvement", "tail_vs_equal_absolute_error_improvement_ci_low", "tail_vs_equal_absolute_error_improvement_ci_high"):
             value = row.get(key)
             if not isinstance(value, (int, float)) or not math.isfinite(float(value)):
                 fail(f"{row['policy']}/{cap}/{row['model']} {key} is not finite")

@@ -269,6 +269,54 @@ effect: the pilot history dominates every model. The next experiment must vary
 total per-client history, including pilot history, rather than only the
 collection increment.
 
+## Metric-ceiling audit
+
+Top-`K` metrics do not share a ceiling, and the ceiling moves with the user
+property this study manipulates. Measured on the 520 evaluated users:
+
+| Quantity | Value |
+| --- | ---: |
+| Users with more than 10 future positives | 325 of 520 (62.5%) |
+| Relevant-set size: mean / median / p90 / max | 29.0 / 16 / 69 / 562 |
+| Mean `Recall@10` ceiling | 0.628 |
+| Minimum `Recall@10` ceiling | 0.018 |
+
+A user with 562 future positives cannot exceed `10/562 = 1.8%` recall no matter
+how good the model is. Raw recall therefore understates retrieval quality by
+more than a factor of two at the reference:
+
+| Model | Raw `Recall@10` | Cap-aware `HitRate@10` | `NDCG@10` |
+| --- | ---: | ---: | ---: |
+| popularity | 0.0417 | 0.0883 | 0.0901 |
+| rating-weighted popularity | 0.0415 | 0.0879 | 0.0912 |
+| item-item cosine | 0.0477 | 0.1103 | 0.1155 |
+| implicit ALS | 0.0415 | 0.0959 | 0.1020 |
+
+This is a confound, not a display issue: heavy users have the lowest recall
+ceilings and are also the clients a per-client cap truncates most, so a
+raw-recall comparison across caps mixes a data effect with a ceiling effect.
+`NDCG@10` and `HitRate@10` both normalize by `min(K, R)` and are unaffected.
+
+The replay reports `NDCG@10` as primary, cap-aware `HitRate@10` as the retrieval
+secondary, raw `Recall@10` only for continuity, and publishes the ceiling audit
+in `reference_artifact.json`. MRR, recommendation-side catalog coverage, and
+per-activity-group breakdowns are declared and not yet measured.
+
+## Federation topology
+
+Everything executed here is **horizontal** federated recommendation emulated
+centrally: one user is one client, all clients share the schema
+`(user, item, rating, timestamp)`, and the budget unit is local rows per client.
+
+**Vertical** federated learning—same users, different feature blocks held by
+different parties—is a different problem with different prerequisites: private
+entity alignment, labels usually held by one party, and per-batch intermediate
+representations instead of per-device updates. It is not tested, and no result
+here transfers to it. A vertical variant is constructible from this snapshot
+because `ratings.csv`, `tags.csv`, and `genome-scores.csv` share identifiers
+while carrying different features; it is tracked separately in
+`docs/research_direction.md`.
+
 ## Next action
 
 Keep `equal_chronological_cap` as the control policy and item-item cosine as
