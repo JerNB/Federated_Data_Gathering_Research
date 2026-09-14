@@ -1,6 +1,10 @@
 # Documentation index
 
-Read in this order. Each document states what it does and does not establish.
+The repository-level reading order — including which result files to open and in
+what sequence — is in the root [`README.md`](../README.md) under "Start here:
+reading order". This index covers the documents themselves.
+
+Each document states what it does and does not establish.
 
 ## 1. What is claimed
 
