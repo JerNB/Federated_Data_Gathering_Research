@@ -4,18 +4,28 @@ Research code over the MovieLens `ml-latest` dataset (snapshot generated
 2023-07-20: 33,832,162 ratings and 2,328,315 tag applications across 86,537
 movies from 330,975 users).
 
-## Project documents
+## Repository map
 
-1. [Data management](docs/data_management.md)
-2. [Experiment workflow](docs/experiment_workflow.md)
-3. [Research direction](docs/research_direction.md)
-4. [Literature source register](docs/literature_sources.md)
-5. [Dataset manifest](data/dataset_manifest.json)
-6. [Chunk manifest](data/chunk_manifest.json)
-7. [Candidate matrix](docs/candidate_matrix.md)
-8. [Sampling-generalization proposal](docs/research_proposal.md)
-9. [Executed experiment contract](configs/experiments/sample_generalization_v1.json)
-10. [Exploration and execution goal](docs/exploration_goal.md)
+| Area | Path | Contents |
+| --- | --- | --- |
+| Proposal | `docs/research_proposal.md` | Canonical claim, estimands, controls, phases, evidence. |
+| Index | `docs/README.md` | Reading order for every document. |
+| Direction decision | `docs/direction_assessment.md` | Literature matrix, evidence cards, ranked decision, executed result. |
+| Decision framework | `docs/exploration_goal.md` | How a data-gathering direction is promoted, deferred, or rejected. |
+| Sources | `docs/literature_sources.md` | Primary-source register (S1–S29) with scope notes. |
+| Sampling matrix | `docs/candidate_matrix.md` | Snapshot-calibration sampler catalog and boundaries. |
+| Data and workflow | `docs/data_management.md`, `docs/experiment_workflow.md` | Package integrity and run procedure. |
+| Later tracks | `docs/research_direction.md` | Deferred comparators and federated-system confirmation. |
+| Experiment contracts | `configs/experiments/` | `sample_generalization_v1.json`, `fixed_cohort_budget_v1.json`. |
+| Evidence | `results/explorations/` | Executed artifacts, reference artifacts, reports, figures. |
+
+## Experiments
+
+| Experiment | Question | Run | Validate |
+| --- | --- | --- | --- |
+| Snapshot sampling matrix | Which sampling mechanisms preserve a full-snapshot result? | `make sample-generalization` | `make validate-sample-generalization` |
+| Fixed-cohort local-data budget | For the same users, how much local history does the recommendation result need? | `make fixed-cohort-budget` | `make validate-fixed-cohort-budget` |
+| Everything tracked | — | — | `make validate-all` |
 
 The repository contains a Git-tracked, byte-preserving CSV package under
 `data/raw/`. The large source tables are separated into deterministic chunks
@@ -95,6 +105,27 @@ Current evidence is tracked under
 `results/explorations/sample_generalization_full/`, including 732 draw rows,
 84 aggregate rows, six figures, a reference artifact, and a concise report.
 The dashboard exposes this run under the full-data candidate matrix panel.
+
+## Fixed-cohort local-data-budget replay
+
+The second experiment holds the client cohort fixed and varies only how much
+collection-window local history each client contributes. It compares an equal
+chronological cap with an item-tail reserve cap against all permitted history
+from the same cohort, evaluated on later interactions from those same users.
+
+Models are declared controls: deterministic popularity, rating-weighted
+popularity, and item-item cosine, plus stochastic implicit ALS whose same-data
+seed floor is published beside every effect. Item-item cosine is the primary
+personalized probe because it has no random state.
+
+```sh
+make fixed-cohort-budget
+make validate-fixed-cohort-budget
+```
+
+Evidence is tracked under `results/explorations/fixed_cohort_budget_v1/`.
+The replay is an offline MovieLens study: it makes no federated-system,
+availability, privacy, consent, or external-generalization claim.
 
 ## Interactive research dashboard
 

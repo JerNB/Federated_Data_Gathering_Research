@@ -46,8 +46,7 @@
       "status": "done",
       "owner": "research",
       "priority": "high",
-      "notes": "Executed one real MovieLens chronological replay: 2,000 users from 16,084 recent pilot-eligible users, 24 policy/model cells. The item-tail reserve cap did not beat the equal chronological cap and was not promoted.",
-      "command": "make validate-fixed-cohort-budget",
+      "notes": "Executed one real MovieLens chronological replay with a four-model control: 2,000 fixed users, 48 policy/model rows. The item-tail reserve cap is rejected; deterministic item-item cosine (NDCG@10 0.1155) shows no significant mean penalty down to one collection event per client, while implicit ALS stays below its 0.0419 same-data seed floor.",
       "parameters": {}
     },
     {

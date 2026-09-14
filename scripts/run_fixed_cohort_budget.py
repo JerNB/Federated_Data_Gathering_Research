@@ -19,9 +19,10 @@ from pathlib import Path
 from typing import Iterable
 
 import numpy as np
-
+from scipy import sparse
 from run_sample_generalization import (
     RATING_THRESHOLD,
+    chain,
     iter_rows,
     iter_user_histories,
     keyed_u64,
@@ -34,7 +35,13 @@ from run_sample_generalization import (
 ROOT = Path(__file__).resolve().parents[1]
 SECONDS_PER_DAY = 86_400
 POLICIES = ("equal_chronological_cap", "tail_reserve_cap")
-MODELS = ("popularity", "rating_weighted_popularity")
+MODELS = (
+    "popularity",
+    "rating_weighted_popularity",
+    "item_item_cosine",
+    "implicit_als",
+)
+DETERMINISTIC_MODELS = ("popularity", "rating_weighted_popularity", "item_item_cosine")
 
 
 @dataclass(frozen=True)
@@ -289,23 +296,212 @@ def training_statistics(
     return counts, rating_sums, interactions, total_rating / interactions
 
 
+def training_matrix(
+    clients: dict[int, Client], selected: dict[int, list[Event]],
+    user_row: dict[int, int], item_index: dict[int, int],
+) -> sparse.csr_matrix:
+    rows: list[int] = []
+    columns: list[int] = []
+    for user_id, client in clients.items():
+        row = user_row[user_id]
+        for event in client.pilot:
+            rows.append(row)
+            columns.append(item_index[event.item_id])
+        for event in selected[user_id]:
+            rows.append(row)
+            columns.append(item_index[event.item_id])
+    matrix = sparse.coo_matrix(
+        (np.ones(len(rows), dtype=np.float64), (rows, columns)),
+        shape=(len(user_row), len(item_index)),
+    ).tocsr()
+    matrix.sum_duplicates()
+    return matrix
+
+
+def als_factor_step(
+    matrix: sparse.csr_matrix, other_factors: np.ndarray,
+    regularization: float, alpha: float,
+) -> np.ndarray:
+    factor_count = other_factors.shape[1]
+    output = np.zeros((matrix.shape[0], factor_count), dtype=np.float64)
+    gram = other_factors.T @ other_factors
+    penalty = regularization * np.eye(factor_count)
+    indptr, indices, data = matrix.indptr, matrix.indices, matrix.data
+    for row in range(matrix.shape[0]):
+        start, end = int(indptr[row]), int(indptr[row + 1])
+        if start == end:
+            continue
+        vectors = other_factors[indices[start:end]]
+        weight = alpha * data[start:end]
+        left = gram + (vectors.T * weight) @ vectors + penalty
+        right = vectors.T @ (weight + 1.0)
+        output[row] = np.linalg.solve(left, right)
+    return output
+
+
+def train_implicit_als(
+    matrix: sparse.csr_matrix, factor_count: int, regularization: float,
+    alpha: float, iterations: int, seed: int,
+) -> tuple[np.ndarray, np.ndarray]:
+    if factor_count <= 0 or iterations <= 0:
+        fail("ALS factor count and iterations must be positive")
+    if regularization <= 0 or alpha <= 0:
+        fail("ALS regularization and alpha must be positive")
+    rng = np.random.default_rng(seed)
+    item_factors = rng.normal(0.0, 0.01, (matrix.shape[1], factor_count))
+    transposed = matrix.T.tocsr()
+    user_factors = np.zeros((matrix.shape[0], factor_count), dtype=np.float64)
+    for _ in range(iterations):
+        user_factors = als_factor_step(matrix, item_factors, regularization, alpha)
+        item_factors = als_factor_step(transposed, user_factors, regularization, alpha)
+    return user_factors, item_factors
+
+
+def als_user_order(
+    user_vector: np.ndarray, item_factors: np.ndarray, item_ids: np.ndarray, limit: int
+) -> np.ndarray:
+    scores = item_factors @ user_vector
+    if limit < len(scores):
+        candidates = np.argpartition(-scores, limit - 1)[:limit]
+    else:
+        candidates = np.arange(len(scores))
+    return candidates[np.lexsort((item_ids[candidates], -scores[candidates]))]
+
+
+def item_item_scores(
+    matrix: sparse.csr_matrix, rows: list[int], support_indices: np.ndarray,
+    score_limit: int, batch_size: int = 128,
+) -> list[tuple[np.ndarray, np.ndarray]]:
+    """Deterministic item-item cosine scores for the requested user rows."""
+    empty = (np.empty(0, dtype=np.int32), np.empty(0, dtype=np.float32))
+    if not len(support_indices):
+        return [empty for _ in rows]
+    restricted = matrix[:, support_indices].tocsr()
+    restricted.data[:] = 1.0
+    frequency = np.asarray(restricted.sum(axis=0)).ravel()
+    normalized = (restricted @ sparse.diags(1.0 / np.sqrt(np.maximum(frequency, 1.0)))).tocsr()
+    profiles = [normalized.getrow(row).indices for row in rows]
+    output: list[tuple[np.ndarray, np.ndarray]] = []
+    for start in range(0, len(rows), batch_size):
+        batch = rows[start : start + batch_size]
+        overlap = (normalized[batch] @ normalized.T).tocsr()
+        scored = (overlap @ normalized).tocsr()
+        for offset in range(scored.shape[0]):
+            begin, end = int(scored.indptr[offset]), int(scored.indptr[offset + 1])
+            indices = scored.indices[begin:end]
+            values = scored.data[begin:end]
+            keep = ~np.isin(indices, profiles[start + offset])
+            indices, values = indices[keep], values[keep]
+            if len(values) > score_limit:
+                selection = np.argpartition(-values, score_limit - 1)[:score_limit]
+                indices, values = indices[selection], values[selection]
+            output.append((
+                support_indices[indices].astype(np.int32, copy=False),
+                values.astype(np.float32, copy=False),
+            ))
+    return output
+
+
+def item_item_user_order(
+    scored: tuple[np.ndarray, np.ndarray], item_ids: np.ndarray
+) -> np.ndarray:
+    indices, values = scored
+    return indices[np.lexsort((item_ids[indices], -values))]
+
+
+def item_item_user_metrics(
+    ranked: np.ndarray, item_ids: np.ndarray, seen: set[int], relevant: set[int], cutoff: int
+) -> tuple[float, float]:
+    ranked_set = {int(index) for index in ranked}
+    fallback = (index for index in range(len(item_ids)) if index not in ranked_set)
+    return metric_at_k(
+        chain((int(index) for index in ranked), fallback), item_ids, seen, relevant, cutoff
+    )
+
+
 def evaluate_orders(
-    orders: dict[str, np.ndarray], item_ids: np.ndarray, clients: dict[int, Client], cutoff: int
-) -> tuple[list[int], dict[str, np.ndarray], dict[str, np.ndarray]]:
-    user_ids = [user_id for user_id, client in clients.items() if client.test]
-    if not user_ids:
-        fail("no cohort users have future positive test items after seen-item exclusion")
+    orders: dict[str, np.ndarray], item_item_rows: list[tuple[np.ndarray, np.ndarray]],
+    als_runs: list[tuple[np.ndarray, np.ndarray]], user_ids: list[int],
+    user_row: dict[int, int], item_ids: np.ndarray,
+    clients: dict[int, Client], cutoff: int,
+) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], np.ndarray]:
+    if not als_runs:
+        fail("at least one ALS seed run is required")
+    if len(item_item_rows) != len(user_ids):
+        fail("item-item score rows must align with the evaluated users")
     recall = {model: np.empty(len(user_ids), dtype=np.float64) for model in MODELS}
     ndcg = {model: np.empty(len(user_ids), dtype=np.float64) for model in MODELS}
+    seed_ndcg = np.empty((len(als_runs), len(user_ids)), dtype=np.float64)
+    seed_recall = np.empty((len(als_runs), len(user_ids)), dtype=np.float64)
     for row, user_id in enumerate(user_ids):
         client = clients[user_id]
-        for model in MODELS:
-            recall_value, ndcg_value = metric_at_k(
+        for model in ("popularity", "rating_weighted_popularity"):
+            recall[model][row], ndcg[model][row] = metric_at_k(
                 orders[model], item_ids, client.seen, client.test, cutoff
             )
-            recall[model][row] = recall_value
-            ndcg[model][row] = ndcg_value
-    return user_ids, recall, ndcg
+        recall["item_item_cosine"][row], ndcg["item_item_cosine"][row] = item_item_user_metrics(
+            item_item_user_order(item_item_rows[row], item_ids),
+            item_ids,
+            client.seen,
+            client.test,
+            cutoff,
+        )
+        for run, (user_factors, item_factors) in enumerate(als_runs):
+            order = als_user_order(
+                user_factors[user_row[user_id]],
+                item_factors,
+                item_ids,
+                cutoff + len(client.seen),
+            )
+            seed_recall[run, row], seed_ndcg[run, row] = metric_at_k(
+                order, item_ids, client.seen, client.test, cutoff
+            )
+        recall["implicit_als"][row] = float(seed_recall[:, row].mean())
+        ndcg["implicit_als"][row] = float(seed_ndcg[:, row].mean())
+    return recall, ndcg, seed_ndcg
+
+
+def train_als_runs(
+    matrix: sparse.csr_matrix, als_config: dict[str, object]
+) -> list[tuple[np.ndarray, np.ndarray]]:
+    seeds = [int(value) for value in als_config.get("seeds", [])]
+    if len(seeds) < 2 or len(set(seeds)) != len(seeds):
+        fail("als.seeds must list at least two distinct seeds")
+    return [
+        train_implicit_als(
+            matrix,
+            int(als_config["factors"]),
+            float(als_config["regularization"]),
+            float(als_config["alpha"]),
+            int(als_config["iterations"]),
+            seed,
+        )
+        for seed in seeds
+    ]
+
+
+def seed_variance_control(
+    seed_ndcg: np.ndarray, seeds: list[int]
+) -> dict[str, object]:
+    pairs: list[dict[str, object]] = []
+    for left in range(len(seeds)):
+        for right in range(left + 1, len(seeds)):
+            difference = seed_ndcg[left] - seed_ndcg[right]
+            pairs.append({
+                "seeds": [seeds[left], seeds[right]],
+                "mean_absolute_ndcg_difference": float(np.abs(difference).mean()),
+                "mean_ndcg_difference": float(difference.mean()),
+            })
+    per_seed = [float(seed_ndcg[index].mean()) for index in range(len(seeds))]
+    return {
+        "scope": "identical full-reference training data, different initialization seeds",
+        "per_seed_mean_ndcg_at_10": dict(zip((str(seed) for seed in seeds), per_seed)),
+        "mean_ndcg_spread": max(per_seed) - min(per_seed),
+        "pairs": pairs,
+        "max_mean_absolute_ndcg_difference": max(
+            float(pair["mean_absolute_ndcg_difference"]) for pair in pairs
+        ),
+    }
 
 
 def bootstrap_interval(values: np.ndarray, replicates: int, seed: int) -> tuple[float, float]:
@@ -356,6 +552,11 @@ def write_report(output_dir: Path, summary: dict[str, object]) -> None:
         f"- Global positive-rating windows: pilot through {reference['pilot_cutoff_utc']}; collection through {reference['collection_cutoff_utc']}; future test thereafter.",
         f"- Full reference training interactions: {reference['full_training_interactions']:,}; evaluated users with future positives: {reference['evaluated_user_count']:,}.",
         f"- Pilot item-tail ceiling: <= {reference['tail_count_ceiling']} positive pilot interactions.",
+        f"- Models: {', '.join(reference['full_mean_ndcg_at_10'])}. Item-item cosine is the deterministic primary personalized probe over {reference['item_item']['supported_item_count']:,} items with support >= {reference['item_item']['support_threshold']}; implicit ALS is the stochastic secondary probe.",
+        f"- Full-reference NDCG@10: "
+        + "; ".join(f"{model} {value:.4f}" for model, value in reference["full_mean_ndcg_at_10"].items())
+        + ".",
+        f"- ALS control: per-user metrics are averaged over seeds {reference['als']['seeds']}; the same-data seed floor is {reference['als']['seed_variance_control']['max_mean_absolute_ndcg_difference']:.4f} mean per-user absolute NDCG difference with a {reference['als']['seed_variance_control']['mean_ndcg_spread']:.4f} mean-NDCG spread.",
         "- Policies differ only in collection-window local-record retention; evaluation excludes the same full pre-test seen set for every policy.",
         "",
         "## Policy evidence",
@@ -385,12 +586,46 @@ def write_report(output_dir: Path, summary: dict[str, object]) -> None:
         else "- No tested tail-reserve cell has a strictly positive paired 95% "
         "interval for lower absolute NDCG error than the equal chronological cap."
     )
+    noise_floor = float(
+        reference["als"]["seed_variance_control"]["max_mean_absolute_ndcg_difference"]
+    )
+    als_above_floor = [
+        row for row in rows
+        if row["model"] == "implicit_als"
+        and float(row["mean_absolute_ndcg_error"]) > noise_floor
+    ]
+    als_conclusion = (
+        f"- {len(als_above_floor)} of "
+        f"{sum(1 for row in rows if row['model'] == 'implicit_als')} ALS cells exceed the "
+        "same-data seed-variance floor, so their per-user error is not explained by "
+        "optimizer initialization alone."
+        if als_above_floor
+        else "- No ALS cell exceeds the same-data seed-variance floor, so per-user ALS "
+        "differences here are not separable from optimizer initialization noise."
+    )
+    item_item_rows = [row for row in rows if row["model"] == "item_item_cosine"]
+    item_item_separating = [
+        row for row in item_item_rows
+        if float(row["ndcg_delta_ci_high"]) < 0.0 or float(row["ndcg_delta_ci_low"]) > 0.0
+    ]
+    item_item_conclusion = (
+        f"- Item-item cosine has zero model-noise floor and separates the budget in "
+        f"{len(item_item_separating)} of {len(item_item_rows)} cells, where the paired 95% "
+        "NDCG interval against full history excludes zero."
+        if item_item_separating
+        else "- Item-item cosine has zero model-noise floor, yet no cell's paired 95% NDCG "
+        "interval against full history excludes zero: the tested caps do not measurably "
+        "change this personalized model."
+    )
     lines += [
         "",
         "## Interpretation boundary",
         "",
         "- A positive tail-vs-equal improvement means the tail-reserve policy had lower mean per-user absolute NDCG error than the equal chronological cap at the same cap.",
         tail_conclusion,
+        item_item_conclusion,
+        als_conclusion,
+        "- Mean NDCG stability and per-user stability are different claims; report both.",
         "- The configured 0.005 mean-absolute-NDCG tolerance is exploratory, not a product-risk threshold or a validated stop-controller rule.",
         "- The replay validates policy-specific sample-to-reference behavior on this cohort and time partition only. It does not validate client availability, dropout, communication, secure aggregation, local compute, consent, or federated convergence.",
         "",
@@ -418,6 +653,8 @@ def main() -> int:
     cohort_config = nested(config, "cohort")
     tail_config = nested(config, "tail")
     evaluation = nested(config, "evaluation")
+    als_config = nested(config, "als")
+    item_item_config = nested(config, "item_item")
     manifest_path = repo_path(str(dataset["manifest"]))
     ratings_dir = repo_path(str(dataset["ratings_dir"]))
     if not manifest_path.is_file():
@@ -451,6 +688,7 @@ def main() -> int:
     )
     item_ids = np.asarray(sorted(catalogue), dtype=np.int64)
     item_index = {int(item_id): index for index, item_id in enumerate(item_ids)}
+    user_row = {user_id: index for index, user_id in enumerate(cohort)}
     pilot_counts = Counter(
         event.item_id for client in clients.values() for event in client.pilot
     )
@@ -465,11 +703,29 @@ def main() -> int:
     full_orders = rank_orders(
         full_counts, full_sums, item_ids, full_prior, float(evaluation["smoothing_count"])
     )
-    evaluated_users, full_recall, full_ndcg = evaluate_orders(
-        full_orders, item_ids, clients, int(evaluation["cutoff"])
+    als_seeds = [int(value) for value in als_config.get("seeds", [])]
+    evaluated_users = [user_id for user_id in cohort if clients[user_id].test]
+    if not evaluated_users:
+        fail("no cohort users have future positive test items after seen-item exclusion")
+    evaluated_rows = [user_row[user_id] for user_id in evaluated_users]
+    support_threshold = int(item_item_config["support_threshold"])
+    support_indices = np.flatnonzero(full_counts >= support_threshold).astype(np.int32)
+    score_limit = max(
+        int(item_item_config["top_k"]),
+        int(evaluation["cutoff"]) + max(len(clients[user_id].seen) for user_id in evaluated_users),
     )
-    if len(evaluated_users) != len(set(evaluated_users)):
-        fail("evaluation users must be unique")
+    print("building full permitted-history item-item cosine reference", flush=True)
+    full_matrix = training_matrix(clients, all_collection, user_row, item_index)
+    full_item_item = item_item_scores(
+        full_matrix, evaluated_rows, support_indices, score_limit
+    )
+    print(f"training full-reference implicit ALS over {len(als_seeds)} seeds", flush=True)
+    full_als = train_als_runs(full_matrix, als_config)
+    full_recall, full_ndcg, full_seed_ndcg = evaluate_orders(
+        full_orders, full_item_item, full_als, evaluated_users, user_row,
+        item_ids, clients, int(evaluation["cutoff"]),
+    )
+    als_control = seed_variance_control(full_seed_ndcg, als_seeds)
 
     reference = {
         "scope": "all permitted positive pilot and collection-window history from fixed cohort",
@@ -487,6 +743,24 @@ def main() -> int:
         "pilot_training_interactions": sum(len(client.pilot) for client in clients.values()),
         "tail_count_ceiling": tail_ceiling,
         "catalogue_item_count": len(item_ids),
+        "item_item": {
+            "support_threshold": support_threshold,
+            "supported_item_count": int(len(support_indices)),
+            "top_k": int(item_item_config["top_k"]),
+            "score_limit": score_limit,
+            "support_scope": str(item_item_config["support_scope"]),
+            "determinism": "no random state; identical inputs reproduce identical scores",
+        },
+        "als": {
+            "factors": int(als_config["factors"]),
+            "regularization": float(als_config["regularization"]),
+            "alpha": float(als_config["alpha"]),
+            "iterations": int(als_config["iterations"]),
+            "seeds": als_seeds,
+            "aggregation": str(als_config["aggregation"]),
+            "tuning": "fixed a priori; no hyperparameter search against the future-test window",
+            "seed_variance_control": als_control,
+        },
         "full_mean_ndcg_at_10": {model: float(full_ndcg[model].mean()) for model in MODELS},
         "full_mean_recall_at_10": {model: float(full_recall[model].mean()) for model in MODELS},
     }
@@ -510,11 +784,15 @@ def main() -> int:
             orders = rank_orders(
                 counts, sums, item_ids, prior, float(evaluation["smoothing_count"])
             )
-            policy_users, recall, ndcg = evaluate_orders(
-                orders, item_ids, clients, int(evaluation["cutoff"])
+            policy_matrix = training_matrix(clients, selected, user_row, item_index)
+            policy_item_item = item_item_scores(
+                policy_matrix, evaluated_rows, support_indices, score_limit
             )
-            if policy_users != evaluated_users:
-                fail("policy evaluation changed the fixed test cohort")
+            policy_als = train_als_runs(policy_matrix, als_config)
+            recall, ndcg, _ = evaluate_orders(
+                orders, policy_item_item, policy_als, evaluated_users, user_row,
+                item_ids, clients, int(evaluation["cutoff"]),
+            )
             for model_index, model in enumerate(MODELS):
                 delta = ndcg[model] - full_ndcg[model]
                 ci_low, ci_high = bootstrap_interval(

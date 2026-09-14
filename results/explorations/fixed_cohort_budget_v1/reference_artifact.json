@@ -20,12 +20,73 @@
   "pilot_training_interactions": 255343,
   "tail_count_ceiling": 1,
   "catalogue_item_count": 83239,
+  "item_item": {
+    "support_threshold": 20,
+    "supported_item_count": 2416,
+    "top_k": 100,
+    "score_limit": 5153,
+    "support_scope": "fixed full-reference item counts, identical for every policy",
+    "determinism": "no random state; identical inputs reproduce identical scores"
+  },
+  "als": {
+    "factors": 32,
+    "regularization": 0.05,
+    "alpha": 20.0,
+    "iterations": 15,
+    "seeds": [
+      20261003,
+      20261004,
+      20261005
+    ],
+    "aggregation": "per-user mean across seeds; identical seed set for every condition",
+    "tuning": "fixed a priori; no hyperparameter search against the future-test window",
+    "seed_variance_control": {
+      "scope": "identical full-reference training data, different initialization seeds",
+      "per_seed_mean_ndcg_at_10": {
+        "20261003": 0.10659559515677586,
+        "20261004": 0.09650619728818984,
+        "20261005": 0.10287454505434485
+      },
+      "mean_ndcg_spread": 0.010089397868586022,
+      "pairs": [
+        {
+          "seeds": [
+            20261003,
+            20261004
+          ],
+          "mean_absolute_ndcg_difference": 0.03992649088036404,
+          "mean_ndcg_difference": 0.01008939786858604
+        },
+        {
+          "seeds": [
+            20261003,
+            20261005
+          ],
+          "mean_absolute_ndcg_difference": 0.04134945236846697,
+          "mean_ndcg_difference": 0.0037210501024310247
+        },
+        {
+          "seeds": [
+            20261004,
+            20261005
+          ],
+          "mean_absolute_ndcg_difference": 0.041897169647008146,
+          "mean_ndcg_difference": -0.006368347766155016
+        }
+      ],
+      "max_mean_absolute_ndcg_difference": 0.041897169647008146
+    }
+  },
   "full_mean_ndcg_at_10": {
     "popularity": 0.09013580912233152,
-    "rating_weighted_popularity": 0.09118699605722543
+    "rating_weighted_popularity": 0.09118699605722543,
+    "item_item_cosine": 0.11547433256522789,
+    "implicit_als": 0.10199211249977018
   },
   "full_mean_recall_at_10": {
     "popularity": 0.04169803631448682,
-    "rating_weighted_popularity": 0.04150090048480624
+    "rating_weighted_popularity": 0.04150090048480624,
+    "item_item_cosine": 0.04767343527399368,
+    "implicit_als": 0.04397324206387093
   }
 }

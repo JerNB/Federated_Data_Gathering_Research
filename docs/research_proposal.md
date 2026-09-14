@@ -358,12 +358,22 @@ regime, or client group for which the controller must gather more or abstain.
 
 ## 8. Models and system boundaries
 
-The model is a controlled probe of the data-plan claim.
+The model is a controlled probe of the data-plan claim, and the model itself is
+a declared control rather than a free choice.
 
 - **Executed calibration:** popularity, rating-weighted popularity, and a
   fixed-support item-item cosine baseline.
-- **First trainable confirmation:** the repository's BPR-MF ranking objective
-  [S2, S15].
+- **Primary personalized probe:** deterministic item-item cosine over a fixed
+  full-reference support set. It has no random state, so a budget effect is not
+  confounded with training noise, and it is the strongest model measured here.
+- **Secondary personalized probe:** implicit ALS [S1], averaged over a common
+  seed set for every condition.
+- **Mandatory model-noise control:** every stochastic recommender must publish
+  its same-data seed floor—per-seed mean metric spread and mean per-user
+  absolute metric difference—next to the data-policy effect. A data-budget
+  claim is invalid when the effect is smaller than that floor.
+- **Next trainable confirmation:** the repository's BPR-MF ranking objective
+  [S2, S15], under the same seed-floor rule.
 - **Federated-system control:** compare a named baseline such as FedAvg with a
   heterogeneity control such as FedProx only after the same local-data plan has
   passed the fixed-cohort emulator. This separates data-plan effects from
@@ -397,22 +407,34 @@ for within-user history. The item-item result therefore exposes sampling and
 support sensitivity that the global controls do not.
 
 `results/explorations/fixed_cohort_budget_v1/` adds one real-data,
-fixed-cohort chronological replay. Its 2,000-user cohort was selected from
-16,084 users active in the final pilot year; 520 later had a future positive
-after fixed seen-item exclusion. The reference used 270,880 interactions,
-including 15,537 collection-window interactions. The tested item-tail reserve
-cap increased tail share but had no cap/model cell with a strictly positive
-paired 95% interval for lower absolute NDCG error than the equal chronological
-cap. It is therefore rejected for this cohort/time episode. The equal cap at 5
-used 2,735 collection interactions with mean absolute NDCG error 0.0023
-(popularity) and 0.0012 (rating-weighted popularity); its 0.005 tolerance is
-exploratory, not a safe-stop threshold.
+fixed-cohort chronological replay with four declared models. Its 2,000-user
+cohort was selected from 16,084 users active in the final pilot year; 520 later
+had a future positive after fixed seen-item exclusion. The reference used
+270,880 training interactions, of which 15,537 (5.7%) fall in the collection
+window that the policies control.
+
+Full-reference NDCG@10 is 0.0901 popularity, 0.0912 rating-weighted popularity,
+0.1155 item-item cosine, and 0.1020 three-seed implicit ALS. Under the
+deterministic item-item probe, no cap's paired 95% interval against full
+history excludes zero—including a cap of one collection event per client, which
+retains 4.1% of collection interactions—while per-user absolute error still
+falls from 0.0156 at cap 1 to 0.0071 at cap 50. Mean stability and per-user
+stability are therefore separate claims. The item-tail reserve cap is
+significantly worse than the equal cap for the personalized probe at caps 5 and
+50, so it is rejected for this episode.
+
+The ALS control bounds what may be claimed from a stochastic model. On
+identical data, seed changes alone move mean NDCG@10 across 0.0965–0.1066 and
+give a 0.0419 mean per-user absolute difference, with 0.55 top-10 seed
+agreement at 32 factors and 0.31 at 64. Every ALS policy-versus-full per-user
+error (0.0157–0.0270) sits below that floor, so ALS cannot currently separate a
+data-budget effect from initialization noise.
 
 These results are in-reference calibration and fixed-cohort replay evidence,
-not evidence that a federated data plan is safe. They establish that sampling,
-support, and coverage must be treated as substantive design choices. Trainable
-model, repeated-cohort/temporal, and federated-system variants remain planned
-evidence.
+not evidence that a federated data plan is safe. The collection window supplies
+only 5.7% of training interactions here, so the next design must vary total
+per-client history, repeat over cohorts and time windows, and only then attempt
+federated-system confirmation.
 
 ## 10. References used here
 

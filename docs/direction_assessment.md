@@ -1,8 +1,9 @@
 # Federated local-data direction assessment
 
-Status: **completed feasibility screen and one executed real-data replay.** The
-tested item-tail reserve policy did not satisfy the direction-promotion rule on
-the pinned cohort/time episode; no new data-gathering policy is promoted.
+Status: **completed feasibility screen and one executed real-data replay with a
+four-model control.** The tested item-tail reserve policy is rejected, and the
+deterministic personalized probe shows no measurable mean-quality penalty from
+capping collection-window history on this cohort.
 
 ## Review limitation
 
@@ -201,13 +202,9 @@ pinned 33,832,162-rating MovieLens snapshot.
 - 520 cohort users had a future positive after fixed seen-item exclusion;
   1,480 had none and are reported rather than silently removed.
 - The tail reserve increased selected tail share—for cap 1, 0.627 versus
-  0.177—but was worse at cap 1 for both models. At cap 5 the comparison was
-  inconclusive: popularity tail-vs-equal absolute-error improvement was 0.0001
-  with paired 95% interval [-0.0001, 0.0004], and rating-weighted popularity
-  was effectively tied.
-- No cap/model cell had a strictly positive paired 95% interval for lower
-  absolute NDCG error. The tested tail-reserve policy is therefore rejected as
-  a promoted direction for this episode.
+  0.177—but was worse at cap 1 for both deterministic controls. No cap/model
+  cell had a strictly positive paired 95% interval for lower absolute NDCG
+  error, so the tested tail-reserve policy is rejected for this episode.
 
 The equal cap at 5 retained 2,735 of 15,537 collection-window interactions
 (82.4% fewer) with mean absolute NDCG errors of 0.0023 for popularity and
@@ -215,9 +212,68 @@ The equal cap at 5 retained 2,735 of 15,537 collection-window interactions
 exploratory, so this is a fidelity observation, not a validated safe-stop
 decision.
 
+## Recommender-model control
+
+The replay treats the recommendation model as an explicit control, because a
+global popularity ranking is nearly identical for every user and cannot stand
+in for a personalized recommender.
+
+| Model | Type | Full-reference NDCG@10 | Same-data noise floor |
+| --- | --- | ---: | --- |
+| popularity | deterministic global | 0.0901 | none |
+| rating-weighted popularity | deterministic global | 0.0912 | none |
+| item-item cosine | deterministic personalized | **0.1155** | none |
+| implicit ALS | stochastic personalized | 0.1020 | 0.0419 per-user; 0.0101 mean spread |
+
+- **Item-item cosine is the primary probe.** It is the strongest model here and
+  has no random state, so any difference between caps is attributable to the
+  data policy. It scores 2,416 items with full-reference support >= 20 and a
+  top-100 neighborhood, with the support set fixed across every policy.
+- **ALS is demoted to a secondary probe.** On identical full-reference data,
+  seed changes alone move mean NDCG@10 across 0.0965–0.1066 and produce a
+  0.0419 mean per-user absolute difference. A separate stability probe found
+  0.55 mean top-10 list agreement between two seeds at 32 factors and 0.31 at
+  64 factors. Every ALS policy-versus-full per-user error (0.0157–0.0270) lies
+  below that floor, so the ALS rows cannot separate a data effect from
+  initialization noise. ALS metrics are therefore averaged over a common seed
+  set and published with the floor.
+
+## What the deterministic probe shows
+
+With item-item cosine, the tested caps do not measurably change mean future
+quality on this cohort:
+
+| Cap | Collection rows kept | Item-item NDCG@10 | Paired 95% CI vs full | Per-user abs. error |
+| ---: | ---: | ---: | --- | ---: |
+| 1 | 643 of 15,537 | 0.1142 | [-0.0049, 0.0024] | 0.0156 |
+| 5 | 2,735 | 0.1146 | [-0.0039, 0.0024] | 0.0135 |
+| 20 | 7,656 | 0.1147 | [-0.0039, 0.0023] | 0.0122 |
+| 50 | 11,762 | 0.1164 | [-0.0013, 0.0034] | 0.0071 |
+
+- No cap's paired interval excludes zero, including a cap of one event per
+  client, which keeps 4.1% of collection-window interactions.
+- Per-user absolute error still falls monotonically with the cap
+  (0.0156 to 0.0071), so individual recommendations keep changing even while the
+  cohort mean is stable. Mean stability and per-user stability are different
+  claims.
+- The deterministic global controls are *more* mean-sensitive at small caps
+  (popularity CIs exclude zero at caps 1, 2 and 10), because they aggregate
+  every retained event into one ranking.
+- The tail reserve is now significantly worse for the personalized probe at
+  caps 5 and 50 (improvement -0.0016 [-0.0033, -0.0001] and -0.0009 [-0.0016,
+  -0.0001]), strengthening its rejection.
+
+**Design consequence.** The collection window supplies only 15,537 of 270,880
+training interactions (5.7%), so this episode cannot resolve a large budget
+effect: the pilot history dominates every model. The next experiment must vary
+total per-client history, including pilot history, rather than only the
+collection increment.
+
 ## Next action
 
-Keep `equal_chronological_cap` as a control. Do not implement the rejected
-tail-reserve policy further. A different controller direction needs a new
-privacy-feasible policy specification and repeated-cohort/temporal evidence
-before it can be promoted; federated-system confirmation remains unavailable.
+Keep `equal_chronological_cap` as the control policy and item-item cosine as
+the primary probe. Do not implement the rejected tail-reserve policy further.
+Re-run the design with total per-client history as the budget axis, repeated
+cohorts, and multiple time windows before stating any sufficiency rule; report
+per-user error beside mean error. Federated-system confirmation remains
+unavailable.

@@ -1,4 +1,4 @@
-.PHONY: validate-experiment verify-source explore sample-generalization validate-sample-generalization fixed-cohort-budget validate-fixed-cohort-budget dashboard
+.PHONY: validate-experiment validate-all verify-source explore sample-generalization validate-sample-generalization fixed-cohort-budget validate-fixed-cohort-budget dashboard
 
 PYTHON ?= python3
 CONFIG ?= configs/experiments/milestone_1_oracle_comparison.json
@@ -68,6 +68,8 @@ validate-fixed-cohort-budget:
 	$(PYTHON) scripts/validate_fixed_cohort_budget.py \
 		--config configs/experiments/fixed_cohort_budget_v1.json \
 		--result-root $(FIXED_COHORT_BUDGET_OUTPUT)
+
+validate-all: validate-experiment validate-sample-generalization validate-fixed-cohort-budget
 
 dashboard:
 	$(PYTHON) scripts/dashboard_server.py --host $(DASHBOARD_HOST) --port $(DASHBOARD_PORT)

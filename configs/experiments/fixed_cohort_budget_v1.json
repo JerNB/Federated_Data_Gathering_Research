@@ -41,11 +41,28 @@
     "candidate_catalog": "all rating-bearing items in the pinned snapshot",
     "fixed_exclusion": "all pilot and collection-window items seen by each cohort client, independent of policy",
     "cutoff": 10,
-    "models": ["popularity", "rating_weighted_popularity"],
+    "models": ["popularity", "rating_weighted_popularity", "item_item_cosine", "implicit_als"],
     "smoothing_count": 20.0,
     "bootstrap_replicates": 1000,
     "bootstrap_seed": 20261002,
     "exploratory_mean_absolute_ndcg_tolerance": 0.005
+  },
+  "item_item": {
+    "model": "deterministic item-item cosine over positive interactions",
+    "support_threshold": 20,
+    "top_k": 100,
+    "support_scope": "fixed full-reference item counts, identical for every policy",
+    "role": "primary personalized probe; no random state"
+  },
+  "als": {
+    "model": "implicit alternating least squares over positive interactions",
+    "factors": 32,
+    "regularization": 0.05,
+    "alpha": 20.0,
+    "iterations": 15,
+    "seeds": [20261003, 20261004, 20261005],
+    "aggregation": "per-user mean across seeds; identical seed set for every condition",
+    "tuning": "fixed a priori; no search against the future-test window"
   },
   "invariants": {
     "fixed_cohort": true,

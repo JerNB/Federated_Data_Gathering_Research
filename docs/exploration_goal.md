@@ -1,9 +1,10 @@
 # Federated local-data direction assessment goal
 
-Status: **completed feasibility screen and one real-data replay.** The tested
-item-tail reserve policy was not promoted; its result and the retained
-equal-history-cap control are recorded in `docs/direction_assessment.md`.
-Neither the snapshot matrix nor this replay is federated-system evidence.
+Status: **completed feasibility screen and one real-data replay with a
+four-model control.** The tested item-tail reserve policy was rejected; the
+deterministic item-item cosine probe and the equal-history-cap control are
+retained. Results are in `docs/direction_assessment.md`. Neither the snapshot
+matrix nor this replay is federated-system evidence.
 
 ## Decision
 
