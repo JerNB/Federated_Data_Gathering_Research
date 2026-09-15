@@ -5,14 +5,21 @@ eligible cohort, the deterministic probe now measures a significant local-data
 budget effect in every tested cell, reversing the underpowered null result that
 protocol v1 produced at cutoff 10.
 
-## Review limitation
+## Independent review status
 
-The source review is primary-source-backed, but it is **not** an independent
-multi-agent review. After the requested retry, the GPT reviewer again reached
-its two-minute runtime limit without output; the requested Anthropic agent had
-no configured model or credentials. Earlier librarian/reviewer runs likewise
-returned no usable review. This report records direct source inspection and
-must not be represented as independently reviewed.
+One adversarial review was obtained and acted on. It challenged the headline v2
+claim and forced a confound check, recorded under "Power versus cutoff" below.
+
+Earlier attempts failed and produced nothing usable: two librarian runs timed
+out, two reviewer runs exceeded the 120-second subagent runtime limit, and the
+cross-family escalation agent had no configured model. The successful review
+used a self-contained packet with every number inline and one question, which
+fits the runtime limit; broad "read the repository and critique it" packets do
+not.
+
+Still unreviewed, and therefore recorded as my own judgement: the literature
+boundary mapping in the evidence matrix below, and the observability and privacy
+contracts assumed for the controller.
 
 This report runs the decision framework in `docs/exploration_goal.md`. It first
 identified a replayable direction, then executed its bounded MovieLens
@@ -283,6 +290,48 @@ interactions (5.3%), so the measured deficits are the effect of that increment
 alone; pilot history still dominates the models. Varying total per-client
 history remains the next design step, but the increment effect is now
 measurable rather than invisible.
+
+## Power versus cutoff: the confound check
+
+The independent review accepted the monotonic ordering but called the headline
+framing overstated, because protocol v2 changed **two** things at once: the
+cutoff rose from 10 to 100 *and* the evaluated cohort grew from 520 to 4,100
+users. Its alternative explanation was that the cutoff alone drove the
+difference—that capping local history degrades deep-list ranking while leaving
+the top ten intact, in which case v1 was measuring a different quantity for
+which its null was approximately true, and "underpowered" would be the wrong
+word.
+
+Its proposed separating check was to recompute NDCG@10 on the v2 cohort. That
+check is now executed; paired intervals are published at every cutoff.
+
+| Cap | Delta at cutoff 10 | Delta at cutoff 100 |
+| ---: | --- | --- |
+| 1 | -0.0037 [-0.0048, -0.0026] | -0.0058 [-0.0065, -0.0051] |
+| 2 | -0.0034 [-0.0046, -0.0023] | -0.0052 [-0.0059, -0.0045] |
+| 5 | -0.0034 [-0.0045, -0.0023] | -0.0045 [-0.0052, -0.0038] |
+| 10 | -0.0031 [-0.0041, -0.0021] | -0.0036 [-0.0042, -0.0031] |
+| 20 | -0.0022 [-0.0030, -0.0013] | -0.0024 [-0.0029, -0.0019] |
+| 50 | -0.0014 [-0.0021, -0.0007] | -0.0012 [-0.0015, -0.0009] |
+
+**The alternative explanation is refuted.** At cutoff 10 on the larger cohort,
+all six caps have intervals excluding zero—the same 6 of 6 as at cutoffs 20, 50,
+and 100. The effect is visible at the shallow cutoff once the cohort is large
+enough, so cohort size, not metric depth, was the binding constraint.
+
+Two refinements the review earned:
+
+- The cutoff still matters for *magnitude*: the cap-1 deficit grows from -0.0037
+  at cutoff 10 to -0.0058 at cutoff 100, so capping local history does hurt the
+  deep list more than the top ten. Both factors move the number; only cohort
+  size moved detectability.
+- v1 and v2 are statistically compatible. The v1 cap-1 interval at cutoff 10 was
+  [-0.0049, +0.0024], which contains the v2 point estimate of -0.0037. v1 did
+  not measure a different effect; it could not resolve the one that was there.
+
+The claim is therefore restated as: *the v1 null was a resolution failure driven
+by cohort size; the budget effect is real, monotonically ordered, and present at
+every tested cutoff.*
 
 ## Metric-ceiling audit
 

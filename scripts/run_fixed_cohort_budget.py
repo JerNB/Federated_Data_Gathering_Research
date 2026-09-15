@@ -763,13 +763,19 @@ def seed_variance_control(
     }
 
 
-def bootstrap_interval(values: np.ndarray, replicates: int, seed: int) -> tuple[float, float]:
-    if len(values) == 0:
+def bootstrap_interval(
+    values: np.ndarray, replicates: int, seed: int, block: int = 200
+) -> tuple[float, float]:
+    """Paired client-level bootstrap interval, resampled in vectorized blocks."""
+    count = len(values)
+    if count == 0:
         fail("cannot bootstrap an empty vector")
     rng = np.random.default_rng(seed)
     means = np.empty(replicates, dtype=np.float64)
-    for index in range(replicates):
-        means[index] = float(values[rng.integers(0, len(values), len(values))].mean())
+    for start in range(0, replicates, block):
+        width = min(block, replicates - start)
+        draws = rng.integers(0, count, size=(width, count))
+        means[start : start + width] = values[draws].mean(axis=1)
     return float(np.quantile(means, 0.025)), float(np.quantile(means, 0.975))
 
 
@@ -1248,6 +1254,25 @@ def main() -> int:
                     "training_interactions": interactions,
                     **metadata,
                     "primary_cutoff": primary_cutoff,
+                    "ndcg_delta_by_cutoff": {
+                        str(cutoff): {
+                            "delta": float(
+                                (metrics[model][cutoff]["ndcg"]
+                                 - full_metrics[model][cutoff]["ndcg"]).mean()
+                            ),
+                            "ci_low": bootstrap_interval(
+                                metrics[model][cutoff]["ndcg"] - full_metrics[model][cutoff]["ndcg"],
+                                int(evaluation["bootstrap_replicates"]),
+                                int(evaluation["bootstrap_seed"]) + cap * 100 + model_index * 7 + cutoff,
+                            )[0],
+                            "ci_high": bootstrap_interval(
+                                metrics[model][cutoff]["ndcg"] - full_metrics[model][cutoff]["ndcg"],
+                                int(evaluation["bootstrap_replicates"]),
+                                int(evaluation["bootstrap_seed"]) + cap * 100 + model_index * 7 + cutoff,
+                            )[1],
+                        }
+                        for cutoff in cutoffs
+                    },
                     "metrics_by_cutoff": {
                         str(cutoff): {
                             field: float(metrics[model][cutoff][field].mean())

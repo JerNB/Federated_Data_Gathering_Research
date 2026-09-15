@@ -180,6 +180,17 @@ def validate_rows(
         for cutoff, values in by_cutoff.items():
             for field in METRIC_FIELDS:
                 finite_probability(values.get(field), f"{label}@{cutoff} {field}")
+        deltas = row.get("ndcg_delta_by_cutoff")
+        if not isinstance(deltas, dict) or set(deltas) != {str(c) for c in cutoffs}:
+            fail(f"{label} is missing a paired NDCG interval at some cutoff")
+        for cutoff, entry in deltas.items():
+            low = finite_number(entry.get("ci_low"), f"{label}@{cutoff} ci_low")
+            high = finite_number(entry.get("ci_high"), f"{label}@{cutoff} ci_high")
+            finite_number(entry.get("delta"), f"{label}@{cutoff} delta")
+            if low > high:
+                fail(f"invalid NDCG interval for {label}@{cutoff}")
+        if abs(float(deltas[str(primary)]["delta"]) - float(row["mean_ndcg_delta_vs_full"])) > 1e-12:
+            fail(f"{label} primary delta disagrees with its cutoff table")
         if abs(float(by_cutoff[str(primary)]["ndcg"]) - float(row["mean_ndcg"])) > 1e-12:
             fail(f"{label} primary NDCG disagrees with its cutoff table")
         for key in (
