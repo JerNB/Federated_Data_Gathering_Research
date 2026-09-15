@@ -5,20 +5,29 @@ eligible cohort, the deterministic probe now measures a significant local-data
 budget effect in every tested cell, reversing the underpowered null result that
 protocol v1 produced at cutoff 10.
 
-## Independent review status
+## Review status
 
 One adversarial review was obtained and acted on. It challenged the headline v2
 claim and forced a confound check, recorded under "Power versus cutoff" below.
 
-Earlier attempts failed and produced nothing usable: two librarian runs timed
-out, two reviewer runs exceeded the 120-second subagent runtime limit, and the
-cross-family escalation agent had no configured model. The successful review
-used a self-contained packet with every number inline and one question, which
-fits the runtime limit; broad "read the repository and critique it" packets do
-not.
+**What that review is, precisely.** It is a read-only subagent run through the
+harness on the operator's own configured GPT provider, in a separate context
+with no access to this session's history. It is a different model family from
+the session that produced the work, which is why it caught a confound the author
+had missed. It is **not** independent in any stronger sense: same operator, same
+machine, same configuration, and no human reviewer. Do not describe it as
+external or third-party validation.
 
-Still unreviewed, and therefore recorded as my own judgement: the literature
-boundary mapping in the evidence matrix below, and the observability and privacy
+Earlier attempts produced nothing usable: two librarian runs timed out, two
+reviewer runs exceeded the 120-second subagent runtime limit, and the
+cross-family escalation agent returned "no model selected" despite credentials
+being present, which is a model-configuration gap rather than a missing secret.
+The successful review used a self-contained packet with every number inline and
+one question, which fits the runtime limit; broad "read the repository and
+critique it" packets do not.
+
+Unreviewed, and therefore recorded as author judgement: the literature boundary
+mapping in the evidence matrix below, and the observability and privacy
 contracts assumed for the controller.
 
 This report runs the decision framework in `docs/exploration_goal.md`. It first
@@ -293,7 +302,7 @@ measurable rather than invisible.
 
 ## Power versus cutoff: the confound check
 
-The independent review accepted the monotonic ordering but called the headline
+The reviewing subagent accepted the monotonic ordering but called the headline
 framing overstated, because protocol v2 changed **two** things at once: the
 cutoff rose from 10 to 100 *and* the evaluated cohort grew from 520 to 4,100
 users. Its alternative explanation was that the cutoff alone drove the
