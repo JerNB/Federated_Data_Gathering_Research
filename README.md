@@ -192,6 +192,22 @@ make validate-fixed-cohort-budget
 ```
 
 Evidence is tracked under `results/explorations/fixed_cohort_budget_v1/`.
+
+Runtime controls:
+
+```sh
+make fixed-cohort-budget                                   # cached cohort, 3 ALS workers
+python3 scripts/run_fixed_cohort_budget.py --als-workers 1 # serial, for debugging
+rm -rf artifacts/fixed_cohort_budget_cache                 # force a full cohort rebuild
+```
+
+The replay is CPU-only by design. BLAS threads are capped to one before numpy
+loads, because the ALS solves are batches of 32x32 systems where thread
+synchronization costs more than the arithmetic; measured on this machine that
+cap alone is 7.7x. Vectorized solves, an item-side item-item product, a cached
+cohort build, and process-level ALS seed training take the full replay from
+about 21 minutes to about 1 minute on a warm cache, with identical results.
+
 The replay is an offline MovieLens study: it makes no federated-system,
 availability, privacy, consent, or external-generalization claim.
 

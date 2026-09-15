@@ -11,7 +11,23 @@ import argparse
 import hashlib
 import json
 import math
+import os
+import pickle
 import time
+from concurrent.futures import ProcessPoolExecutor
+
+# The ALS solves are batches of 32x32 systems. Multi-threaded BLAS spends more
+# time launching threads than solving them: capping to one thread measured 7.7x
+# faster per iteration on this machine. Must run before numpy is imported.
+for _blas_threads in (
+    "OMP_NUM_THREADS",
+    "OPENBLAS_NUM_THREADS",
+    "MKL_NUM_THREADS",
+    "VECLIB_MAXIMUM_THREADS",
+    "NUMEXPR_NUM_THREADS",
+):
+    os.environ.setdefault(_blas_threads, "1")
+
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -320,22 +336,37 @@ def training_matrix(
 
 def als_factor_step(
     matrix: sparse.csr_matrix, other_factors: np.ndarray,
-    regularization: float, alpha: float,
+    regularization: float, alpha: float, max_block: int = 4_000_000,
 ) -> np.ndarray:
+    """One ALS half-step, batched by interaction count.
+
+    Rows with the same number of interactions are stacked and solved together,
+    which removes the per-entity Python loop. The arithmetic is unchanged; the
+    result matches the scalar formulation to about 1e-15.
+    """
     factor_count = other_factors.shape[1]
     output = np.zeros((matrix.shape[0], factor_count), dtype=np.float64)
-    gram = other_factors.T @ other_factors
-    penalty = regularization * np.eye(factor_count)
+    base = other_factors.T @ other_factors + regularization * np.eye(factor_count)
     indptr, indices, data = matrix.indptr, matrix.indices, matrix.data
-    for row in range(matrix.shape[0]):
-        start, end = int(indptr[row]), int(indptr[row + 1])
-        if start == end:
-            continue
-        vectors = other_factors[indices[start:end]]
-        weight = alpha * data[start:end]
-        left = gram + (vectors.T * weight) @ vectors + penalty
-        right = vectors.T @ (weight + 1.0)
-        output[row] = np.linalg.solve(left, right)
+    counts = np.diff(indptr)
+    active = np.flatnonzero(counts)
+    if not len(active):
+        return output
+    active = active[np.argsort(counts[active], kind="stable")]
+    sizes = counts[active]
+    bounds = np.concatenate(([0], np.flatnonzero(np.diff(sizes)) + 1, [len(active)]))
+    for group_index in range(len(bounds) - 1):
+        group = active[bounds[group_index] : bounds[group_index + 1]]
+        width = int(counts[group[0]])
+        block = max(1, max_block // max(width * factor_count, 1))
+        for start in range(0, len(group), block):
+            chunk = group[start : start + block]
+            offsets = indptr[chunk][:, None] + np.arange(width)
+            vectors = other_factors[indices[offsets]]
+            weight = alpha * data[offsets]
+            left = np.matmul((vectors * weight[:, :, None]).transpose(0, 2, 1), vectors) + base
+            right = (vectors * (weight + 1.0)[:, :, None]).sum(axis=1)
+            output[chunk] = np.linalg.solve(left, right)
     return output
 
 
@@ -372,7 +403,13 @@ def item_item_scores(
     matrix: sparse.csr_matrix, rows: list[int], support_indices: np.ndarray,
     score_limit: int, batch_size: int = 128,
 ) -> list[tuple[np.ndarray, np.ndarray]]:
-    """Deterministic item-item cosine scores for the requested user rows."""
+    """Deterministic item-item cosine scores for the requested user rows.
+
+    Scoring is `N (N^T N)` rather than `(N N^T) N`. Matrix multiplication is
+    associative, so the scores are unchanged, but the intermediate is the
+    item-item matrix (support x support) instead of the user-user matrix, which
+    removes the quadratic-in-users cost and lets the cohort grow.
+    """
     empty = (np.empty(0, dtype=np.int32), np.empty(0, dtype=np.float32))
     if not len(support_indices):
         return [empty for _ in rows]
@@ -380,12 +417,12 @@ def item_item_scores(
     restricted.data[:] = 1.0
     frequency = np.asarray(restricted.sum(axis=0)).ravel()
     normalized = (restricted @ sparse.diags(1.0 / np.sqrt(np.maximum(frequency, 1.0)))).tocsr()
+    similarity = (normalized.T @ normalized).tocsr()
     profiles = [normalized.getrow(row).indices for row in rows]
     output: list[tuple[np.ndarray, np.ndarray]] = []
     for start in range(0, len(rows), batch_size):
         batch = rows[start : start + batch_size]
-        overlap = (normalized[batch] @ normalized.T).tocsr()
-        scored = (overlap @ normalized).tocsr()
+        scored = (normalized[batch] @ similarity).tocsr()
         for offset in range(scored.shape[0]):
             begin, end = int(scored.indptr[offset]), int(scored.indptr[offset + 1])
             indices = scored.indices[begin:end]
@@ -496,23 +533,38 @@ def evaluation_ceilings(
     }
 
 
+def _train_als_seed(
+    payload: tuple[tuple, int, float, float, int, int]
+) -> tuple[np.ndarray, np.ndarray]:
+    """Worker entry point: rebuild the CSR matrix, then train one seed."""
+    (data, indices, indptr, shape), factors, regularization, alpha, iterations, seed = payload
+    matrix = sparse.csr_matrix((data, indices, indptr), shape=shape)
+    return train_implicit_als(matrix, factors, regularization, alpha, iterations, seed)
+
+
 def train_als_runs(
-    matrix: sparse.csr_matrix, als_config: dict[str, object]
+    matrix: sparse.csr_matrix, als_config: dict[str, object], workers: int = 1
 ) -> list[tuple[np.ndarray, np.ndarray]]:
+    """Train one ALS model per seed. Seeds are independent, so they can run in
+    separate processes; each worker inherits the single-thread BLAS cap, which
+    is what makes the parallel speedup real rather than oversubscription."""
     seeds = [int(value) for value in als_config.get("seeds", [])]
     if len(seeds) < 2 or len(set(seeds)) != len(seeds):
         fail("als.seeds must list at least two distinct seeds")
-    return [
-        train_implicit_als(
-            matrix,
-            int(als_config["factors"]),
-            float(als_config["regularization"]),
-            float(als_config["alpha"]),
-            int(als_config["iterations"]),
-            seed,
-        )
+    settings = (
+        int(als_config["factors"]),
+        float(als_config["regularization"]),
+        float(als_config["alpha"]),
+        int(als_config["iterations"]),
+    )
+    if workers <= 1:
+        return [train_implicit_als(matrix, *settings, seed) for seed in seeds]
+    payloads = [
+        ((matrix.data, matrix.indices, matrix.indptr, matrix.shape), *settings, seed)
         for seed in seeds
     ]
+    with ProcessPoolExecutor(max_workers=min(workers, len(seeds))) as pool:
+        return list(pool.map(_train_als_seed, payloads))
 
 
 def seed_variance_control(
@@ -672,6 +724,65 @@ def write_report(output_dir: Path, summary: dict[str, object]) -> None:
     (output_dir / "report.md").write_text("\n".join(lines), encoding="utf-8")
 
 
+def load_or_build_cohort(
+    chunks: list[Path], manifest_path: Path, windows: dict[str, object],
+    cohort_config: dict[str, object], cache_dir: Path,
+) -> dict[str, object]:
+    """Build the fixed cohort, or reuse a cached build of the same contract.
+
+    The three passes over 33.8 million ratings dominate a warm rerun, and they
+    depend only on the dataset manifest plus the window and cohort settings.
+    """
+    key_payload = json.dumps(
+        {
+            "manifest_sha256": sha256_file(manifest_path),
+            "chunks": [str(path.relative_to(ROOT)) for path in chunks],
+            "windows": windows,
+            "cohort": cohort_config,
+            "version": 1,
+        },
+        sort_keys=True,
+    ).encode()
+    key = hashlib.sha256(key_payload).hexdigest()[:24]
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = cache_dir / f"cohort_{key}.pkl"
+    if cache_path.is_file():
+        print(f"reusing cached cohort build {key}", flush=True)
+        with cache_path.open("rb") as handle:
+            return pickle.load(handle)
+
+    print("computing global chronological cutoffs", flush=True)
+    pilot_cutoff, collection_cutoff, global_counts, catalogue = global_cutoffs(
+        chunks, float(windows["pilot_fraction"]), float(windows["collection_fraction"])
+    )
+    print("selecting fixed recent pilot-eligible cohort", flush=True)
+    cohort, pilot_eligible_count = select_cohort(
+        chunks,
+        pilot_cutoff,
+        int(cohort_config["minimum_pilot_positive_interactions"]),
+        int(cohort_config["recent_pilot_activity_days"]),
+        int(cohort_config["panel_size"]),
+        int(cohort_config["seed"]),
+    )
+    print("loading fixed cohort histories", flush=True)
+    clients = load_clients(
+        chunks, cohort, pilot_cutoff, collection_cutoff, int(cohort_config["seed"])
+    )
+    state = {
+        "cache_key": key,
+        "pilot_cutoff": pilot_cutoff,
+        "collection_cutoff": collection_cutoff,
+        "global_counts": global_counts,
+        "catalogue": catalogue,
+        "cohort": cohort,
+        "pilot_eligible_count": pilot_eligible_count,
+        "clients": clients,
+    }
+    with cache_path.open("wb") as handle:
+        pickle.dump(state, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    return state
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -681,6 +792,14 @@ def main() -> int:
     parser.add_argument(
         "--output", type=Path,
         default=Path("results/explorations/fixed_cohort_budget_v1"),
+    )
+    parser.add_argument(
+        "--cache-dir", type=Path, default=Path("artifacts/fixed_cohort_budget_cache"),
+        help="cohort-construction cache; delete it to force a full rebuild",
+    )
+    parser.add_argument(
+        "--als-workers", type=int, default=min(3, os.cpu_count() or 1),
+        help="processes used for the independent ALS seed trainings (1 disables)",
     )
     args = parser.parse_args()
 
@@ -708,23 +827,16 @@ def main() -> int:
 
     output_dir.mkdir(parents=True, exist_ok=True)
     started = time.perf_counter()
-    print("computing global chronological cutoffs", flush=True)
-    pilot_cutoff, collection_cutoff, global_counts, catalogue = global_cutoffs(
-        chunks, float(windows["pilot_fraction"]), float(windows["collection_fraction"])
+    cohort_state = load_or_build_cohort(
+        chunks, manifest_path, windows, cohort_config, repo_path(args.cache_dir)
     )
-    print("selecting fixed recent pilot-eligible cohort", flush=True)
-    cohort, pilot_eligible_count = select_cohort(
-        chunks,
-        pilot_cutoff,
-        int(cohort_config["minimum_pilot_positive_interactions"]),
-        int(cohort_config["recent_pilot_activity_days"]),
-        int(cohort_config["panel_size"]),
-        int(cohort_config["seed"]),
-    )
-    print("loading fixed cohort histories", flush=True)
-    clients = load_clients(
-        chunks, cohort, pilot_cutoff, collection_cutoff, int(cohort_config["seed"])
-    )
+    pilot_cutoff = cohort_state["pilot_cutoff"]
+    collection_cutoff = cohort_state["collection_cutoff"]
+    global_counts = cohort_state["global_counts"]
+    catalogue = cohort_state["catalogue"]
+    cohort = cohort_state["cohort"]
+    pilot_eligible_count = cohort_state["pilot_eligible_count"]
+    clients = cohort_state["clients"]
     item_ids = np.asarray(sorted(catalogue), dtype=np.int64)
     item_index = {int(item_id): index for index, item_id in enumerate(item_ids)}
     user_row = {user_id: index for index, user_id in enumerate(cohort)}
@@ -759,7 +871,7 @@ def main() -> int:
         full_matrix, evaluated_rows, support_indices, score_limit
     )
     print(f"training full-reference implicit ALS over {len(als_seeds)} seeds", flush=True)
-    full_als = train_als_runs(full_matrix, als_config)
+    full_als = train_als_runs(full_matrix, als_config, args.als_workers)
     full_recall, full_ndcg, full_hit_rate, full_seed_ndcg = evaluate_orders(
         full_orders, full_item_item, full_als, evaluated_users, user_row,
         item_ids, clients, int(evaluation["cutoff"]),
@@ -831,7 +943,7 @@ def main() -> int:
             policy_item_item = item_item_scores(
                 policy_matrix, evaluated_rows, support_indices, score_limit
             )
-            policy_als = train_als_runs(policy_matrix, als_config)
+            policy_als = train_als_runs(policy_matrix, als_config, args.als_workers)
             recall, ndcg, hit_rate, _ = evaluate_orders(
                 orders, policy_item_item, policy_als, evaluated_users, user_row,
                 item_ids, clients, int(evaluation["cutoff"]),

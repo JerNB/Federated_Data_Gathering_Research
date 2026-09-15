@@ -1,9 +1,9 @@
 {
   "run_id": "fixed_cohort_budget_v1",
-  "created_at_utc": "2026-09-14T17:45:18.826961+00:00",
+  "created_at_utc": "2026-09-14T21:56:35.254695+00:00",
   "script": {
     "path": "scripts/run_fixed_cohort_budget.py",
-    "sha256": "f038d6ada319cdfbeea193d36b7200f0d5b006d90083dc7329355b4b53d33533"
+    "sha256": "a7ba5c25e0531e7d6a4524f9016df60d079609a432276e33650108e729c49957"
   },
   "inputs": {
     "config_path": "configs/experiments/fixed_cohort_budget_v1.json",
@@ -1492,7 +1492,7 @@
       "tail_vs_equal_absolute_error_improvement_ci_high": 0.0006946048989871094
     }
   ],
-  "runtime_seconds": 1242.7168316669995,
+  "runtime_seconds": 67.98568670800887,
   "interpretation": {
     "supported_claim": "policy-specific fixed-cohort sample-to-reference fidelity on the pinned MovieLens replay",
     "not_supported": [

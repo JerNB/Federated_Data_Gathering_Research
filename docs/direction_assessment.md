@@ -240,6 +240,13 @@ in for a personalized recommender.
 
 ## What the deterministic probe shows
 
+> **Evidence caveat.** Every number below was measured at `K = 10`, which S30
+> identifies as the least robust and least discriminative cutoff studied. A null
+> result at a shallow cutoff is weak evidence of equivalence: part of the
+> "no difference" may be low discriminative power rather than true equivalence.
+> `docs/evaluation_protocol.md` proposes rerunning at `K` up to 100 before any
+> sufficiency statement is made.
+
 With item-item cosine, the tested caps do not measurably change mean future
 quality on this cohort:
 

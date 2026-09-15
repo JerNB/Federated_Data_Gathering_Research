@@ -18,7 +18,8 @@ Each document states what it does and does not establish.
 
 | Document | Role |
 | --- | --- |
-| [`literature_sources.md`](literature_sources.md) | Primary-source register S1–S29, with the exact claim each source supports. |
+| [`literature_sources.md`](literature_sources.md) | Primary-source register S1–S34, with the exact claim each source supports. |
+| [`evaluation_protocol.md`](evaluation_protocol.md) | Cutoff and metric protocol: executed v1, proposed v2, and the open decisions. |
 | [`candidate_matrix.md`](candidate_matrix.md) | Snapshot-calibration sampler catalog, roles, and interpretation limits. |
 
 ## 3. How to reproduce it

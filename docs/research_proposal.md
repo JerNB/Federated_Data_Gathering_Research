@@ -158,6 +158,11 @@ estimate temporal, client, external-domain, or federated-system robustness.
 
 ### Metric contract and structural ceilings
 
+> **Under revision.** `docs/evaluation_protocol.md` proposes protocol v2
+> (deep cutoffs, `Precision@K` instead of the ad-hoc `HitRate`, `MRR` dropped)
+> on the evidence of S30–S34. The rules below describe **executed** protocol v1
+> and remain in force until that draft is accepted.
+
 Metric choice is a control, not a presentation detail. Top-`K` retrieval metrics
 have different ceilings, and those ceilings vary systematically with exactly the
 user property this study manipulates—how much history a client has.
@@ -175,10 +180,10 @@ have large `R`, so their `Recall@K` ceiling is low, and heavy users are also the
 clients whose histories a per-client cap truncates most. A raw-recall comparison
 across caps therefore mixes a data effect with a metric-ceiling effect.
 
-Rules:
+Rules currently in force (protocol v1):
 
-- Report `NDCG@10` as primary and the cap-aware `HitRate@10` as the retrieval
-  secondary. Raw `Recall@10` may be reported for continuity, never alone.
+- Report `NDCG@10` as primary and `HitRate@10` as the retrieval secondary. Raw
+  `Recall@10` may be reported for continuity, never alone.
 - Publish the ceiling audit beside the results: relevant-set size distribution,
   the share of users above `K`, and the mean and minimum recall ceiling.
 - Never compare `Recall@K` or `Precision@K` across groups whose relevant-set
@@ -188,6 +193,19 @@ Rules:
   there is no universal acceptable NDCG error.
 - Also report uncertainty over the natural unit (clients, episodes, time
   windows, groups, datasets, or sample draws), coverage, and resource cost.
+
+Known weaknesses of v1, measured or sourced:
+
+- `K = 10` is the shallowest depth studied in S30 and is the **least robust and
+  least discriminative**; deeper cutoffs near 100 dominate it on both axes while
+  rarely changing system order. The value 10 was never justified here.
+- `HitRate@K` equals `Precision@K` whenever `R >= K`, which covers 62.5% of the
+  evaluated users, so it adds a non-standard name rather than a new measurement.
+- The relevant set is “items later rated at least 4”, an observation artifact
+  under missing-not-at-random feedback (S32); every metric dividing by `R`
+  inherits that bias.
+- No popularity-bias treatment is applied, so averaged accuracy may diverge from
+  unbiased accuracy (S33, S34).
 
 Not yet measured, and therefore not claimed: MRR, catalog coverage of the
 recommendations themselves, per-activity-group metric breakdowns, and any
@@ -535,7 +553,7 @@ This is an execution order, not a claim that later questions are unimportant.
 | P5 | Runtime and data-structure trade-offs | Measure whether optimization helps at current scale without making the method brittle when schema or data structure changes. | Open |
 | P6 | Additional datasets | Add external datasets only when they test a defined generalization claim or close a known validity gap. | Open |
 | P7 | AI-model plugin track | Consider neural, transformer, or other AI recommenders after the common benchmark interface and classical baselines are stable. | Deferred |
-| P8 | Factor analysis | Define whether “挖因子” means latent-factor interpretation, error-factor attribution, observable feature analysis, or another question. | Undefined |
+| P8 | Factor analysis | Define whether "factor mining" means latent-factor interpretation, error-factor attribution, observable feature analysis, or another question. | Undefined |
 
 “Federated data gathering” is currently a cross-cutting term rather than a
 fixed priority. The review must distinguish privacy-preserving data collection,

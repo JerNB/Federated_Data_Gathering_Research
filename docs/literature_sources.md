@@ -242,3 +242,71 @@ do not turn the executed central snapshot matrix into federated evidence.
 - Proposal use: a recommender-specific participant-selection comparator that
   couples client contribution estimates with training policy. It changes which
   clients participate rather than establishing local-history sufficiency.
+
+## Offline evaluation-protocol sources
+
+These sources govern cutoff choice, metric selection, and known offline
+evaluation biases. They are read as method constraints, not as results.
+
+### S30 — Valcarce, Bellogín, Parapar, and Castells (2018), On the Robustness and Discriminative Power of IR Metrics for Top-N Recommendation
+
+- Primary source: https://doi.org/10.1145/3240323.3240347
+- Open draft: https://www.dc.fi.udc.es/~dvalcarce/pubs/valcarce-etal-recsys2018.pdf
+- Measured claims (MovieLens 1M, LibraryThing, BeerAdvocate; 21 recommenders;
+  AllItems protocol; relevance threshold 4):
+  - System rankings correlate strongly across cutoffs 5–100 (Kendall tau mostly
+    above 0.9; lowest observed 0.76 between `@5` and `@100` on MovieLens), so
+    the cutoff rarely reverses "which system is better".
+  - Deeper cutoffs (about 100) are more robust to both sparsity and popularity
+    bias and have higher discriminative power than shallow cutoffs of 5–10.
+  - Discriminative-power score (lower is better, cutoff 100) on MovieLens 1M:
+    nDCG 1.4, precision 2.6, MAP 2.8, recall 7.0, infAP 8.4, bpref 9.9,
+    MRR 15.5.
+  - Precision is the most robust metric; nDCG is the most discriminative; MRR,
+    bpref, and infAP perform poorly for recommendation.
+- Proposal use: justifies reporting deep cutoffs, using nDCG as primary and
+  precision as the robust secondary, and treating recall and MRR as weak
+  primaries. A shallow cutoff is a product-display choice, not an evaluation
+  requirement.
+
+### S31 — Krichene and Rendle (2020), On Sampled Metrics for Item Recommendation
+
+- Primary source: https://doi.org/10.1145/3394486.3403226
+- Open paper: http://walid.krichene.net/papers/KDD-sampled-metrics.pdf
+- Claim: metrics computed against a sampled subset of irrelevant items are
+  inconsistent with their exact counterparts and can reverse system order;
+  as the sample shrinks, metrics degenerate toward AUC. Corrections reduce but
+  do not remove the inconsistency; avoid sampling when exact evaluation is
+  affordable.
+- Proposal use: confirms the executed AllItems protocol—ranking the full
+  rating-bearing catalog with no negative sampling—is the correct choice, and
+  forbids switching to sampled evaluation for speed.
+
+### S32 — Steck (2013), Evaluation of Recommendations: Rating-Prediction and Ranking
+
+- Primary source: https://doi.org/10.1145/2507157.2507160
+- Claim: the decisive difference between rating-prediction and ranking
+  evaluation is the data each uses, not the metric. Observed ratings are
+  missing not at random, so evaluating only on observed items answers a small
+  and biased part of the task.
+- Proposal use: the relevant set in this study is "items the user later rated
+  at least 4", which is an observation artifact rather than the user's true
+  interest set. Any metric that divides by that set inherits the bias.
+
+### S33 — Yang et al. (2018), Unbiased Offline Recommender Evaluation for Missing-Not-At-Random Implicit Feedback
+
+- Primary source: https://doi.org/10.1145/3240323.3240355
+- Claim: average-over-all offline evaluation of implicit feedback is biased
+  toward popular items; inverse-propensity weighting with a popularity-based
+  exposure model reduces that bias, at the cost of estimator variance.
+- Proposal use: a candidate debiasing layer for a later phase. It requires a
+  declared propensity model, so it is not adopted silently.
+
+### S34 — Cañamares and Castells (2018), Should I Follow the Crowd?
+
+- Primary source: https://doi.org/10.1145/3209978.3210014
+- Claim: popularity can be either a genuine effectiveness signal or an
+  evaluation artifact depending on how rating, discovery, and relevance
+  interact; offline accuracy can diverge from unbiased accuracy.
+- Proposal use: motivates reporting tail-restricted and popularity-stratified
+  results rather than a single averaged accuracy number.
