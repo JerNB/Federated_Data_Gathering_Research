@@ -35,7 +35,7 @@ Each document states what it does and does not establish.
 | Experiment | Contract | Evidence |
 | --- | --- | --- |
 | Snapshot sampling matrix | `configs/experiments/sample_generalization_v1.json` | `results/explorations/sample_generalization_full/` |
-| Fixed-cohort local-data budget | `configs/experiments/fixed_cohort_budget_v1.json` | `results/explorations/fixed_cohort_budget_v1/` |
+| Fixed-cohort local-data budget | `configs/experiments/fixed_cohort_budget_v2.json` | `results/explorations/fixed_cohort_budget_v2/` |
 
 ## Standing rules
 

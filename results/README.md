@@ -25,7 +25,7 @@ does not claim independent external generalization.
 
 ## Fixed-cohort local-data-budget evidence
 
-`explorations/fixed_cohort_budget_v1/` holds the second experiment: one fixed
+`explorations/fixed_cohort_budget_v2/` holds the second experiment: one fixed
 2,000-user cohort, global chronological pilot/collection/future windows, two
 retention policies, six per-client caps, and four declared models, for 48
 policy/model rows plus a frozen reference artifact and report.

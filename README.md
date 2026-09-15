@@ -26,16 +26,16 @@ never read without its boundary.
    — snapshot **calibration**: which sampling mechanisms distort a full-data
    result. Start here; it motivates the second experiment. Not federated
    evidence.
-5. [`results/explorations/fixed_cohort_budget_v1/reference_artifact.json`](results/explorations/fixed_cohort_budget_v1/reference_artifact.json)
+5. [`results/explorations/fixed_cohort_budget_v2/reference_artifact.json`](results/explorations/fixed_cohort_budget_v2/reference_artifact.json)
    — the frozen comparison basis: cohort size, time windows, evaluated users,
    interaction counts, item-item support, and the ALS same-data seed floor.
    **Read this before the numbers**, because the seed floor decides which model
    differences are interpretable at all.
-6. [`results/explorations/fixed_cohort_budget_v1/report.md`](results/explorations/fixed_cohort_budget_v1/report.md)
+6. [`results/explorations/fixed_cohort_budget_v2/report.md`](results/explorations/fixed_cohort_budget_v2/report.md)
    — the executed policy grid: two retention policies, six per-client caps, four
    models. Read the "Interpretation boundary" section last, and treat it as
    binding.
-7. [`results/explorations/fixed_cohort_budget_v1/candidate_summary.json`](results/explorations/fixed_cohort_budget_v1/candidate_summary.json)
+7. [`results/explorations/fixed_cohort_budget_v2/candidate_summary.json`](results/explorations/fixed_cohort_budget_v2/candidate_summary.json)
    — machine-readable rows, confidence intervals, cost counters, and the full
    design echo for reproduction.
 
@@ -80,7 +80,7 @@ never read without its boundary.
 | Sampling matrix | `docs/candidate_matrix.md` | Snapshot-calibration sampler catalog and boundaries. |
 | Data and workflow | `docs/data_management.md`, `docs/experiment_workflow.md` | Package integrity and run procedure. |
 | Later tracks | `docs/research_direction.md` | Deferred comparators and federated-system confirmation. |
-| Experiment contracts | `configs/experiments/` | `sample_generalization_v1.json`, `fixed_cohort_budget_v1.json`. |
+| Experiment contracts | `configs/experiments/` | `sample_generalization_v1.json`, `fixed_cohort_budget_v2.json`. |
 | Schemas and objectives | `configs/run_record.schema.json`, `configs/objectives/` | Run-record schema and objective definitions. |
 | Evidence | `results/explorations/` | Executed artifacts, reference artifacts, reports, figures. |
 | Code | `scripts/` | Runners (`run_*.py`), contract validators (`validate_*.py`), dashboard, data tooling. |
@@ -191,7 +191,7 @@ make fixed-cohort-budget
 make validate-fixed-cohort-budget
 ```
 
-Evidence is tracked under `results/explorations/fixed_cohort_budget_v1/`.
+Evidence is tracked under `results/explorations/fixed_cohort_budget_v2/`.
 
 Runtime controls:
 

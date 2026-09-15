@@ -42,11 +42,11 @@
     },
     {
       "id": "run-fixed-cohort-budget-replay",
-      "title": "Run fixed-cohort local-data budget replay",
+      "title": "Run fixed-cohort local-data budget replay (protocol v2)",
       "status": "done",
       "owner": "research",
       "priority": "high",
-      "notes": "Executed one real MovieLens chronological replay with a four-model control: 2,000 fixed users, 48 policy/model rows. The item-tail reserve cap is rejected; deterministic item-item cosine (NDCG@10 0.1155) shows no significant mean penalty down to one collection event per client, while implicit ALS stays below its 0.0419 same-data seed floor.",
+      "notes": "Protocol v2 executed: cutoff 100, entire eligible cohort of 16,084 users, 4,100 evaluated, stratified reporting and self-normalized propensity weighting. The deterministic item-item probe measures a significant deficit in all 12 cap/policy cells, from -0.0058 at cap 1 to -0.0012 at cap 50, reversing the underpowered v1 null at cutoff 10. Tail reserve still unpromoted; ALS still below its 0.0203 seed floor.",
       "parameters": {}
     },
     {

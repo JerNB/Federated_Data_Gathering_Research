@@ -410,33 +410,57 @@ Use leave-one-dataset-out evaluation for any claim that the controller transfers
 
 ## 7. Analysis rules
 
-For every algorithm, episode, and data-plan cell, produce:
+For every algorithm, episode, and data-plan cell, produce raw metrics against
+the cost vector with client-level uncertainty, paired effects versus the
+full-cohort reference, cutoff sensitivity, stratified breakdowns, weighted and
+unweighted values, coverage counts, and resource cost. A positive
+local-data-sufficiency claim additionally requires the predeclared safety,
+coverage, cost, and federated-confirmation conditions to hold.
 
-- raw metric versus the cost vector, with client-level uncertainty bands;
-- paired metric effect versus the full-cohort reference;
-- model-selection agreement and a `no decisive winner` label when the reference
-  winner is statistically tied;
-- false acceptance, false rejection, and abstention outcomes for `Pi`;
-- client, stratum, item-tail, availability, and completion coverage;
-- local compute, bytes, rounds, wall-clock time, and memory;
-- time-window, cohort, and randomization sensitivity.
+## 8. Current evidence
 
-Primary evidence for a positive local-data-sufficiency claim requires all of:
+The tracked snapshot contains 33,832,162 ratings from 330,975 users. The
+sampling-calibration matrix in `results/explorations/sample_generalization_full/`
+remains the prior evidence layer: it shows that sampling mechanism, support, and
+coverage change a full-data result, with item-item cosine far more sensitive
+than global popularity controls.
 
-1. the predeclared upper confidence bound for false acceptance is no greater
-   than the declared safety limit;
-2. accepted plans meet the metric and decision-fidelity tolerances against the
-   full-cohort reference;
-3. required client and subgroup coverage pass, including the declared
-   worst-stratum rule;
-4. the adaptive plan uses less of the primary cost budget than fixed plans that
-   meet the same safety target; and
-5. the surviving plan is confirmed under the declared federated-system model.
+`results/explorations/fixed_cohort_budget_v2/` holds the executed protocol-v2
+replay. The cohort is the entire eligible pool of 16,084 users, of which 4,100
+have future positives; the frozen reference uses 2,205,099 training
+interactions, 117,092 of them collection-window events the policies control.
+Metrics are reported at cutoffs 10, 20, 50, and 100 with 100 as the primary
+depth, alongside self-normalized propensity-weighted values and stratified
+breakdowns.
 
-A negative result is useful: it identifies a budget, data plan, availability
-regime, or client group for which the controller must gather more or abstain.
+Full-reference NDCG@100 is 0.1095 popularity, 0.1097 rating-weighted
+popularity, 0.1228 item-item cosine, and 0.1459 three-seed implicit ALS. Under
+the deterministic probe, **every tested cap now shows a significant deficit
+against full history**: -0.0058 [-0.0065, -0.0051] at cap 1, shrinking
+monotonically to -0.0012 [-0.0015, -0.0009] at cap 50. Propensity-weighted
+deltas agree in sign and shrink in the same order, so the effect is not an
+exposure artifact.
 
-## 8. Models and system boundaries
+This reverses the protocol-v1 null result, which was measured at cutoff 10 with
+520 evaluated users and found no cap whose interval excluded zero. S30
+identifies cutoff 10 as the least discriminative depth studied; the null did not
+survive a deeper cutoff and a census cohort. The practical magnitude stays
+small: capping at one collection event per client keeps 5,089 of 117,092
+collection interactions and costs about 4.7% of NDCG@100 relative to the
+full-history reference.
+
+The tail-reserve policy remains unpromoted. Four of 48 cells show a strictly
+positive paired interval, all implicit ALS at caps 10 and 20 with effects near
+0.0003; every deterministic-probe cell is negative or null. ALS is the strongest
+model at this depth but still fails its own control: no ALS cell exceeds the
+0.0203 same-data seed floor.
+
+These results are in-reference calibration and fixed-cohort replay evidence,
+not evidence that a federated data plan is safe. Varying total per-client
+history, repeating over time windows, and federated-system confirmation remain
+planned evidence.
+
+## 9. Models and system boundaries
 
 The model is a controlled probe of the data-plan claim, and the model itself is
 a declared control rather than a free choice.
@@ -467,54 +491,6 @@ Active labeling, individual utility scoring from raw logs, incentives, and
 clustered personalization are outside the first estimand. Local relevance and
 online-retention selection are controlled comparators only when their
 observability, compute, and privacy contracts are specified.
-
-## 9. Current evidence
-
-The tracked full snapshot contains 33,832,162 ratings from 330,975 users over
-86,537 catalog movies; 83,239 of those movies appear in the ratings package.
-The executed result in `results/explorations/sample_generalization_full/` uses
-2,000 fixed eligible panel users, 13,653,758 positive training interactions,
-four sampling schemes, three fixed models, seven fractions, and ten draws below
-the full fraction. It contains 732 draw rows, 84 aggregate rows, six figures,
-and a persisted full-reference artifact.
-
-The full-reference NDCG@10 is approximately 0.0391 for popularity, 0.0390 for
-rating-weighted popularity, and 0.0616 for item-item cosine. At 10% of the
-training budget, the two global controls remain within roughly 0.0001–0.0006
-absolute NDCG error across schemes, while item-item NDCG is approximately
-0.0120 for user-based schemes, 0.0218 for uniform interactions, and 0.0216
-for within-user history. The item-item result therefore exposes sampling and
-support sensitivity that the global controls do not.
-
-`results/explorations/fixed_cohort_budget_v1/` adds one real-data,
-fixed-cohort chronological replay with four declared models. Its 2,000-user
-cohort was selected from 16,084 users active in the final pilot year; 520 later
-had a future positive after fixed seen-item exclusion. The reference used
-270,880 training interactions, of which 15,537 (5.7%) fall in the collection
-window that the policies control.
-
-Full-reference NDCG@10 is 0.0901 popularity, 0.0912 rating-weighted popularity,
-0.1155 item-item cosine, and 0.1020 three-seed implicit ALS. Under the
-deterministic item-item probe, no cap's paired 95% interval against full
-history excludes zero—including a cap of one collection event per client, which
-retains 4.1% of collection interactions—while per-user absolute error still
-falls from 0.0156 at cap 1 to 0.0071 at cap 50. Mean stability and per-user
-stability are therefore separate claims. The item-tail reserve cap is
-significantly worse than the equal cap for the personalized probe at caps 5 and
-50, so it is rejected for this episode.
-
-The ALS control bounds what may be claimed from a stochastic model. On
-identical data, seed changes alone move mean NDCG@10 across 0.0965–0.1066 and
-give a 0.0419 mean per-user absolute difference, with 0.55 top-10 seed
-agreement at 32 factors and 0.31 at 64. Every ALS policy-versus-full per-user
-error (0.0157–0.0270) sits below that floor, so ALS cannot currently separate a
-data-budget effect from initialization noise.
-
-These results are in-reference calibration and fixed-cohort replay evidence,
-not evidence that a federated data plan is safe. The collection window supplies
-only 5.7% of training interactions here, so the next design must vary total
-per-client history, repeat over cohorts and time windows, and only then attempt
-federated-system confirmation.
 
 ## 10. References used here
 

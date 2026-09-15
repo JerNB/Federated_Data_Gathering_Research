@@ -1,0 +1,118 @@
+{
+  "experiment_id": "fixed_cohort_budget_v2",
+  "title": "Fixed-cohort chronological local-data budget replay, evaluation protocol v2",
+  "status": "executed_real_data_validation",
+  "supersedes": "fixed_cohort_budget_v1",
+  "protocol_changes": [
+    "primary evaluation depth raised from 10 to 100 on the robustness and discriminative-power evidence in S30",
+    "cohort raised from 2,000 users to the entire eligible pool of 16,084 for statistical power",
+    "popularity and activity stratified reporting added",
+    "self-normalized inverse-propensity weighting added beside every unweighted metric"
+  ],
+  "dataset": {
+    "dataset_id": "movielens_ml_latest",
+    "version": "2023-07-20",
+    "manifest": "data/dataset_manifest.json",
+    "ratings_dir": "data/raw/ratings"
+  },
+  "estimand": {
+    "reference": "all permitted positive pilot and collection-window history from one fixed eligible cohort",
+    "sample": "same cohort with a local chronological history cap or item-tail reserve cap",
+    "measured_claim": "policy-specific fixed-cohort sample-to-reference fidelity",
+    "claim_boundary": "offline MovieLens replay; no device availability, dropout, secure aggregation, consent, bytes, rounds, or federated convergence claim"
+  },
+  "windows": {
+    "method": "global chronological positive-rating day cutoffs",
+    "pilot_fraction": 0.9,
+    "collection_fraction": 0.05,
+    "future_test_fraction": 0.05
+  },
+  "cohort": {
+    "selection": "every user with the pilot minimum and a positive interaction in the final 365 pilot days",
+    "panel_size": 16084,
+    "panel_size_rationale": "the requested 20,000 is not attainable: exactly 16,084 users satisfy the declared eligibility rule, so the cohort is the entire eligible pool and no cohort-draw variance remains. Reaching 20,000 would require relaxing the eligibility contract, which changes the population rather than the sample.",
+    "minimum_pilot_positive_interactions": 5,
+    "recent_pilot_activity_days": 365,
+    "seed": 20261001
+  },
+  "policies": {
+    "equal_chronological_cap": "retain each client's first k positive collection-window events",
+    "tail_reserve_cap": "retain up to k events per client; reserve half of capacity for the client's earliest collection events whose item has pilot popularity at or below the pilot 20th-percentile count, then fill by chronological order"
+  },
+  "caps": [1, 2, 5, 10, 20, 50],
+  "tail": {
+    "pilot_item_count_quantile": 0.2,
+    "reserve_fraction": 0.5
+  },
+  "evaluation": {
+    "positive_rule": "rating >= 4.0",
+    "candidate_catalog": "all rating-bearing items in the pinned snapshot",
+    "fixed_exclusion": "all pilot and collection-window items seen by each cohort client, independent of policy",
+    "cutoffs": [10, 20, 50, 100],
+    "primary_cutoff": 100,
+    "display_cutoff": 10,
+    "models": ["popularity", "rating_weighted_popularity", "item_item_cosine", "implicit_als"],
+    "primary_metric": "ndcg",
+    "secondary_metrics": ["precision", "recall"],
+    "metric_notes": {
+      "ndcg": "normalized by min(K, |relevant|); not capped by relevant-set size; primary decision metric",
+      "precision": "hits / K; capped at |relevant| / K for light users; robust secondary per S30",
+      "recall": "hits / |relevant|; capped at K / |relevant| for heavy users; interpretation only, never a decision metric",
+      "dropped": ["hit_rate (equals precision when |relevant| >= K)", "MRR (least robust and weakly discriminative per S30)"]
+    },
+    "smoothing_count": 20.0,
+    "bootstrap_replicates": 1000,
+    "bootstrap_seed": 20261002,
+    "exploratory_mean_absolute_ndcg_tolerance": 0.005
+  },
+  "propensity": {
+    "estimator": "self-normalized inverse propensity scoring over relevant test items",
+    "model": "item popularity power law, p_i proportional to n_i^((gamma+1)/2), normalized to a maximum of 1",
+    "gamma": 0.5,
+    "popularity_source": "training-window positive interactions from the fixed cohort",
+    "minimum_propensity": 0.01,
+    "reporting_rule": "every weighted metric is published beside its unweighted value; the exposure model cannot be validated on MovieLens",
+    "source": "S33"
+  },
+  "strata": {
+    "user_activity": {
+      "definition": "pilot positive-interaction count, cohort terciles",
+      "labels": ["light", "medium", "heavy"]
+    },
+    "relevant_set_size": {
+      "definition": "future positives at or below the primary cutoff versus above it",
+      "labels": ["at_or_below_cutoff", "above_cutoff"]
+    },
+    "item_popularity": {
+      "definition": "training-window item popularity, head is the top decile, tail is at or below the 20th percentile",
+      "labels": ["head", "mid", "tail"],
+      "applied_to": "distribution of hits across popularity bands"
+    }
+  },
+  "item_item": {
+    "model": "deterministic item-item cosine over positive interactions",
+    "support_threshold": 20,
+    "top_k": 100,
+    "candidate_block_size": 2000,
+    "support_scope": "fixed full-reference item counts, identical for every policy",
+    "role": "primary personalized probe; no random state"
+  },
+  "als": {
+    "model": "implicit alternating least squares over positive interactions",
+    "factors": 32,
+    "regularization": 0.05,
+    "alpha": 20.0,
+    "iterations": 15,
+    "seeds": [20261003, 20261004, 20261005],
+    "aggregation": "per-user mean across seeds; identical seed set for every condition",
+    "tuning": "fixed a priori; no search against the future-test window"
+  },
+  "invariants": {
+    "fixed_cohort": true,
+    "future_test_hidden_from_policy": true,
+    "full_reference_reused": true,
+    "same_cap_per_client": true,
+    "no_negative_sampling": true,
+    "weighted_and_unweighted_both_reported": true
+  }
+}

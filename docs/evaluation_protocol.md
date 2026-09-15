@@ -1,7 +1,9 @@
-# Evaluation protocol (draft v2 — proposed, not executed)
+# Evaluation protocol v2 (executed)
 
-Status: **design document awaiting approval.** The executed results still use
-protocol v1 (`cutoff = 10`, primary `NDCG@10`). Nothing here has been run.
+Status: **executed.** `configs/experiments/fixed_cohort_budget_v2.json` and
+`results/explorations/fixed_cohort_budget_v2/` implement this protocol; v1 has
+been retired. The open questions at the end were decided; their outcomes are
+recorded below.
 
 ## 1. Why v1 is questionable
 
@@ -97,3 +99,18 @@ before any sufficiency statement is made.
    sensitivity result?
 3. Do we adopt propensity weighting at all for this study, given that it
    introduces an exposure model we cannot validate on MovieLens?
+
+
+## 6. Decisions taken and what they changed
+
+| Decision | Chosen | Consequence |
+| --- | --- | --- |
+| Primary cutoff | 100 | The v1 null result reversed: the deterministic probe now separates the budget in 12 of 12 cells. |
+| Cohort | Entire eligible pool, 16,084 users | 20,000 is unattainable: exactly 16,084 users satisfy the declared eligibility rule, so the cohort is a census rather than a sample and cohort-draw variance is gone. |
+| Stratified reporting | Added immediately | Costs nothing: strata are group-wise aggregates of per-user metrics already computed, with no extra training. |
+| Propensity weighting | Adopted, self-normalized | Weighted deltas agree in sign with unweighted deltas, so the measured effect is not an exposure artifact. Every weighted value is published beside its unweighted counterpart. |
+
+The ad-hoc `HitRate` was removed, `MRR` was never introduced, and raw
+`Recall@K` is retained for interpretation only. Deepening the cutoff also
+dissolved most of the recall ceiling: users above the cutoff fell from 62.5% to
+4.0%, and the mean recall ceiling rose from 0.628 to 0.987.

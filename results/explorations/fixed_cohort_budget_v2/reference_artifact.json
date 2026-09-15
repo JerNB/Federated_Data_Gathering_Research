@@ -1,0 +1,375 @@
+{
+  "scope": "all permitted positive pilot and collection-window history from fixed cohort",
+  "protocol": "v2",
+  "cohort_user_count": 16084,
+  "pilot_eligible_user_count": 16084,
+  "evaluated_user_count": 4100,
+  "cohort_users_without_future_positive_after_seen_exclusion": 11984,
+  "pilot_cutoff_timestamp": 1598227199,
+  "collection_cutoff_timestamp": 1633219199,
+  "pilot_cutoff_utc": "2020-08-23T23:59:59+00:00",
+  "collection_cutoff_utc": "2021-10-02T23:59:59+00:00",
+  "global_counts": {
+    "raw_rows": 33832162,
+    "positive_rows": 16916912,
+    "pilot_positive_rows": 15225257,
+    "collection_positive_rows": 847631,
+    "future_positive_rows": 844024
+  },
+  "full_training_interactions": 2205099,
+  "full_collection_interactions": 117092,
+  "pilot_training_interactions": 2088007,
+  "tail_count_ceiling": 1,
+  "catalogue_item_count": 83239,
+  "cutoffs": [
+    10,
+    20,
+    50,
+    100
+  ],
+  "primary_cutoff": 100,
+  "display_cutoff": 10,
+  "propensity": {
+    "estimator": "self-normalized inverse propensity scoring over relevant test items",
+    "model": "item popularity power law, p_i proportional to n_i^((gamma+1)/2), normalized to a maximum of 1",
+    "gamma": 0.5,
+    "minimum_propensity": 0.01,
+    "reporting_rule": "every weighted metric is published beside its unweighted value; the exposure model cannot be validated on MovieLens",
+    "max_inverse_weight": 100.0
+  },
+  "strata": {
+    "user_activity": {
+      "light": 1372,
+      "medium": 1363,
+      "heavy": 1365
+    },
+    "relevant_set_size": {
+      "at_or_below_cutoff": 3934,
+      "above_cutoff": 166
+    },
+    "item_popularity_bands": {
+      "head": 3898,
+      "mid": 22285,
+      "tail": 57056
+    }
+  },
+  "item_item": {
+    "support_threshold": 20,
+    "supported_item_count": 7912,
+    "top_k": 100,
+    "candidate_block_size": 2000,
+    "support_scope": "fixed full-reference item counts, identical for every policy",
+    "determinism": "no random state; identical inputs reproduce identical scores"
+  },
+  "als": {
+    "factors": 32,
+    "regularization": 0.05,
+    "alpha": 20.0,
+    "iterations": 15,
+    "seeds": [
+      20261003,
+      20261004,
+      20261005
+    ],
+    "aggregation": "per-user mean across seeds; identical seed set for every condition",
+    "tuning": "fixed a priori; no hyperparameter search against the future-test window",
+    "seed_variance_control": {
+      "scope": "identical full-reference training data, different initialization seeds",
+      "per_seed_mean_ndcg_at_10": {
+        "20261003": 0.1462476433799481,
+        "20261004": 0.14576455899523943,
+        "20261005": 0.14582432927360858
+      },
+      "mean_ndcg_spread": 0.0004830843847086763,
+      "pairs": [
+        {
+          "seeds": [
+            20261003,
+            20261004
+          ],
+          "mean_absolute_ndcg_difference": 0.018280845991916046,
+          "mean_ndcg_difference": 0.0004830843847086749
+        },
+        {
+          "seeds": [
+            20261003,
+            20261005
+          ],
+          "mean_absolute_ndcg_difference": 0.01955183644883171,
+          "mean_ndcg_difference": 0.00042331410633954973
+        },
+        {
+          "seeds": [
+            20261004,
+            20261005
+          ],
+          "mean_absolute_ndcg_difference": 0.020269687596885484,
+          "mean_ndcg_difference": -5.9770278369125275e-05
+        }
+      ],
+      "max_mean_absolute_ndcg_difference": 0.020269687596885484
+    }
+  },
+  "full_reference_metrics": {
+    "popularity": {
+      "10": {
+        "ndcg": 0.08681432927901148,
+        "precision": 0.07170731707317073,
+        "recall": 0.03982946137002601,
+        "weighted_ndcg": 0.007378003728714712,
+        "weighted_recall": 0.01098709441974689
+      },
+      "20": {
+        "ndcg": 0.0854810778781332,
+        "precision": 0.06117073170731708,
+        "recall": 0.0647814417147911,
+        "weighted_ndcg": 0.009334894279770084,
+        "weighted_recall": 0.01732006618481436
+      },
+      "50": {
+        "ndcg": 0.09316847781729208,
+        "precision": 0.045375609756097564,
+        "recall": 0.11348634733526605,
+        "weighted_ndcg": 0.01318629025769696,
+        "weighted_recall": 0.031613949566531956
+      },
+      "100": {
+        "ndcg": 0.10953491915206202,
+        "precision": 0.03493170731707318,
+        "recall": 0.16859583078879128,
+        "weighted_ndcg": 0.017404175294673058,
+        "weighted_recall": 0.04999389475126168
+      }
+    },
+    "rating_weighted_popularity": {
+      "10": {
+        "ndcg": 0.08723820880874136,
+        "precision": 0.07209756097560976,
+        "recall": 0.0402072910270868,
+        "weighted_ndcg": 0.00741711439615948,
+        "weighted_recall": 0.011024463191551119
+      },
+      "20": {
+        "ndcg": 0.08529864226798146,
+        "precision": 0.06086585365853659,
+        "recall": 0.06421793818018813,
+        "weighted_ndcg": 0.009296899537917753,
+        "weighted_recall": 0.017046581801530607
+      },
+      "50": {
+        "ndcg": 0.09343856354980168,
+        "precision": 0.04553170731707317,
+        "recall": 0.11368665074822923,
+        "weighted_ndcg": 0.013175387220562332,
+        "weighted_recall": 0.03142665054698542
+      },
+      "100": {
+        "ndcg": 0.10972849364411293,
+        "precision": 0.034953658536585365,
+        "recall": 0.168967695227835,
+        "weighted_ndcg": 0.0174957319175305,
+        "weighted_recall": 0.05035560579498011
+      }
+    },
+    "item_item_cosine": {
+      "10": {
+        "ndcg": 0.10525780992657383,
+        "precision": 0.08934146341463414,
+        "recall": 0.043974639821688276,
+        "weighted_ndcg": 0.010183545921605728,
+        "weighted_recall": 0.012980220423722736
+      },
+      "20": {
+        "ndcg": 0.09851397481864607,
+        "precision": 0.07182926829268292,
+        "recall": 0.06787437447708093,
+        "weighted_ndcg": 0.01237718918123884,
+        "weighted_recall": 0.020459333980353024
+      },
+      "50": {
+        "ndcg": 0.1049705318119885,
+        "precision": 0.05285365853658537,
+        "recall": 0.12039805618014052,
+        "weighted_ndcg": 0.016820336859181318,
+        "weighted_recall": 0.03696889996314786
+      },
+      "100": {
+        "ndcg": 0.12277760080281724,
+        "precision": 0.03999756097560976,
+        "recall": 0.18393219048907572,
+        "weighted_ndcg": 0.02225622614785926,
+        "weighted_recall": 0.060680018470392505
+      }
+    },
+    "implicit_als": {
+      "10": {
+        "ndcg": 0.10905553962162005,
+        "precision": 0.09431707317073172,
+        "recall": 0.04965497554121956,
+        "weighted_ndcg": 0.01258769785853344,
+        "weighted_recall": 0.015110222413380597
+      },
+      "20": {
+        "ndcg": 0.10870860739172984,
+        "precision": 0.08133739837398374,
+        "recall": 0.08296910894085918,
+        "weighted_ndcg": 0.01595453904171885,
+        "weighted_recall": 0.0261335495872177
+      },
+      "50": {
+        "ndcg": 0.12302134659134922,
+        "precision": 0.06332682926829268,
+        "recall": 0.15248901160728942,
+        "weighted_ndcg": 0.022920765246622274,
+        "weighted_recall": 0.05155686487262448
+      },
+      "100": {
+        "ndcg": 0.1459455105495987,
+        "precision": 0.04945365853658537,
+        "recall": 0.22612808357084138,
+        "weighted_ndcg": 0.02989822436049982,
+        "weighted_recall": 0.07957145418168833
+      }
+    }
+  },
+  "full_reference_strata": {
+    "popularity": {
+      "user_activity": {
+        "light": {
+          "users": 1372,
+          "mean": 0.13636007656235496
+        },
+        "medium": {
+          "users": 1363,
+          "mean": 0.09963570487689662
+        },
+        "heavy": {
+          "users": 1365,
+          "mean": 0.09245690676387786
+        }
+      },
+      "relevant_set_size": {
+        "at_or_below_cutoff": {
+          "users": 3934,
+          "mean": 0.10570917403129677
+        },
+        "above_cutoff": {
+          "users": 166,
+          "mean": 0.20020046918272835
+        }
+      },
+      "hit_popularity_bands": {
+        "head": 14322,
+        "mid": 0,
+        "tail": 0
+      }
+    },
+    "rating_weighted_popularity": {
+      "user_activity": {
+        "light": {
+          "users": 1372,
+          "mean": 0.13658545462735858
+        },
+        "medium": {
+          "users": 1363,
+          "mean": 0.09991000191620336
+        },
+        "heavy": {
+          "users": 1365,
+          "mean": 0.09253791031526874
+        }
+      },
+      "relevant_set_size": {
+        "at_or_below_cutoff": {
+          "users": 3934,
+          "mean": 0.10590869640696243
+        },
+        "above_cutoff": {
+          "users": 166,
+          "mean": 0.20025308599923353
+        }
+      },
+      "hit_popularity_bands": {
+        "head": 14331,
+        "mid": 0,
+        "tail": 0
+      }
+    },
+    "item_item_cosine": {
+      "user_activity": {
+        "light": {
+          "users": 1372,
+          "mean": 0.1617473078673226
+        },
+        "medium": {
+          "users": 1363,
+          "mean": 0.11665751090751848
+        },
+        "heavy": {
+          "users": 1365,
+          "mean": 0.08971917181731608
+        }
+      },
+      "relevant_set_size": {
+        "at_or_below_cutoff": {
+          "users": 3934,
+          "mean": 0.11775867205554999
+        },
+        "above_cutoff": {
+          "users": 166,
+          "mean": 0.24172016521094597
+        }
+      },
+      "hit_popularity_bands": {
+        "head": 16325,
+        "mid": 74,
+        "tail": 0
+      }
+    },
+    "implicit_als": {
+      "user_activity": {
+        "light": {
+          "users": 1372,
+          "mean": 0.19164099809979984
+        },
+        "medium": {
+          "users": 1363,
+          "mean": 0.14273040447959856
+        },
+        "heavy": {
+          "users": 1365,
+          "mean": 0.10322608245768233
+        }
+      },
+      "relevant_set_size": {
+        "at_or_below_cutoff": {
+          "users": 3934,
+          "mean": 0.1403344345708205
+        },
+        "above_cutoff": {
+          "users": 166,
+          "mean": 0.2789212509141378
+        }
+      },
+      "hit_popularity_bands": {
+        "head": 20163,
+        "mid": 124,
+        "tail": 0
+      }
+    }
+  },
+  "evaluation_ceilings": {
+    "definition": "Recall@K divides by the full relevant set, so a user with more than K future positives cannot exceed K/|relevant|. NDCG@K and precision@K are reported beside it; NDCG normalizes by min(K, |relevant|).",
+    "cutoff": 100,
+    "relevant_set_size": {
+      "mean": 26.17609756097561,
+      "median": 13.0,
+      "p90": 62.0,
+      "max": 1047.0
+    },
+    "users_with_relevant_above_cutoff": 166,
+    "share_with_relevant_above_cutoff": 0.04048780487804878,
+    "mean_recall_ceiling": 0.9866346078927248,
+    "min_recall_ceiling": 0.09551098376313276
+  }
+}

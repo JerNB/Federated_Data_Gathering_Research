@@ -1,9 +1,9 @@
 # Federated local-data direction assessment
 
-Status: **completed feasibility screen and one executed real-data replay with a
-four-model control.** The tested item-tail reserve policy is rejected, and the
-deterministic personalized probe shows no measurable mean-quality penalty from
-capping collection-window history on this cohort.
+Status: **protocol v2 executed.** At the primary cutoff of 100 over the entire
+eligible cohort, the deterministic probe now measures a significant local-data
+budget effect in every tested cell, reversing the underpowered null result that
+protocol v1 produced at cutoff 10.
 
 ## Review limitation
 
@@ -189,8 +189,8 @@ intervals, it either:
 
 ## Executed real-data result
 
-`configs/experiments/fixed_cohort_budget_v1.json` and
-`results/explorations/fixed_cohort_budget_v1/` implement the contract on the
+`configs/experiments/fixed_cohort_budget_v2.json` and
+`results/explorations/fixed_cohort_budget_v2/` implement the contract on the
 pinned 33,832,162-rating MovieLens snapshot.
 
 - The deterministic cohort had 2,000 users selected from 16,084 users with at
@@ -240,53 +240,60 @@ in for a personalized recommender.
 
 ## What the deterministic probe shows
 
-> **Evidence caveat.** Every number below was measured at `K = 10`, which S30
-> identifies as the least robust and least discriminative cutoff studied. A null
-> result at a shallow cutoff is weak evidence of equivalence: part of the
-> "no difference" may be low discriminative power rather than true equivalence.
-> `docs/evaluation_protocol.md` proposes rerunning at `K` up to 100 before any
-> sufficiency statement is made.
+Protocol v2 supersedes the v1 numbers below it. The v1 run used cutoff 10 and a
+2,000-user cohort and found no significant effect; S30 identifies cutoff 10 as
+the least discriminative depth, and that null result did not survive a deeper
+cutoff and a larger cohort.
 
-With item-item cosine, the tested caps do not measurably change mean future
-quality on this cohort:
+**Protocol v2 result (cutoff 100, 16,084-user cohort, 4,100 evaluated users,
+2,205,099 training interactions of which 117,092 are collection-window events):**
 
-| Cap | Collection rows kept | Item-item NDCG@10 | Paired 95% CI vs full | Per-user abs. error |
-| ---: | ---: | ---: | --- | ---: |
-| 1 | 643 of 15,537 | 0.1142 | [-0.0049, 0.0024] | 0.0156 |
-| 5 | 2,735 | 0.1146 | [-0.0039, 0.0024] | 0.0135 |
-| 20 | 7,656 | 0.1147 | [-0.0039, 0.0023] | 0.0122 |
-| 50 | 11,762 | 0.1164 | [-0.0013, 0.0034] | 0.0071 |
+| Cap | Collection rows kept | Item-item NDCG@100 | Delta vs full | Paired 95% CI |
+| ---: | ---: | ---: | ---: | --- |
+| 1 | 5,089 | 0.1170 | -0.0058 | [-0.0065, -0.0051] |
+| 2 | 9,715 | 0.1176 | -0.0052 | [-0.0060, -0.0045] |
+| 5 | 21,734 | 0.1183 | -0.0045 | [-0.0052, -0.0039] |
+| 10 | 37,346 | 0.1192 | -0.0036 | [-0.0042, -0.0030] |
+| 20 | 58,752 | 0.1204 | -0.0024 | [-0.0029, -0.0019] |
+| 50 | 89,039 | 0.1216 | -0.0012 | [-0.0015, -0.0009] |
 
-- No cap's paired interval excludes zero, including a cap of one event per
-  client, which keeps 4.1% of collection-window interactions.
-- Per-user absolute error still falls monotonically with the cap
-  (0.0156 to 0.0071), so individual recommendations keep changing even while the
-  cohort mean is stable. Mean stability and per-user stability are different
-  claims.
-- The deterministic global controls are *more* mean-sensitive at small caps
-  (popularity CIs exclude zero at caps 1, 2 and 10), because they aggregate
-  every retained event into one ranking.
-- The tail reserve is now significantly worse for the personalized probe at
-  caps 5 and 50 (improvement -0.0016 [-0.0033, -0.0001] and -0.0009 [-0.0016,
-  -0.0001]), strengthening its rejection.
+- **Every interval excludes zero and every sign is negative.** Capping local
+  history measurably costs recommendation quality, and the deficit shrinks
+  monotonically as the cap rises. The budget effect is real and orderly; it was
+  simply invisible at cutoff 10 with 520 evaluated users.
+- The deficit is small in absolute terms: even a cap of one collection event per
+  client loses 0.0058 NDCG@100 against a 0.1228 full-history reference, about
+  4.7% relative, while keeping 5,089 of 117,092 collection interactions.
+- Propensity-weighted deltas agree in sign and shrink in the same order
+  (-0.0015 at cap 1 to -0.0004 at cap 50), so the effect is not an artifact of
+  popularity-biased exposure.
+- Cutoff sensitivity is itself informative: item-item NDCG rises from 0.1015 at
+  cutoff 10 to 0.1170 at cutoff 100 for the same cap-1 condition, which is the
+  depth effect S30 predicts.
+- The tail reserve remains unpromoted. Four of 48 cells show a strictly positive
+  paired interval, all of them implicit ALS at caps 10 and 20, with effects of
+  0.0003 and intervals barely clearing zero; every deterministic-probe cell is
+  negative or null.
+- ALS is the strongest model at cutoff 100 (0.1459) but still fails its own
+  control: no ALS cell exceeds the 0.0203 same-data seed floor, so its rows
+  cannot separate a data effect from initialization noise.
 
-**Design consequence.** The collection window supplies only 15,537 of 270,880
-training interactions (5.7%), so this episode cannot resolve a large budget
-effect: the pilot history dominates every model. The next experiment must vary
-total per-client history, including pilot history, rather than only the
-collection increment.
+**Design note.** The collection window supplies 117,092 of 2,205,099 training
+interactions (5.3%), so the measured deficits are the effect of that increment
+alone; pilot history still dominates the models. Varying total per-client
+history remains the next design step, but the increment effect is now
+measurable rather than invisible.
 
 ## Metric-ceiling audit
 
-Top-`K` metrics do not share a ceiling, and the ceiling moves with the user
-property this study manipulates. Measured on the 520 evaluated users:
+Deepening the primary cutoff to 100 largely dissolves the recall ceiling that
+dominated protocol v1. Measured on the 4,100 evaluated users at cutoff 100:
 
-| Quantity | Value |
-| --- | ---: |
-| Users with more than 10 future positives | 325 of 520 (62.5%) |
-| Relevant-set size: mean / median / p90 / max | 29.0 / 16 / 69 / 562 |
-| Mean `Recall@10` ceiling | 0.628 |
-| Minimum `Recall@10` ceiling | 0.018 |
+| Quantity | v1 at cutoff 10 (520 users) | v2 at cutoff 100 (4,100 users) |
+| --- | ---: | ---: |
+| Users with relevant set above the cutoff | 325 (62.5%) | 166 (4.0%) |
+| Mean recall ceiling | 0.628 | 0.987 |
+| Minimum recall ceiling | 0.018 | 0.096 |
 
 A user with 562 future positives cannot exceed `10/562 = 1.8%` recall no matter
 how good the model is. Raw recall therefore understates retrieval quality by

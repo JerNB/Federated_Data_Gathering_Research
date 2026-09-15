@@ -388,122 +388,213 @@ def train_implicit_als(
     return user_factors, item_factors
 
 
-def als_user_order(
-    user_vector: np.ndarray, item_factors: np.ndarray, item_ids: np.ndarray, limit: int
+def top_unseen_from_scores(
+    scores: np.ndarray, item_ids: np.ndarray, seen_mask: np.ndarray, limit: int
 ) -> np.ndarray:
-    scores = item_factors @ user_vector
-    if limit < len(scores):
-        candidates = np.argpartition(-scores, limit - 1)[:limit]
-    else:
-        candidates = np.arange(len(scores))
-    return candidates[np.lexsort((item_ids[candidates], -scores[candidates]))]
+    """Rank the highest-scoring unseen candidates, ties broken by item id."""
+    masked = np.where(seen_mask, -np.inf, scores)
+    finite = int(np.count_nonzero(np.isfinite(masked)))
+    take = min(limit, finite)
+    if take <= 0:
+        return np.empty(0, dtype=np.int64)
+    candidates = np.argpartition(-masked, take - 1)[:take]
+    candidates = candidates[np.isfinite(masked[candidates])]
+    return candidates[np.lexsort((item_ids[candidates], -masked[candidates]))]
+
+
+def top_unseen_from_order(
+    order: np.ndarray, item_ids: np.ndarray, seen: set[int], limit: int
+) -> list[int]:
+    """Walk a precomputed global ranking and keep the first unseen candidates."""
+    picked: list[int] = []
+    for index in order:
+        position = int(index)
+        if int(item_ids[position]) in seen:
+            continue
+        picked.append(position)
+        if len(picked) >= limit:
+            break
+    return picked
 
 
 def item_item_scores(
     matrix: sparse.csr_matrix, rows: list[int], support_indices: np.ndarray,
-    score_limit: int, batch_size: int = 128,
-) -> list[tuple[np.ndarray, np.ndarray]]:
-    """Deterministic item-item cosine scores for the requested user rows.
+    seen_masks: list[np.ndarray], item_ids: np.ndarray, limit: int,
+    block_size: int = 2000, batch_size: int = 512,
+) -> list[np.ndarray]:
+    """Deterministic item-item cosine ranking for the requested user rows.
 
     Scoring is `N (N^T N)` rather than `(N N^T) N`. Matrix multiplication is
     associative, so the scores are unchanged, but the intermediate is the
-    item-item matrix (support x support) instead of the user-user matrix, which
-    removes the quadratic-in-users cost and lets the cohort grow.
+    item-item matrix instead of the user-user matrix, which removes the
+    quadratic-in-users cost. Candidate items are processed in blocks so the
+    similarity matrix is never materialized in full.
     """
-    empty = (np.empty(0, dtype=np.int32), np.empty(0, dtype=np.float32))
     if not len(support_indices):
-        return [empty for _ in rows]
+        return [np.empty(0, dtype=np.int64) for _ in rows]
     restricted = matrix[:, support_indices].tocsr()
     restricted.data[:] = 1.0
     frequency = np.asarray(restricted.sum(axis=0)).ravel()
     normalized = (restricted @ sparse.diags(1.0 / np.sqrt(np.maximum(frequency, 1.0)))).tocsr()
-    similarity = (normalized.T @ normalized).tocsr()
-    profiles = [normalized.getrow(row).indices for row in rows]
-    output: list[tuple[np.ndarray, np.ndarray]] = []
-    for start in range(0, len(rows), batch_size):
-        batch = rows[start : start + batch_size]
-        scored = (normalized[batch] @ similarity).tocsr()
-        for offset in range(scored.shape[0]):
-            begin, end = int(scored.indptr[offset]), int(scored.indptr[offset + 1])
-            indices = scored.indices[begin:end]
-            values = scored.data[begin:end]
-            keep = ~np.isin(indices, profiles[start + offset])
-            indices, values = indices[keep], values[keep]
-            if len(values) > score_limit:
-                selection = np.argpartition(-values, score_limit - 1)[:score_limit]
-                indices, values = indices[selection], values[selection]
-            output.append((
-                support_indices[indices].astype(np.int32, copy=False),
-                values.astype(np.float32, copy=False),
-            ))
+    transposed = normalized.T.tocsr()
+    support_item_ids = item_ids[support_indices]
+    profiles = normalized[rows].tocsr()
+    collected_scores: list[np.ndarray] = []
+    collected_local: list[np.ndarray] = []
+    for block_start in range(0, len(support_indices), block_size):
+        stop = min(block_start + block_size, len(support_indices))
+        similarity_block = (transposed @ normalized[:, block_start:stop]).toarray()
+        width = similarity_block.shape[1]
+        take = min(limit, width)
+        for batch_start in range(0, len(rows), batch_size):
+            batch = slice(batch_start, min(batch_start + batch_size, len(rows)))
+            block_scores = profiles[batch] @ similarity_block
+            selection = np.argpartition(-block_scores, take - 1, axis=1)[:, :take]
+            if block_start == 0:
+                collected_scores.append(np.take_along_axis(block_scores, selection, axis=1))
+                collected_local.append(selection + block_start)
+            else:
+                index = batch_start // batch_size
+                collected_scores[index] = np.concatenate(
+                    [collected_scores[index], np.take_along_axis(block_scores, selection, axis=1)],
+                    axis=1,
+                )
+                collected_local[index] = np.concatenate(
+                    [collected_local[index], selection + block_start], axis=1
+                )
+    output: list[np.ndarray] = []
+    for batch_index, (scores_block, local_block) in enumerate(zip(collected_scores, collected_local)):
+        for offset in range(scores_block.shape[0]):
+            row_index = batch_index * batch_size + offset
+            local = local_block[offset]
+            values = scores_block[offset]
+            positive = values > 0.0
+            local, values = local[positive], values[positive]
+            global_index = support_indices[local].astype(np.int64, copy=False)
+            keep = ~seen_masks[row_index][global_index]
+            local, values = local[keep], values[keep]
+            if len(values) > limit:
+                selection = np.argpartition(-values, limit - 1)[:limit]
+                local, values = local[selection], values[selection]
+            ordered = np.lexsort((support_item_ids[local], -values))
+            output.append(support_indices[local[ordered]].astype(np.int64, copy=False))
     return output
 
 
-def item_item_user_order(
-    scored: tuple[np.ndarray, np.ndarray], item_ids: np.ndarray
-) -> np.ndarray:
-    indices, values = scored
-    return indices[np.lexsort((item_ids[indices], -values))]
+def user_cutoff_metrics(
+    ranked: Iterable[int], item_ids: np.ndarray, relevant: set[int],
+    weights: dict[int, float], cutoffs: tuple[int, ...],
+) -> dict[int, dict[str, float]]:
+    """Unweighted and propensity-weighted metrics at every cutoff.
 
-
-def item_item_user_metrics(
-    ranked: np.ndarray, item_ids: np.ndarray, seen: set[int], relevant: set[int], cutoff: int
-) -> tuple[float, float]:
-    ranked_set = {int(index) for index in ranked}
-    fallback = (index for index in range(len(item_ids)) if index not in ranked_set)
-    return metric_at_k(
-        chain((int(index) for index in ranked), fallback), item_ids, seen, relevant, cutoff
-    )
-
-
-def evaluate_orders(
-    orders: dict[str, np.ndarray], item_item_rows: list[tuple[np.ndarray, np.ndarray]],
-    als_runs: list[tuple[np.ndarray, np.ndarray]], user_ids: list[int],
-    user_row: dict[int, int], item_ids: np.ndarray,
-    clients: dict[int, Client], cutoff: int,
-) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], dict[str, np.ndarray], np.ndarray]:
-    if not als_runs:
-        fail("at least one ALS seed run is required")
-    if len(item_item_rows) != len(user_ids):
-        fail("item-item score rows must align with the evaluated users")
-    recall = {model: np.empty(len(user_ids), dtype=np.float64) for model in MODELS}
-    ndcg = {model: np.empty(len(user_ids), dtype=np.float64) for model in MODELS}
-    seed_ndcg = np.empty((len(als_runs), len(user_ids)), dtype=np.float64)
-    seed_recall = np.empty((len(als_runs), len(user_ids)), dtype=np.float64)
-    for row, user_id in enumerate(user_ids):
-        client = clients[user_id]
-        for model in ("popularity", "rating_weighted_popularity"):
-            recall[model][row], ndcg[model][row] = metric_at_k(
-                orders[model], item_ids, client.seen, client.test, cutoff
-            )
-        recall["item_item_cosine"][row], ndcg["item_item_cosine"][row] = item_item_user_metrics(
-            item_item_user_order(item_item_rows[row], item_ids),
-            item_ids,
-            client.seen,
-            client.test,
-            cutoff,
+    Weighted values follow the self-normalized inverse-propensity family: each
+    relevant item contributes its inverse exposure propensity, and the ideal
+    ranking uses the same weights sorted descending, so a perfect ranking still
+    scores 1.0.
+    """
+    if not relevant:
+        fail("a user with no relevant items must not be evaluated")
+    deepest = max(cutoffs)
+    hit_ranks: list[int] = []
+    hit_weights: list[float] = []
+    for position, index in enumerate(ranked, start=1):
+        if position > deepest:
+            break
+        item_id = int(item_ids[int(index)])
+        if item_id in relevant:
+            hit_ranks.append(position)
+            hit_weights.append(weights[item_id])
+    relevant_size = len(relevant)
+    total_weight = sum(weights[item] for item in relevant)
+    sorted_weights = sorted((weights[item] for item in relevant), reverse=True)
+    output: dict[int, dict[str, float]] = {}
+    for cutoff in cutoffs:
+        hits = sum(1 for rank in hit_ranks if rank <= cutoff)
+        dcg = sum(
+            1.0 / math.log2(rank + 1.0) for rank in hit_ranks if rank <= cutoff
         )
-        for run, (user_factors, item_factors) in enumerate(als_runs):
-            order = als_user_order(
-                user_factors[user_row[user_id]],
-                item_factors,
-                item_ids,
-                cutoff + len(client.seen),
-            )
-            seed_recall[run, row], seed_ndcg[run, row] = metric_at_k(
-                order, item_ids, client.seen, client.test, cutoff
-            )
-        recall["implicit_als"][row] = float(seed_recall[:, row].mean())
-        ndcg["implicit_als"][row] = float(seed_ndcg[:, row].mean())
-    ratio = recall_ceiling_ratio(clients, user_ids, cutoff)
-    hit_rate = {model: recall[model] * ratio for model in MODELS}
-    return recall, ndcg, hit_rate, seed_ndcg
+        weighted_dcg = sum(
+            weight / math.log2(rank + 1.0)
+            for rank, weight in zip(hit_ranks, hit_weights)
+            if rank <= cutoff
+        )
+        weighted_hits = sum(
+            weight for rank, weight in zip(hit_ranks, hit_weights) if rank <= cutoff
+        )
+        ideal_depth = min(cutoff, relevant_size)
+        ideal_dcg = sum(1.0 / math.log2(rank + 1.0) for rank in range(1, ideal_depth + 1))
+        weighted_ideal = sum(
+            sorted_weights[rank - 1] / math.log2(rank + 1.0)
+            for rank in range(1, ideal_depth + 1)
+        )
+        output[cutoff] = {
+            "ndcg": dcg / ideal_dcg if ideal_dcg else 0.0,
+            "precision": hits / float(cutoff),
+            "recall": hits / float(relevant_size),
+            "weighted_ndcg": weighted_dcg / weighted_ideal if weighted_ideal else 0.0,
+            "weighted_recall": weighted_hits / total_weight if total_weight else 0.0,
+        }
+    return output
 
 
-def recall_ceiling_ratio(clients: dict[int, Client], user_ids: list[int], cutoff: int) -> np.ndarray:
-    """Per-user factor converting Recall@K into its cap-aware hit rate."""
-    sizes = np.array([len(clients[user_id].test) for user_id in user_ids], dtype=np.float64)
-    return sizes / np.minimum(sizes, float(cutoff))
+def propensity_weights(
+    counts: np.ndarray, item_ids: np.ndarray, propensity_config: dict[str, object]
+) -> dict[int, float]:
+    """Inverse exposure weights from an item-popularity power law (S33).
+
+    The exposure model is an assumption, not a measurement: MovieLens cannot
+    validate it, so every weighted metric is published beside its unweighted
+    counterpart.
+    """
+    gamma = float(propensity_config["gamma"])
+    floor = float(propensity_config["minimum_propensity"])
+    if not 0.0 < floor <= 1.0:
+        fail("minimum_propensity must be in (0, 1]")
+    exponent = (gamma + 1.0) / 2.0
+    raw = np.power(np.maximum(counts, 0.0), exponent)
+    peak = float(raw.max())
+    if peak <= 0.0:
+        fail("propensity model needs at least one observed item")
+    propensity = np.maximum(raw / peak, floor)
+    return {int(item_ids[index]): 1.0 / propensity[index] for index in range(len(item_ids))}
+
+
+def activity_strata(
+    clients: dict[int, Client], user_ids: list[int], labels: list[str]
+) -> dict[int, str]:
+    """Assign users to pilot-activity terciles, fixed across every policy."""
+    sizes = np.array([len(clients[user_id].pilot) for user_id in user_ids], dtype=np.float64)
+    lower, upper = np.quantile(sizes, [1 / 3, 2 / 3])
+    assignment: dict[int, str] = {}
+    for user_id, size in zip(user_ids, sizes):
+        if size <= lower:
+            assignment[user_id] = labels[0]
+        elif size <= upper:
+            assignment[user_id] = labels[1]
+        else:
+            assignment[user_id] = labels[2]
+    return assignment
+
+
+def popularity_bands(
+    counts: np.ndarray, item_ids: np.ndarray, labels: list[str]
+) -> dict[int, str]:
+    """Classify candidate items into head, mid, and tail popularity bands."""
+    observed = counts[counts > 0]
+    if not len(observed):
+        fail("popularity bands need at least one observed item")
+    tail_ceiling = float(np.quantile(observed, 0.2))
+    head_floor = float(np.quantile(observed, 0.9))
+    bands: dict[int, str] = {}
+    for index in range(len(item_ids)):
+        value = counts[index]
+        if value >= head_floor:
+            bands[int(item_ids[index])] = labels[0]
+        elif value <= tail_ceiling:
+            bands[int(item_ids[index])] = labels[2]
+        else:
+            bands[int(item_ids[index])] = labels[1]
+    return bands
 
 
 def evaluation_ceilings(
@@ -516,8 +607,8 @@ def evaluation_ceilings(
     return {
         "definition": (
             "Recall@K divides by the full relevant set, so a user with more than K "
-            "future positives cannot exceed K/|relevant|. NDCG@K already normalizes "
-            "by min(K, |relevant|); the cap-aware hit rate divides by that same term."
+            "future positives cannot exceed K/|relevant|. NDCG@K and precision@K "
+            "are reported beside it; NDCG normalizes by min(K, |relevant|)."
         ),
         "cutoff": int(cutoff),
         "relevant_set_size": {
@@ -531,6 +622,87 @@ def evaluation_ceilings(
         "mean_recall_ceiling": float(ceilings.mean()),
         "min_recall_ceiling": float(ceilings.min()),
     }
+
+
+def evaluate_condition(
+    orders: dict[str, np.ndarray], item_item_rankings: list[np.ndarray],
+    als_runs: list[tuple[np.ndarray, np.ndarray]], user_ids: list[int],
+    user_row: dict[int, int], item_ids: np.ndarray, seen_masks: list[np.ndarray],
+    clients: dict[int, Client], weights: dict[int, float], cutoffs: tuple[int, ...],
+    hit_bands: dict[int, str], band_labels: list[str],
+) -> dict[str, object]:
+    """Per-user metrics for every model at every cutoff, plus hit-band counts."""
+    if not als_runs:
+        fail("at least one ALS seed run is required")
+    if len(item_item_rankings) != len(user_ids):
+        fail("item-item rankings must align with the evaluated users")
+    deepest = max(cutoffs)
+    fields = ("ndcg", "precision", "recall", "weighted_ndcg", "weighted_recall")
+    per_user = {
+        model: {cutoff: {field: np.empty(len(user_ids)) for field in fields} for cutoff in cutoffs}
+        for model in MODELS
+    }
+    seed_primary = np.empty((len(als_runs), len(user_ids)), dtype=np.float64)
+    band_counts = {model: {label: 0 for label in band_labels} for model in MODELS}
+    primary = max(cutoffs)
+    for row, user_id in enumerate(user_ids):
+        client = clients[user_id]
+        rankings: dict[str, list[int] | np.ndarray] = {
+            "popularity": top_unseen_from_order(orders["popularity"], item_ids, client.seen, deepest),
+            "rating_weighted_popularity": top_unseen_from_order(
+                orders["rating_weighted_popularity"], item_ids, client.seen, deepest
+            ),
+            "item_item_cosine": item_item_rankings[row],
+        }
+        seed_metrics: list[dict[int, dict[str, float]]] = []
+        for user_factors, item_factors in als_runs:
+            ranking = top_unseen_from_scores(
+                item_factors @ user_factors[user_row[user_id]],
+                item_ids,
+                seen_masks[row],
+                deepest,
+            )
+            seed_metrics.append(
+                user_cutoff_metrics(ranking, item_ids, client.test, weights, cutoffs)
+            )
+        rankings["implicit_als"] = top_unseen_from_scores(
+            als_runs[0][1] @ als_runs[0][0][user_row[user_id]], item_ids, seen_masks[row], deepest
+        )
+        for model in MODELS:
+            if model == "implicit_als":
+                for cutoff in cutoffs:
+                    for field in fields:
+                        per_user[model][cutoff][field][row] = float(
+                            np.mean([run[cutoff][field] for run in seed_metrics])
+                        )
+                seed_primary[:, row] = [run[primary]["ndcg"] for run in seed_metrics]
+            else:
+                metrics = user_cutoff_metrics(
+                    rankings[model], item_ids, client.test, weights, cutoffs
+                )
+                for cutoff in cutoffs:
+                    for field in fields:
+                        per_user[model][cutoff][field][row] = metrics[cutoff][field]
+            for index in list(rankings[model])[:primary]:
+                item_id = int(item_ids[int(index)])
+                if item_id in client.test:
+                    band_counts[model][hit_bands[item_id]] += 1
+    return {"per_user": per_user, "seed_primary_ndcg": seed_primary, "hit_bands": band_counts}
+
+
+def stratified_means(
+    values: np.ndarray, user_ids: list[int], assignment: dict[int, str], labels: list[str]
+) -> dict[str, object]:
+    """Mean of a per-user metric within each stratum, with support counts."""
+    output: dict[str, object] = {}
+    for label in labels:
+        mask = np.array([assignment[user_id] == label for user_id in user_ids])
+        count = int(mask.sum())
+        output[label] = {
+            "users": count,
+            "mean": float(values[mask].mean()) if count else None,
+        }
+    return output
 
 
 def _train_als_seed(
@@ -628,43 +800,83 @@ def write_report(output_dir: Path, summary: dict[str, object]) -> None:
     rows = summary["rows"]
     if not isinstance(reference, dict) or not isinstance(rows, list):
         raise AssertionError("invalid summary shape")
+    primary = int(reference["primary_cutoff"])
+    cutoffs = [int(value) for value in reference["cutoffs"]]
+    full_metrics = reference["full_reference_metrics"]
+    ceilings = reference["evaluation_ceilings"]
     lines = [
-        "# Fixed-cohort local-data-budget replay",
+        "# Fixed-cohort local-data-budget replay (protocol v2)",
         "",
         "Status: real MovieLens offline chronological replay; not a federated-system, privacy, or external-generalization result.",
         "",
         "## Design",
         "",
-        f"- Fixed deterministic cohort: {reference['cohort_user_count']:,} of {reference['pilot_eligible_user_count']:,} pilot-eligible users.",
+        f"- Fixed deterministic cohort: {reference['cohort_user_count']:,} of {reference['pilot_eligible_user_count']:,} pilot-eligible users; {reference['evaluated_user_count']:,} have future positives.",
         f"- Global positive-rating windows: pilot through {reference['pilot_cutoff_utc']}; collection through {reference['collection_cutoff_utc']}; future test thereafter.",
-        f"- Full reference training interactions: {reference['full_training_interactions']:,}; evaluated users with future positives: {reference['evaluated_user_count']:,}.",
-        f"- Pilot item-tail ceiling: <= {reference['tail_count_ceiling']} positive pilot interactions.",
-        f"- Models: {', '.join(reference['full_mean_ndcg_at_10'])}. Item-item cosine is the deterministic primary personalized probe over {reference['item_item']['supported_item_count']:,} items with support >= {reference['item_item']['support_threshold']}; implicit ALS is the stochastic secondary probe.",
-        f"- Full-reference NDCG@10: "
-        + "; ".join(f"{model} {value:.4f}" for model, value in reference["full_mean_ndcg_at_10"].items())
+        f"- Full reference training interactions: {reference['full_training_interactions']:,}, of which {reference['full_collection_interactions']:,} are collection-window events the policies control.",
+        f"- Cutoffs {cutoffs} with primary depth {primary}; the display depth is {reference['display_cutoff']}.",
+        f"- Models: item-item cosine is the deterministic primary probe over {reference['item_item']['supported_item_count']:,} items with support >= {reference['item_item']['support_threshold']}; implicit ALS is the stochastic secondary probe.",
+        "- Full-reference NDCG@%d: " % primary
+        + "; ".join(f"{model} {full_metrics[model][str(primary)]['ndcg']:.4f}" for model in full_metrics)
         + ".",
         f"- ALS control: per-user metrics are averaged over seeds {reference['als']['seeds']}; the same-data seed floor is {reference['als']['seed_variance_control']['max_mean_absolute_ndcg_difference']:.4f} mean per-user absolute NDCG difference with a {reference['als']['seed_variance_control']['mean_ndcg_spread']:.4f} mean-NDCG spread.",
-        f"- Metric ceilings: {reference['evaluation_ceilings']['users_with_relevant_above_cutoff']:,} of {reference['evaluated_user_count']:,} evaluated users "
-        f"({reference['evaluation_ceilings']['share_with_relevant_above_cutoff']:.1%}) have more than {reference['evaluation_ceilings']['cutoff']} future positives, "
-        f"so their Recall@10 is structurally capped; the mean recall ceiling is {reference['evaluation_ceilings']['mean_recall_ceiling']:.3f} "
-        f"(minimum {reference['evaluation_ceilings']['min_recall_ceiling']:.3f}). NDCG@10 and the cap-aware HitRate@10 divide by min(K, |relevant|) instead.",
+        f"- Propensity weighting: {reference['propensity']['model']}, gamma {reference['propensity']['gamma']}, floor {reference['propensity']['minimum_propensity']}, maximum inverse weight {reference['propensity']['max_inverse_weight']:.1f}. The exposure model is an assumption, so weighted values never replace unweighted ones.",
+        f"- Metric ceilings: {ceilings['users_with_relevant_above_cutoff']:,} of {reference['evaluated_user_count']:,} users ({ceilings['share_with_relevant_above_cutoff']:.1%}) have more than {primary} future positives; mean recall ceiling {ceilings['mean_recall_ceiling']:.3f}, minimum {ceilings['min_recall_ceiling']:.3f}.",
         "- Policies differ only in collection-window local-record retention; evaluation excludes the same full pre-test seen set for every policy.",
         "",
-        "## Policy evidence",
+        "## Policy evidence at the primary cutoff",
         "",
-        "| Policy | Cap | Model | Mean NDCG@10 | Mean abs. NDCG error | 95% CI of NDCG delta vs full | Mean Recall@10 | Mean HitRate@10 | Collection rows | Tail share | Tail-vs-equal abs.-error improvement (95% CI) |",
-        "| --- | ---: | --- | ---: | ---: | --- | ---: | ---: | ---: | ---: | --- |",
+        f"| Policy | Cap | Model | NDCG@{primary} | Weighted NDCG@{primary} | Abs. NDCG error | 95% CI of NDCG delta | Precision@{primary} | Recall@{primary} | Collection rows | Tail share | Tail-vs-equal improvement (95% CI) |",
+        "| --- | ---: | --- | ---: | ---: | ---: | --- | ---: | ---: | ---: | ---: | --- |",
     ]
     for row in rows:
         lines.append(
             f"| {row['policy']} | {row['cap']} | {row['model']} | "
-            f"{row['mean_ndcg_at_10']:.4f} | {row['mean_absolute_ndcg_error']:.4f} | "
+            f"{row['mean_ndcg']:.4f} | {row['mean_weighted_ndcg']:.4f} | "
+            f"{row['mean_absolute_ndcg_error']:.4f} | "
             f"[{row['ndcg_delta_ci_low']:.4f}, {row['ndcg_delta_ci_high']:.4f}] | "
-            f"{row['mean_recall_at_10']:.4f} | {row['mean_hit_rate_at_10']:.4f} | {row['selected_collection_interactions']:,} | "
-            f"{row['selected_tail_share']:.3f} | "
+            f"{row['mean_precision']:.4f} | {row['mean_recall']:.4f} | "
+            f"{row['selected_collection_interactions']:,} | {row['selected_tail_share']:.3f} | "
             f"{row['tail_vs_equal_absolute_error_improvement']:.4f} "
             f"[{row['tail_vs_equal_absolute_error_improvement_ci_low']:.4f}, "
             f"{row['tail_vs_equal_absolute_error_improvement_ci_high']:.4f}] |")
+    lines += [
+        "",
+        "## Cutoff sensitivity (equal chronological cap)",
+        "",
+        "| Cap | Model | " + " | ".join(f"NDCG@{cutoff}" for cutoff in cutoffs) + " |",
+        "| ---: | --- | " + " | ".join("---:" for _ in cutoffs) + " |",
+    ]
+    for row in rows:
+        if row["policy"] != "equal_chronological_cap":
+            continue
+        values = " | ".join(
+            f"{row['metrics_by_cutoff'][str(cutoff)]['ndcg']:.4f}" for cutoff in cutoffs
+        )
+        lines.append(f"| {row['cap']} | {row['model']} | {values} |")
+    activity_labels = list(next(iter(rows))["strata"]["user_activity"].keys())
+    band_labels = list(next(iter(rows))["strata"]["hit_popularity_bands"].keys())
+    lines += [
+        "",
+        "## Stratified evidence at the primary cutoff",
+        "",
+        "| Policy | Cap | Model | "
+        + " | ".join(f"NDCG {label}" for label in activity_labels)
+        + " | " + " | ".join(f"hits {label}" for label in band_labels) + " |",
+        "| --- | ---: | --- | " + " | ".join("---:" for _ in activity_labels + band_labels) + " |",
+    ]
+    for row in rows:
+        activity_cells = " | ".join(
+            "n/a" if row["strata"]["user_activity"][label]["mean"] is None
+            else f"{row['strata']['user_activity'][label]['mean']:.4f}"
+            for label in activity_labels
+        )
+        band_cells = " | ".join(
+            f"{row['strata']['hit_popularity_bands'][label]:,}" for label in band_labels
+        )
+        lines.append(
+            f"| {row['policy']} | {row['cap']} | {row['model']} | {activity_cells} | {band_cells} |"
+        )
     tail_rows = [row for row in rows if row["policy"] == "tail_reserve_cap"]
     tail_improvements = [
         row for row in tail_rows
@@ -787,11 +999,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--config", type=Path,
-        default=Path("configs/experiments/fixed_cohort_budget_v1.json"),
+        default=Path("configs/experiments/fixed_cohort_budget_v2.json"),
     )
     parser.add_argument(
         "--output", type=Path,
-        default=Path("results/explorations/fixed_cohort_budget_v1"),
+        default=Path("results/explorations/fixed_cohort_budget_v2"),
+    )
+    parser.add_argument(
+        "--panel-size", type=int, default=None,
+        help="override the configured cohort size; smoke tests only",
     )
     parser.add_argument(
         "--cache-dir", type=Path, default=Path("artifacts/fixed_cohort_budget_cache"),
@@ -813,6 +1029,10 @@ def main() -> int:
     evaluation = nested(config, "evaluation")
     als_config = nested(config, "als")
     item_item_config = nested(config, "item_item")
+    propensity_config = nested(config, "propensity")
+    strata_config = nested(config, "strata")
+    if args.panel_size is not None:
+        cohort_config = {**cohort_config, "panel_size": int(args.panel_size)}
     manifest_path = repo_path(str(dataset["manifest"]))
     ratings_dir = repo_path(str(dataset["ratings_dir"]))
     if not manifest_path.is_file():
@@ -824,6 +1044,12 @@ def main() -> int:
     models = tuple(str(value) for value in evaluation.get("models", []))
     if models != MODELS:
         fail(f"this replay requires models {MODELS}, got {models}")
+    cutoffs = tuple(int(value) for value in evaluation.get("cutoffs", []))
+    primary_cutoff = int(evaluation["primary_cutoff"])
+    if not cutoffs or tuple(sorted(set(cutoffs))) != cutoffs:
+        fail("cutoffs must be a strictly increasing positive integer list")
+    if primary_cutoff != max(cutoffs):
+        fail("the primary cutoff must be the deepest configured cutoff")
 
     output_dir.mkdir(parents=True, exist_ok=True)
     started = time.perf_counter()
@@ -859,27 +1085,44 @@ def main() -> int:
     if not evaluated_users:
         fail("no cohort users have future positive test items after seen-item exclusion")
     evaluated_rows = [user_row[user_id] for user_id in evaluated_users]
+    seen_masks = []
+    for user_id in evaluated_users:
+        mask = np.zeros(len(item_ids), dtype=bool)
+        seen_indices = [item_index[item] for item in clients[user_id].seen if item in item_index]
+        if seen_indices:
+            mask[np.asarray(seen_indices, dtype=np.int64)] = True
+        seen_masks.append(mask)
     support_threshold = int(item_item_config["support_threshold"])
-    support_indices = np.flatnonzero(full_counts >= support_threshold).astype(np.int32)
-    score_limit = max(
-        int(item_item_config["top_k"]),
-        int(evaluation["cutoff"]) + max(len(clients[user_id].seen) for user_id in evaluated_users),
-    )
+    support_indices = np.flatnonzero(full_counts >= support_threshold).astype(np.int64)
+    block_size = int(item_item_config["candidate_block_size"])
+    weights = propensity_weights(full_counts, item_ids, propensity_config)
+    activity_labels = list(nested(strata_config, "user_activity")["labels"])
+    band_labels = list(nested(strata_config, "item_popularity")["labels"])
+    size_labels = list(nested(strata_config, "relevant_set_size")["labels"])
+    activity = activity_strata(clients, evaluated_users, activity_labels)
+    hit_bands = popularity_bands(full_counts, item_ids, band_labels)
+    relevant_size_strata = {
+        user_id: size_labels[0] if len(clients[user_id].test) <= primary_cutoff else size_labels[1]
+        for user_id in evaluated_users
+    }
     print("building full permitted-history item-item cosine reference", flush=True)
     full_matrix = training_matrix(clients, all_collection, user_row, item_index)
     full_item_item = item_item_scores(
-        full_matrix, evaluated_rows, support_indices, score_limit
+        full_matrix, evaluated_rows, support_indices, seen_masks, item_ids,
+        primary_cutoff, block_size,
     )
     print(f"training full-reference implicit ALS over {len(als_seeds)} seeds", flush=True)
     full_als = train_als_runs(full_matrix, als_config, args.als_workers)
-    full_recall, full_ndcg, full_hit_rate, full_seed_ndcg = evaluate_orders(
-        full_orders, full_item_item, full_als, evaluated_users, user_row,
-        item_ids, clients, int(evaluation["cutoff"]),
+    full_evaluation = evaluate_condition(
+        full_orders, full_item_item, full_als, evaluated_users, user_row, item_ids,
+        seen_masks, clients, weights, cutoffs, hit_bands, band_labels,
     )
-    als_control = seed_variance_control(full_seed_ndcg, als_seeds)
+    full_metrics = full_evaluation["per_user"]
+    als_control = seed_variance_control(full_evaluation["seed_primary_ndcg"], als_seeds)
 
     reference = {
         "scope": "all permitted positive pilot and collection-window history from fixed cohort",
+        "protocol": "v2",
         "cohort_user_count": len(cohort),
         "pilot_eligible_user_count": pilot_eligible_count,
         "evaluated_user_count": len(evaluated_users),
@@ -894,11 +1137,32 @@ def main() -> int:
         "pilot_training_interactions": sum(len(client.pilot) for client in clients.values()),
         "tail_count_ceiling": tail_ceiling,
         "catalogue_item_count": len(item_ids),
+        "cutoffs": list(cutoffs),
+        "primary_cutoff": primary_cutoff,
+        "display_cutoff": int(evaluation["display_cutoff"]),
+        "propensity": {
+            **{key: propensity_config[key] for key in ("estimator", "model", "gamma", "minimum_propensity", "reporting_rule")},
+            "max_inverse_weight": float(max(weights.values())),
+        },
+        "strata": {
+            "user_activity": {
+                label: sum(1 for value in activity.values() if value == label)
+                for label in activity_labels
+            },
+            "relevant_set_size": {
+                label: sum(1 for value in relevant_size_strata.values() if value == label)
+                for label in size_labels
+            },
+            "item_popularity_bands": {
+                label: sum(1 for value in hit_bands.values() if value == label)
+                for label in band_labels
+            },
+        },
         "item_item": {
             "support_threshold": support_threshold,
             "supported_item_count": int(len(support_indices)),
             "top_k": int(item_item_config["top_k"]),
-            "score_limit": score_limit,
+            "candidate_block_size": block_size,
             "support_scope": str(item_item_config["support_scope"]),
             "determinism": "no random state; identical inputs reproduce identical scores",
         },
@@ -912,12 +1176,29 @@ def main() -> int:
             "tuning": "fixed a priori; no hyperparameter search against the future-test window",
             "seed_variance_control": als_control,
         },
-        "full_mean_ndcg_at_10": {model: float(full_ndcg[model].mean()) for model in MODELS},
-        "full_mean_recall_at_10": {model: float(full_recall[model].mean()) for model in MODELS},
-        "full_mean_hit_rate_at_10": {model: float(full_hit_rate[model].mean()) for model in MODELS},
-        "evaluation_ceilings": evaluation_ceilings(
-            clients, evaluated_users, int(evaluation["cutoff"])
-        ),
+        "full_reference_metrics": {
+            model: {
+                str(cutoff): {
+                    field: float(full_metrics[model][cutoff][field].mean())
+                    for field in ("ndcg", "precision", "recall", "weighted_ndcg", "weighted_recall")
+                }
+                for cutoff in cutoffs
+            }
+            for model in MODELS
+        },
+        "full_reference_strata": {
+            model: {
+                "user_activity": stratified_means(
+                    full_metrics[model][primary_cutoff]["ndcg"], evaluated_users, activity, activity_labels
+                ),
+                "relevant_set_size": stratified_means(
+                    full_metrics[model][primary_cutoff]["ndcg"], evaluated_users, relevant_size_strata, size_labels
+                ),
+                "hit_popularity_bands": full_evaluation["hit_bands"][model],
+            }
+            for model in MODELS
+        },
+        "evaluation_ceilings": evaluation_ceilings(clients, evaluated_users, primary_cutoff),
     }
     (output_dir / "reference_artifact.json").write_text(
         json.dumps(reference, indent=2) + "\n", encoding="utf-8"
@@ -941,36 +1222,60 @@ def main() -> int:
             )
             policy_matrix = training_matrix(clients, selected, user_row, item_index)
             policy_item_item = item_item_scores(
-                policy_matrix, evaluated_rows, support_indices, score_limit
+                policy_matrix, evaluated_rows, support_indices, seen_masks, item_ids,
+                primary_cutoff, block_size,
             )
             policy_als = train_als_runs(policy_matrix, als_config, args.als_workers)
-            recall, ndcg, hit_rate, _ = evaluate_orders(
-                orders, policy_item_item, policy_als, evaluated_users, user_row,
-                item_ids, clients, int(evaluation["cutoff"]),
+            condition = evaluate_condition(
+                orders, policy_item_item, policy_als, evaluated_users, user_row, item_ids,
+                seen_masks, clients, weights, cutoffs, hit_bands, band_labels,
             )
+            metrics = condition["per_user"]
             for model_index, model in enumerate(MODELS):
-                delta = ndcg[model] - full_ndcg[model]
+                primary = metrics[model][primary_cutoff]["ndcg"]
+                reference_primary = full_metrics[model][primary_cutoff]["ndcg"]
+                delta = primary - reference_primary
                 ci_low, ci_high = bootstrap_interval(
                     delta,
                     int(evaluation["bootstrap_replicates"]),
                     int(evaluation["bootstrap_seed"]) + cap * 100 + model_index,
                 )
-                ndcg_by_policy[(policy, cap, model)] = ndcg[model]
+                ndcg_by_policy[(policy, cap, model)] = primary
                 rows.append({
                     "policy": policy,
                     "cap": cap,
                     "model": model,
                     "training_interactions": interactions,
                     **metadata,
-                    "mean_ndcg_at_10": float(ndcg[model].mean()),
-                    "mean_recall_at_10": float(recall[model].mean()),
+                    "primary_cutoff": primary_cutoff,
+                    "metrics_by_cutoff": {
+                        str(cutoff): {
+                            field: float(metrics[model][cutoff][field].mean())
+                            for field in ("ndcg", "precision", "recall", "weighted_ndcg", "weighted_recall")
+                        }
+                        for cutoff in cutoffs
+                    },
+                    "mean_ndcg": float(primary.mean()),
+                    "mean_weighted_ndcg": float(metrics[model][primary_cutoff]["weighted_ndcg"].mean()),
+                    "mean_precision": float(metrics[model][primary_cutoff]["precision"].mean()),
+                    "mean_recall": float(metrics[model][primary_cutoff]["recall"].mean()),
                     "mean_ndcg_delta_vs_full": float(delta.mean()),
                     "mean_absolute_ndcg_error": float(np.abs(delta).mean()),
                     "ndcg_delta_ci_low": ci_low,
                     "ndcg_delta_ci_high": ci_high,
-                    "mean_recall_delta_vs_full": float((recall[model] - full_recall[model]).mean()),
-                    "mean_hit_rate_at_10": float(hit_rate[model].mean()),
-                    "mean_hit_rate_delta_vs_full": float((hit_rate[model] - full_hit_rate[model]).mean()),
+                    "mean_weighted_ndcg_delta_vs_full": float(
+                        (metrics[model][primary_cutoff]["weighted_ndcg"]
+                         - full_metrics[model][primary_cutoff]["weighted_ndcg"]).mean()
+                    ),
+                    "strata": {
+                        "user_activity": stratified_means(
+                            primary, evaluated_users, activity, activity_labels
+                        ),
+                        "relevant_set_size": stratified_means(
+                            primary, evaluated_users, relevant_size_strata, size_labels
+                        ),
+                        "hit_popularity_bands": condition["hit_bands"][model],
+                    },
                     "exploratory_tolerance_pass": bool(
                         float(np.abs(delta).mean()) <= float(evaluation["exploratory_mean_absolute_ndcg_tolerance"])
                     ),
@@ -979,7 +1284,7 @@ def main() -> int:
     for row in rows:
         equal = ndcg_by_policy[("equal_chronological_cap", int(row["cap"]), str(row["model"]))]
         tail = ndcg_by_policy[("tail_reserve_cap", int(row["cap"]), str(row["model"]))]
-        reference_ndcg = full_ndcg[str(row["model"])]
+        reference_ndcg = full_metrics[str(row["model"])][primary_cutoff]["ndcg"]
         improvement = np.abs(equal - reference_ndcg) - np.abs(tail - reference_ndcg)
         ci_low, ci_high = bootstrap_interval(
             improvement,
@@ -991,7 +1296,7 @@ def main() -> int:
         row["tail_vs_equal_absolute_error_improvement_ci_high"] = ci_high
 
     summary = {
-        "run_id": "fixed_cohort_budget_v1",
+        "run_id": "fixed_cohort_budget_v2",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "script": {
             "path": str(Path(__file__).relative_to(ROOT)),
