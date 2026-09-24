@@ -12,7 +12,8 @@ Discussion-stage ideas requested on 2026-09-15 are recorded in
 budgeting and attribute-specialist recommendation with late fusion. Neither is
 promoted or established as novel.
 
-1. **Trainable models:** BPR-MF first, then implicit ALS and item-based methods.
+1. **Trainable models:** BPR-MF first, then further item-based methods; implicit
+   ALS and deterministic item-item cosine are already executed controls.
 2. **Sampling extensions:** item-stratified, graph-aware, coreset, and recent
    temporal-window sampling.
 3. **Data regimes:** additional public datasets and controlled changes in
@@ -21,7 +22,18 @@ promoted or established as novel.
    availability/dropout, a named privacy mechanism, and optimizer controls.
    These are required confirmation evidence; the existing snapshot result does
    not establish them.
-5. **Interpretability:** latent-factor or heterogeneity analysis only when it
+5. **Vertical federated track (not started):** the executed work is horizontal
+   (one user per client, shared schema, budget in local rows). A vertical
+   variant keeps the same users but partitions *features* across parties—for
+   example ratings, user tags, and item genome scores from this same snapshot.
+   It requires its own estimand, a private entity-alignment protocol, an
+   explicit statement of which party holds the label, and a cost model in
+   aligned batches and intermediate representations rather than local rows.
+   Vertical results must never be pooled with horizontal local-data-budget
+   evidence.
+6. **Metric extensions:** MRR, recommendation-side catalog coverage, and
+   per-activity-group breakdowns, each with its ceiling stated.
+7. **Interpretability:** latent-factor or heterogeneity analysis only when it
    answers a declared sampling/generalization question.
 
 ## Rules for promotion into the primary study

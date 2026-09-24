@@ -28,7 +28,7 @@ def assert_failure(result: subprocess.CompletedProcess[str], text: str, label: s
 def main() -> int:
     selector = ROOT / "scripts" / "select_pilot_catalog.py"
     recorder = ROOT / "scripts" / "create_run_record.py"
-    schema = load_json(ROOT / "experiments" / "run_record.schema.json")
+    schema = load_json(ROOT / "configs" / "run_record.schema.json")
     assert not schema_keyword_errors(schema), "run record schema uses unsupported keywords"
     assert schema_keyword_errors({"unsupported_keyword": True})
 

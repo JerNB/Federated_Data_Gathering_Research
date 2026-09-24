@@ -21,6 +21,7 @@ Tracked now:
 configs/
   objectives/                objective files
   experiments/               primary and deferred experiment contracts
+  run_record.schema.json     run-record schema
 
 data/
   dataset_manifest.json      source snapshot identity
@@ -28,14 +29,15 @@ data/
   raw/                       separated CSV package
 
 docs/
+  README.md                  documentation index and reading order
   data_management.md
   experiment_workflow.md
   literature_sources.md      cited-source register
   research_direction.md      deferred candidate tracks
   research_proposal.md       canonical primary proposal
-
-experiments/
-  run_record.schema.json
+  exploration_goal.md        direction promotion framework
+  direction_assessment.md    executed direction decision
+  candidate_matrix.md        sampler catalog
 
 results/
   explorations/              tracked preflight and full candidate outputs
@@ -46,6 +48,9 @@ results/
 
 scripts/
   run_sample_generalization.py
+  validate_sample_generalization.py
+  run_fixed_cohort_budget.py
+  validate_fixed_cohort_budget.py
   create_run_record.py
   explore_dataset.py
   select_pilot_catalog.py

@@ -4,18 +4,96 @@ Research code over the MovieLens `ml-latest` dataset (snapshot generated
 2023-07-20: 33,832,162 ratings and 2,328,315 tag applications across 86,537
 movies from 330,975 users).
 
-## Project documents
+## Start here: reading order
 
-1. [Data management](docs/data_management.md)
-2. [Experiment workflow](docs/experiment_workflow.md)
-3. [Research direction](docs/research_direction.md)
-4. [Literature source register](docs/literature_sources.md)
-5. [Dataset manifest](data/dataset_manifest.json)
-6. [Chunk manifest](data/chunk_manifest.json)
-7. [Candidate matrix](docs/candidate_matrix.md)
-8. [Sampling-generalization proposal](docs/research_proposal.md)
-9. [Executed experiment contract](configs/experiments/sample_generalization_v1.json)
-10. [Exploration and execution goal](docs/exploration_goal.md)
+Read in this order. Each step says what the artifact establishes, so a result is
+never read without its boundary.
+
+### A. Understand the question (about 10 minutes)
+
+1. [`docs/research_proposal.md`](docs/research_proposal.md) §1–§2 — the claim:
+   for a fixed client cohort, how much existing local history must be retained
+   or used to preserve a declared recommendation decision, and which federated
+   pain points that targets.
+2. [`docs/research_proposal.md`](docs/research_proposal.md) §3–§4 — what
+   "generalizability" means here, and which controls are fixed.
+3. [`docs/exploration_goal.md`](docs/exploration_goal.md) — how a candidate
+   data-gathering direction is promoted, deferred, or rejected.
+
+### B. Read the results in dependency order
+
+4. [`results/explorations/sample_generalization_full/report.md`](results/explorations/sample_generalization_full/report.md)
+   — snapshot **calibration**: which sampling mechanisms distort a full-data
+   result. Start here; it motivates the second experiment. Not federated
+   evidence.
+5. [`results/explorations/fixed_cohort_budget_v2/reference_artifact.json`](results/explorations/fixed_cohort_budget_v2/reference_artifact.json)
+   — the frozen comparison basis: cohort size, time windows, evaluated users,
+   interaction counts, item-item support, and the ALS same-data seed floor.
+   **Read this before the numbers**, because the seed floor decides which model
+   differences are interpretable at all.
+6. [`results/explorations/fixed_cohort_budget_v2/report.md`](results/explorations/fixed_cohort_budget_v2/report.md)
+   — the executed policy grid: two retention policies, six per-client caps, four
+   models. Read the "Interpretation boundary" section last, and treat it as
+   binding.
+7. [`results/explorations/fixed_cohort_budget_v2/candidate_summary.json`](results/explorations/fixed_cohort_budget_v2/candidate_summary.json)
+   — machine-readable rows, confidence intervals, cost counters, and the full
+   design echo for reproduction.
+
+### C. Read the conclusion and its limits
+
+8. [`docs/direction_assessment.md`](docs/direction_assessment.md) — the decision:
+   evidence cards per candidate direction, the rejected item-tail reserve
+   policy, the recommender-model control, and what the deterministic probe
+   shows.
+9. [`docs/research_proposal.md`](docs/research_proposal.md) §9 — current
+   evidence in one place, with the explicit statement of what is *not*
+   established.
+10. [`docs/literature_sources.md`](docs/literature_sources.md) — the primary
+    source behind each claim, and why adjacent work is not the same question.
+
+### D. Reproduce or extend
+
+11. [`docs/experiment_workflow.md`](docs/experiment_workflow.md) and
+    [`docs/data_management.md`](docs/data_management.md) — run procedure and
+    dataset integrity.
+12. `make validate-all`, then `make dashboard` for an interactive view.
+
+### Three rules that govern every result here
+
+- A model is a declared control. A stochastic recommender must publish its
+  same-data seed floor; an effect smaller than that floor is not evidence.
+- The client cohort is fixed within an episode. Changing *which* users
+  contribute is a different question from changing *how much* history each
+  contributes.
+- Offline MovieLens replay cannot establish device availability, dropout,
+  communication cost, secure aggregation, consent, or federated convergence.
+
+## Repository map
+
+| Area | Path | Contents |
+| --- | --- | --- |
+| Proposal | `docs/research_proposal.md` | Canonical claim, estimands, controls, phases, evidence. |
+| Index | `docs/README.md` | Reading order for every document. |
+| Direction decision | `docs/direction_assessment.md` | Literature matrix, evidence cards, ranked decision, executed result. |
+| Decision framework | `docs/exploration_goal.md` | How a data-gathering direction is promoted, deferred, or rejected. |
+| Sources | `docs/literature_sources.md` | Primary-source register (S1–S29) with scope notes. |
+| Sampling matrix | `docs/candidate_matrix.md` | Snapshot-calibration sampler catalog and boundaries. |
+| Data and workflow | `docs/data_management.md`, `docs/experiment_workflow.md` | Package integrity and run procedure. |
+| Later tracks | `docs/research_direction.md` | Deferred comparators and federated-system confirmation. |
+| Experiment contracts | `configs/experiments/` | `sample_generalization_v1.json`, `fixed_cohort_budget_v2.json`. |
+| Schemas and objectives | `configs/run_record.schema.json`, `configs/objectives/` | Run-record schema and objective definitions. |
+| Evidence | `results/explorations/` | Executed artifacts, reference artifacts, reports, figures. |
+| Code | `scripts/` | Runners (`run_*.py`), contract validators (`validate_*.py`), dashboard, data tooling. |
+| Dashboard UI | `web/` | Static client for the local research console. |
+| Untracked working dirs | `ml-latest/`, `artifacts/` | Ephemeral download and scratch output; safe to delete. |
+
+## Experiments
+
+| Experiment | Question | Run | Validate |
+| --- | --- | --- | --- |
+| Snapshot sampling matrix | Which sampling mechanisms preserve a full-snapshot result? | `make sample-generalization` | `make validate-sample-generalization` |
+| Fixed-cohort local-data budget | For the same users, how much local history does the recommendation result need? | `make fixed-cohort-budget` | `make validate-fixed-cohort-budget` |
+| Everything tracked | — | — | `make validate-all` |
 
 The repository contains a Git-tracked, byte-preserving CSV package under
 `data/raw/`. The large source tables are separated into deterministic chunks
@@ -95,6 +173,43 @@ Current evidence is tracked under
 `results/explorations/sample_generalization_full/`, including 732 draw rows,
 84 aggregate rows, six figures, a reference artifact, and a concise report.
 The dashboard exposes this run under the full-data candidate matrix panel.
+
+## Fixed-cohort local-data-budget replay
+
+The second experiment holds the client cohort fixed and varies only how much
+collection-window local history each client contributes. It compares an equal
+chronological cap with an item-tail reserve cap against all permitted history
+from the same cohort, evaluated on later interactions from those same users.
+
+Models are declared controls: deterministic popularity, rating-weighted
+popularity, and item-item cosine, plus stochastic implicit ALS whose same-data
+seed floor is published beside every effect. Item-item cosine is the primary
+personalized probe because it has no random state.
+
+```sh
+make fixed-cohort-budget
+make validate-fixed-cohort-budget
+```
+
+Evidence is tracked under `results/explorations/fixed_cohort_budget_v2/`.
+
+Runtime controls:
+
+```sh
+make fixed-cohort-budget                                   # cached cohort, 3 ALS workers
+python3 scripts/run_fixed_cohort_budget.py --als-workers 1 # serial, for debugging
+rm -rf artifacts/fixed_cohort_budget_cache                 # force a full cohort rebuild
+```
+
+The replay is CPU-only by design. BLAS threads are capped to one before numpy
+loads, because the ALS solves are batches of 32x32 systems where thread
+synchronization costs more than the arithmetic; measured on this machine that
+cap alone is 7.7x. Vectorized solves, an item-side item-item product, a cached
+cohort build, and process-level ALS seed training take the full replay from
+about 21 minutes to about 1 minute on a warm cache, with identical results.
+
+The replay is an offline MovieLens study: it makes no federated-system,
+availability, privacy, consent, or external-generalization claim.
 
 ## Interactive research dashboard
 

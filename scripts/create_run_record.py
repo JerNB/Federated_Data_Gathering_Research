@@ -176,7 +176,7 @@ def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[s
 
 
 def validate_record_schema(record: dict[str, Any]) -> None:
-    schema_path = ROOT / "experiments" / "run_record.schema.json"
+    schema_path = ROOT / "configs" / "run_record.schema.json"
     schema = load_json(schema_path)
     unsupported = schema_keyword_errors(schema)
     if unsupported:

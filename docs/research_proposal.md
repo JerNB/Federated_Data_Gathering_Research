@@ -50,6 +50,38 @@ existing permitted local events; it does not mean inducing users to create new
 events or uploading their histories. A policy that changes consent or user
 behavior requires a prospective randomized study, not this historical replay.
 
+### Federation topology: horizontal only
+
+This study is **horizontal (cross-device) federated recommendation**: one user
+is one client, every client holds the same feature schema
+`(user, item, rating, timestamp)`, and clients are partitioned by *sample*, not
+by feature. The local-data budget is therefore a per-client row budget.
+
+**Vertical federated learning is explicitly out of scope for the current
+claim.** In a vertical setting the same users are shared across parties that
+each hold *different features*—for example a ratings platform, a tagging
+service, and a content-metadata provider—so the open problems change:
+
+| Concern | Horizontal (this study) | Vertical (not studied) |
+| --- | --- | --- |
+| Partition | by user/sample | by feature/party |
+| Budget unit | local interactions per client | shared feature blocks and aligned entities per party |
+| Prerequisite | client eligibility and availability | private entity alignment across parties |
+| Label location | every client has its own interactions | labels usually sit with one party only |
+| Per-round traffic | model updates per device | intermediate representations per aligned batch |
+| Main leakage risk | update inversion | intermediate-representation and alignment leakage |
+
+A vertical variant is constructible from this snapshot, because `ratings.csv`,
+`tags.csv`, and `genome-scores.csv` share `movieId` and `userId` while carrying
+different feature blocks. That is recorded as a separate future track with its
+own estimand, alignment protocol, and cost model. It is **not** evidence for or
+against the horizontal local-data-budget claim, and results from the two
+topologies must never be pooled.
+
+The executed replay is a centralized *emulator* of the horizontal data
+partition. It fixes who contributes and varies how much each contributes; it
+does not yet run federated rounds.
+
 The existing snapshot comparison—fixed-protocol recommendation result
 `R_a(D_N)` versus `R_a(S_s(D_N, n, r))`—remains a calibration study. It
 measures which sampling mechanisms can distort a full-data result before the
@@ -124,12 +156,60 @@ decision rule, or coverage requirement. The chronological test target measures
 held-out prediction performance, but one snapshot and one cutoff do not
 estimate temporal, client, external-domain, or federated-system robustness.
 
-For every future claim, use NDCG@10 as the primary ranking outcome and Recall@10
-as its secondary retrieval check. Also report uncertainty over the natural unit
-(clients, episodes, time windows, groups, datasets, or sample draws), coverage,
-and resource cost. Use algorithm ordering only when the decision is specifically
-“which model should be selected.” Practical tolerances must be declared for
-that decision; there is no universal acceptable NDCG error.
+### Metric contract and structural ceilings
+
+> **Under revision.** `docs/evaluation_protocol.md` proposes protocol v2
+> (deep cutoffs, `Precision@K` instead of the ad-hoc `HitRate`, `MRR` dropped)
+> on the evidence of S30–S34. The rules below describe **executed** protocol v1
+> and remain in force until that draft is accepted.
+
+Metric choice is a control, not a presentation detail. Top-`K` retrieval metrics
+have different ceilings, and those ceilings vary systematically with exactly the
+user property this study manipulates—how much history a client has.
+
+| Metric | Definition at `K` | Ceiling behaviour |
+| --- | --- | --- |
+| `NDCG@K` | `DCG@K / IDCG` with `IDCG` over `min(K, R)` | Reaches 1.0 for any `R`; **not** capped. Primary outcome. |
+| `HitRate@K` | `hits / min(K, R)` | Reaches 1.0 for any `R`; cap-aware retrieval check. Secondary outcome. |
+| `Recall@K` | `hits / R` | Capped at `K / R`. A user with 50 future positives cannot exceed 0.20 at `K = 10`. |
+| `Precision@K` | `hits / K` | Capped at `R / K`. A user with 3 future positives cannot exceed 0.30 at `K = 10`. |
+
+Here `R` is the size of a user's relevant set after the fixed seen-item
+exclusion. The consequence is a real confound, not a cosmetic one: heavy users
+have large `R`, so their `Recall@K` ceiling is low, and heavy users are also the
+clients whose histories a per-client cap truncates most. A raw-recall comparison
+across caps therefore mixes a data effect with a metric-ceiling effect.
+
+Rules currently in force (protocol v1):
+
+- Report `NDCG@10` as primary and `HitRate@10` as the retrieval secondary. Raw
+  `Recall@10` may be reported for continuity, never alone.
+- Publish the ceiling audit beside the results: relevant-set size distribution,
+  the share of users above `K`, and the mean and minimum recall ceiling.
+- Never compare `Recall@K` or `Precision@K` across groups whose relevant-set
+  sizes differ without stating both ceilings.
+- Use algorithm ordering only when the decision is specifically “which model
+  should be selected.” Practical tolerances must be declared for that decision;
+  there is no universal acceptable NDCG error.
+- Also report uncertainty over the natural unit (clients, episodes, time
+  windows, groups, datasets, or sample draws), coverage, and resource cost.
+
+Known weaknesses of v1, measured or sourced:
+
+- `K = 10` is the shallowest depth studied in S30 and is the **least robust and
+  least discriminative**; deeper cutoffs near 100 dominate it on both axes while
+  rarely changing system order. The value 10 was never justified here.
+- `HitRate@K` equals `Precision@K` whenever `R >= K`, which covers 62.5% of the
+  evaluated users, so it adds a non-standard name rather than a new measurement.
+- The relevant set is “items later rated at least 4”, an observation artifact
+  under missing-not-at-random feedback (S32); every metric dividing by `R`
+  inherits that bias.
+- No popularity-bias treatment is applied, so averaged accuracy may diverge from
+  unbiased accuracy (S33, S34).
+
+Not yet measured, and therefore not claimed: MRR, catalog coverage of the
+recommendations themselves, per-activity-group metric breakdowns, and any
+beyond-accuracy objective such as diversity or novelty.
 
 ## 4. Calibration estimand and controller controls
 
@@ -330,40 +410,74 @@ Use leave-one-dataset-out evaluation for any claim that the controller transfers
 
 ## 7. Analysis rules
 
-For every algorithm, episode, and data-plan cell, produce:
+For every algorithm, episode, and data-plan cell, produce raw metrics against
+the cost vector with client-level uncertainty, paired effects versus the
+full-cohort reference, cutoff sensitivity, stratified breakdowns, weighted and
+unweighted values, coverage counts, and resource cost. A positive
+local-data-sufficiency claim additionally requires the predeclared safety,
+coverage, cost, and federated-confirmation conditions to hold.
 
-- raw metric versus the cost vector, with client-level uncertainty bands;
-- paired metric effect versus the full-cohort reference;
-- model-selection agreement and a `no decisive winner` label when the reference
-  winner is statistically tied;
-- false acceptance, false rejection, and abstention outcomes for `Pi`;
-- client, stratum, item-tail, availability, and completion coverage;
-- local compute, bytes, rounds, wall-clock time, and memory;
-- time-window, cohort, and randomization sensitivity.
+## 8. Current evidence
 
-Primary evidence for a positive local-data-sufficiency claim requires all of:
+The tracked snapshot contains 33,832,162 ratings from 330,975 users. The
+sampling-calibration matrix in `results/explorations/sample_generalization_full/`
+remains the prior evidence layer: it shows that sampling mechanism, support, and
+coverage change a full-data result, with item-item cosine far more sensitive
+than global popularity controls.
 
-1. the predeclared upper confidence bound for false acceptance is no greater
-   than the declared safety limit;
-2. accepted plans meet the metric and decision-fidelity tolerances against the
-   full-cohort reference;
-3. required client and subgroup coverage pass, including the declared
-   worst-stratum rule;
-4. the adaptive plan uses less of the primary cost budget than fixed plans that
-   meet the same safety target; and
-5. the surviving plan is confirmed under the declared federated-system model.
+`results/explorations/fixed_cohort_budget_v2/` holds the executed protocol-v2
+replay. The cohort is the entire eligible pool of 16,084 users, of which 4,100
+have future positives; the frozen reference uses 2,205,099 training
+interactions, 117,092 of them collection-window events the policies control.
+Metrics are reported at cutoffs 10, 20, 50, and 100 with 100 as the primary
+depth, alongside self-normalized propensity-weighted values and stratified
+breakdowns.
 
-A negative result is useful: it identifies a budget, data plan, availability
-regime, or client group for which the controller must gather more or abstain.
+Full-reference NDCG@100 is 0.1095 popularity, 0.1097 rating-weighted
+popularity, 0.1228 item-item cosine, and 0.1459 three-seed implicit ALS. Under
+the deterministic probe, **every tested cap now shows a significant deficit
+against full history**: -0.0058 [-0.0065, -0.0051] at cap 1, shrinking
+monotonically to -0.0012 [-0.0015, -0.0009] at cap 50. Propensity-weighted
+deltas agree in sign and shrink in the same order, so the effect is not an
+exposure artifact.
 
-## 8. Models and system boundaries
+This reverses the protocol-v1 null result, which was measured at cutoff 10 with
+520 evaluated users and found no cap whose interval excluded zero. S30
+identifies cutoff 10 as the least discriminative depth studied; the null did not
+survive a deeper cutoff and a census cohort. The practical magnitude stays
+small: capping at one collection event per client keeps 5,089 of 117,092
+collection interactions and costs about 4.7% of NDCG@100 relative to the
+full-history reference.
 
-The model is a controlled probe of the data-plan claim.
+The tail-reserve policy remains unpromoted. Four of 48 cells show a strictly
+positive paired interval, all implicit ALS at caps 10 and 20 with effects near
+0.0003; every deterministic-probe cell is negative or null. ALS is the strongest
+model at this depth but still fails its own control: no ALS cell exceeds the
+0.0203 same-data seed floor.
+
+These results are in-reference calibration and fixed-cohort replay evidence,
+not evidence that a federated data plan is safe. Varying total per-client
+history, repeating over time windows, and federated-system confirmation remain
+planned evidence.
+
+## 9. Models and system boundaries
+
+The model is a controlled probe of the data-plan claim, and the model itself is
+a declared control rather than a free choice.
 
 - **Executed calibration:** popularity, rating-weighted popularity, and a
   fixed-support item-item cosine baseline.
-- **First trainable confirmation:** the repository's BPR-MF ranking objective
-  [S2, S15].
+- **Primary personalized probe:** deterministic item-item cosine over a fixed
+  full-reference support set. It has no random state, so a budget effect is not
+  confounded with training noise, and it is the strongest model measured here.
+- **Secondary personalized probe:** implicit ALS [S1], averaged over a common
+  seed set for every condition.
+- **Mandatory model-noise control:** every stochastic recommender must publish
+  its same-data seed floor—per-seed mean metric spread and mean per-user
+  absolute metric difference—next to the data-policy effect. A data-budget
+  claim is invalid when the effect is smaller than that floor.
+- **Next trainable confirmation:** the repository's BPR-MF ranking objective
+  [S2, S15], under the same seed-floor rule.
 - **Federated-system control:** compare a named baseline such as FedAvg with a
   heterogeneity control such as FedProx only after the same local-data plan has
   passed the fixed-cohort emulator. This separates data-plan effects from
@@ -377,42 +491,6 @@ Active labeling, individual utility scoring from raw logs, incentives, and
 clustered personalization are outside the first estimand. Local relevance and
 online-retention selection are controlled comparators only when their
 observability, compute, and privacy contracts are specified.
-
-## 9. Current evidence
-
-The tracked full snapshot contains 33,832,162 ratings from 330,975 users over
-86,537 catalog movies; 83,239 of those movies appear in the ratings package.
-The executed result in `results/explorations/sample_generalization_full/` uses
-2,000 fixed eligible panel users, 13,653,758 positive training interactions,
-four sampling schemes, three fixed models, seven fractions, and ten draws below
-the full fraction. It contains 732 draw rows, 84 aggregate rows, six figures,
-and a persisted full-reference artifact.
-
-The full-reference NDCG@10 is approximately 0.0391 for popularity, 0.0390 for
-rating-weighted popularity, and 0.0616 for item-item cosine. At 10% of the
-training budget, the two global controls remain within roughly 0.0001–0.0006
-absolute NDCG error across schemes, while item-item NDCG is approximately
-0.0120 for user-based schemes, 0.0218 for uniform interactions, and 0.0216
-for within-user history. The item-item result therefore exposes sampling and
-support sensitivity that the global controls do not.
-
-`results/explorations/fixed_cohort_budget_v1/` adds one real-data,
-fixed-cohort chronological replay. Its 2,000-user cohort was selected from
-16,084 users active in the final pilot year; 520 later had a future positive
-after fixed seen-item exclusion. The reference used 270,880 interactions,
-including 15,537 collection-window interactions. The tested item-tail reserve
-cap increased tail share but had no cap/model cell with a strictly positive
-paired 95% interval for lower absolute NDCG error than the equal chronological
-cap. It is therefore rejected for this cohort/time episode. The equal cap at 5
-used 2,735 collection interactions with mean absolute NDCG error 0.0023
-(popularity) and 0.0012 (rating-weighted popularity); its 0.005 tolerance is
-exploratory, not a safe-stop threshold.
-
-These results are in-reference calibration and fixed-cohort replay evidence,
-not evidence that a federated data plan is safe. They establish that sampling,
-support, and coverage must be treated as substantive design choices. Trainable
-model, repeated-cohort/temporal, and federated-system variants remain planned
-evidence.
 
 ## 10. References used here
 
@@ -451,7 +529,7 @@ This is an execution order, not a claim that later questions are unimportant.
 | P5 | Runtime and data-structure trade-offs | Measure whether optimization helps at current scale without making the method brittle when schema or data structure changes. | Open |
 | P6 | Additional datasets | Add external datasets only when they test a defined generalization claim or close a known validity gap. | Open |
 | P7 | AI-model plugin track | Consider neural, transformer, or other AI recommenders after the common benchmark interface and classical baselines are stable. | Deferred |
-| P8 | Factor analysis | Define whether “挖因子” means latent-factor interpretation, error-factor attribution, observable feature analysis, or another question. | Undefined |
+| P8 | Factor analysis | Define whether "factor mining" means latent-factor interpretation, error-factor attribution, observable feature analysis, or another question. | Undefined |
 
 “Federated data gathering” is currently a cross-cutting term rather than a
 fixed priority. The review must distinguish privacy-preserving data collection,
