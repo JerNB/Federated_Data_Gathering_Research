@@ -7,6 +7,11 @@ snapshot-calibration evidence, not the primary federated claim.
 
 ## Complementary tracks after a direction is promoted
 
+Discussion-stage ideas requested on 2026-09-15 are recorded in
+[candidate research notes](candidate_ideas_2026-09-15.md): joint history/feature
+budgeting and attribute-specialist recommendation with late fusion. Neither is
+promoted or established as novel.
+
 1. **Trainable models:** BPR-MF first, then implicit ALS and item-based methods.
 2. **Sampling extensions:** item-stratified, graph-aware, coreset, and recent
    temporal-window sampling.
