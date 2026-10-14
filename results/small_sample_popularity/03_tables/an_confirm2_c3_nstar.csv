@@ -1,0 +1,8 @@
+dataset,N_star_k10,N_star_kall,n_max_tested,n_max_expected,n_star_increases_with_k,cand_share,label
+ml-latest,4000,100,4000,4000,no,0.3748,cap-limited
+ml-1m,none (> 1000),100,1000,1000,no,0.8815,
+amazon-video-games,none (> 2000),none (> 2000),2000,2000,no,0.107,cap-limited
+amazon-musical-instruments,none (> 2000),none (> 2000),2000,2000,no,0.2475,cap-limited
+amazon-software,400,100,4000,4000,no,0.4285,cap-limited
+kuairand-pure,2000,100,2000,2000,no,0.751,
+gowalla,none (> 4000),1000,4000,4000,no,0.0644,cap-limited

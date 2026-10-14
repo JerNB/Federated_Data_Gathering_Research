@@ -1,0 +1,15 @@
+dataset,k,status,N_star,n_max_tested,n_cells_present,n_cells_expected
+ml-latest,10,exists,4000,4000,6,6
+ml-latest,all,exists,100,4000,6,6
+ml-1m,10,none,,1000,4,4
+ml-1m,all,exists,100,1000,4,4
+amazon-video-games,10,none,,2000,5,5
+amazon-video-games,all,none,,2000,5,5
+amazon-musical-instruments,10,none,,2000,5,5
+amazon-musical-instruments,all,none,,2000,5,5
+amazon-software,10,exists,400,4000,6,6
+amazon-software,all,exists,100,4000,6,6
+kuairand-pure,10,exists,2000,2000,5,5
+kuairand-pure,all,exists,100,2000,5,5
+gowalla,10,none,,4000,6,6
+gowalla,all,exists,1000,4000,6,6

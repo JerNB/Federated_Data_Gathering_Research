@@ -1,0 +1,8 @@
+variant,label,column,source,restricted_to_5pct,verdict,complete,n_pairs,n_expected_pairs,n_positive,share_positive,pooled_diff,pooled_lo,pooled_hi,datasets_positive,datasets_judged,most_datasets_positive,reason
+count_A,count vs Truth A (literal C1),count.A_ndcg100,e1,1,not testable,0,0,46,0,,,,,,,,"no judged (dataset, budget) pair with two usable cells"
+ht_A,ht vs Truth A,ht.A_ndcg100,e1,1,not testable,0,0,46,0,,,,,,,,"no judged (dataset, budget) pair with two usable cells"
+count_Au,count vs Truth A_u (user-normalised),count.Au_ndcg100,e1,1,not testable,0,0,46,0,,,,,,,,"no judged (dataset, budget) pair with two usable cells"
+boot_count_A,boot arm: count vs Truth A,count.A_ndcg100,boot,0,not testable,0,0,,0,,,,,,,,e7.jsonl (arm boot) not found in the runs directory
+boot_ht_A,boot arm: ht vs Truth A,ht.A_ndcg100,boot,0,not testable,0,0,,0,,,,,,,,e7.jsonl (arm boot) not found in the runs directory
+boot_count_Au,boot arm: count vs Truth A_u,count.Au_ndcg100,boot,0,not testable,0,0,,0,,,,,,,,e7.jsonl (arm boot) not found in the runs directory
+boot_ht_Au,boot arm: ht vs Truth A_u,ht.Au_ndcg100,boot,0,not testable,0,0,,0,,,,,,,,e7.jsonl (arm boot) not found in the runs directory

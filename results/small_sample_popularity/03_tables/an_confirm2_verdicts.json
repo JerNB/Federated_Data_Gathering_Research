@@ -1,0 +1,273 @@
+[
+  {
+    "id": "C1",
+    "title_en": "C1. Breadth beats depth for estimating the list (amended rule A10)",
+    "title_zh": "C1. 广度胜过深度：同样的记录总数，人多比每人记录多更能估准名单（修订规则 A10）",
+    "verdict": "not testable",
+    "numbers": {
+      "n_pairs": 0,
+      "n_positive": 0,
+      "share_positive": null,
+      "n_expected_pairs": 46,
+      "n_missing_pairs": 46,
+      "datasets_present": [],
+      "datasets_missing": [
+        "ml-latest",
+        "ml-1m",
+        "amazon-video-games",
+        "amazon-musical-instruments",
+        "amazon-software",
+        "amazon-movies-tv",
+        "amazon-books",
+        "gowalla",
+        "brightkite",
+        "kuairand-pure",
+        "lastfm-1k"
+      ],
+      "restriction": "widest cell N <= 5% of the group (datasets.json n_pop)",
+      "secondary": {
+        "ht_A": {
+          "label": "ht vs Truth A",
+          "column": "ht.A_ndcg100",
+          "verdict": "not testable",
+          "n_pairs": 0,
+          "n_positive": 0,
+          "share_positive": null,
+          "complete": false,
+          "n_expected_pairs": 46,
+          "reason": "no judged (dataset, budget) pair with two usable cells"
+        },
+        "count_Au": {
+          "label": "count vs Truth A_u (user-normalised)",
+          "column": "count.Au_ndcg100",
+          "verdict": "not testable",
+          "n_pairs": 0,
+          "n_positive": 0,
+          "share_positive": null,
+          "complete": false,
+          "n_expected_pairs": 46,
+          "reason": "no judged (dataset, budget) pair with two usable cells"
+        },
+        "boot_count_A": {
+          "label": "boot arm: count vs Truth A",
+          "column": "count.A_ndcg100",
+          "verdict": "not testable",
+          "n_pairs": 0,
+          "n_positive": 0,
+          "share_positive": null,
+          "complete": false,
+          "n_expected_pairs": null,
+          "reason": "e7.jsonl (arm boot) not found in the runs directory"
+        },
+        "boot_ht_A": {
+          "label": "boot arm: ht vs Truth A",
+          "column": "ht.A_ndcg100",
+          "verdict": "not testable",
+          "n_pairs": 0,
+          "n_positive": 0,
+          "share_positive": null,
+          "complete": false,
+          "n_expected_pairs": null,
+          "reason": "e7.jsonl (arm boot) not found in the runs directory"
+        },
+        "boot_count_Au": {
+          "label": "boot arm: count vs Truth A_u",
+          "column": "count.Au_ndcg100",
+          "verdict": "not testable",
+          "n_pairs": 0,
+          "n_positive": 0,
+          "share_positive": null,
+          "complete": false,
+          "n_expected_pairs": null,
+          "reason": "e7.jsonl (arm boot) not found in the runs directory"
+        },
+        "boot_ht_Au": {
+          "label": "boot arm: ht vs Truth A_u",
+          "column": "ht.Au_ndcg100",
+          "verdict": "not testable",
+          "n_pairs": 0,
+          "n_positive": 0,
+          "share_positive": null,
+          "complete": false,
+          "n_expected_pairs": null,
+          "reason": "e7.jsonl (arm boot) not found in the runs directory"
+        }
+      },
+      "secondary_verdict_lines": [
+        "ht vs Truth A: not testable (no judged (dataset, budget) pair with two usable cells)",
+        "count vs Truth A_u (user-normalised): not testable (no judged (dataset, budget) pair with two usable cells)",
+        "boot arm: count vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory)",
+        "boot arm: ht vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory)",
+        "boot arm: count vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory)",
+        "boot arm: ht vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory)"
+      ],
+      "depth_finding": {
+        "applies": false,
+        "provisional": false
+      },
+      "reason": "no judged (dataset, budget) pair with two usable cells"
+    },
+    "reading_en": "No judged (dataset, budget) pair with two usable cells (widest cell N at most 5% of the group) was found in the popularity stage (e1), so C1 could not be tested. Secondary lines: ht vs Truth A: not testable (no judged (dataset, budget) pair with two usable cells) | count vs Truth A_u (user-normalised): not testable (no judged (dataset, budget) pair with two usable cells) | boot arm: count vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: ht vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: count vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: ht vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory).",
+    "reading_zh": "流行度阶段（e1）里没有找到可比较的（数据集，预算）组合（最宽格 N 不超过群体 5%），所以无法检验 C1。",
+    "rule": "difference (largest-N cell minus largest-k cell) of count NDCG@100 vs Truth A at equal budget N*k, judged only when the widest cell has N <= 5% of the group: supported if >= 75% of pairs positive AND pooled interval excludes 0 AND pooled difference >= 0.005; falsified if <= 50% positive OR pooled interval entirely below 0; otherwise inconclusive (mixed). Secondary lines: same contrast for ht.A, count.Au and the boot arm (no 5% restriction)"
+  },
+  {
+    "id": "C2",
+    "title_en": "C2. A hybrid with honest weights is never worse than the better pure list, and sometimes better than both (amended rule A11)",
+    "title_zh": "C2. 只用样本自己选权重的混合名单，不比较好的单一名单差，有时还胜过两者（修订规则 A11）",
+    "verdict": "not supported",
+    "numbers": {
+      "n_cells": 132,
+      "n_expected_cells": 132,
+      "n_missing_cells": 0,
+      "datasets_present": [
+        "ml-latest",
+        "ml-1m",
+        "amazon-video-games",
+        "amazon-musical-instruments",
+        "amazon-software",
+        "kuairand-pure",
+        "gowalla"
+      ],
+      "datasets_missing": [],
+      "a_share_within_0p002": 0.696969696969697,
+      "a_cells": 92,
+      "b_share_above_comparator": 0.25,
+      "b_cells": 33,
+      "c_share_random_more": 0.38461538461538464,
+      "c_cells": 30,
+      "c_cells_eligible": 78,
+      "c_cells_identical_splits": 12,
+      "c_cells_few_untied": 42,
+      "c_cells_no_weights": 0,
+      "a_share_range_if_missing": [
+        0.696969696969697,
+        0.696969696969697
+      ],
+      "b_share_range_if_missing": [
+        0.25,
+        0.25
+      ],
+      "c_share_range_if_missing": [
+        0.38461538461538464,
+        0.38461538461538464
+      ],
+      "prediction_a": false,
+      "prediction_b": true,
+      "prediction_c": false,
+      "falsifier_a": true,
+      "falsifier_b": false,
+      "falsifier_c": true,
+      "pooled_diff_mean": -0.001800237003968254,
+      "pooled_diff_lo": -0.002863690768849206,
+      "pooled_diff_hi": -0.0007913449131944447,
+      "n_datasets_positive_mean_diff": 1,
+      "n_datasets": 7,
+      "datasets_with_a_share_ge_90": 0,
+      "most_datasets_a_ok": false,
+      "mean_rand_minus_time_panel": 0.0002787765151515153,
+      "share_cells_random_panel_above_time": 0.4393939393939394,
+      "share_draws_w01_time": 0.43333333333333335,
+      "share_draws_w01_random": 0.4640151515151515,
+      "mean_w_random": 0.659185606060606,
+      "mean_w_time": 0.6636363636363636,
+      "share_cells_comparator_pers_time": 0.32575757575757575,
+      "min_draws": 20,
+      "indicative_verdict": "not supported"
+    },
+    "reading_en": "Over 132 cells, the time-hold-out hybrid was within 0.002 of the better pure list (comparator = the larger cell mean of popularity and personalised_time) in 70% (rule: at least 90%), above that list with a paired 95% interval above 0 in 25% (rule: at least 20%), and the random hold-out put more weight on personalisation than the time hold-out in more draws in 38% of 78 eligible cells (rule: at least 70%; falsified at 50% or below; 12 cells with identical splits and 42 cells with fewer than 5 untied draws were excluded). Mean panel NDCG@100 of hybrid_random minus hybrid_time per cell: +0.0003. Share of draws where the hybrid picked w = 0 or 1: 43% (time), 46% (random).",
+    "reading_zh": "在 132 个格子中，用时间留出法选权重的混合名单与较好的单一名单（取流行度与个性化(时间)两者格子均值较大者）相差不超过 0.002 的占 70%（要求至少 90%）；配对 95% 区间在 0 之上的占 25%（要求至少 20%）；在 78 个可判定的格子中，随机留出法比时间留出法给个性化更大权重的抽样次数占多数的格子占 38%（要求至少 70%，不超过 50% 则被证伪；另有 12 个格子因两种留出法划分相同被排除）。",
+    "rule": "(a) hybrid_time cell mean >= larger of (popularity, personalised_time) cell means - 0.002 in >= 90% of cells; (b) paired-by-draw 95% interval of hybrid_time minus that pure list above 0 in >= 20% of cells; (c) per cell, draws with hybrid_random.w > hybrid_time.w vs <, ties dropped, >= 5 untied draws, identical-split cells excluded; 'random more' larger in >= 70% of eligible cells. Supported if a>=90%, b>=20%, c>=70%; falsified if a<75% or b<10% or c<=50%; else mixed"
+  },
+  {
+    "id": "C3",
+    "title_en": "C3. A crossover sample size exists, and does not grow with k (amended rule A12)",
+    "title_zh": "C3. 存在一个交叉样本量，并且 k = 全部 时不比 k = 10 时更大（修订规则 A12）",
+    "verdict": "mixed",
+    "numbers": {
+      "n_datasets_expected": 7,
+      "n_datasets_with_data": 7,
+      "n_star_exists_kall": 5,
+      "n_star_none_kall": 2,
+      "kall_open": 0,
+      "n_star_exists_k10": 3,
+      "n_star_none_k10": 4,
+      "k10_open": 0,
+      "datasets_where_n_star_increases_with_k": [],
+      "prediction_kall": true,
+      "prediction_k10": false,
+      "prediction_monotone": true,
+      "falsifier_kall": false,
+      "most_datasets_exist_kall": true,
+      "most_datasets_exist_k10": false,
+      "n_max_tested": {
+        "ml-latest": 4000,
+        "ml-1m": 1000,
+        "amazon-video-games": 2000,
+        "amazon-musical-instruments": 2000,
+        "amazon-software": 4000,
+        "kuairand-pure": 2000,
+        "gowalla": 4000
+      },
+      "cand_share": {
+        "ml-latest": 0.3748,
+        "ml-1m": 0.8815,
+        "amazon-video-games": 0.107,
+        "amazon-musical-instruments": 0.2475,
+        "amazon-software": 0.4285,
+        "amazon-movies-tv": 0.0347,
+        "amazon-books": 0.0332,
+        "gowalla": 0.0644,
+        "brightkite": 0.0274,
+        "kuairand-pure": 0.751,
+        "lastfm-1k": 0.2894
+      },
+      "cap_limited_datasets": [
+        "ml-latest",
+        "amazon-video-games",
+        "amazon-musical-instruments",
+        "amazon-software",
+        "gowalla"
+      ],
+      "cand_share_note": "cand_share.csv found",
+      "n_star_table": {
+        "ml-latest|k=10": "4000",
+        "ml-latest|k=all": "100",
+        "ml-1m|k=10": "none (> 1000)",
+        "ml-1m|k=all": "100",
+        "amazon-video-games|k=10": "none (> 2000)",
+        "amazon-video-games|k=all": "none (> 2000)",
+        "amazon-musical-instruments|k=10": "none (> 2000)",
+        "amazon-musical-instruments|k=all": "none (> 2000)",
+        "amazon-software|k=10": "400",
+        "amazon-software|k=all": "100",
+        "kuairand-pure|k=10": "2000",
+        "kuairand-pure|k=all": "100",
+        "gowalla|k=10": "none (> 4000)",
+        "gowalla|k=all": "1000"
+      },
+      "reachable_verdicts": [
+        "mixed"
+      ],
+      "indicative_verdict": "mixed",
+      "indicative_exists_kall": 5,
+      "indicative_exists_k10": 3,
+      "indicative_violations": [],
+      "exists_kall_datasets": [
+        "ml-latest",
+        "ml-1m",
+        "amazon-software",
+        "kuairand-pure",
+        "gowalla"
+      ],
+      "exists_k10_datasets": [
+        "ml-latest",
+        "amazon-software",
+        "kuairand-pure"
+      ]
+    },
+    "reading_en": "A crossover size N* (personalised(time) beats popularity, 95% interval above 0 and mean difference above 0 at every larger tested N) exists for k = all in 5 of 7 datasets (rule: at least 5; absent in 2, falsified at 4) and for k = 10 in 3 (rule: at least 4). N*(all) does not exceed N*(10) in any dataset where both are known (no monotonicity violation). Largest N tested per dataset: ml-latest 4000, ml-1m 1000, amazon-video-games 2000, amazon-musical-instruments 2000, amazon-software 4000, kuairand-pure 2000, gowalla 4000. Candidate-universe share below 0.5 (cap-limited): ml-latest, amazon-video-games, amazon-musical-instruments, amazon-software, gowalla.",
+    "reading_zh": "在 k = 全部 时，7 个数据集中有 5 个存在交叉样本量 N*（个性化模型显著胜过流行度，且在更大的 N 上均值差保持为正；要求至少 5 个；至少 4 个不存在则被证伪）；k = 10 时有 3 个（要求至少 4 个）。N* 没有出现 k = 全部 大于 k = 10 的情况。 候选集占比低于 0.5（受候选集上限限制）：ml-latest, amazon-video-games, amazon-musical-instruments, amazon-software, gowalla。",
+    "rule": "N*(k), k in {10, all} = smallest N whose paired-by-draw 95% interval of personalised_time - popularity is above 0 AND whose mean difference stays > 0 at every larger tested N; absent counts as larger than any present N*; supported if N* exists at k=all in >= 5 of 7 and at k=10 in >= 4 of 7 and N*(all) > N*(10) never happens; falsified if absent at k=all in >= 4 of 7; else mixed"
+  }
+]

@@ -461,7 +461,7 @@ def run_ref(task: dict) -> dict:
     return row
 
 
-KINDS = {"e1": run_e1, "e2": run_e2, "e2c": run_e2, "e2p": run_e2p, "e8": run_e8, "e4": run_e4, "e5": run_e5, "e6": run_e6, "ref": run_ref}
+KINDS = {"e1": run_e1, "e2": run_e2, "e2c": run_e2, "e2s": run_e2, "e2p": run_e2p, "e8": run_e8, "e4": run_e4, "e5": run_e5, "e6": run_e6, "ref": run_ref}
 
 
 def run_task(task: dict) -> dict:

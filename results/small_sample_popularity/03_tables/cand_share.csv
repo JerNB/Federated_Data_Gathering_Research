@@ -1,0 +1,12 @@
+dataset,share,panel_users,panel_future_choices
+ml-latest,0.3748,1390,68547
+ml-1m,0.8815,194,8503
+amazon-video-games,0.107,553,2345
+amazon-musical-instruments,0.2475,622,2550
+amazon-software,0.4285,850,3960
+amazon-movies-tv,0.0347,1500,13614
+amazon-books,0.0332,1500,19842
+gowalla,0.0644,1500,22405
+brightkite,0.0274,1107,32261
+kuairand-pure,0.751,1500,11796
+lastfm-1k,0.2894,116,14132

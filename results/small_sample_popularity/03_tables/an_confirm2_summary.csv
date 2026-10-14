@@ -1,0 +1,10 @@
+claim,verdict,units,share_or_count,headline_1_name,headline_1,headline_2_name,headline_2,headline_3_name,headline_3
+C1,not testable,0,,pairs_positive,0,pooled_diff_A_ndcg100,,pooled_ci,
+C1:ht_A,not testable,0,,pairs_positive,0,pooled_diff_ht.A_ndcg100,,pooled_ci,"no judged (dataset, budget) pair with two usable cells"
+C1:count_Au,not testable,0,,pairs_positive,0,pooled_diff_count.Au_ndcg100,,pooled_ci,"no judged (dataset, budget) pair with two usable cells"
+C1:boot_count_A,not testable,0,,pairs_positive,0,pooled_diff_count.A_ndcg100,,pooled_ci,e7.jsonl (arm boot) not found in the runs directory
+C1:boot_ht_A,not testable,0,,pairs_positive,0,pooled_diff_ht.A_ndcg100,,pooled_ci,e7.jsonl (arm boot) not found in the runs directory
+C1:boot_count_Au,not testable,0,,pairs_positive,0,pooled_diff_count.Au_ndcg100,,pooled_ci,e7.jsonl (arm boot) not found in the runs directory
+C1:boot_ht_Au,not testable,0,,pairs_positive,0,pooled_diff_ht.Au_ndcg100,,pooled_ci,e7.jsonl (arm boot) not found in the runs directory
+C2,not supported,132,0.69697,share_a_within_0.002,0.69697,share_b_above_comparator,0.25,share_c_random_more,0.384615
+C3,mixed,7,5,datasets_with_N*_k_all,5,datasets_with_N*_k_10,3,datasets_N*_all_above_N*_10,0

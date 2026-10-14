@@ -85,6 +85,12 @@ def build(stage):
                 for k in k_grid(ds, [5, 10, 20, None]):
                     for d in range(100, 100 + R_E2):
                         out.append(dict(T("e2c", ds, d, N=N, k=k), cvgap=True))
+    elif stage == "e2s":      # the e2 grid extended downward: where does the crossover really start? (left-censoring check)
+        for ds in E2_DATASETS:
+            for N in (20, 40, 60):
+                for k in k_grid(ds, [5, 10, 20, None]):
+                    for d in range(R_E2):
+                        out.append(T("e2s", ds, d, N=N, k=k))
     elif stage == "e2p":
         for ds in E2_DATASETS:
             for N in [n for n in (100, 200, 400, 1000, 2000, 4000) if n <= 0.4 * meta(ds)["n_pop"]]:
@@ -140,7 +146,7 @@ def build(stage):
     return out
 
 
-STAGES = ["ref", "e2", "e1", "e2p", "e2c", "e8", "e4", "e6", "e5", "e7"]
+STAGES = ["ref", "e2", "e1", "e2p", "e2c", "e2s", "e8", "e4", "e6", "e5", "e7"]
 
 
 def main():
