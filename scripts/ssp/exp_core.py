@@ -54,18 +54,17 @@ def prior_pi(fr: F.Frame) -> np.ndarray:
     return (c + 0.1) / (c.sum() + 0.1 * len(c))
 
 
-_WIN: dict = {}
-
-
 def window_pool(fr: F.Frame) -> np.ndarray:
-    """POP users with at least one collection choice after T_old (people active in the recent window)."""
-    key = id(fr)
-    if key not in _WIN:
-        _WIN.clear()
+    """POP users with at least one collection choice after T_old (people active in the recent window).
+
+    Stored on the frame object itself: an earlier version keyed a module cache by id(frame), and ids are reused
+    after a frame is freed, which could hand one dataset another dataset's pool.
+    """
+    if not hasattr(fr, "_win_pool"):
         n_win = np.add.reduceat((fr.c_ts >= fr.T_old).astype(np.int64), fr.c_ptr[:-1])
         n_win = np.where(np.diff(fr.c_ptr) > 0, n_win, 0)
-        _WIN[key] = np.flatnonzero(n_win > 0)
-    return _WIN[key]
+        fr._win_pool = np.flatnonzero(n_win > 0)
+    return fr._win_pool
 
 
 def sample(fr, task, rng):
