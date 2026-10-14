@@ -1,0 +1,209 @@
+[
+ {
+  "id": "X13",
+  "title_en": "Exploratory X13: the crossover sample size is set by the served profile length, not by the training depth",
+  "title_zh": "探索性 X13：交叉点样本量主要由展示给用户的历史长度决定，而不是由训练深度决定",
+  "verdict": "not testable",
+  "numbers": {
+   "per_model": {
+    "knn100": {
+     "verdict": "not testable",
+     "datasets_with_N_star_for_both": 3,
+     "within_one_step": 0,
+     "differ_2plus_steps": 3,
+     "N_star_for_one_k_train_only": 2,
+     "datasets_in_data": 7
+    },
+    "ease100": {
+     "verdict": "not testable",
+     "datasets_with_N_star_for_both": 2,
+     "within_one_step": 0,
+     "differ_2plus_steps": 2,
+     "N_star_for_one_k_train_only": 2,
+     "datasets_in_data": 7
+    }
+   },
+   "datasets": [
+    "ml-1m",
+    "amazon-software",
+    "gowalla",
+    "kuairand-pure",
+    "ml-latest",
+    "amazon-video-games",
+    "amazon-musical-instruments"
+   ],
+   "datasets_with_N_star_by_kprof": {
+    "knn100|k_train=all|kprof=1": "0/7 datasets have an N*",
+    "knn100|k_train=all|kprof=2": "2/7 datasets have an N*",
+    "knn100|k_train=all|kprof=5": "3/7 datasets have an N*",
+    "knn100|k_train=all|kprof=10": "4/7 datasets have an N*",
+    "knn100|k_train=all|kprof=20": "4/4 datasets have an N*",
+    "knn100|k_train=all|kprof=all": "5/7 datasets have an N*",
+    "knn100|k_train=5|kprof=1": "0/7 datasets have an N*",
+    "knn100|k_train=5|kprof=2": "0/7 datasets have an N*",
+    "knn100|k_train=5|kprof=5": "1/7 datasets have an N*",
+    "knn100|k_train=5|kprof=10": "1/7 datasets have an N*",
+    "knn100|k_train=5|kprof=20": "0/4 datasets have an N*",
+    "knn100|k_train=5|kprof=all": "3/7 datasets have an N*",
+    "ease100|k_train=all|kprof=1": "0/7 datasets have an N*",
+    "ease100|k_train=all|kprof=2": "0/7 datasets have an N*",
+    "ease100|k_train=all|kprof=5": "1/7 datasets have an N*",
+    "ease100|k_train=all|kprof=10": "1/7 datasets have an N*",
+    "ease100|k_train=all|kprof=20": "1/4 datasets have an N*",
+    "ease100|k_train=all|kprof=all": "4/7 datasets have an N*",
+    "ease100|k_train=5|kprof=1": "0/7 datasets have an N*",
+    "ease100|k_train=5|kprof=2": "0/7 datasets have an N*",
+    "ease100|k_train=5|kprof=5": "0/7 datasets have an N*",
+    "ease100|k_train=5|kprof=10": "1/7 datasets have an N*",
+    "ease100|k_train=5|kprof=20": "0/4 datasets have an N*",
+    "ease100|k_train=5|kprof=all": "2/7 datasets have an N*"
+   }
+  },
+  "reading_en": "Fewer than 4 datasets have a crossover N* for both k_train = 5 and k_train = all at kprof = all (knn100: 3, ease100: 2 of 7 datasets in the data), so the rule cannot be judged yet. The N* values are in the table.",
+  "reading_zh": "在 kprof=all 时，同时有 k_train=5 和 k_train=all 交叉点的数据集少于 4 个（knn100：3，ease100：2，现有数据共 7 个数据集），所以暂时无法判定。各 N* 见表格。",
+  "rule": "Per dataset and model (knn100, ease100) vs pop at stratum=all, kprof=all: N*(k_train) = smallest N whose paired-by-draw 95% interval of (model - pop) is above 0 and whose mean stays above 0 at every larger N. Supported if N*(k_train=5) is within one grid step of N*(k_train=all) in >= 5 of the datasets that have an N* for both; not supported if they differ by >= 2 steps in >= 4 of them; not testable if fewer than 4 datasets have an N* for both; else mixed. Models are combined (supported only if both are)."
+ },
+ {
+  "id": "X13b",
+  "title_en": "Exploratory X13b: people with a long history benefit from personalisation at smaller samples than people with a short one",
+  "title_zh": "探索性 X13b：历史长的人比历史短的人在更小的样本量下就能从个性化中受益",
+  "verdict": "mixed",
+  "numbers": {
+   "per_model": {
+    "knn100": {
+     "verdict": "not supported",
+     "heavy_far_smaller": 1,
+     "judged": 5
+    },
+    "ease100": {
+     "verdict": "supported",
+     "heavy_far_smaller": 4,
+     "judged": 5
+    }
+   },
+   "median_ratio_where_both_have_N_star": 1.0,
+   "n_ratios": 9
+  },
+  "reading_en": "Heavy-history people reach a crossover at no more than half the sample size of light-history people in: knn100: 1 of 5 judged datasets; ease100: 4 of 5 judged datasets. Where both terciles have an N*, the median heavy/light ratio is 1.00 (9 ratios).",
+  "reading_zh": "历史长的人所需样本量不超过历史短的人的一半的情况：knn100：5 个可判定数据集中有 1 个；ease100：5 个可判定数据集中有 4 个。两组都有 N* 时，重度/轻度的中位数比值为 1.00（共 9 个）。",
+  "rule": "Per dataset and model, kprof=all, k_train=all: ratio = N*(heavy tercile) / N*(light tercile). 'Far smaller' = ratio <= 0.5; a light tercile with no N* counts as N* above the largest tested N (so a heavy N* at most half the largest N counts as far smaller; a heavy N* above that is not judged). Datasets with no N* in either tercile are not judged. Supported if far smaller in strictly more than half of the judged datasets; models combined."
+ },
+ {
+  "id": "X13c",
+  "title_en": "Exploratory X13c: serving each history tercile its own best model beats the best single model",
+  "title_zh": "探索性 X13c：按历史长度三分位分别选最优模型，优于只用一个最优模型",
+  "verdict": "not supported",
+  "numbers": {
+   "datasets_judged": 7,
+   "datasets_counting": 0,
+   "k_train_5_datasets_counting": "1/7",
+   "median_gain": 0.0,
+   "median_gain_split_half": 0.0,
+   "choices": {
+    "ml-1m": "light=ease50, middle=knn100, heavy=knn100, single=ease50",
+    "amazon-software": "light=knn100, middle=knn100, heavy=knn100, single=knn100",
+    "gowalla": "light=knn50, middle=knn50, heavy=knn50, single=knn50",
+    "kuairand-pure": "light=knn100, middle=knn100, heavy=knn100, single=knn100",
+    "ml-latest": "light=ease100, middle=ease100, heavy=ease100, single=ease100",
+    "amazon-video-games": "light=knn50, middle=ease50, heavy=knn100, single=knn50",
+    "amazon-musical-instruments": "light=knn50, middle=knn50, heavy=knn50, single=knn50"
+   }
+  },
+  "reading_en": "At the largest N, the tercile policy beats the best single model with a 95% interval above 0 and a positive split-half gain in 0 of 7 datasets (median in-sample gain 0.0000 NDCG@100, split-half 0.0000). The choice is made on the same draws it is scored on, so the in-sample gain is optimistic; the split-half column is the fair check.",
+  "reading_zh": "在最大 N 处，按三分位选模型的策略优于最优单一模型（95% 区间在 0 以上且折半检验为正）的数据集有 0/7 个（样本内增益中位数 0.0000 NDCG@100，折半检验 0.0000）。选择与打分用的是同一批抽样，样本内增益偏乐观；折半检验才是公平的检查。",
+  "rule": "Per dataset at the largest N with >= 4 draws, kprof=all, k_train=all: tercile policy = for each tercile the model (of pop, ease100, knn100, ease50, knn50) with the best cell mean; best single policy = the one model with the best mean over the three terciles. Gain = per-draw paired difference of the tercile-average scores. A dataset counts when the 95% interval of the gain is above 0 AND the split-half gain (choose on even draws, score on odd draws, and the reverse) is above 0. Supported if so in strictly more than half of the datasets."
+ },
+ {
+  "id": "X14",
+  "title_en": "Exploratory X14: one sample's own bootstrap predicts its list quality at the right scale, and the row-level bootstrap does not",
+  "title_zh": "探索性 X14：单个样本自己的自助法能按正确尺度预测榜单质量，而按行的自助法不能",
+  "verdict": "mixed",
+  "numbers": {
+   "user_calibrated_datasets": "6/6",
+   "row_misscaled_datasets": "6/6",
+   "spearman_ok_datasets": "0/6",
+   "verdict_per_part": {
+    "user_calibrated": "supported",
+    "row_misscaled": "supported",
+    "spearman": "not supported"
+   },
+   "median_ratio_user_N_ge_200": 1.0008269828033036,
+   "median_ratio_row_N_ge_200": 0.9992940721712735,
+   "median_spearman_user": 0.17861174927619258,
+   "mean_signed_error_pred_minus_real_by_k_and_N": {
+    "k=5|N=100": {
+     "user": 0.22113908333333332,
+     "row": 0.21487225
+    },
+    "k=5|N=200": {
+     "user": 0.054745166666666664,
+     "row": 0.05139691666666668
+    },
+    "k=5|N=400": {
+     "user": 0.010266500000000003,
+     "row": 0.00922425
+    },
+    "k=5|N=1000": {
+     "user": 0.000780333333333332,
+     "row": 0.0004495833333333319
+    },
+    "k=5|N=2000": {
+     "user": 0.0019113000000000023,
+     "row": 0.001765799999999995
+    },
+    "k=5|N=4000": {
+     "user": 0.005387750000000005,
+     "row": 0.005149499999999999
+    },
+    "k=all|N=100": {
+     "user": 0.02639683333333333,
+     "row": 0.015523833333333329
+    },
+    "k=all|N=200": {
+     "user": -0.0002141666666666588,
+     "row": -0.006064499999999991
+    },
+    "k=all|N=400": {
+     "user": -0.0009177499999999932,
+     "row": -0.003625250000000002
+    },
+    "k=all|N=1000": {
+     "user": -0.0020148333333333346,
+     "row": -0.0031821666666666656
+    },
+    "k=all|N=2000": {
+     "user": -0.002473500000000006,
+     "row": -0.0031288000000000036
+    },
+    "k=all|N=4000": {
+     "user": -0.0010094999999999993,
+     "row": -0.0012904999999999972
+    }
+   }
+  },
+  "reading_en": "The user-level bootstrap has a median pred/real ratio inside [0.67, 1.5] in every N >= 200 cell in 6/6 datasets (median ratio 1.00); the row-level one differs from it by a paired interval that excludes zero in most cells in 6/6 datasets (median ratio 1.00). Across draws, predicted and real quality are rank-correlated at 0.5 or more in 0/6 datasets (median Spearman 0.18). Signed error (pred - real) by N is in the table.",
+  "reading_zh": "按用户的自助法在 N≥200 的每个格子里，预测/真实比值的中位数都落在 [0.67, 1.5] 内的数据集有 6/6 个（比值中位数 1.00）；按行的自助法与之相比、配对区间不含 0 的格子占多数的数据集有 6/6 个（比值中位数 1.00）。跨抽样来看，预测与真实质量的秩相关达到 0.5 以上的数据集有 0/6 个（Spearman 中位数 0.18）。按 N 的有符号误差（预测减真实）见表格。",
+  "rule": "Against Truth A (real_A), cells with N >= 200. (1) user-level bootstrap 'calibrated' in a dataset if the median pred/real ratio over draws lies in [0.67, 1.5] in every (N >= 200, k) cell; supported if so in strictly more than half of the datasets. (2) row-level bootstrap 'mis-scaled relative to the user-level one' in a dataset if the paired-by-draw 95% interval of (pred_row - pred_user) excludes 0 in more than half of its N >= 200 cells; supported if so in strictly more than half of the datasets. (3) Spearman correlation across draws of pred_user vs real_A: a dataset passes if the median over its N >= 200 cells is >= 0.5 (cells with >= 5 draws and non-constant values); supported if so in strictly more than half of the datasets. The three parts are combined (supported only if all are)."
+ },
+ {
+  "id": "X15",
+  "title_en": "Exploratory X15: the unbiased weighted count only beats the plain count at very large samples, if ever",
+  "title_zh": "探索性 X15：无偏的加权计数即便能胜过普通计数，也只发生在样本很大时",
+  "verdict": "supported",
+  "numbers": {
+   "series": 50,
+   "series_judged": 50,
+   "series_prediction_holds": 47,
+   "series_ht_never_wins": 46,
+   "series_ht_wins_before_10pct_of_group": 3,
+   "never_wins_but_largest_N_below_10pct_of_group": 0,
+   "median_diff_ht_minus_count_at_Nmax": -0.1247651666666666,
+   "series_ht_better_at_Nmax_mean": 4,
+   "A_u_series_ht_never_wins": "50/50",
+   "A_u_median_diff_ht_minus_count_at_Nmax": -0.1358496666666666
+  },
+  "reading_en": "In 47 of 50 dataset-k series the weighted `ht` count never beats the plain `count` on Truth A, or only does so once N is at least 10% of the group (never: 46; wins earlier than 10% of the group: 3; of the never cases, 0 stop below 10% of the group, so they are lower bounds). At the largest N the median difference (ht - count) is -0.1248 NDCG@100, and ht is ahead in 4 of 50 series.",
+  "reading_zh": "在 50 个数据集与 k 的组合中，有 47 个里加权的 `ht` 在对 Truth A 的得分上从不胜过普通 `count`，或者只有在 N 达到群体 10% 以上时才胜过（从不胜过：46；在 10% 以前就胜过：3；从不胜过的组合中有 0 个测试的最大 N 不到群体的 10%，只能算下界）。在最大 N 处 ht 减 count 的中位数为 -0.1248 NDCG@100，ht 领先的组合为 4/50。",
+  "rule": "For each dataset and numeric k: N_win is the smallest N where the independent-draw bootstrap 95% interval of (ht - count) for A_ndcg100 is above 0 (2000 resamples); 'never' if no N qualifies. Supported if, in strictly more than half of the dataset-k series, ht never wins or wins only at N >= 10% of the group. A_u results are shown beside it and do not enter the verdict."
+ }
+]

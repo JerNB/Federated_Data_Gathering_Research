@@ -1,0 +1,134 @@
+[
+ {
+  "id": "X1",
+  "title_en": "Exploratory X1 (window truth): the stale list beats a fresh sample from the same window until N is a large share of the group",
+  "title_zh": "探索性 X1（窗口真相）：在样本人数达到群体的较大比例之前，旧榜单优于来自同一时间窗口的新样本榜单",
+  "verdict": "not supported",
+  "numbers": {
+   "W_ndcg100_all_met_of_judged": "0/11",
+   "W_ndcg100_all_reached_in_grid": "11/11",
+   "W_ndcg100_all_ci_clears_stale_at_N_s": "10/11",
+   "W_ndcg100_all_median_share_where_reached": 0.012510947078693857,
+   "W_ndcg100_all_indeterminate": 0,
+   "W_ndcg100_5_met_of_judged": "0/9",
+   "W_ndcg100_5_reached_in_grid": "9/11",
+   "W_ndcg100_5_ci_clears_stale_at_N_s": "8/9",
+   "W_ndcg100_5_median_share_where_reached": 0.008613264427217916,
+   "W_ndcg100_5_indeterminate": 2,
+   "W_ov100_all_met_of_judged": "0/11",
+   "W_ov100_all_reached_in_grid": "11/11",
+   "W_ov100_all_ci_clears_stale_at_N_s": "9/11",
+   "W_ov100_all_median_share_where_reached": 0.012510947078693857,
+   "W_ov100_all_indeterminate": 0,
+   "W_ov100_5_met_of_judged": "0/8",
+   "W_ov100_5_reached_in_grid": "8/11",
+   "W_ov100_5_ci_clears_stale_at_N_s": "5/8",
+   "W_ov100_5_median_share_where_reached": 0.00810891358243025,
+   "W_ov100_5_indeterminate": 3,
+   "verdict_per_measure": {
+    "W_ndcg100_all": "not supported",
+    "W_ndcg100_5": "not supported",
+    "W_ov100_all": "not supported",
+    "W_ov100_5": "not supported"
+   },
+   "n_datasets_with_window_sample": 11,
+   "n_datasets_without_stale_reference": 0
+  },
+  "reading_en": "Scored on the window (the same stretch of time the fresh sample comes from), a fresh sample with every earlier choice kept (k=all) matched the stale list in 11 of 11 datasets within the sampled N (median 1% of the group where it did). Judged datasets where this took at least 30% of the group: k=all 0/11, k=5 0/9 (top-100 overlap: k=all 0/11, k=5 0/8). Exploratory; few draws per cell make single crossovers noisy.",
+  "reading_zh": "以“窗口”（新样本所取自的同一段时间）为标准，保留全部过往选择（k=all）时，在已抽样的 N 范围内，新样本在 11 个数据集中有 11 个追平了旧榜单；追平发生处的中位数约为群体的 1%。需要群体至少 30% 才追平的判定数：k=all 0/11，k=5 0/9（前 100 名重合度：k=all 0/11，k=5 0/8）。这是探索性结果，每格抽样次数不多，单个交叉点有噪声。",
+  "rule": "Crossover N_s >= 30% of the group in most datasets (N_s = smallest N whose mean window-sample count score >= the stale list's score on the window truth; judged on W_ndcg100 at k=5 and k=all, both must agree; W_ov100 reported as a robustness check)"
+ },
+ {
+  "id": "X2",
+  "title_en": "Exploratory X2 (window truth): shrinking toward the stale list helps most near the crossover",
+  "title_zh": "探索性 X2（窗口真相）：向旧榜单收缩在交叉点附近帮助最大",
+  "verdict": "not supported",
+  "numbers": {
+   "kall_peak_near_crossover": "2/11",
+   "kall_not_judged": 0,
+   "k5_peak_near_crossover": "1/9",
+   "k5_not_judged": 2,
+   "verdict_per_k": {
+    "all": "not supported",
+    "5": "not supported"
+   },
+   "kappa_median_over_cells": 16964.603355,
+   "kappa_median_by_N": {
+    "20": 29092.043859999998,
+    "40": 10883.090639999999,
+    "100": 10772.418615,
+    "200": 12424.78291,
+    "400": 11137.91674,
+    "1000": 13889.9227,
+    "2000": 16386.479905,
+    "4000": 44649.516865,
+    "10000": 67511.72614,
+    "20000": 11798.942865
+   },
+   "kappa_note": "kappa is capped at 1e+06, which means 'all weight on the stale list'",
+   "largest_mean_gain_W_ndcg100": 0.7627083333333335,
+   "median_peak_N": 20.0,
+   "share_peak_ci_excludes_0": "20/22"
+  },
+  "reading_en": "Shrinking a fresh window sample toward the stale list gains up to 0.763 NDCG@100 on the window truth, with the gain peaking at a median N of 20. Peak within one grid step of the X1 crossover: k=all 2/11, k=5 1/9 (only datasets whose crossover was reached can be judged). The median shrinkage strength kappa over cells is 16,965; a high kappa means the method leans on the stale list.",
+  "reading_zh": "把来自窗口的新样本向旧榜单收缩，对窗口真相的 NDCG@100 最多提高 0.763，增益峰值的中位数 N 为 20。增益峰值与 X1 交叉点相差不超过一格的情况：k=all 2/11，k=5 1/9（只有交叉点已出现的数据集才能判定）。各格收缩强度 kappa 的中位数为 16,965；kappa 越大，方法越依赖旧榜单。",
+  "rule": "Gain of shrinking toward the stale list (shrunk minus count, window score W_ndcg100) peaks near the X1 crossover (peak at the crossover grid point or one grid step away; judged only where the crossover is reached inside the grid; k=5 and k=all must agree, verdict from the majority of judged datasets per k)"
+ },
+ {
+  "id": "X12",
+  "title_en": "Exploratory X12: weighting recent choices more helps predict later choices",
+  "title_zh": "探索性 X12：更看重近期选择有助于预测之后的选择",
+  "verdict": "supported",
+  "numbers": {
+   "W_ndcg100": {
+    "cells": 223,
+    "wins": 15,
+    "losses": 119,
+    "ties": 89,
+    "win_share": 0.06726457399103139,
+    "median_diff": -0.0032956666666666746
+   },
+   "B_ndcg100": {
+    "cells": 223,
+    "wins": 179,
+    "losses": 2,
+    "ties": 42,
+    "win_share": 0.8026905829596412,
+    "median_diff": 0.013039333333333335
+   },
+   "U_ndcg": {
+    "cells": 223,
+    "wins": 179,
+    "losses": 3,
+    "ties": 41,
+    "win_share": 0.8026905829596412,
+    "median_diff": 0.0008619999999999988
+   },
+   "truthB_per_k": {
+    "k=5": "62 wins / 1 losses / 20 ties of 83",
+    "k=20": "45 wins / 0 losses / 12 ties of 57",
+    "k=all": "72 wins / 1 losses / 10 ties of 83"
+   },
+   "truthB_datasets_with_a_win": 11,
+   "truthB_datasets_with_a_loss": [
+    "ml-1m",
+    "gowalla"
+   ],
+   "truthB_largest_losses": [
+    "ml-1m k=all N=20: -0.004",
+    "gowalla k=5 N=4000: -0.003"
+   ],
+   "truthB_largest_wins": [
+    "brightkite k=5 N=1000: +0.105",
+    "brightkite k=20 N=200: +0.093",
+    "brightkite k=5 N=200: +0.090",
+    "brightkite k=5 N=400: +0.087",
+    "brightkite k=20 N=40: +0.073"
+   ],
+   "decay_half_life": "the length of the window"
+  },
+  "reading_en": "Weighting recent choices more beat the plain count list on later real choices (Truth B) in 179 of 223 cells (80%), lost in 2, and was indistinguishable in 42; the median gain over all cells is +0.013 NDCG@100. On the window score it wins 15 and loses 119 of 223, and on the held-out panel it wins 179 and loses 3 of 223. Exploratory, 11 dataset(s) with window samples.",
+  "reading_zh": "更看重近期选择，在 223 个格子中有 179 个（80%）预测之后真实选择（Truth B）的效果好于普通计数榜单，2 个更差，42 个看不出差别；所有格子的中位差为 +0.013（NDCG@100）。窗口得分上胜 15、负 119（共 223），留出面板上胜 179、负 3（共 223）。这是探索性结果，共 11 个有窗口样本的数据集。",
+  "rule": "Share of (dataset, N, k) cells where recency-weighted counts beat plain counts on Truth B (B_ndcg100) with the 95% bootstrap interval of the difference above 0 (cells with >= 2 draws): supported if more than 50% of judged cells, not supported if fewer than 25%, else mixed; cells with the interval below 0 are reported as losses"
+ }
+]

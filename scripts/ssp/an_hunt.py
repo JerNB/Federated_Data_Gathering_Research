@@ -77,7 +77,12 @@ P_REP = 0.05
 MIN_N = 3                 # draws needed per group
 Z_NONMONO = 2.0           # class 1: "more than 2 standard errors"
 P_STORE = 0.10            # a hypothesis with q <= 0.10 necessarily has p <= 0.10
-FRESH_DRAW0, N_FRESH, TOP_TASKS = 1000, 20, 40
+FRESH_DRAW0, N_FRESH, TOP_TASKS = 1000, 20, 400
+# With tens of thousands of cells and 60 draws, almost anything is 'significant'. Rule fixed before replication:
+# a candidate is only TESTED FOR REPLICATION when it passes BH, has an effect of at least MIN_EFFECT (these metrics live
+# on a 0-1 scale), does not rely on the main-grid `shrunk` estimator (its prior overlaps the truth, amendment A1) and is
+# among the PER_CLASS_TESTED largest effects of its class. Counts of every stage are reported.
+MIN_EFFECT, PER_CLASS_TESTED = 0.01, 20
 
 E1_EST = ["count", "shrunk", "lcb"]
 E1_METRICS = ["A_ov10", "A_ov100", "A_rbo90", "A_rbo98", "A_tau100", "A_ndcg100", "B_ndcg100", "B_mass10",
@@ -932,11 +937,17 @@ def run_scan(S, out, log):
         n_hit = 0
         for rec in C.stored.get(c, []):
             rec["q"] = float(q[rec["idx"]])
-            rec["hit"] = bool(rec["q"] <= Q_FDR and not rec.get("gate_fail"))
-            n_hit += rec["hit"]
+            rec["bh"] = bool(rec["q"] <= Q_FDR and not rec.get("gate_fail"))
+            n_hit += rec["bh"]
+            rec["eligible"] = bool(rec["bh"] and abs(rec["effect"] or 0) >= MIN_EFFECT and "shrunk" not in json.dumps(jsonable(rec["info"])))
+            rec["hit"] = False
             cands.append(rec)
+        elig = sorted([r for r in cands if r["cls"] == c and r["eligible"]], key=lambda r: -abs(r["effect"]))
+        for r in elig[:PER_CLASS_TESTED]:
+            r["hit"] = True
         counts[c] = dict(scanned=len(ps), skipped=C.skipped.get(c, 0), duplicates=C.dups.get(c, 0),
-                         nominal_p05=int(sum(1 for p in ps if p < 0.05)), significant=int(n_hit))
+                         nominal_p05=int(sum(1 for p in ps if p < 0.05)), significant=int(n_hit),
+                         eligible=len(elig), tested=min(len(elig), PER_CLASS_TESTED))
     cands.sort(key=lambda r: (not r["hit"], r["q"], -r["z"], r["cls"]))
     for n, rec in enumerate(cands):
         rec["cid"] = f"C{rec['cls']}-{n:05d}"
@@ -984,7 +995,7 @@ def write_scan_tables(out, cands, counts, C, S):
         for r in cands:
             w.writerow([r["cid"], CLASSES[r["cls"]][1], ds_of(r), r["info"]["cell"], names(r), metric(r),
                         fnum(r["effect"]), fnum(r["z"], 3), f"{r['p']:.3g}", f"{r['q']:.3g}", r["n"],
-                        "FDR hit" if r["hit"] else "nominal only (not FDR)", r["desc_en"],
+                        "FDR hit" if r["hit"] else ("FDR significant, not tested (small effect, confounded or lower rank)" if r.get("bh") else "nominal only (not FDR)"), r["desc_en"],
                         json.dumps(jsonable(r["spec"]))])
     with open(os.path.join(td, "hunt_candidates_zh.csv"), "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
@@ -1004,7 +1015,7 @@ def write_scan_tables(out, cands, counts, C, S):
                     "nominal_p_lt_0.05", "fdr_hits_q_le_0.10", "notes"])
         for c, v in counts.items():
             w.writerow([CLASSES[c][0], CLASSES[c][1], v["scanned"], v["skipped"], v["duplicates"],
-                        v["nominal_p05"], v["significant"], " ".join(C.notes.get(c, []))])
+                        v["nominal_p05"], v["significant"], f"eligible={v.get('eligible')} tested_for_replication={v.get('tested')} " + " ".join(C.notes.get(c, []))])
     return hits, tasks
 
 

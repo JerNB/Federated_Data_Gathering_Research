@@ -1,0 +1,15 @@
+dataset,model,N_star_k5,N_star_kall,label_k5,label_kall,note,grid_steps_apart,within_one_step,differ_2plus_steps,status
+ml-1m,knn100,,100,none,100,N* exists for one k_train only,,,,exploratory
+amazon-software,knn100,1000,100,"1,000",100,,3,False,True,exploratory
+gowalla,knn100,,1000,none,"1,000",N* exists for one k_train only,,,,exploratory
+kuairand-pure,knn100,2000,100,"2,000",100,,4,False,True,exploratory
+ml-latest,knn100,1000,100,"1,000",100,,3,False,True,exploratory
+amazon-video-games,knn100,,,none,none,no N* for either k_train,,,,exploratory
+amazon-musical-instruments,knn100,,,none,none,no N* for either k_train,,,,exploratory
+ml-1m,ease100,,,none,none,no N* for either k_train,,,,exploratory
+amazon-software,ease100,2000,200,"2,000",200,,3,False,True,exploratory
+gowalla,ease100,,2000,none,"2,000",N* exists for one k_train only,,,,exploratory
+kuairand-pure,ease100,,100,none,100,N* exists for one k_train only,,,,exploratory
+ml-latest,ease100,4000,100,"4,000",100,,5,False,True,exploratory
+amazon-video-games,ease100,,,none,none,no N* for either k_train,,,,exploratory
+amazon-musical-instruments,ease100,,,none,none,no N* for either k_train,,,,exploratory

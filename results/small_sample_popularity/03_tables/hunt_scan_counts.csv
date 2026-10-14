@@ -1,0 +1,9 @@
+class_id,class,scanned,skipped_untestable,duplicates_removed,nominal_p_lt_0.05,fdr_hits_q_le_0.10,notes
+x11_c1_nonmonotone,1 non-monotone learning curve,24159,144,92,765,443,eligible=256 tested_for_replication=20 
+x11_c2_signflip,2 sign flip between targets,1872,0,0,260,253,"eligible=0 tested_for_replication=0 e2 rows hold only panel (U) metrics, so 'hyb_time - pop' cannot be compared with a Truth-A metric: that half of the pre-registered pair is not testable on these data."
+x11_c3_reversal,3 estimator order reversal,1630,12,32,342,325,eligible=6 tested_for_replication=6 
+x11_c4_interaction,"4 interaction (N x k, breadth vs depth)",7647,70,28,2061,1802,eligible=806 tested_for_replication=20 
+x11_c5_heterogeneity,5 cross-dataset heterogeneity,482,0,8,192,189,eligible=4 tested_for_replication=4 
+x11_c6_valley,6 mixing valley,993,52,11,0,0,eligible=0 tested_for_replication=0 
+x11_c7_diverging,7 diverging targets,2442,0,0,67,27,eligible=0 tested_for_replication=0 
+x11_c8_noisehelps,8 noise helps,1131,0,39,1,0,eligible=0 tested_for_replication=0 

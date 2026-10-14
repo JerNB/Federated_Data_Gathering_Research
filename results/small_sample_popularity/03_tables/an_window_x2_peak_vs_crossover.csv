@@ -1,0 +1,30 @@
+dataset,k,peak_N,peak_gain,peak_ci_lo,peak_ci_hi,gain_at_peak_ci_excludes_0,x1_crossover_N_s,grid_steps_peak_vs_crossover,outcome,status
+ml-latest,5,20,0.299066,0.279988,0.319163,True,200,3,far,exploratory
+ml-latest,20,20,0.161095,0.145069,0.182175,True,40,1,near,exploratory
+ml-latest,all,20,0.008537,-0.00556578,0.0232689,False,20,0,near,exploratory
+ml-1m,5,20,0.501393,0.484697,0.517054,True,,,not judged (crossover not reached within sampled N),exploratory
+ml-1m,20,20,0.339206,0.320078,0.358741,True,1000,5,far,exploratory
+ml-1m,all,20,0.126916,0.114597,0.139009,True,200,3,far,exploratory
+amazon-video-games,5,20,0.0248287,0.000621033,0.0468821,True,20,0,near,exploratory
+amazon-video-games,all,2000,-0.0202427,-0.0218421,-0.0186747,False,20,6,far,exploratory
+amazon-musical-instruments,5,20,0.524903,0.499008,0.548832,True,1000,5,far,exploratory
+amazon-musical-instruments,all,20,0.480772,0.453895,0.506592,True,400,4,far,exploratory
+amazon-software,5,20,0.157446,0.137055,0.176533,True,100,2,far,exploratory
+amazon-software,all,20,0.11886,0.100403,0.136911,True,40,1,near,exploratory
+amazon-movies-tv,5,20,0.153462,0.132775,0.171627,True,200,3,far,exploratory
+amazon-movies-tv,20,20,0.132289,0.109449,0.154419,True,100,2,far,exploratory
+amazon-movies-tv,all,20,0.141993,0.118763,0.164095,True,100,2,far,exploratory
+amazon-books,5,20,0.0887553,0.0784443,0.0992476,True,200,3,far,exploratory
+amazon-books,20,20,0.0788727,0.0635843,0.0930049,True,100,2,far,exploratory
+amazon-books,all,20,0.0799407,0.0657626,0.0934293,True,100,2,far,exploratory
+gowalla,5,20,0.762708,0.735039,0.780275,True,4000,7,far,exploratory
+gowalla,20,20,0.763748,0.74821,0.777147,True,2000,6,far,exploratory
+gowalla,all,20,0.753402,0.738747,0.767856,True,1000,5,far,exploratory
+brightkite,5,20,0.471266,0.459023,0.481275,True,2000,6,far,exploratory
+brightkite,20,20,0.434811,0.409619,0.457497,True,400,4,far,exploratory
+brightkite,all,20,0.420177,0.389007,0.44823,True,200,3,far,exploratory
+kuairand-pure,5,20,0.350421,0.332085,0.369871,True,200,3,far,exploratory
+kuairand-pure,20,20,0.258333,0.239202,0.278391,True,100,2,far,exploratory
+kuairand-pure,all,20,0.240617,0.216604,0.264234,True,100,2,far,exploratory
+lastfm-1k,5,20,0.587384,0.570424,0.601908,True,,,not judged (crossover not reached within sampled N),exploratory
+lastfm-1k,all,20,0.167096,0.140062,0.194028,True,100,2,far,exploratory

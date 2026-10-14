@@ -1,0 +1,7 @@
+dataset,n_cells_N_ge_200,user_calibrated,user_cells_in_band,row_cells_in_band,row_calibrated,row_misscaled_vs_user,row_differs_cells,median_spearman_user,median_spearman_row,spearman_ok,median_ratio_user_over_cells,median_ratio_row_over_cells,status
+ml-1m,6,True,6/6,6/6,True,True,6/6,0.155639,0.0759398,False,0.999524,0.996983,exploratory
+amazon-software,10,True,10/10,10/10,True,True,7/10,0.17218,0.106839,False,0.99904,0.997932,exploratory
+kuairand-pure,8,True,8/8,8/8,True,True,5/8,0.173684,0.105663,False,1.00213,1.00066,exploratory
+ml-latest,10,True,10/10,10/10,True,True,7/10,0.183539,-0.0621242,False,1.00433,1.00281,exploratory
+amazon-video-games,8,True,8/8,8/8,True,True,5/8,0.264662,0.158647,False,1.00393,1.00142,exploratory
+amazon-musical-instruments,8,True,8/8,8/8,True,True,5/8,0.273684,0.158647,False,0.993636,0.992123,exploratory

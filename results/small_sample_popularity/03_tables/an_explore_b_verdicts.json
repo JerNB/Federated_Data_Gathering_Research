@@ -1,0 +1,181 @@
+[
+  {
+    "id": "X5",
+    "title_en": "X5 (exploratory): coverage and width of rank intervals, naive bootstrap versus Mogstad sets",
+    "title_zh": "X5（探索性）：排名区间的覆盖率与宽度，朴素自助法与 Mogstad 区间对比",
+    "verdict": "supported",
+    "numbers": {
+      "n_cells": 42,
+      "n_datasets": 6,
+      "median_draws_per_cell": 30.0,
+      "share_cells_naive_51_200_below_0.93": 0.78571,
+      "share_cells_mogstad_cov_at_least_0.95": 1.0,
+      "share_cells_mogstad_51_200_at_least_0.95": 1.0,
+      "median_naive_cov": 0.85578,
+      "median_naive_cov_51_200": 0.85232,
+      "median_naive_cov_1_10": 0.90833,
+      "median_mogstad_cov": 1.0,
+      "median_mogstad_cov_51_200": 1.0,
+      "median_width_ratio_mogstad_over_naive": 2.97556,
+      "notes": []
+    },
+    "reading_en": "Across 42 cells, the naive intervals cover only 0.85 of true ranks 51-200 (median) and fall below 0.93 in 79% of cells; the Mogstad sets cover 1.00 (median) and reach 0.95 in 100% of cells. The Mogstad sets are 3.0 times as wide as the naive intervals (median).",
+    "reading_zh": "在 42 个格子里，朴素区间对真实第 51-200 名的覆盖率中位数只有 0.85，79% 的格子低于 0.93；Mogstad 区间覆盖率中位数 1.00，100% 的格子达到 0.95。Mogstad 区间的宽度约为朴素区间的 3.0 倍。",
+    "rule": "Naive coverage below 0.93 in the ranks 51-200 band in most cells (> 50% of (dataset,N,k) cells); Mogstad coverage at least 0.95 in most cells.",
+    "label": "exploratory"
+  },
+  {
+    "id": "X6",
+    "title_en": "X6 (exploratory): activity-biased samplers, uncorrected count versus weighted (HT) count",
+    "title_zh": "X6（探索性）：按活跃度有偏抽样下，未校正计数与加权（HT）计数对比",
+    "verdict": "not supported",
+    "numbers": {
+      "per_arm": {
+        "activity": {
+          "n_series": 29,
+          "n_series_crossover": 10,
+          "n_series_never": 15,
+          "n_series_ht_ahead_from_start": 4,
+          "n_datasets": 11,
+          "n_datasets_with_crossover": 2,
+          "median_crossover_N": 1000.0
+        },
+        "inv_activity": {
+          "n_series": 29,
+          "n_series_crossover": 4,
+          "n_series_never": 25,
+          "n_series_ht_ahead_from_start": 0,
+          "n_datasets": 11,
+          "n_datasets_with_crossover": 1,
+          "median_crossover_N": 1000.0
+        }
+      },
+      "notes": []
+    },
+    "reading_en": "A crossover (uncorrected count ahead or level at the smallest N, weighted count clearly ahead from some N on) was found in: activity: 2 of 11 datasets (10 of 29 dataset-k series); inv_activity: 1 of 11 datasets (4 of 29 dataset-k series). Where it exists, the median crossover is at N = 1000; 40 series never show the weighted count winning.",
+    "reading_zh": "出现“交叉点”（最小 N 时未校正计数不落后，之后加权计数明显领先）的情况：activity：11 个数据集中有 2 个（29 条数据集-k 系列中有 10 条）；inv_activity：11 个数据集中有 1 个（29 条数据集-k 系列中有 4 条）。有交叉点时，交叉 N 的中位数约为 1000；有 40 条系列加权计数始终没有赢。",
+    "rule": "A crossover N exists in most datasets: the weighted (HT) count beats the uncorrected count (95% CI of the paired difference above 0) from some N on, while the uncorrected count is not behind at the smallest N.",
+    "label": "exploratory"
+  },
+  {
+    "id": "X7",
+    "title_en": "X7 (exploratory): recent-choice samples versus uniform samples on Truth A and Truth B",
+    "title_zh": "X7（探索性）：最近选择的样本与均匀样本在真值 A、真值 B 上的比较",
+    "verdict": "supported",
+    "numbers": {
+      "per_arm": {
+        "recent_rows": {
+          "n_datasets": 11,
+          "n_flip_B": 8,
+          "n_flip_U": 8,
+          "n_datasets_with_U": 11,
+          "pooled_dA": -0.06035,
+          "n_datasets_positive_A": 0,
+          "pooled_dA_lo": -0.08875,
+          "pooled_dA_hi": -0.03642,
+          "pooled_dB": 0.04827,
+          "n_datasets_positive_B": 8,
+          "pooled_dB_lo": 0.00899,
+          "pooled_dB_hi": 0.10407,
+          "pooled_dU": 0.0024,
+          "n_datasets_positive_U": 8,
+          "pooled_dU_lo": -0.00062,
+          "pooled_dU_hi": 0.00563
+        },
+        "recent_window": {
+          "n_datasets": 11,
+          "n_flip_B": 10,
+          "n_flip_U": 9,
+          "n_datasets_with_U": 11,
+          "pooled_dA": -0.16303,
+          "n_datasets_positive_A": 0,
+          "pooled_dA_lo": -0.19803,
+          "pooled_dA_hi": -0.12258,
+          "pooled_dB": 0.05986,
+          "n_datasets_positive_B": 10,
+          "pooled_dB_lo": 0.02511,
+          "pooled_dB_hi": 0.10156,
+          "pooled_dU": 0.00569,
+          "n_datasets_positive_U": 9,
+          "pooled_dU_lo": 0.0007,
+          "pooled_dU_hi": 0.01123
+        }
+      },
+      "notes": []
+    },
+    "reading_en": "recent_rows: Truth A -0.060, Truth B 0.048 (mean difference in NDCG@100, recent minus uniform), sign flip in 8 of 11 datasets; recent_window: Truth A -0.163, Truth B 0.060 (mean difference in NDCG@100, recent minus uniform), sign flip in 10 of 11 datasets. A sign flip means worse on Truth A and better on Truth B.",
+    "reading_zh": "recent_rows：真值 A 差 -0.060，真值 B 差 0.048（最近 减 均匀，NDCG@100 均值），11 个数据集中 8 个符号相反；recent_window：真值 A 差 -0.163，真值 B 差 0.060（最近 减 均匀，NDCG@100 均值），11 个数据集中 10 个符号相反。符号相反指对真值 A 更差、对真值 B 更好。",
+    "rule": "Opposite signs in most datasets: recent-choice samples are worse than uniform ones on Truth A and better on Truth B (difference of mean NDCG@100, averaged over the (N,k) cells).",
+    "label": "exploratory"
+  },
+  {
+    "id": "X8",
+    "title_en": "X8 (exploratory): subgroup lists, sample-only versus global versus shrunk, and N** versus distinctiveness",
+    "title_zh": "X8（探索性）：子群体榜单（仅样本、全局、收缩）以及 N** 与差异度的关系",
+    "verdict": "not supported",
+    "numbers": {
+      "n_series": 164,
+      "n_groups": 82,
+      "n_datasets": 11,
+      "spearman_rho_ndcg100": -0.43759,
+      "rho_ci_lo": -0.55689,
+      "rho_ci_hi": -0.30862,
+      "spearman_rho_ov100": -0.46907,
+      "rho_by_k": {
+        "5": -0.56212,
+        "all": -0.46916
+      },
+      "n_series_sample_never_beats_global_ndcg100": 70,
+      "censoring_value_used_for_never": 2000,
+      "share_series_shrunk_at_least_best_of_both_at_every_N_ndcg100": 0.07317,
+      "share_cells_shrunk_at_least_best_of_both_ndcg100": 0.58236,
+      "share_series_shrunk_at_least_best_of_both_at_every_N_ov100": 0.08537,
+      "notes": []
+    },
+    "reading_en": "Across 164 (group, k) series, the Spearman correlation between distinctiveness and N** is -0.44 (95% interval -0.56 to -0.31); the sample-only list never beat the global list in 70 series (counted as above the largest N). The shrunk list was at least as good as the better of sample and global at every N in 7% of series (58% of individual cells).",
+    "reading_zh": "在 164 条（群体，k）系列中，差异度与 N** 的 Spearman 相关为 -0.44（95% 区间 -0.56 到 -0.31）；有 70 条系列中仅用样本的榜单始终没有超过全局榜单（记为大于最大 N）。收缩榜单在每个 N 上都不差于样本榜与全局榜中较好者的系列占 7%（单个格子占 58%）。",
+    "rule": "Positive rank correlation (Spearman, across groups) between distinctiveness (1 - group_vs_global_ov100) and N** (smallest N where the sample-only list beats the global list). Supported if rho > 0 and the 95% bootstrap interval (over groups) excludes 0; mixed if rho > 0 but the interval includes 0.",
+    "label": "exploratory"
+  },
+  {
+    "id": "X9",
+    "title_en": "X9 (exploratory): privacy noise measured in sample sizes, central versus local, head versus tail",
+    "title_zh": "X9（探索性）：用样本量衡量隐私噪声的代价，中心化与本地化、头部与尾部",
+    "verdict": "mixed",
+    "numbers": {
+      "n_ratio_rows": 585,
+      "n_datasets": 5,
+      "eps_values": [
+        0.5,
+        1.0,
+        2.0,
+        4.0,
+        8.0
+      ],
+      "N_ref_values": [
+        200,
+        1000,
+        5000,
+        20000
+      ],
+      "central_eps_ge2_Nref_ge2000_n_rows": 54,
+      "central_eps_ge2_Nref_ge2000_median_ratio": 0.86479,
+      "central_eps_ge2_all_Nref_median_ratio": 0.2,
+      "central_eps_ge2_all_Nref_median_cost_factor": 5.0,
+      "local_eps_ge2_median_ratio": 0.02,
+      "local_eps_ge2_median_cost_factor": 50.0,
+      "local_eps_ge2_share_censored": 0.87179,
+      "share_cells_head_loss_larger_than_tail": 0.48718,
+      "median_relative_loss_head_ov10": 0.96218,
+      "median_relative_loss_tail_ov100": 0.93325,
+      "part_head": false,
+      "part_central_free": true,
+      "part_local_factor": true,
+      "notes": []
+    },
+    "reading_en": "central DP (eps >= 2, N >= 2000) keeps a median 0.86 of the people's worth; local DP (eps >= 2) needs a median 50 times more people (a lower bound: 87% of these cells are below the nonprivate curve). Privacy noise removes a median 96% of the top-10 overlap but 93% of the top-100 overlap (head loss larger in 49% of cells).",
+    "reading_zh": "中心化差分隐私（eps≥2，N≥2000）保留约 0.86 的有效人数；本地差分隐私（eps≥2）需要多出约 50 倍的人数（只是下限：这些格子中有 87% 低于非隐私曲线的最小 N）。隐私噪声使前 10 名重合度中位下降 96%，前 100 名重合度下降 93%（49% 的格子里头部损失更大）。",
+    "rule": "Statements in sample-size ratios, per dataset. Operational reading (fixed in advance): (a) head: private relative loss in ov10 exceeds that in ov100 in most cells; (b) central DP (laplace, gaussian) at eps >= 2 and N >= 2000 has median effective-N ratio >= 0.8; (c) local DP (ldp_oue) at eps >= 2 needs a median of at least 30x more people.",
+    "label": "exploratory"
+  }
+]

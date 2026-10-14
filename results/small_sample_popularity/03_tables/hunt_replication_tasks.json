@@ -1,0 +1,10042 @@
+[
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:2|k=5|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:2|k=5|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=joined:1|k=5|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=joined:1|k=5|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:2|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"group": "activity:2",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:2|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"group": "activity:2",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1000",
+"dataset": "lastfm-1k",
+"draw": 1000,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1001",
+"dataset": "lastfm-1k",
+"draw": 1001,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1002",
+"dataset": "lastfm-1k",
+"draw": 1002,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1003",
+"dataset": "lastfm-1k",
+"draw": 1003,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1004",
+"dataset": "lastfm-1k",
+"draw": 1004,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1005",
+"dataset": "lastfm-1k",
+"draw": 1005,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1006",
+"dataset": "lastfm-1k",
+"draw": 1006,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1007",
+"dataset": "lastfm-1k",
+"draw": 1007,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1008",
+"dataset": "lastfm-1k",
+"draw": 1008,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1009",
+"dataset": "lastfm-1k",
+"draw": 1009,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1010",
+"dataset": "lastfm-1k",
+"draw": 1010,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1011",
+"dataset": "lastfm-1k",
+"draw": 1011,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1012",
+"dataset": "lastfm-1k",
+"draw": 1012,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1013",
+"dataset": "lastfm-1k",
+"draw": 1013,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1014",
+"dataset": "lastfm-1k",
+"draw": 1014,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1015",
+"dataset": "lastfm-1k",
+"draw": 1015,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1016",
+"dataset": "lastfm-1k",
+"draw": 1016,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1017",
+"dataset": "lastfm-1k",
+"draw": 1017,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1018",
+"dataset": "lastfm-1k",
+"draw": 1018,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=5|d=1019",
+"dataset": "lastfm-1k",
+"draw": 1019,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1000",
+"dataset": "lastfm-1k",
+"draw": 1000,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1001",
+"dataset": "lastfm-1k",
+"draw": 1001,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1002",
+"dataset": "lastfm-1k",
+"draw": 1002,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1003",
+"dataset": "lastfm-1k",
+"draw": 1003,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1004",
+"dataset": "lastfm-1k",
+"draw": 1004,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1005",
+"dataset": "lastfm-1k",
+"draw": 1005,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1006",
+"dataset": "lastfm-1k",
+"draw": 1006,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1007",
+"dataset": "lastfm-1k",
+"draw": 1007,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1008",
+"dataset": "lastfm-1k",
+"draw": 1008,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1009",
+"dataset": "lastfm-1k",
+"draw": 1009,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1010",
+"dataset": "lastfm-1k",
+"draw": 1010,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1011",
+"dataset": "lastfm-1k",
+"draw": 1011,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1012",
+"dataset": "lastfm-1k",
+"draw": 1012,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1013",
+"dataset": "lastfm-1k",
+"draw": 1013,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1014",
+"dataset": "lastfm-1k",
+"draw": 1014,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1015",
+"dataset": "lastfm-1k",
+"draw": 1015,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1016",
+"dataset": "lastfm-1k",
+"draw": 1016,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1017",
+"dataset": "lastfm-1k",
+"draw": 1017,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1018",
+"dataset": "lastfm-1k",
+"draw": 1018,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=5|d=1019",
+"dataset": "lastfm-1k",
+"draw": 1019,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1000",
+"dataset": "lastfm-1k",
+"draw": 1000,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1001",
+"dataset": "lastfm-1k",
+"draw": 1001,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1002",
+"dataset": "lastfm-1k",
+"draw": 1002,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1003",
+"dataset": "lastfm-1k",
+"draw": 1003,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1004",
+"dataset": "lastfm-1k",
+"draw": 1004,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1005",
+"dataset": "lastfm-1k",
+"draw": 1005,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1006",
+"dataset": "lastfm-1k",
+"draw": 1006,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1007",
+"dataset": "lastfm-1k",
+"draw": 1007,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1008",
+"dataset": "lastfm-1k",
+"draw": 1008,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1009",
+"dataset": "lastfm-1k",
+"draw": 1009,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1010",
+"dataset": "lastfm-1k",
+"draw": 1010,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1011",
+"dataset": "lastfm-1k",
+"draw": 1011,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1012",
+"dataset": "lastfm-1k",
+"draw": 1012,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1013",
+"dataset": "lastfm-1k",
+"draw": 1013,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1014",
+"dataset": "lastfm-1k",
+"draw": 1014,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1015",
+"dataset": "lastfm-1k",
+"draw": 1015,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1016",
+"dataset": "lastfm-1k",
+"draw": 1016,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1017",
+"dataset": "lastfm-1k",
+"draw": 1017,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1018",
+"dataset": "lastfm-1k",
+"draw": 1018,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=200|k=None|d=1019",
+"dataset": "lastfm-1k",
+"draw": 1019,
+"N": 200,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1000",
+"dataset": "lastfm-1k",
+"draw": 1000,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1001",
+"dataset": "lastfm-1k",
+"draw": 1001,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1002",
+"dataset": "lastfm-1k",
+"draw": 1002,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1003",
+"dataset": "lastfm-1k",
+"draw": 1003,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1004",
+"dataset": "lastfm-1k",
+"draw": 1004,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1005",
+"dataset": "lastfm-1k",
+"draw": 1005,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1006",
+"dataset": "lastfm-1k",
+"draw": 1006,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1007",
+"dataset": "lastfm-1k",
+"draw": 1007,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1008",
+"dataset": "lastfm-1k",
+"draw": 1008,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1009",
+"dataset": "lastfm-1k",
+"draw": 1009,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1010",
+"dataset": "lastfm-1k",
+"draw": 1010,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1011",
+"dataset": "lastfm-1k",
+"draw": 1011,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1012",
+"dataset": "lastfm-1k",
+"draw": 1012,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1013",
+"dataset": "lastfm-1k",
+"draw": 1013,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1014",
+"dataset": "lastfm-1k",
+"draw": 1014,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1015",
+"dataset": "lastfm-1k",
+"draw": 1015,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1016",
+"dataset": "lastfm-1k",
+"draw": 1016,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1017",
+"dataset": "lastfm-1k",
+"draw": 1017,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1018",
+"dataset": "lastfm-1k",
+"draw": 1018,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|lastfm-1k|N=100|k=None|d=1019",
+"dataset": "lastfm-1k",
+"draw": 1019,
+"N": 100,
+"k": null
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=activity:0|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"group": "activity:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=activity:0|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"group": "activity:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:0|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"group": "joined:0",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:0|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"group": "joined:0",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=10|group=activity:1|k=5|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"group": "activity:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|brightkite|N=20|group=activity:1|k=5|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"group": "activity:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=10|group=joined:1|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"group": "joined:1",
+"N": 10,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e5",
+"key": "e5|gowalla|N=20|group=joined:1|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"group": "joined:1",
+"N": 20,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1000",
+"dataset": "amazon-video-games",
+"draw": 1000,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1001",
+"dataset": "amazon-video-games",
+"draw": 1001,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1002",
+"dataset": "amazon-video-games",
+"draw": 1002,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1003",
+"dataset": "amazon-video-games",
+"draw": 1003,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1004",
+"dataset": "amazon-video-games",
+"draw": 1004,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1005",
+"dataset": "amazon-video-games",
+"draw": 1005,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1006",
+"dataset": "amazon-video-games",
+"draw": 1006,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1007",
+"dataset": "amazon-video-games",
+"draw": 1007,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1008",
+"dataset": "amazon-video-games",
+"draw": 1008,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1009",
+"dataset": "amazon-video-games",
+"draw": 1009,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1010",
+"dataset": "amazon-video-games",
+"draw": 1010,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1011",
+"dataset": "amazon-video-games",
+"draw": 1011,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1012",
+"dataset": "amazon-video-games",
+"draw": 1012,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1013",
+"dataset": "amazon-video-games",
+"draw": 1013,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1014",
+"dataset": "amazon-video-games",
+"draw": 1014,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1015",
+"dataset": "amazon-video-games",
+"draw": 1015,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1016",
+"dataset": "amazon-video-games",
+"draw": 1016,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1017",
+"dataset": "amazon-video-games",
+"draw": 1017,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1018",
+"dataset": "amazon-video-games",
+"draw": 1018,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=5|d=1019",
+"dataset": "amazon-video-games",
+"draw": 1019,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1000",
+"dataset": "amazon-video-games",
+"draw": 1000,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1001",
+"dataset": "amazon-video-games",
+"draw": 1001,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1002",
+"dataset": "amazon-video-games",
+"draw": 1002,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1003",
+"dataset": "amazon-video-games",
+"draw": 1003,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1004",
+"dataset": "amazon-video-games",
+"draw": 1004,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1005",
+"dataset": "amazon-video-games",
+"draw": 1005,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1006",
+"dataset": "amazon-video-games",
+"draw": 1006,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1007",
+"dataset": "amazon-video-games",
+"draw": 1007,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1008",
+"dataset": "amazon-video-games",
+"draw": 1008,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1009",
+"dataset": "amazon-video-games",
+"draw": 1009,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1010",
+"dataset": "amazon-video-games",
+"draw": 1010,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1011",
+"dataset": "amazon-video-games",
+"draw": 1011,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1012",
+"dataset": "amazon-video-games",
+"draw": 1012,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1013",
+"dataset": "amazon-video-games",
+"draw": 1013,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1014",
+"dataset": "amazon-video-games",
+"draw": 1014,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1015",
+"dataset": "amazon-video-games",
+"draw": 1015,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1016",
+"dataset": "amazon-video-games",
+"draw": 1016,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1017",
+"dataset": "amazon-video-games",
+"draw": 1017,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1018",
+"dataset": "amazon-video-games",
+"draw": 1018,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=5|d=1019",
+"dataset": "amazon-video-games",
+"draw": 1019,
+"N": 40,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1000",
+"dataset": "amazon-video-games",
+"draw": 1000,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1001",
+"dataset": "amazon-video-games",
+"draw": 1001,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1002",
+"dataset": "amazon-video-games",
+"draw": 1002,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1003",
+"dataset": "amazon-video-games",
+"draw": 1003,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1004",
+"dataset": "amazon-video-games",
+"draw": 1004,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1005",
+"dataset": "amazon-video-games",
+"draw": 1005,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1006",
+"dataset": "amazon-video-games",
+"draw": 1006,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1007",
+"dataset": "amazon-video-games",
+"draw": 1007,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1008",
+"dataset": "amazon-video-games",
+"draw": 1008,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1009",
+"dataset": "amazon-video-games",
+"draw": 1009,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1010",
+"dataset": "amazon-video-games",
+"draw": 1010,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1011",
+"dataset": "amazon-video-games",
+"draw": 1011,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1012",
+"dataset": "amazon-video-games",
+"draw": 1012,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1013",
+"dataset": "amazon-video-games",
+"draw": 1013,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1014",
+"dataset": "amazon-video-games",
+"draw": 1014,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1015",
+"dataset": "amazon-video-games",
+"draw": 1015,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1016",
+"dataset": "amazon-video-games",
+"draw": 1016,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1017",
+"dataset": "amazon-video-games",
+"draw": 1017,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1018",
+"dataset": "amazon-video-games",
+"draw": 1018,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=100|k=10|d=1019",
+"dataset": "amazon-video-games",
+"draw": 1019,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1000",
+"dataset": "amazon-video-games",
+"draw": 1000,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1001",
+"dataset": "amazon-video-games",
+"draw": 1001,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1002",
+"dataset": "amazon-video-games",
+"draw": 1002,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1003",
+"dataset": "amazon-video-games",
+"draw": 1003,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1004",
+"dataset": "amazon-video-games",
+"draw": 1004,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1005",
+"dataset": "amazon-video-games",
+"draw": 1005,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1006",
+"dataset": "amazon-video-games",
+"draw": 1006,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1007",
+"dataset": "amazon-video-games",
+"draw": 1007,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1008",
+"dataset": "amazon-video-games",
+"draw": 1008,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1009",
+"dataset": "amazon-video-games",
+"draw": 1009,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1010",
+"dataset": "amazon-video-games",
+"draw": 1010,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1011",
+"dataset": "amazon-video-games",
+"draw": 1011,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1012",
+"dataset": "amazon-video-games",
+"draw": 1012,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1013",
+"dataset": "amazon-video-games",
+"draw": 1013,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1014",
+"dataset": "amazon-video-games",
+"draw": 1014,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1015",
+"dataset": "amazon-video-games",
+"draw": 1015,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1016",
+"dataset": "amazon-video-games",
+"draw": 1016,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1017",
+"dataset": "amazon-video-games",
+"draw": 1017,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1018",
+"dataset": "amazon-video-games",
+"draw": 1018,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-video-games|N=40|k=10|d=1019",
+"dataset": "amazon-video-games",
+"draw": 1019,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=2|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=2|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=1000|k=5|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=400|k=5|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1000",
+"dataset": "amazon-software",
+"draw": 1000,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1001",
+"dataset": "amazon-software",
+"draw": 1001,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1002",
+"dataset": "amazon-software",
+"draw": 1002,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1003",
+"dataset": "amazon-software",
+"draw": 1003,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1004",
+"dataset": "amazon-software",
+"draw": 1004,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1005",
+"dataset": "amazon-software",
+"draw": 1005,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1006",
+"dataset": "amazon-software",
+"draw": 1006,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1007",
+"dataset": "amazon-software",
+"draw": 1007,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1008",
+"dataset": "amazon-software",
+"draw": 1008,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1009",
+"dataset": "amazon-software",
+"draw": 1009,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1010",
+"dataset": "amazon-software",
+"draw": 1010,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1011",
+"dataset": "amazon-software",
+"draw": 1011,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1012",
+"dataset": "amazon-software",
+"draw": 1012,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1013",
+"dataset": "amazon-software",
+"draw": 1013,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1014",
+"dataset": "amazon-software",
+"draw": 1014,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1015",
+"dataset": "amazon-software",
+"draw": 1015,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1016",
+"dataset": "amazon-software",
+"draw": 1016,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1017",
+"dataset": "amazon-software",
+"draw": 1017,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1018",
+"dataset": "amazon-software",
+"draw": 1018,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=2000|k=10|d=1019",
+"dataset": "amazon-software",
+"draw": 1019,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|gowalla|N=2000|k=10|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1000",
+"dataset": "ml-latest",
+"draw": 1000,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1001",
+"dataset": "ml-latest",
+"draw": 1001,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1002",
+"dataset": "ml-latest",
+"draw": 1002,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1003",
+"dataset": "ml-latest",
+"draw": 1003,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1004",
+"dataset": "ml-latest",
+"draw": 1004,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1005",
+"dataset": "ml-latest",
+"draw": 1005,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1006",
+"dataset": "ml-latest",
+"draw": 1006,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1007",
+"dataset": "ml-latest",
+"draw": 1007,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1008",
+"dataset": "ml-latest",
+"draw": 1008,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1009",
+"dataset": "ml-latest",
+"draw": 1009,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1010",
+"dataset": "ml-latest",
+"draw": 1010,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1011",
+"dataset": "ml-latest",
+"draw": 1011,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1012",
+"dataset": "ml-latest",
+"draw": 1012,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1013",
+"dataset": "ml-latest",
+"draw": 1013,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1014",
+"dataset": "ml-latest",
+"draw": 1014,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1015",
+"dataset": "ml-latest",
+"draw": 1015,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1016",
+"dataset": "ml-latest",
+"draw": 1016,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1017",
+"dataset": "ml-latest",
+"draw": 1017,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1018",
+"dataset": "ml-latest",
+"draw": 1018,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=100|k=5|d=1019",
+"dataset": "ml-latest",
+"draw": 1019,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1000",
+"dataset": "ml-latest",
+"draw": 1000,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1001",
+"dataset": "ml-latest",
+"draw": 1001,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1002",
+"dataset": "ml-latest",
+"draw": 1002,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1003",
+"dataset": "ml-latest",
+"draw": 1003,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1004",
+"dataset": "ml-latest",
+"draw": 1004,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1005",
+"dataset": "ml-latest",
+"draw": 1005,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1006",
+"dataset": "ml-latest",
+"draw": 1006,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1007",
+"dataset": "ml-latest",
+"draw": 1007,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1008",
+"dataset": "ml-latest",
+"draw": 1008,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1009",
+"dataset": "ml-latest",
+"draw": 1009,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1010",
+"dataset": "ml-latest",
+"draw": 1010,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1011",
+"dataset": "ml-latest",
+"draw": 1011,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1012",
+"dataset": "ml-latest",
+"draw": 1012,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1013",
+"dataset": "ml-latest",
+"draw": 1013,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1014",
+"dataset": "ml-latest",
+"draw": 1014,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1015",
+"dataset": "ml-latest",
+"draw": 1015,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1016",
+"dataset": "ml-latest",
+"draw": 1016,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1017",
+"dataset": "ml-latest",
+"draw": 1017,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1018",
+"dataset": "ml-latest",
+"draw": 1018,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=5|d=1019",
+"dataset": "ml-latest",
+"draw": 1019,
+"N": 2000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=2|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 1000,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=2|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=1000|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=400|k=5|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1000",
+"dataset": "ml-1m",
+"draw": 1000,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1001",
+"dataset": "ml-1m",
+"draw": 1001,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1002",
+"dataset": "ml-1m",
+"draw": 1002,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1003",
+"dataset": "ml-1m",
+"draw": 1003,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1004",
+"dataset": "ml-1m",
+"draw": 1004,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1005",
+"dataset": "ml-1m",
+"draw": 1005,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1006",
+"dataset": "ml-1m",
+"draw": 1006,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1007",
+"dataset": "ml-1m",
+"draw": 1007,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1008",
+"dataset": "ml-1m",
+"draw": 1008,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1009",
+"dataset": "ml-1m",
+"draw": 1009,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1010",
+"dataset": "ml-1m",
+"draw": 1010,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1011",
+"dataset": "ml-1m",
+"draw": 1011,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1012",
+"dataset": "ml-1m",
+"draw": 1012,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1013",
+"dataset": "ml-1m",
+"draw": 1013,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1014",
+"dataset": "ml-1m",
+"draw": 1014,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1015",
+"dataset": "ml-1m",
+"draw": 1015,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1016",
+"dataset": "ml-1m",
+"draw": 1016,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1017",
+"dataset": "ml-1m",
+"draw": 1017,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1018",
+"dataset": "ml-1m",
+"draw": 1018,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=100|k=5|d=1019",
+"dataset": "ml-1m",
+"draw": 1019,
+"N": 100,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1000",
+"dataset": "ml-1m",
+"draw": 1000,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1001",
+"dataset": "ml-1m",
+"draw": 1001,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1002",
+"dataset": "ml-1m",
+"draw": 1002,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1003",
+"dataset": "ml-1m",
+"draw": 1003,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1004",
+"dataset": "ml-1m",
+"draw": 1004,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1005",
+"dataset": "ml-1m",
+"draw": 1005,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1006",
+"dataset": "ml-1m",
+"draw": 1006,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1007",
+"dataset": "ml-1m",
+"draw": 1007,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1008",
+"dataset": "ml-1m",
+"draw": 1008,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1009",
+"dataset": "ml-1m",
+"draw": 1009,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1010",
+"dataset": "ml-1m",
+"draw": 1010,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1011",
+"dataset": "ml-1m",
+"draw": 1011,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1012",
+"dataset": "ml-1m",
+"draw": 1012,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1013",
+"dataset": "ml-1m",
+"draw": 1013,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1014",
+"dataset": "ml-1m",
+"draw": 1014,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1015",
+"dataset": "ml-1m",
+"draw": 1015,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1016",
+"dataset": "ml-1m",
+"draw": 1016,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1017",
+"dataset": "ml-1m",
+"draw": 1017,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1018",
+"dataset": "ml-1m",
+"draw": 1018,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=5|d=1019",
+"dataset": "ml-1m",
+"draw": 1019,
+"N": 1000,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1000",
+"dataset": "ml-latest",
+"draw": 1000,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1001",
+"dataset": "ml-latest",
+"draw": 1001,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1002",
+"dataset": "ml-latest",
+"draw": 1002,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1003",
+"dataset": "ml-latest",
+"draw": 1003,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1004",
+"dataset": "ml-latest",
+"draw": 1004,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1005",
+"dataset": "ml-latest",
+"draw": 1005,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1006",
+"dataset": "ml-latest",
+"draw": 1006,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1007",
+"dataset": "ml-latest",
+"draw": 1007,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1008",
+"dataset": "ml-latest",
+"draw": 1008,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1009",
+"dataset": "ml-latest",
+"draw": 1009,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1010",
+"dataset": "ml-latest",
+"draw": 1010,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1011",
+"dataset": "ml-latest",
+"draw": 1011,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1012",
+"dataset": "ml-latest",
+"draw": 1012,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1013",
+"dataset": "ml-latest",
+"draw": 1013,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1014",
+"dataset": "ml-latest",
+"draw": 1014,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1015",
+"dataset": "ml-latest",
+"draw": 1015,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1016",
+"dataset": "ml-latest",
+"draw": 1016,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1017",
+"dataset": "ml-latest",
+"draw": 1017,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1018",
+"dataset": "ml-latest",
+"draw": 1018,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-latest|N=2000|k=10|d=1019",
+"dataset": "ml-latest",
+"draw": 1019,
+"N": 2000,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1000",
+"dataset": "kuairand-pure",
+"draw": 1000,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1001",
+"dataset": "kuairand-pure",
+"draw": 1001,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1002",
+"dataset": "kuairand-pure",
+"draw": 1002,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1003",
+"dataset": "kuairand-pure",
+"draw": 1003,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1004",
+"dataset": "kuairand-pure",
+"draw": 1004,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1005",
+"dataset": "kuairand-pure",
+"draw": 1005,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1006",
+"dataset": "kuairand-pure",
+"draw": 1006,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1007",
+"dataset": "kuairand-pure",
+"draw": 1007,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1008",
+"dataset": "kuairand-pure",
+"draw": 1008,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1009",
+"dataset": "kuairand-pure",
+"draw": 1009,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1010",
+"dataset": "kuairand-pure",
+"draw": 1010,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1011",
+"dataset": "kuairand-pure",
+"draw": 1011,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1012",
+"dataset": "kuairand-pure",
+"draw": 1012,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1013",
+"dataset": "kuairand-pure",
+"draw": 1013,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1014",
+"dataset": "kuairand-pure",
+"draw": 1014,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1015",
+"dataset": "kuairand-pure",
+"draw": 1015,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1016",
+"dataset": "kuairand-pure",
+"draw": 1016,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1017",
+"dataset": "kuairand-pure",
+"draw": 1017,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1018",
+"dataset": "kuairand-pure",
+"draw": 1018,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=200|k=20|d=1019",
+"dataset": "kuairand-pure",
+"draw": 1019,
+"N": 200,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1000",
+"dataset": "kuairand-pure",
+"draw": 1000,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1001",
+"dataset": "kuairand-pure",
+"draw": 1001,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1002",
+"dataset": "kuairand-pure",
+"draw": 1002,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1003",
+"dataset": "kuairand-pure",
+"draw": 1003,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1004",
+"dataset": "kuairand-pure",
+"draw": 1004,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1005",
+"dataset": "kuairand-pure",
+"draw": 1005,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1006",
+"dataset": "kuairand-pure",
+"draw": 1006,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1007",
+"dataset": "kuairand-pure",
+"draw": 1007,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1008",
+"dataset": "kuairand-pure",
+"draw": 1008,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1009",
+"dataset": "kuairand-pure",
+"draw": 1009,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1010",
+"dataset": "kuairand-pure",
+"draw": 1010,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1011",
+"dataset": "kuairand-pure",
+"draw": 1011,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1012",
+"dataset": "kuairand-pure",
+"draw": 1012,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1013",
+"dataset": "kuairand-pure",
+"draw": 1013,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1014",
+"dataset": "kuairand-pure",
+"draw": 1014,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1015",
+"dataset": "kuairand-pure",
+"draw": 1015,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1016",
+"dataset": "kuairand-pure",
+"draw": 1016,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1017",
+"dataset": "kuairand-pure",
+"draw": 1017,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1018",
+"dataset": "kuairand-pure",
+"draw": 1018,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=2000|k=20|d=1019",
+"dataset": "kuairand-pure",
+"draw": 1019,
+"N": 2000,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1000",
+"dataset": "amazon-movies-tv",
+"draw": 1000,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1001",
+"dataset": "amazon-movies-tv",
+"draw": 1001,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1002",
+"dataset": "amazon-movies-tv",
+"draw": 1002,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1003",
+"dataset": "amazon-movies-tv",
+"draw": 1003,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1004",
+"dataset": "amazon-movies-tv",
+"draw": 1004,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1005",
+"dataset": "amazon-movies-tv",
+"draw": 1005,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1006",
+"dataset": "amazon-movies-tv",
+"draw": 1006,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1007",
+"dataset": "amazon-movies-tv",
+"draw": 1007,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1008",
+"dataset": "amazon-movies-tv",
+"draw": 1008,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1009",
+"dataset": "amazon-movies-tv",
+"draw": 1009,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1010",
+"dataset": "amazon-movies-tv",
+"draw": 1010,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1011",
+"dataset": "amazon-movies-tv",
+"draw": 1011,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1012",
+"dataset": "amazon-movies-tv",
+"draw": 1012,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1013",
+"dataset": "amazon-movies-tv",
+"draw": 1013,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1014",
+"dataset": "amazon-movies-tv",
+"draw": 1014,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1015",
+"dataset": "amazon-movies-tv",
+"draw": 1015,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1016",
+"dataset": "amazon-movies-tv",
+"draw": 1016,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1017",
+"dataset": "amazon-movies-tv",
+"draw": 1017,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1018",
+"dataset": "amazon-movies-tv",
+"draw": 1018,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=10|d=1019",
+"dataset": "amazon-movies-tv",
+"draw": 1019,
+"N": 100,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1000",
+"dataset": "amazon-movies-tv",
+"draw": 1000,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1001",
+"dataset": "amazon-movies-tv",
+"draw": 1001,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1002",
+"dataset": "amazon-movies-tv",
+"draw": 1002,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1003",
+"dataset": "amazon-movies-tv",
+"draw": 1003,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1004",
+"dataset": "amazon-movies-tv",
+"draw": 1004,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1005",
+"dataset": "amazon-movies-tv",
+"draw": 1005,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1006",
+"dataset": "amazon-movies-tv",
+"draw": 1006,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1007",
+"dataset": "amazon-movies-tv",
+"draw": 1007,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1008",
+"dataset": "amazon-movies-tv",
+"draw": 1008,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1009",
+"dataset": "amazon-movies-tv",
+"draw": 1009,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1010",
+"dataset": "amazon-movies-tv",
+"draw": 1010,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1011",
+"dataset": "amazon-movies-tv",
+"draw": 1011,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1012",
+"dataset": "amazon-movies-tv",
+"draw": 1012,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1013",
+"dataset": "amazon-movies-tv",
+"draw": 1013,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1014",
+"dataset": "amazon-movies-tv",
+"draw": 1014,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1015",
+"dataset": "amazon-movies-tv",
+"draw": 1015,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1016",
+"dataset": "amazon-movies-tv",
+"draw": 1016,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1017",
+"dataset": "amazon-movies-tv",
+"draw": 1017,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1018",
+"dataset": "amazon-movies-tv",
+"draw": 1018,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=10|d=1019",
+"dataset": "amazon-movies-tv",
+"draw": 1019,
+"N": 40,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1000",
+"dataset": "amazon-movies-tv",
+"draw": 1000,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1001",
+"dataset": "amazon-movies-tv",
+"draw": 1001,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1002",
+"dataset": "amazon-movies-tv",
+"draw": 1002,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1003",
+"dataset": "amazon-movies-tv",
+"draw": 1003,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1004",
+"dataset": "amazon-movies-tv",
+"draw": 1004,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1005",
+"dataset": "amazon-movies-tv",
+"draw": 1005,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1006",
+"dataset": "amazon-movies-tv",
+"draw": 1006,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1007",
+"dataset": "amazon-movies-tv",
+"draw": 1007,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1008",
+"dataset": "amazon-movies-tv",
+"draw": 1008,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1009",
+"dataset": "amazon-movies-tv",
+"draw": 1009,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1010",
+"dataset": "amazon-movies-tv",
+"draw": 1010,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1011",
+"dataset": "amazon-movies-tv",
+"draw": 1011,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1012",
+"dataset": "amazon-movies-tv",
+"draw": 1012,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1013",
+"dataset": "amazon-movies-tv",
+"draw": 1013,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1014",
+"dataset": "amazon-movies-tv",
+"draw": 1014,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1015",
+"dataset": "amazon-movies-tv",
+"draw": 1015,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1016",
+"dataset": "amazon-movies-tv",
+"draw": 1016,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1017",
+"dataset": "amazon-movies-tv",
+"draw": 1017,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1018",
+"dataset": "amazon-movies-tv",
+"draw": 1018,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=100|k=20|d=1019",
+"dataset": "amazon-movies-tv",
+"draw": 1019,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1000",
+"dataset": "amazon-movies-tv",
+"draw": 1000,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1001",
+"dataset": "amazon-movies-tv",
+"draw": 1001,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1002",
+"dataset": "amazon-movies-tv",
+"draw": 1002,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1003",
+"dataset": "amazon-movies-tv",
+"draw": 1003,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1004",
+"dataset": "amazon-movies-tv",
+"draw": 1004,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1005",
+"dataset": "amazon-movies-tv",
+"draw": 1005,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1006",
+"dataset": "amazon-movies-tv",
+"draw": 1006,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1007",
+"dataset": "amazon-movies-tv",
+"draw": 1007,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1008",
+"dataset": "amazon-movies-tv",
+"draw": 1008,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1009",
+"dataset": "amazon-movies-tv",
+"draw": 1009,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1010",
+"dataset": "amazon-movies-tv",
+"draw": 1010,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1011",
+"dataset": "amazon-movies-tv",
+"draw": 1011,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1012",
+"dataset": "amazon-movies-tv",
+"draw": 1012,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1013",
+"dataset": "amazon-movies-tv",
+"draw": 1013,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1014",
+"dataset": "amazon-movies-tv",
+"draw": 1014,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1015",
+"dataset": "amazon-movies-tv",
+"draw": 1015,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1016",
+"dataset": "amazon-movies-tv",
+"draw": 1016,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1017",
+"dataset": "amazon-movies-tv",
+"draw": 1017,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1018",
+"dataset": "amazon-movies-tv",
+"draw": 1018,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=40|k=20|d=1019",
+"dataset": "amazon-movies-tv",
+"draw": 1019,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1000",
+"dataset": "amazon-movies-tv",
+"draw": 1000,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1001",
+"dataset": "amazon-movies-tv",
+"draw": 1001,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1002",
+"dataset": "amazon-movies-tv",
+"draw": 1002,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1003",
+"dataset": "amazon-movies-tv",
+"draw": 1003,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1004",
+"dataset": "amazon-movies-tv",
+"draw": 1004,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1005",
+"dataset": "amazon-movies-tv",
+"draw": 1005,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1006",
+"dataset": "amazon-movies-tv",
+"draw": 1006,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1007",
+"dataset": "amazon-movies-tv",
+"draw": 1007,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1008",
+"dataset": "amazon-movies-tv",
+"draw": 1008,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1009",
+"dataset": "amazon-movies-tv",
+"draw": 1009,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1010",
+"dataset": "amazon-movies-tv",
+"draw": 1010,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1011",
+"dataset": "amazon-movies-tv",
+"draw": 1011,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1012",
+"dataset": "amazon-movies-tv",
+"draw": 1012,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1013",
+"dataset": "amazon-movies-tv",
+"draw": 1013,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1014",
+"dataset": "amazon-movies-tv",
+"draw": 1014,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1015",
+"dataset": "amazon-movies-tv",
+"draw": 1015,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1016",
+"dataset": "amazon-movies-tv",
+"draw": 1016,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1017",
+"dataset": "amazon-movies-tv",
+"draw": 1017,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1018",
+"dataset": "amazon-movies-tv",
+"draw": 1018,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=2|d=1019",
+"dataset": "amazon-movies-tv",
+"draw": 1019,
+"N": 400,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1000",
+"dataset": "amazon-movies-tv",
+"draw": 1000,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1001",
+"dataset": "amazon-movies-tv",
+"draw": 1001,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1002",
+"dataset": "amazon-movies-tv",
+"draw": 1002,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1003",
+"dataset": "amazon-movies-tv",
+"draw": 1003,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1004",
+"dataset": "amazon-movies-tv",
+"draw": 1004,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1005",
+"dataset": "amazon-movies-tv",
+"draw": 1005,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1006",
+"dataset": "amazon-movies-tv",
+"draw": 1006,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1007",
+"dataset": "amazon-movies-tv",
+"draw": 1007,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1008",
+"dataset": "amazon-movies-tv",
+"draw": 1008,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1009",
+"dataset": "amazon-movies-tv",
+"draw": 1009,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1010",
+"dataset": "amazon-movies-tv",
+"draw": 1010,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1011",
+"dataset": "amazon-movies-tv",
+"draw": 1011,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1012",
+"dataset": "amazon-movies-tv",
+"draw": 1012,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1013",
+"dataset": "amazon-movies-tv",
+"draw": 1013,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1014",
+"dataset": "amazon-movies-tv",
+"draw": 1014,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1015",
+"dataset": "amazon-movies-tv",
+"draw": 1015,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1016",
+"dataset": "amazon-movies-tv",
+"draw": 1016,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1017",
+"dataset": "amazon-movies-tv",
+"draw": 1017,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1018",
+"dataset": "amazon-movies-tv",
+"draw": 1018,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=2|d=1019",
+"dataset": "amazon-movies-tv",
+"draw": 1019,
+"N": 200,
+"k": 2
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1000",
+"dataset": "amazon-movies-tv",
+"draw": 1000,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1001",
+"dataset": "amazon-movies-tv",
+"draw": 1001,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1002",
+"dataset": "amazon-movies-tv",
+"draw": 1002,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1003",
+"dataset": "amazon-movies-tv",
+"draw": 1003,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1004",
+"dataset": "amazon-movies-tv",
+"draw": 1004,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1005",
+"dataset": "amazon-movies-tv",
+"draw": 1005,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1006",
+"dataset": "amazon-movies-tv",
+"draw": 1006,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1007",
+"dataset": "amazon-movies-tv",
+"draw": 1007,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1008",
+"dataset": "amazon-movies-tv",
+"draw": 1008,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1009",
+"dataset": "amazon-movies-tv",
+"draw": 1009,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1010",
+"dataset": "amazon-movies-tv",
+"draw": 1010,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1011",
+"dataset": "amazon-movies-tv",
+"draw": 1011,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1012",
+"dataset": "amazon-movies-tv",
+"draw": 1012,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1013",
+"dataset": "amazon-movies-tv",
+"draw": 1013,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1014",
+"dataset": "amazon-movies-tv",
+"draw": 1014,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1015",
+"dataset": "amazon-movies-tv",
+"draw": 1015,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1016",
+"dataset": "amazon-movies-tv",
+"draw": 1016,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1017",
+"dataset": "amazon-movies-tv",
+"draw": 1017,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1018",
+"dataset": "amazon-movies-tv",
+"draw": 1018,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=400|k=5|d=1019",
+"dataset": "amazon-movies-tv",
+"draw": 1019,
+"N": 400,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1000",
+"dataset": "amazon-movies-tv",
+"draw": 1000,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1001",
+"dataset": "amazon-movies-tv",
+"draw": 1001,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1002",
+"dataset": "amazon-movies-tv",
+"draw": 1002,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1003",
+"dataset": "amazon-movies-tv",
+"draw": 1003,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1004",
+"dataset": "amazon-movies-tv",
+"draw": 1004,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1005",
+"dataset": "amazon-movies-tv",
+"draw": 1005,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1006",
+"dataset": "amazon-movies-tv",
+"draw": 1006,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1007",
+"dataset": "amazon-movies-tv",
+"draw": 1007,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1008",
+"dataset": "amazon-movies-tv",
+"draw": 1008,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1009",
+"dataset": "amazon-movies-tv",
+"draw": 1009,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1010",
+"dataset": "amazon-movies-tv",
+"draw": 1010,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1011",
+"dataset": "amazon-movies-tv",
+"draw": 1011,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1012",
+"dataset": "amazon-movies-tv",
+"draw": 1012,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1013",
+"dataset": "amazon-movies-tv",
+"draw": 1013,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1014",
+"dataset": "amazon-movies-tv",
+"draw": 1014,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1015",
+"dataset": "amazon-movies-tv",
+"draw": 1015,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1016",
+"dataset": "amazon-movies-tv",
+"draw": 1016,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1017",
+"dataset": "amazon-movies-tv",
+"draw": 1017,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1018",
+"dataset": "amazon-movies-tv",
+"draw": 1018,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e1",
+"key": "e1|amazon-movies-tv|N=200|k=5|d=1019",
+"dataset": "amazon-movies-tv",
+"draw": 1019,
+"N": 200,
+"k": 5
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1000",
+"dataset": "kuairand-pure",
+"draw": 1000,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1001",
+"dataset": "kuairand-pure",
+"draw": 1001,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1002",
+"dataset": "kuairand-pure",
+"draw": 1002,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1003",
+"dataset": "kuairand-pure",
+"draw": 1003,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1004",
+"dataset": "kuairand-pure",
+"draw": 1004,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1005",
+"dataset": "kuairand-pure",
+"draw": 1005,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1006",
+"dataset": "kuairand-pure",
+"draw": 1006,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1007",
+"dataset": "kuairand-pure",
+"draw": 1007,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1008",
+"dataset": "kuairand-pure",
+"draw": 1008,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1009",
+"dataset": "kuairand-pure",
+"draw": 1009,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1010",
+"dataset": "kuairand-pure",
+"draw": 1010,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1011",
+"dataset": "kuairand-pure",
+"draw": 1011,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1012",
+"dataset": "kuairand-pure",
+"draw": 1012,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1013",
+"dataset": "kuairand-pure",
+"draw": 1013,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1014",
+"dataset": "kuairand-pure",
+"draw": 1014,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1015",
+"dataset": "kuairand-pure",
+"draw": 1015,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1016",
+"dataset": "kuairand-pure",
+"draw": 1016,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1017",
+"dataset": "kuairand-pure",
+"draw": 1017,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1018",
+"dataset": "kuairand-pure",
+"draw": 1018,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|kuairand-pure|N=1000|k=20|d=1019",
+"dataset": "kuairand-pure",
+"draw": 1019,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1000",
+"dataset": "ml-1m",
+"draw": 1000,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1001",
+"dataset": "ml-1m",
+"draw": 1001,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1002",
+"dataset": "ml-1m",
+"draw": 1002,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1003",
+"dataset": "ml-1m",
+"draw": 1003,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1004",
+"dataset": "ml-1m",
+"draw": 1004,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1005",
+"dataset": "ml-1m",
+"draw": 1005,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1006",
+"dataset": "ml-1m",
+"draw": 1006,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1007",
+"dataset": "ml-1m",
+"draw": 1007,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1008",
+"dataset": "ml-1m",
+"draw": 1008,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1009",
+"dataset": "ml-1m",
+"draw": 1009,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1010",
+"dataset": "ml-1m",
+"draw": 1010,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1011",
+"dataset": "ml-1m",
+"draw": 1011,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1012",
+"dataset": "ml-1m",
+"draw": 1012,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1013",
+"dataset": "ml-1m",
+"draw": 1013,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1014",
+"dataset": "ml-1m",
+"draw": 1014,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1015",
+"dataset": "ml-1m",
+"draw": 1015,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1016",
+"dataset": "ml-1m",
+"draw": 1016,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1017",
+"dataset": "ml-1m",
+"draw": 1017,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1018",
+"dataset": "ml-1m",
+"draw": 1018,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=1000|k=20|d=1019",
+"dataset": "ml-1m",
+"draw": 1019,
+"N": 1000,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=20|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=20|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=40|k=None|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1000",
+"dataset": "gowalla",
+"draw": 1000,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1001",
+"dataset": "gowalla",
+"draw": 1001,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1002",
+"dataset": "gowalla",
+"draw": 1002,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1003",
+"dataset": "gowalla",
+"draw": 1003,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1004",
+"dataset": "gowalla",
+"draw": 1004,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1005",
+"dataset": "gowalla",
+"draw": 1005,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1006",
+"dataset": "gowalla",
+"draw": 1006,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1007",
+"dataset": "gowalla",
+"draw": 1007,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1008",
+"dataset": "gowalla",
+"draw": 1008,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1009",
+"dataset": "gowalla",
+"draw": 1009,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1010",
+"dataset": "gowalla",
+"draw": 1010,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1011",
+"dataset": "gowalla",
+"draw": 1011,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1012",
+"dataset": "gowalla",
+"draw": 1012,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1013",
+"dataset": "gowalla",
+"draw": 1013,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1014",
+"dataset": "gowalla",
+"draw": 1014,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1015",
+"dataset": "gowalla",
+"draw": 1015,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1016",
+"dataset": "gowalla",
+"draw": 1016,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1017",
+"dataset": "gowalla",
+"draw": 1017,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1018",
+"dataset": "gowalla",
+"draw": 1018,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|gowalla|N=20|k=None|d=1019",
+"dataset": "gowalla",
+"draw": 1019,
+"N": 20,
+"k": null
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1000",
+"dataset": "amazon-software",
+"draw": 1000,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1001",
+"dataset": "amazon-software",
+"draw": 1001,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1002",
+"dataset": "amazon-software",
+"draw": 1002,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1003",
+"dataset": "amazon-software",
+"draw": 1003,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1004",
+"dataset": "amazon-software",
+"draw": 1004,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1005",
+"dataset": "amazon-software",
+"draw": 1005,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1006",
+"dataset": "amazon-software",
+"draw": 1006,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1007",
+"dataset": "amazon-software",
+"draw": 1007,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1008",
+"dataset": "amazon-software",
+"draw": 1008,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1009",
+"dataset": "amazon-software",
+"draw": 1009,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1010",
+"dataset": "amazon-software",
+"draw": 1010,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1011",
+"dataset": "amazon-software",
+"draw": 1011,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1012",
+"dataset": "amazon-software",
+"draw": 1012,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1013",
+"dataset": "amazon-software",
+"draw": 1013,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1014",
+"dataset": "amazon-software",
+"draw": 1014,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1015",
+"dataset": "amazon-software",
+"draw": 1015,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1016",
+"dataset": "amazon-software",
+"draw": 1016,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1017",
+"dataset": "amazon-software",
+"draw": 1017,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1018",
+"dataset": "amazon-software",
+"draw": 1018,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|amazon-software|N=400|k=10|d=1019",
+"dataset": "amazon-software",
+"draw": 1019,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1000",
+"dataset": "ml-1m",
+"draw": 1000,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1001",
+"dataset": "ml-1m",
+"draw": 1001,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1002",
+"dataset": "ml-1m",
+"draw": 1002,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1003",
+"dataset": "ml-1m",
+"draw": 1003,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1004",
+"dataset": "ml-1m",
+"draw": 1004,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1005",
+"dataset": "ml-1m",
+"draw": 1005,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1006",
+"dataset": "ml-1m",
+"draw": 1006,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1007",
+"dataset": "ml-1m",
+"draw": 1007,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1008",
+"dataset": "ml-1m",
+"draw": 1008,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1009",
+"dataset": "ml-1m",
+"draw": 1009,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1010",
+"dataset": "ml-1m",
+"draw": 1010,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1011",
+"dataset": "ml-1m",
+"draw": 1011,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1012",
+"dataset": "ml-1m",
+"draw": 1012,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1013",
+"dataset": "ml-1m",
+"draw": 1013,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1014",
+"dataset": "ml-1m",
+"draw": 1014,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1015",
+"dataset": "ml-1m",
+"draw": 1015,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1016",
+"dataset": "ml-1m",
+"draw": 1016,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1017",
+"dataset": "ml-1m",
+"draw": 1017,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1018",
+"dataset": "ml-1m",
+"draw": 1018,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e2",
+"key": "e2|ml-1m|N=400|k=10|d=1019",
+"dataset": "ml-1m",
+"draw": 1019,
+"N": 400,
+"k": 10
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=20|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 100,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=20|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 40,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=100|k=None|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 100,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=40|k=None|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 40,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=20|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 20,
+"k": 20
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1000",
+"dataset": "brightkite",
+"draw": 1000,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1001",
+"dataset": "brightkite",
+"draw": 1001,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1002",
+"dataset": "brightkite",
+"draw": 1002,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1003",
+"dataset": "brightkite",
+"draw": 1003,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1004",
+"dataset": "brightkite",
+"draw": 1004,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1005",
+"dataset": "brightkite",
+"draw": 1005,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1006",
+"dataset": "brightkite",
+"draw": 1006,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1007",
+"dataset": "brightkite",
+"draw": 1007,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1008",
+"dataset": "brightkite",
+"draw": 1008,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1009",
+"dataset": "brightkite",
+"draw": 1009,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1010",
+"dataset": "brightkite",
+"draw": 1010,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1011",
+"dataset": "brightkite",
+"draw": 1011,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1012",
+"dataset": "brightkite",
+"draw": 1012,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1013",
+"dataset": "brightkite",
+"draw": 1013,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1014",
+"dataset": "brightkite",
+"draw": 1014,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1015",
+"dataset": "brightkite",
+"draw": 1015,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1016",
+"dataset": "brightkite",
+"draw": 1016,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1017",
+"dataset": "brightkite",
+"draw": 1017,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1018",
+"dataset": "brightkite",
+"draw": 1018,
+"N": 20,
+"k": null
+},
+{
+"kind": "e1",
+"key": "e1|brightkite|N=20|k=None|d=1019",
+"dataset": "brightkite",
+"draw": 1019,
+"N": 20,
+"k": null
+}
+]

@@ -1,0 +1,15 @@
+dataset,model,N_star_light,N_star_middle,N_star_heavy,label_light,label_middle,label_heavy,N_max_tested,ratio_heavy_over_light,case,heavy_far_smaller,ratio_heavy_over_light_upper_bound,status
+ml-1m,knn100,100,100,100,100,100,100,1000,1,both have N*,False,,exploratory
+amazon-software,knn100,200,100,100,200,100,100,4000,0.5,both have N*,True,,exploratory
+gowalla,knn100,1000,1000,1000,"1,000","1,000","1,000",4000,1,both have N*,False,,exploratory
+kuairand-pure,knn100,100,100,100,100,100,100,2000,1,both have N*,False,,exploratory
+ml-latest,knn100,100,100,100,100,100,100,4000,1,both have N*,False,,exploratory
+amazon-video-games,knn100,,,2000,none,none,"2,000",2000,,light has no N* (ratio is an upper bound),not judged,1,exploratory
+amazon-musical-instruments,knn100,,,2000,none,none,"2,000",2000,,light has no N* (ratio is an upper bound),not judged,1,exploratory
+ml-1m,ease100,,,100,none,none,100,1000,,light has no N* (ratio is an upper bound),True,0.1,exploratory
+amazon-software,ease100,200,400,100,200,400,100,4000,0.5,both have N*,True,,exploratory
+gowalla,ease100,2000,2000,1000,"2,000","2,000","1,000",4000,0.5,both have N*,True,,exploratory
+kuairand-pure,ease100,1000,100,100,"1,000",100,100,2000,0.1,both have N*,True,,exploratory
+ml-latest,ease100,100,100,100,100,100,100,4000,1,both have N*,False,,exploratory
+amazon-video-games,ease100,,,,none,none,none,2000,,no N* in either tercile,not judged,,exploratory
+amazon-musical-instruments,ease100,,,,none,none,none,2000,,no N* in either tercile,not judged,,exploratory

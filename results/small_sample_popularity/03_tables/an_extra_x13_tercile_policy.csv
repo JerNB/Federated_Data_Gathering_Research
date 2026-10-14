@@ -1,0 +1,15 @@
+dataset,k_train,N,n_draws,model_light,model_middle,model_heavy,best_single_model,score_tercile_policy,score_best_single,gain,gain_ci_lo,gain_ci_hi,gain_split_half,counts,status
+ml-1m,all,1000,12,ease50,knn100,knn100,ease50,0.201186,0.199956,0.00122944,-3.15208e-05,0.00265226,0.00122944,False,exploratory
+amazon-software,all,4000,12,knn100,knn100,knn100,knn100,0.0833825,0.0833825,0,0,0,0,False,exploratory
+gowalla,all,4000,12,knn50,knn50,knn50,knn50,0.0241072,0.0241072,0,0,0,0,False,exploratory
+kuairand-pure,all,2000,12,knn100,knn100,knn100,knn100,0.128083,0.128083,0,0,0,0,False,exploratory
+ml-latest,all,4000,12,ease100,ease100,ease100,ease100,0.121746,0.121746,0,0,0,0,False,exploratory
+amazon-video-games,all,2000,12,knn50,ease50,knn100,knn50,0.00936833,0.00908917,0.000279167,-8.40069e-05,0.000689743,0.000205278,False,exploratory
+amazon-musical-instruments,all,2000,12,knn50,knn50,knn50,knn50,0.0238828,0.0238828,0,0,0,0,False,exploratory
+ml-1m,5,1000,12,knn50,knn50,knn50,knn50,0.182613,0.182613,0,0,0,-0.000151667,False,exploratory
+amazon-software,5,4000,12,knn100,knn100,knn100,knn100,0.0673786,0.0673786,0,0,0,0,False,exploratory
+gowalla,5,4000,12,pop,knn50,knn50,knn50,0.01337,0.0133331,3.69444e-05,-0.000143083,0.000247806,-0.000215833,False,exploratory
+kuairand-pure,5,2000,12,knn50,knn50,knn100,knn50,0.0934508,0.0934028,4.80556e-05,-0.000262854,0.000348382,-8.33333e-07,False,exploratory
+ml-latest,5,4000,12,knn100,knn100,knn100,knn100,0.0994675,0.0994675,0,0,0,0,False,exploratory
+amazon-video-games,5,2000,12,pop,pop,knn50,pop,0.00882917,0.00853139,0.000297778,7.83125e-05,0.000531437,0.000598889,True,exploratory
+amazon-musical-instruments,5,2000,12,pop,pop,pop,pop,0.0216822,0.0216822,0,0,0,0,False,exploratory
