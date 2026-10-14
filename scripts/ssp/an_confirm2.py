@@ -786,7 +786,13 @@ def run_c3(e2c, meta, cand, rng):
             return "n/a (k not in grid)"
         nmax = n_max_tested.get(ds)
         if st == "exists":
-            return str(int(value(ds, k)))
+            v = int(value(ds, k))
+            lo_n = min(info[(ds, k)]["ns_expected"]) if info[(ds, k)]["ns_expected"] else None
+            if lo_n is not None and v == lo_n:
+                return f"<= {v} (smallest tested)"     # left-censored: the crossover may be lower
+            if nmax is not None and v == nmax:
+                return f"{v} (= largest tested)"       # nothing larger to confirm 'stays above 0'
+            return str(v)
         if st == "none":
             return f"none (> {nmax})" if nmax is not None else "none (> N_max)"
         ind = info[(ds, k)]["indicative"]
@@ -1046,7 +1052,7 @@ def fig_c2(c2, e2c, meta, rng, path_a, path_b):
                title_fontsize=10)
     fig.suptitle(f"Draw-by-draw, random hold-out put more weight on personalisation than time hold-out in "
                  f"{pct(n['c_share_random_more'])} of {n['c_cells_eligible']} eligible cells "
-                 f"({n['c_cells_identical_splits']} cells with identical splits excluded); panels show k = all",
+                 f"({n['c_cells_identical_splits']} cells where both hold-outs chose the same model and weight in every draw excluded); panels show k = all",
                  fontsize=10, y=0.995)
     fig.tight_layout(rect=(0, 0.13, 1, 0.95))
     save(fig, path_b)
@@ -1211,7 +1217,7 @@ def build_verdicts(c1, c2, c3):
               f"popularity and personalised_time) in {pct(n['a_share_within_0p002'])} (rule: at least 90%), above that list with a paired 95% interval "
               f"above 0 in {pct(n['b_share_above_comparator'])} (rule: at least 20%), and the random hold-out put more weight on personalisation "
               f"than the time hold-out in more draws in {pct(n['c_share_random_more'])} of {n['c_cells_eligible']} eligible cells "
-              f"(rule: at least 70%; falsified at 50% or below; {n['c_cells_identical_splits']} cells with identical splits and "
+              f"(rule: at least 70%; falsified at 50% or below; {n['c_cells_identical_splits']} cells where both hold-outs chose the same model and weight in every draw and "
               f"{n['c_cells_few_untied']} cells with fewer than 5 untied draws were excluded). "
               f"Mean panel NDCG@100 of hybrid_random minus hybrid_time per cell: {fnum(n['mean_rand_minus_time_panel'], '+.4f')}. "
               f"Share of draws where the hybrid picked w = 0 or 1: {pct(n['share_draws_w01_time'])} (time), "
@@ -1219,7 +1225,7 @@ def build_verdicts(c1, c2, c3):
         zh = (f"在 {n['n_cells']} 个格子中，用时间留出法选权重的混合名单与较好的单一名单（取流行度与个性化(时间)两者格子均值较大者）相差不超过 0.002 的占 "
               f"{pct(n['a_share_within_0p002'])}（要求至少 90%）；配对 95% 区间在 0 之上的占 {pct(n['b_share_above_comparator'])}（要求至少 20%）；"
               f"在 {n['c_cells_eligible']} 个可判定的格子中，随机留出法比时间留出法给个性化更大权重的抽样次数占多数的格子占 {pct(n['c_share_random_more'])}"
-              f"（要求至少 70%，不超过 50% 则被证伪；另有 {n['c_cells_identical_splits']} 个格子因两种留出法划分相同被排除）。")
+              f"（要求至少 70%，不超过 50% 则被证伪；另有 {n['c_cells_identical_splits']} 个格子因两种留出法每次都选了相同的模型和权重、{n['c_cells_few_untied']} 个格子因不并列的抽样少于 5 次而被排除）。")
         en += pn_en
         zh += pn_zh
         if c2.get("why"):

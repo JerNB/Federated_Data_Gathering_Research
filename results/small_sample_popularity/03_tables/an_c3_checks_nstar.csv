@@ -1,0 +1,29 @@
+check,dataset,k,metric,N_star
+in_universe,ml-latest,10,standard,4000
+in_universe,ml-latest,10,in_universe,4000
+in_universe,ml-latest,all,standard,<= 100 (smallest tested)
+in_universe,ml-latest,all,in_universe,<= 100 (smallest tested)
+in_universe,ml-1m,10,standard,none (> 1000)
+in_universe,ml-1m,10,in_universe,none (> 1000)
+in_universe,ml-1m,all,standard,<= 100 (smallest tested)
+in_universe,ml-1m,all,in_universe,<= 100 (smallest tested)
+in_universe,amazon-video-games,10,standard,none (> 2000)
+in_universe,amazon-video-games,10,in_universe,none (> 2000)
+in_universe,amazon-video-games,all,standard,none (> 2000)
+in_universe,amazon-video-games,all,in_universe,2000
+in_universe,amazon-musical-instruments,10,standard,none (> 2000)
+in_universe,amazon-musical-instruments,10,in_universe,none (> 2000)
+in_universe,amazon-musical-instruments,all,standard,none (> 2000)
+in_universe,amazon-musical-instruments,all,in_universe,none (> 2000)
+in_universe,amazon-software,10,standard,400
+in_universe,amazon-software,10,in_universe,400
+in_universe,amazon-software,all,standard,<= 100 (smallest tested)
+in_universe,amazon-software,all,in_universe,<= 100 (smallest tested)
+in_universe,kuairand-pure,10,standard,2000
+in_universe,kuairand-pure,10,in_universe,2000
+in_universe,kuairand-pure,all,standard,<= 100 (smallest tested)
+in_universe,kuairand-pure,all,in_universe,<= 100 (smallest tested)
+in_universe,gowalla,10,standard,none (> 4000)
+in_universe,gowalla,10,in_universe,none (> 4000)
+in_universe,gowalla,all,standard,1000
+in_universe,gowalla,all,in_universe,1000

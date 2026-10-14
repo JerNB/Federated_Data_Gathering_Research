@@ -1,0 +1,17 @@
+[
+ {
+  "id": "X17",
+  "title_en": "Two speeds: the popularity list saturates early, a personalised model keeps improving (exploratory)",
+  "title_zh": "两种速度：热门榜很早就饱和，个性化模型还在继续提升（探索性）",
+  "rule": "In more than half of the judged datasets, the sample size where the popularity list reaches 95% of its own best is at least two grid steps below that of the best pure personalised model (k = all, panel NDCG@100).",
+  "verdict": "supported",
+  "numbers": {
+   "datasets_judged": 7,
+   "datasets_two_or_more_steps": 4,
+   "median_gain_pop": 1.215,
+   "median_gain_pers": 1.936
+  },
+  "reading_en": "From N=100 to the largest tested N, the popularity list's panel score grows by a median factor of 1.22 while the best personalised model's grows by 1.94; the popularity list reached 95% of its best at least two grid steps earlier in 4 of 7 datasets.",
+  "reading_zh": "从 N=100 到最大被测 N，热门榜在验证小组上的得分中位数增长 1.22 倍，而最好的纯个性化模型增长 1.94 倍；7 个数据集中，有 4 个里热门榜至少提早两个网格步就达到了自身最好成绩的 95%。"
+ }
+]

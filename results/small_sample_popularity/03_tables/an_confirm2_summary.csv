@@ -1,7 +1,7 @@
 claim,verdict,units,share_or_count,headline_1_name,headline_1,headline_2_name,headline_2,headline_3_name,headline_3
-C1,not testable,0,,pairs_positive,0,pooled_diff_A_ndcg100,,pooled_ci,
-C1:ht_A,not testable,0,,pairs_positive,0,pooled_diff_ht.A_ndcg100,,pooled_ci,"no judged (dataset, budget) pair with two usable cells"
-C1:count_Au,not testable,0,,pairs_positive,0,pooled_diff_count.Au_ndcg100,,pooled_ci,"no judged (dataset, budget) pair with two usable cells"
+C1,mixed,46,0.608696,pairs_positive,28,pooled_diff_A_ndcg100,0.000538145,pooled_ci,"[-0.0028, 0.0041]"
+C1:ht_A,not supported,46,0.195652,pairs_positive,9,pooled_diff_ht.A_ndcg100,-0.00818145,pooled_ci,"[-0.0116, -0.0050]"
+C1:count_Au,mixed,46,0.630435,pairs_positive,29,pooled_diff_count.Au_ndcg100,0.000459499,pooled_ci,"[-0.0031, 0.0044]"
 C1:boot_count_A,not testable,0,,pairs_positive,0,pooled_diff_count.A_ndcg100,,pooled_ci,e7.jsonl (arm boot) not found in the runs directory
 C1:boot_ht_A,not testable,0,,pairs_positive,0,pooled_diff_ht.A_ndcg100,,pooled_ci,e7.jsonl (arm boot) not found in the runs directory
 C1:boot_count_Au,not testable,0,,pairs_positive,0,pooled_diff_count.Au_ndcg100,,pooled_ci,e7.jsonl (arm boot) not found in the runs directory

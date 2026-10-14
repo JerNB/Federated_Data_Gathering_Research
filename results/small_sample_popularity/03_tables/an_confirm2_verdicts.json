@@ -3,15 +3,14 @@
     "id": "C1",
     "title_en": "C1. Breadth beats depth for estimating the list (amended rule A10)",
     "title_zh": "C1. 广度胜过深度：同样的记录总数，人多比每人记录多更能估准名单（修订规则 A10）",
-    "verdict": "not testable",
+    "verdict": "mixed",
     "numbers": {
-      "n_pairs": 0,
-      "n_positive": 0,
-      "share_positive": null,
+      "n_pairs": 46,
+      "n_positive": 28,
+      "share_positive": 0.6086956521739131,
       "n_expected_pairs": 46,
-      "n_missing_pairs": 46,
-      "datasets_present": [],
-      "datasets_missing": [
+      "n_missing_pairs": 0,
+      "datasets_present": [
         "ml-latest",
         "ml-1m",
         "amazon-video-games",
@@ -21,32 +20,76 @@
         "amazon-books",
         "gowalla",
         "brightkite",
-        "kuairand-pure",
+        "kuairand-pure"
+      ],
+      "datasets_missing": [
         "lastfm-1k"
       ],
       "restriction": "widest cell N <= 5% of the group (datasets.json n_pop)",
+      "pooled_A": {
+        "mean": 0.0005381449074073959,
+        "lo": -0.0028295315856481543,
+        "hi": 0.004072680127314803,
+        "lo_draws_only": -0.00226773998842593,
+        "hi_draws_only": 0.003186205659722227,
+        "n_pairs": 46,
+        "share_positive": 0.6086956521739131
+      },
+      "prediction_share_met": false,
+      "prediction_interval_excludes_zero": false,
+      "prediction_pooled_ge_0p005": false,
+      "falsifier_share": false,
+      "falsifier_interval_below_zero": false,
+      "indicative_verdict": "mixed",
+      "datasets_positive": 6,
+      "datasets_judged": 10,
+      "most_datasets_positive": true,
+      "per_dataset_share_positive": {
+        "ml-latest": 0.2222222222222222,
+        "ml-1m": 0.5,
+        "amazon-video-games": 0.75,
+        "amazon-musical-instruments": 1.0,
+        "amazon-software": 0.5,
+        "amazon-movies-tv": 0.6666666666666666,
+        "amazon-books": 0.6666666666666666,
+        "gowalla": 0.6666666666666666,
+        "brightkite": 0.6666666666666666,
+        "kuairand-pure": 1.0
+      },
       "secondary": {
         "ht_A": {
           "label": "ht vs Truth A",
           "column": "ht.A_ndcg100",
-          "verdict": "not testable",
-          "n_pairs": 0,
-          "n_positive": 0,
-          "share_positive": null,
-          "complete": false,
+          "verdict": "not supported",
+          "n_pairs": 46,
+          "n_positive": 9,
+          "share_positive": 0.1956521739130435,
+          "complete": true,
           "n_expected_pairs": 46,
-          "reason": "no judged (dataset, budget) pair with two usable cells"
+          "pooled_mean": -0.00818145462962963,
+          "pooled_lo": -0.011555388310185183,
+          "pooled_hi": -0.005029314155092593,
+          "datasets_positive": 0,
+          "datasets_judged": 10,
+          "most_datasets_positive": false,
+          "indicative_verdict": "not supported"
         },
         "count_Au": {
           "label": "count vs Truth A_u (user-normalised)",
           "column": "count.Au_ndcg100",
-          "verdict": "not testable",
-          "n_pairs": 0,
-          "n_positive": 0,
-          "share_positive": null,
-          "complete": false,
+          "verdict": "mixed",
+          "n_pairs": 46,
+          "n_positive": 29,
+          "share_positive": 0.6304347826086957,
+          "complete": true,
           "n_expected_pairs": 46,
-          "reason": "no judged (dataset, budget) pair with two usable cells"
+          "pooled_mean": 0.00045949861111109215,
+          "pooled_lo": -0.00309569299768518,
+          "pooled_hi": 0.004402880868055556,
+          "datasets_positive": 6,
+          "datasets_judged": 10,
+          "most_datasets_positive": true,
+          "indicative_verdict": "mixed"
         },
         "boot_count_A": {
           "label": "boot arm: count vs Truth A",
@@ -94,8 +137,8 @@
         }
       },
       "secondary_verdict_lines": [
-        "ht vs Truth A: not testable (no judged (dataset, budget) pair with two usable cells)",
-        "count vs Truth A_u (user-normalised): not testable (no judged (dataset, budget) pair with two usable cells)",
+        "ht vs Truth A: 9 of 46 pairs positive (20%), pooled breadth-minus-depth -0.0082 (95% interval -0.0116 to -0.0050) -> not supported",
+        "count vs Truth A_u (user-normalised): 29 of 46 pairs positive (63%), pooled breadth-minus-depth +0.0005 (95% interval -0.0031 to +0.0044) -> mixed",
         "boot arm: count vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory)",
         "boot arm: ht vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory)",
         "boot arm: count vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory)",
@@ -104,11 +147,10 @@
       "depth_finding": {
         "applies": false,
         "provisional": false
-      },
-      "reason": "no judged (dataset, budget) pair with two usable cells"
+      }
     },
-    "reading_en": "No judged (dataset, budget) pair with two usable cells (widest cell N at most 5% of the group) was found in the popularity stage (e1), so C1 could not be tested. Secondary lines: ht vs Truth A: not testable (no judged (dataset, budget) pair with two usable cells) | count vs Truth A_u (user-normalised): not testable (no judged (dataset, budget) pair with two usable cells) | boot arm: count vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: ht vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: count vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: ht vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory).",
-    "reading_zh": "流行度阶段（e1）里没有找到可比较的（数据集，预算）组合（最宽格 N 不超过群体 5%），所以无法检验 C1。",
+    "reading_en": "Literal test (plain count, Truth A, widest cell N at most 5% of the group): breadth beat depth in 28 of 46 judged dataset-budget pairs (61%; rule: at least 75% for support, at most 50% falsifies, in between is inconclusive). Pooled difference (breadth minus depth) +0.0005 NDCG@100 (95% interval -0.0028 to +0.0041; rule: interval above 0 and difference at least 0.005); 6 of 10 datasets have a positive mean difference (most datasets). Secondary lines (same contrast, same rule): ht vs Truth A: 9 of 46 pairs positive (20%), pooled breadth-minus-depth -0.0082 (95% interval -0.0116 to -0.0050) -> not supported | count vs Truth A_u (user-normalised): 29 of 46 pairs positive (63%), pooled breadth-minus-depth +0.0005 (95% interval -0.0031 to +0.0044) -> mixed | boot arm: count vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: ht vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: count vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory) | boot arm: ht vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory). Mechanism (A9): plain counts at small k estimate the user-normalised list A_u rather than Truth A, so compare the count.A, ht.A and count.Au columns before interpreting the sign.",
+    "reading_zh": "字面检验（普通计数，真值 A，只看最宽的格子 N 不超过群体 5% 的组合）：在 46 个组合中，人多的名单更好的有 28 个（61%；支持要求至少 75%，不超过 50% 则被证伪，介于两者之间为无定论）。合并差（人多 减 记录多）为 +0.0005（95% 区间 -0.0028 到 +0.0041；要求区间在 0 之上且差不小于 0.005）；10 个数据集中有 6 个平均差为正。次要结果（同一对比、同一规则）：ht vs Truth A: 9 of 46 pairs positive (20%), pooled breadth-minus-depth -0.0082 (95% interval -0.0116 to -0.0050) -> not supported；count vs Truth A_u (user-normalised): 29 of 46 pairs positive (63%), pooled breadth-minus-depth +0.0005 (95% interval -0.0031 to +0.0044) -> mixed；boot arm: count vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory)；boot arm: ht vs Truth A: not testable (e7.jsonl (arm boot) not found in the runs directory)；boot arm: count vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory)；boot arm: ht vs Truth A_u: not testable (e7.jsonl (arm boot) not found in the runs directory)。机制（A9）：k 较小时普通计数估计的是“按人归一化”的名单 A_u，而不是真值 A；解读符号之前请先对照 count.A、ht.A、count.Au 三列。",
     "rule": "difference (largest-N cell minus largest-k cell) of count NDCG@100 vs Truth A at equal budget N*k, judged only when the widest cell has N <= 5% of the group: supported if >= 75% of pairs positive AND pooled interval excludes 0 AND pooled difference >= 0.005; falsified if <= 50% positive OR pooled interval entirely below 0; otherwise inconclusive (mixed). Secondary lines: same contrast for ht.A, count.Au and the boot arm (no 5% restriction)"
   },
   {
@@ -175,8 +217,8 @@
       "min_draws": 20,
       "indicative_verdict": "not supported"
     },
-    "reading_en": "Over 132 cells, the time-hold-out hybrid was within 0.002 of the better pure list (comparator = the larger cell mean of popularity and personalised_time) in 70% (rule: at least 90%), above that list with a paired 95% interval above 0 in 25% (rule: at least 20%), and the random hold-out put more weight on personalisation than the time hold-out in more draws in 38% of 78 eligible cells (rule: at least 70%; falsified at 50% or below; 12 cells with identical splits and 42 cells with fewer than 5 untied draws were excluded). Mean panel NDCG@100 of hybrid_random minus hybrid_time per cell: +0.0003. Share of draws where the hybrid picked w = 0 or 1: 43% (time), 46% (random).",
-    "reading_zh": "在 132 个格子中，用时间留出法选权重的混合名单与较好的单一名单（取流行度与个性化(时间)两者格子均值较大者）相差不超过 0.002 的占 70%（要求至少 90%）；配对 95% 区间在 0 之上的占 25%（要求至少 20%）；在 78 个可判定的格子中，随机留出法比时间留出法给个性化更大权重的抽样次数占多数的格子占 38%（要求至少 70%，不超过 50% 则被证伪；另有 12 个格子因两种留出法划分相同被排除）。",
+    "reading_en": "Over 132 cells, the time-hold-out hybrid was within 0.002 of the better pure list (comparator = the larger cell mean of popularity and personalised_time) in 70% (rule: at least 90%), above that list with a paired 95% interval above 0 in 25% (rule: at least 20%), and the random hold-out put more weight on personalisation than the time hold-out in more draws in 38% of 78 eligible cells (rule: at least 70%; falsified at 50% or below; 12 cells where both hold-outs chose the same model and weight in every draw and 42 cells with fewer than 5 untied draws were excluded). Mean panel NDCG@100 of hybrid_random minus hybrid_time per cell: +0.0003. Share of draws where the hybrid picked w = 0 or 1: 43% (time), 46% (random).",
+    "reading_zh": "在 132 个格子中，用时间留出法选权重的混合名单与较好的单一名单（取流行度与个性化(时间)两者格子均值较大者）相差不超过 0.002 的占 70%（要求至少 90%）；配对 95% 区间在 0 之上的占 25%（要求至少 20%）；在 78 个可判定的格子中，随机留出法比时间留出法给个性化更大权重的抽样次数占多数的格子占 38%（要求至少 70%，不超过 50% 则被证伪；另有 12 个格子因两种留出法每次都选了相同的模型和权重、42 个格子因不并列的抽样少于 5 次而被排除）。",
     "rule": "(a) hybrid_time cell mean >= larger of (popularity, personalised_time) cell means - 0.002 in >= 90% of cells; (b) paired-by-draw 95% interval of hybrid_time minus that pure list above 0 in >= 20% of cells; (c) per cell, draws with hybrid_random.w > hybrid_time.w vs <, ties dropped, >= 5 untied draws, identical-split cells excluded; 'random more' larger in >= 70% of eligible cells. Supported if a>=90%, b>=20%, c>=70%; falsified if a<75% or b<10% or c<=50%; else mixed"
   },
   {
@@ -231,18 +273,18 @@
       ],
       "cand_share_note": "cand_share.csv found",
       "n_star_table": {
-        "ml-latest|k=10": "4000",
-        "ml-latest|k=all": "100",
+        "ml-latest|k=10": "4000 (= largest tested)",
+        "ml-latest|k=all": "<= 100 (smallest tested)",
         "ml-1m|k=10": "none (> 1000)",
-        "ml-1m|k=all": "100",
+        "ml-1m|k=all": "<= 100 (smallest tested)",
         "amazon-video-games|k=10": "none (> 2000)",
         "amazon-video-games|k=all": "none (> 2000)",
         "amazon-musical-instruments|k=10": "none (> 2000)",
         "amazon-musical-instruments|k=all": "none (> 2000)",
         "amazon-software|k=10": "400",
-        "amazon-software|k=all": "100",
-        "kuairand-pure|k=10": "2000",
-        "kuairand-pure|k=all": "100",
+        "amazon-software|k=all": "<= 100 (smallest tested)",
+        "kuairand-pure|k=10": "2000 (= largest tested)",
+        "kuairand-pure|k=all": "<= 100 (smallest tested)",
         "gowalla|k=10": "none (> 4000)",
         "gowalla|k=all": "1000"
       },

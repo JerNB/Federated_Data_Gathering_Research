@@ -1,0 +1,91 @@
+[
+ {
+  "id": "X3",
+  "title_en": "Exploratory X3: error falls as a power law with a floor, and the exponent follows the Zipf slope",
+  "title_zh": "探索性 X3：误差按带下限的幂律下降，且指数与齐普夫斜率同序",
+  "verdict": "mixed",
+  "numbers": {
+   "rho_A_ndcg100_all": 0.5363636363636364,
+   "n_A_ndcg100_all": 11,
+   "power_wins_A_ndcg100_all": "4/11",
+   "rho_A_ov100_all": 0.5636363636363637,
+   "n_A_ov100_all": 11,
+   "power_wins_A_ov100_all": "5/11",
+   "rho_A_rbo90_all": 0.6090909090909091,
+   "n_A_rbo90_all": 11,
+   "power_wins_A_rbo90_all": "5/11",
+   "rho_A_ndcg100_5": 0.7636363636363637,
+   "n_A_ndcg100_5": 11,
+   "power_wins_A_ndcg100_5": "0/11",
+   "rho_A_ov100_5": 0.7090909090909092,
+   "n_A_ov100_5": 11,
+   "power_wins_A_ov100_5": "0/11",
+   "rho_A_rbo90_5": 0.7000000000000001,
+   "n_A_rbo90_5": 11,
+   "power_wins_A_rbo90_5": "1/11",
+   "verdict_per_k_on_NDCG": {
+    "all": "not supported",
+    "5": "supported"
+   }
+  },
+  "reading_en": "Rank correlation between the NDCG@100 error exponent and the Zipf slope is 0.54 at k=all (n=11 datasets) and 0.76 at k=5 (n=11); the prediction was above 0.6. n is small, so these correlations are noisy.",
+  "reading_zh": "NDCG@100 误差指数与齐普夫斜率的等级相关：k=all 为 0.54（11 个数据集），k=5 为 0.76（11 个）；预测值是高于 0.6。数据集数量少，相关系数噪声大。",
+  "rule": "Rank correlation of the power-law exponent and the Zipf slope above 0.6 across the datasets (judged on NDCG@100 error, k=all and k=5; needs >= 5 converged datasets)"
+ },
+ {
+  "id": "X4",
+  "title_en": "Exploratory X4: the Dyer-Owen bound is conservative",
+  "title_zh": "探索性 X4：Dyer-Owen 界是保守的",
+  "verdict": "not testable",
+  "numbers": {
+   "n_datasets": 11,
+   "proxy_not_contradicted": 9,
+   "proxy_observed_exceeds_predicted": 0,
+   "proxy_uninformative": 0,
+   "datasets_where_ov10_reaches_0.8": 10,
+   "predicted_n_resolve_top10_range": [
+    15534.818585708887,
+    21065358.614677202
+   ],
+   "depth_at_N5000": {
+    "ml-latest": 2,
+    "ml-1m": 1,
+    "amazon-video-games": 1,
+    "amazon-musical-instruments": 2,
+    "amazon-software": 2,
+    "amazon-movies-tv": 1,
+    "amazon-books": 1,
+    "gowalla": 1,
+    "brightkite": 1,
+    "kuairand-pure": 2,
+    "lastfm-1k": 2
+   }
+  },
+  "reading_en": "The observed number of correctly ordered top items is not stored in the e1 rows, so the rule as written cannot be tested. Only a proxy is reported: the predicted resolve-N beside the N where top-10 overlap first reaches 0.8 (k=all). Top-10 overlap reached 0.8 within the sampled N in 10 of 11 datasets, while the bound predicts 15,535 to 21,065,359 people to settle the top-10; proxy outcome: 9 not contradicted, 0 exceeding, 0 uninformative.",
+  "reading_zh": "e1 数据中没有保存“实际排对的前几名数量”，因此该规则无法按原文检验。这里只给出代理指标：预测的“排清所需 N”与前 10 名重合度首次达到 0.8 的 N（k=all）。在已抽样的 N 范围内，11 个数据集中有 10 个的前 10 名重合度达到 0.8；而该界预测需要 15,535 到 21,065,359 人才能排清前 10 名；代理结果：9 个未被推翻，0 个超出预测，0 个无法判断。",
+  "rule": "Observed correctly ordered depth >= the Dyer-Owen bound at every N (cannot be read from e1 rows; proxy only)"
+ },
+ {
+  "id": "X10",
+  "title_en": "Exploratory X10: the drift between Truth A and Truth B is larger than the sampling error",
+  "title_zh": "探索性 X10：真相 A 与真相 B 之间的漂移大于抽样误差",
+  "verdict": "supported",
+  "numbers": {
+   "panel_ndcg_N1000_drift_exceeds": "10/10",
+   "panel_ndcg_Nmax_drift_exceeds": "10/11",
+   "panel_ndcg_median_drift_gap": 0.021149999999999995,
+   "panel_ndcg_median_sampling_gap_N1000": 0.00028616666666666634,
+   "ndcg_vs_truth_lists_N1000_drift_exceeds": "10/10",
+   "ndcg_vs_truth_lists_Nmax_drift_exceeds": "11/11",
+   "ndcg_vs_truth_lists_median_drift_gap": 0.65803,
+   "ndcg_vs_truth_lists_median_sampling_gap_N1000": 0.002859500000000037,
+   "verdict_per_measure": {
+    "panel_ndcg": "supported",
+    "ndcg_vs_truth_lists": "supported"
+   }
+  },
+  "reading_en": "On the panel score, the drift gap is larger than the sampling gap at N=1000 in 10/10 datasets (median drift 0.021 vs sampling 0.000); on NDCG@100 against the truth lists it is 10/10 (median drift 0.658 vs sampling 0.003). At the largest N the counts are 10/11 and 11/11.",
+  "reading_zh": "按面板得分，在 N=1000 时漂移差距大于抽样差距的数据集为 10/10（漂移中位数 0.021，抽样中位数 0.000）；按对真相榜单的 NDCG@100 为 10/10（漂移中位数 0.658，抽样中位数 0.003）。在最大 N 处分别为 10/11 和 11/11。",
+  "rule": "Drift gap (Truth A vs Truth B oracle lists) exceeds the sampling gap in most datasets (judged at N=1000, k=all; measures: panel NDCG@100 and NDCG@100 vs the truth lists)"
+ }
+]

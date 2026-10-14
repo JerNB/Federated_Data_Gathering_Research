@@ -20,6 +20,7 @@ FIG = "../../results/small_sample_popularity/04_figures"
 FAMILIES = [
     # (verdict file, id prefix label en, zh, figure prefixes)
     ("an_confirm2", "Confirmatory claims", "确认性假设", ("F2-C",)),
+    ("an_c3_checks", "Companions to C2/C3: in-universe score and smaller sample sizes", "C2/C3 的配套检验：候选集内得分与更小的样本量", ("an_c3_checks_",)),
     ("an_window", "Exploratory: stale list, shrinkage and recency weighting (window truth)", "探索性：旧榜、收缩和近期加权（窗口真相）", ("an_window_",)),
     ("an_explore_a", "Exploratory: scaling, theory check, drift", "探索性：缩放规律、理论检验、漂移", ("an_explore_a_",)),
     ("an_explore_b", "Exploratory: rank sets, biased samplers, recency, subgroups, privacy", "探索性：排名置信集、有偏抽样、近期偏好、子群体、隐私", ("an_explore_b_",)),

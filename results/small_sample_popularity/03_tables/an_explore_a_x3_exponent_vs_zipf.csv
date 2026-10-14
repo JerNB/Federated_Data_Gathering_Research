@@ -1,0 +1,7 @@
+k,measure,n_datasets_converged,spearman_rho_beta_vs_zipf_s,rho_boot_ci_lo,rho_boot_ci_hi,note,power_law_better_than_exponential_by_AIC,status
+all,A_ndcg100,11,0.536364,-0.234928,0.952153,n is small: rank correlation over datasets is very noisy,4/11,exploratory
+all,A_ov100,11,0.563636,-0.155856,0.962085,n is small: rank correlation over datasets is very noisy,5/11,exploratory
+all,A_rbo90,11,0.609091,-0.0901327,0.971564,n is small: rank correlation over datasets is very noisy,5/11,exploratory
+5,A_ndcg100,11,0.763636,0.149503,1,n is small: rank correlation over datasets is very noisy,0/11,exploratory
+5,A_ov100,11,0.709091,0.0746253,1,n is small: rank correlation over datasets is very noisy,0/11,exploratory
+5,A_rbo90,11,0.7,0.136112,0.950054,n is small: rank correlation over datasets is very noisy,1/11,exploratory

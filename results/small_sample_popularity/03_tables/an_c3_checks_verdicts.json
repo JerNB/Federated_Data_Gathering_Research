@@ -1,0 +1,20 @@
+[
+ {
+  "id": "C3-in-universe",
+  "title_en": "C3 crossover on the in-universe score (companion to C3, amendment A15)",
+  "title_zh": "C3 交叉样本量：候选集内得分版（C3 的配套，修订 A15）",
+  "verdict": "mixed",
+  "numbers": {
+   "exists_kall_standard": 5,
+   "exists_kall_in_universe": 6,
+   "exists_k10_standard": 3,
+   "exists_k10_in_universe": 3,
+   "series_that_change": [
+    "amazon-video-games/k=all"
+   ]
+  },
+  "reading_en": "Counting only relevant items a model can reach (inside the 1,500-item candidate universe), N* exists at k=all in 6 of 7 datasets (standard score: 5) and at k=10 in 3 (standard: 3). Series whose answer changes: amazon-video-games/k=all. This shows how much of the 'popularity wins' result is the candidate cap talking.",
+  "reading_zh": "只统计模型够得着的相关物品（候选集 1,500 个物品之内）时，k=all 下 7 个数据集中 6 个存在 N*（标准得分：5 个），k=10 下 3 个（标准：3 个）。结果发生变化的序列：amazon-video-games/k=all。这说明'热门更好'的结果有多少是候选集上限造成的。",
+  "rule": "Same N* rule as C3 (A12) on U_ndcg_in; companion, not a registered verdict."
+ }
+]

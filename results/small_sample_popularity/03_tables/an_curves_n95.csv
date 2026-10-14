@@ -1,0 +1,8 @@
+dataset,N_max,N95_popularity_panel,N95_personalised_panel,steps_apart,N95_list_vs_truthA,panel_gain_pop_last_vs_first,panel_gain_pers_last_vs_first
+amazon-musical-instruments,2000,1000,2000,1,1000,1.37,2.483
+amazon-software,4000,1000,2000,1,400,1.215,1.937
+amazon-video-games,2000,1000,2000,1,1000,1.524,1.936
+gowalla,4000,1000,4000,2,2000,1.664,4.431
+kuairand-pure,2000,200,1000,2,200,1.093,1.315
+ml-1m,1000,100,400,2,100,1.036,1.1
+ml-latest,4000,100,2000,4,100,1.041,1.389
