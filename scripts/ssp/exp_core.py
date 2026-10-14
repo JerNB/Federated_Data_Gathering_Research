@@ -154,7 +154,7 @@ def holdout_choice(S, row_ts, om, rng, mode: str):
     """
     Vi, Hi = E.split_hidden(S, rng, 0.25, row_ts if mode == "time" else None)
     if Vi.shape[0] < 10:
-        return None, None, None
+        return None, None, None, {}
     V = Vi[:, om].tocsr()
     cvp = type("P", (), {})()
     cvp.seen, cvp.rel, cvp.n_rel = V.toarray() > 0, Hi[:, om].toarray() > 0, np.asarray(Hi.sum(1)).ravel()
@@ -171,10 +171,12 @@ def holdout_choice(S, row_ts, om, rng, mode: str):
         table[("knn", 0.0, wt)] = E.rank_eval((1 - wt) * zv + wt * sc, cvp, rng=rng)["ndcg"]
     ok = {kk: v for kk, v in table.items() if np.isfinite(v)}
     if not ok:
-        return None, None, None
+        return None, None, None, {}
     best = max(ok, key=ok.get)
     pure = {kk: v for kk, v in ok.items() if kk[2] == 1.0}
-    return best, (max(pure, key=pure.get) if pure else best), ok[best]
+    pure_best = max(pure, key=pure.get) if pure else best
+    extras = {"pop": ok.get(("knn", 0.0, 0.0), float("nan")), "pers": ok[pure_best]}
+    return best, pure_best, ok[best], extras
 
 
 def run_e2(task: dict) -> dict:
@@ -218,9 +220,12 @@ def run_e2(task: dict) -> dict:
     can_cv = (k is None or k >= 3) and S.shape[0] >= 20
     if can_cv:
         for mode in ("random", "time"):
-            ch, pure, v = holdout_choice(S, row_ts, om, rng, mode)
+            ch, pure, v, extras = holdout_choice(S, row_ts, om, rng, mode)
             if ch is None:
                 continue
+            if task.get("cvgap"):   # in-sample estimate of "how much does personalising help", for the stop rule
+                row[f"cv_pop_{mode}"] = _r(extras["pop"])
+                row[f"cv_pers_{mode}"] = _r(extras["pers"])
             row[f"hyb_{mode}.w"], row[f"hyb_{mode}.model"] = ch[2], ch[0]
             row[f"hyb_{mode}.U_ndcg"] = _r(grid[ch])
             row[f"pers_{mode}.U_ndcg"] = _r(grid[(pure[0], pure[1], 1.0)])
@@ -456,7 +461,7 @@ def run_ref(task: dict) -> dict:
     return row
 
 
-KINDS = {"e1": run_e1, "e2": run_e2, "e2p": run_e2p, "e8": run_e8, "e4": run_e4, "e5": run_e5, "e6": run_e6, "ref": run_ref}
+KINDS = {"e1": run_e1, "e2": run_e2, "e2c": run_e2, "e2p": run_e2p, "e8": run_e8, "e4": run_e4, "e5": run_e5, "e6": run_e6, "ref": run_ref}
 
 
 def run_task(task: dict) -> dict:
