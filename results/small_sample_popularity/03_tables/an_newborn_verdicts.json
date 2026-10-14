@@ -1,0 +1,153 @@
+{
+ "Q1": {
+  "rule": "dropping newborn items removes >= 50% of the gap, more than random drop, in >= 8 of 11",
+  "met": 8,
+  "judged": 11,
+  "datasets": [
+   "ml-latest",
+   "amazon-video-games",
+   "amazon-musical-instruments",
+   "amazon-software",
+   "amazon-movies-tv",
+   "amazon-books",
+   "gowalla",
+   "brightkite"
+  ]
+ },
+ "Q2": {
+  "rule": "Spearman(head_newborn_share, staleness) >= 0.6",
+  "rho": 0.9272727272727275,
+  "n": 11
+ },
+ "Q3": {
+  "rule": ">=0.40 in >=4 of 5 Amazon, <0.10 in gowalla and lastfm-1k",
+  "amazon_met": 5,
+  "low": {
+   "gowalla": false,
+   "lastfm-1k": true
+  }
+ },
+ "per_dataset": {
+  "ml-latest": {
+   "head_newborn_share": 0.24761994823589942,
+   "fresh_score": 0.9442272524417978,
+   "gap_full": 0.10879594804324762,
+   "gap_survivors": -0.12183703148388657,
+   "gap_random": 0.06850484237192615,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 2.1198673634008407,
+   "gap_removed_by_random_drop": 0.37033645458289766,
+   "staleness": 0.11522220711369882
+  },
+  "ml-1m": {
+   "head_newborn_share": 0.007495379452724604,
+   "fresh_score": 0.9023209067851508,
+   "gap_full": 0.01373771554585096,
+   "gap_survivors": 0.011897785223067073,
+   "gap_random": 0.011896505090333185,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 0.1339327719112352,
+   "gap_removed_by_random_drop": 0.1340259557255029,
+   "staleness": 0.015224866721526613
+  },
+  "amazon-video-games": {
+   "head_newborn_share": 0.9515667896550885,
+   "fresh_score": 0.47057795626644294,
+   "gap_full": 0.34127165639515544,
+   "gap_survivors": -0.3536205328786863,
+   "gap_random": 0.10043292573190368,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 2.036184887470503,
+   "gap_removed_by_random_drop": 0.7057097363643546,
+   "staleness": 0.7252181107308949
+  },
+  "amazon-musical-instruments": {
+   "head_newborn_share": 0.5184861721967504,
+   "fresh_score": 0.6781103740142896,
+   "gap_full": 0.30767899974072666,
+   "gap_survivors": 0.01679412891285753,
+   "gap_random": 0.2093182130139109,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 0.9454167202603703,
+   "gap_removed_by_random_drop": 0.31968638356762047,
+   "staleness": 0.4537299701217121
+  },
+  "amazon-software": {
+   "head_newborn_share": 0.9370197292676128,
+   "fresh_score": 0.4519347359142866,
+   "gap_full": 0.38616786644642714,
+   "gap_survivors": -0.23222120391282555,
+   "gap_random": 0.2016859327854154,
+   "n_origins": 5,
+   "gap_removed_by_dropping_newborn": 1.6013478181127778,
+   "gap_removed_by_random_drop": 0.47772471427682817,
+   "staleness": 0.8544770644044216
+  },
+  "amazon-movies-tv": {
+   "head_newborn_share": 0.9782945655917321,
+   "fresh_score": 0.3645268076377233,
+   "gap_full": 0.26834035771860537,
+   "gap_survivors": -0.25157683636107253,
+   "gap_random": 0.18328522616292264,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 1.9375288849576928,
+   "gap_removed_by_random_drop": 0.3169673480307261,
+   "staleness": 0.7361333984119196
+  },
+  "amazon-books": {
+   "head_newborn_share": 0.973774323701035,
+   "fresh_score": 0.3610683020065941,
+   "gap_full": 0.3114306148453735,
+   "gap_survivors": -0.1158766026429184,
+   "gap_random": 0.18588526057624305,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 1.372078392808143,
+   "gap_removed_by_random_drop": 0.4031246392762773,
+   "staleness": 0.8625254920319366
+  },
+  "gowalla": {
+   "head_newborn_share": 0.4745350430508868,
+   "fresh_score": 0.5705116912734133,
+   "gap_full": 0.25221851142821705,
+   "gap_survivors": 0.12505953945682438,
+   "gap_random": 0.15722945356874635,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 0.5041619318555961,
+   "gap_removed_by_random_drop": 0.37661414034038965,
+   "staleness": 0.44209174901438314
+  },
+  "brightkite": {
+   "head_newborn_share": 0.3134576397678368,
+   "fresh_score": 0.5682439340726169,
+   "gap_full": 0.13784562287816404,
+   "gap_survivors": 0.026578678731455238,
+   "gap_random": 0.11238771425483192,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 0.8071851816800377,
+   "gap_removed_by_random_drop": 0.18468420027985433,
+   "staleness": 0.24258177626327027
+  },
+  "kuairand-pure": {
+   "head_newborn_share": 0.0009212344541685859,
+   "fresh_score": 0.7185597236872266,
+   "gap_full": 0.03438821369394758,
+   "gap_survivors": 0.03182715741390435,
+   "gap_random": 0.03290659311775426,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 0.07447482741722011,
+   "gap_removed_by_random_drop": 0.043085127636452,
+   "staleness": 0.04785714055539803
+  },
+  "lastfm-1k": {
+   "head_newborn_share": 0.012095920127482429,
+   "fresh_score": 0.7505853584876744,
+   "gap_full": 0.02224428569931859,
+   "gap_survivors": 0.01252355021824672,
+   "gap_random": 0.026337667014282144,
+   "n_origins": 8,
+   "gap_removed_by_dropping_newborn": 0.4369992191464096,
+   "gap_removed_by_random_drop": -0.18401945426770627,
+   "staleness": 0.029635917418023912
+  }
+ }
+}
