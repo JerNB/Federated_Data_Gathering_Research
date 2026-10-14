@@ -1,0 +1,13 @@
+{
+  "max_workers": 4,
+  "fan_soft": 1750,
+  "fan_hard": 2100,
+  "temp_soft": 72.0,
+  "temp_hard": 78.0,
+  "ram_budget_gb": 8.0,
+  "swap_growth_gb": 2.0,
+  "min_free_disk_gb": 10.0,
+  "up_after_s": 120,
+  "cool_after_s": 45,
+  "poll_s": 3.0
+}

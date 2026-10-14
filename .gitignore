@@ -19,3 +19,10 @@ venv/
 
 # macOS
 .DS_Store
+
+# small-sample popularity study
+datasets/raw/
+datasets/npz/
+results/small_sample_popularity/**/*.jsonl
+results/small_sample_popularity/**/raw/
+datasets/frames/
