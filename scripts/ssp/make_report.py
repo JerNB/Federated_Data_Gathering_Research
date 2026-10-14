@@ -24,7 +24,8 @@ FAMILIES = [
     ("an_explore_a", "Exploratory: scaling, theory check, drift", "探索性：缩放规律、理论检验、漂移", ("an_explore_a_",)),
     ("an_explore_b", "Exploratory: rank sets, biased samplers, recency, subgroups, privacy", "探索性：排名置信集、有偏抽样、近期偏好、子群体、隐私", ("an_explore_b_",)),
     ("an_hunt", "Exploratory: surprise hunt with fresh-seed replication", "探索性：惊喜搜索与新种子复现", ("hunt_",)),
-    ("an_extra", "Exploratory: profile length vs training depth, self-assessment", "探索性：历史长度与训练深度、自我评估", ("an_extra_",)),
+    ("an_extra", "Exploratory: profile length vs training depth, self-assessment, unbiased vs plain count", "探索性：历史长度与训练深度、自我评估、无偏与朴素计数", ("an_extra_",)),
+    ("an_stoprule", "Exploratory: a stop rule from inside the sample", "探索性：来自样本内部的切换规则", ("an_stoprule_",)),
 ]
 
 BADGE_EN = {"supported": "SUPPORTED", "not supported": "NOT SUPPORTED", "mixed": "MIXED", "not testable": "NOT TESTABLE"}
