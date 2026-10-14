@@ -9,7 +9,18 @@ to build a ranked list of items. **How good is that list, how many people do you
 recommender trained on the same sample worth more than just showing the popularity list?**
 We treat the popularity list like a statistic (a mean, a variance), except the thing estimated is a ranking.
 
-<!-- HEADLINE -->
+## Headline
+
+- A popularity list from a few hundred people is already close to the full-community list in soft quality. **The bigger
+  gap is time, not sample size:** the community's earlier list is far from its later list in all 10 datasets we could
+  judge, a recent-window sample predicts the later list better than a uniform sample in 10 of 11, and recency-weighted
+  counts beat plain counts in 80% of cells. The repair is small (about 2% of the gap on the list), so drift is the
+  open problem.
+- A personalized model trained on the same sample is still improving at the largest tested size, while the popularity
+  list saturates much earlier; in a post-hoc small-N stage it beats popularity from as few as 20 people in 3 of 7
+  datasets.
+- The three pre-registered predictions did **not** hold as written (C1 inconclusive, C2 falsified, C3 mixed); the reasons
+  and our checks of our own explanations are in [`02_results_en.md`](02_results_en.md) section 2.
 
 ## 2. Read in this order
 

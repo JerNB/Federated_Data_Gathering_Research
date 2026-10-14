@@ -3,7 +3,7 @@
   "id": "x11_c1_nonmonotone",
   "title_en": "Surprise hunt, pattern class 1 non-monotone learning curve (exploratory)",
   "title_zh": "意外发现搜索：1 学习曲线随样本变大反而变差（探索性）",
-  "verdict": "not testable",
+  "verdict": "supported",
   "numbers": {
    "scanned": 24159,
    "skipped_untestable": 144,
@@ -11,28 +11,28 @@
    "nominal_p_lt_0.05": 765,
    "significant_q_le_0.10": 443,
    "rerun_on_fresh": 20,
-   "replicated": 0,
+   "replicated": 20,
    "total_hypotheses_all_classes": 40356
   },
-  "reading_en": "Of 24159 hypotheses scanned (40356 in all classes), 443 pass the false-discovery control (q <= 0.10); they have NOT yet been re-run on fresh draws, so none is a finding.",
-  "reading_zh": "共扫描24159个这类假设（所有类别合计40356个），443个通过假发现率控制(q<=0.10)；尚未用新抽样重跑，所以都还不算发现。",
+  "reading_en": "Of 24159 hypotheses scanned (40356 in all classes), 443 pass the false-discovery control; 20 of the 20 re-run on fresh draws replicated (same sign, one-sided p < 0.05). Only the replicated ones count as findings; all remain exploratory. eligible=256 tested_for_replication=20 ",
+  "reading_zh": "共扫描24159个这类假设（所有类别合计40356个），443个通过假发现率控制；用新抽样重跑的20个中有20个重现（同方向且单侧p<0.05）。只有重现的才算发现，且仍属探索性。",
   "rule": "X11 (exploratory, pre-registered): scan every curve for non-monotone shapes and sign reversals; Benjamini-Hochberg q=0.10 within the class; each hit re-run on fresh seeds, reported as found / replicated / not replicated. Class verdict rule (fixed before use): supported = at least half of ALL FDR hits of the class replicate (hits that could not be re-run count as not replicated); mixed = some but fewer; not supported = no FDR hit or none replicated; not testable = hits not yet re-run or cells missing.",
   "examples": [
    {
     "cid": "C1-00000",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On brightkite (subgroup activity:2, k=5), the NDCG@100 against the reference list of the 75% blend of sample and global falls from 0.433 at N=10 to 0.098 at N=20, although more people were sampled.",
     "reading_zh": "在brightkite（子群activity:2，每人5条）上，样本与全体榜75%混合的榜的对参考榜的NDCG@100从N=10时的0.433降到N=20时的0.098，尽管抽的人更多了。"
    },
    {
     "cid": "C1-00001",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On brightkite (subgroup activity:2, k=5), the NDCG@100 against the reference list of the 50% blend of sample and global falls from 0.433 at N=10 to 0.098 at N=20, although more people were sampled.",
     "reading_zh": "在brightkite（子群activity:2，每人5条）上，样本与全体榜50%混合的榜的对参考榜的NDCG@100从N=10时的0.433降到N=20时的0.098，尽管抽的人更多了。"
    },
    {
     "cid": "C1-00002",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On brightkite (subgroup activity:2, k=5), the NDCG@100 against the reference list of the 25% blend of sample and global falls from 0.433 at N=10 to 0.098 at N=20, although more people were sampled.",
     "reading_zh": "在brightkite（子群activity:2，每人5条）上，样本与全体榜25%混合的榜的对参考榜的NDCG@100从N=10时的0.433降到N=20时的0.098，尽管抽的人更多了。"
    }
@@ -53,8 +53,8 @@
    "replicated": 0,
    "total_hypotheses_all_classes": 40356
   },
-  "reading_en": "Of 1872 hypotheses scanned (40356 in all classes), 253 pass the false-discovery control (q <= 0.10); they have NOT yet been re-run on fresh draws, so none is a finding. e2 rows hold only panel (U) metrics, so 'hyb_time - pop' cannot be compared with a Truth-A metric: that half of the pre-registered pair is not testable on these data.",
-  "reading_zh": "共扫描1872个这类假设（所有类别合计40356个），253个通过假发现率控制(q<=0.10)；尚未用新抽样重跑，所以都还不算发现。",
+  "reading_en": "Of 1872 hypotheses scanned, 253 pass the false-discovery control but none could be re-run because the fresh data lack their cells; none is a finding. eligible=0 tested_for_replication=0 e2 rows hold only panel (U) metrics, so 'hyb_time - pop' cannot be compared with a Truth-A metric: that half of the pre-registered pair is not testable on these data.",
+  "reading_zh": "共扫描1872个，253个通过假发现率控制，但新数据里缺少对应格子，无法重跑，因此都不算发现。",
   "rule": "X11 (exploratory, pre-registered): scan every curve for non-monotone shapes and sign reversals; Benjamini-Hochberg q=0.10 within the class; each hit re-run on fresh seeds, reported as found / replicated / not replicated. Class verdict rule (fixed before use): supported = at least half of ALL FDR hits of the class replicate (hits that could not be re-run count as not replicated); mixed = some but fewer; not supported = no FDR hit or none replicated; not testable = hits not yet re-run or cells missing.",
   "examples": []
  },
@@ -62,7 +62,7 @@
   "id": "x11_c3_reversal",
   "title_en": "Surprise hunt, pattern class 3 estimator order reversal (exploratory)",
   "title_zh": "意外发现搜索：3 两种估计方法随样本变大互换名次（探索性）",
-  "verdict": "not testable",
+  "verdict": "supported",
   "numbers": {
    "scanned": 1630,
    "skipped_untestable": 12,
@@ -70,28 +70,28 @@
    "nominal_p_lt_0.05": 342,
    "significant_q_le_0.10": 325,
    "rerun_on_fresh": 6,
-   "replicated": 0,
+   "replicated": 6,
    "total_hypotheses_all_classes": 40356
   },
-  "reading_en": "Of 1630 hypotheses scanned (40356 in all classes), 325 pass the false-discovery control (q <= 0.10); they have NOT yet been re-run on fresh draws, so none is a finding.",
-  "reading_zh": "共扫描1630个这类假设（所有类别合计40356个），325个通过假发现率控制(q<=0.10)；尚未用新抽样重跑，所以都还不算发现。",
+  "reading_en": "Of 1630 hypotheses scanned (40356 in all classes), 325 pass the false-discovery control; 6 of the 6 re-run on fresh draws replicated (same sign, one-sided p < 0.05). Only the replicated ones count as findings; all remain exploratory. eligible=6 tested_for_replication=6 ",
+  "reading_zh": "共扫描1630个这类假设（所有类别合计40356个），325个通过假发现率控制；用新抽样重跑的6个中有6个重现（同方向且单侧p<0.05）。只有重现的才算发现，且仍属探索性。",
   "rule": "X11 (exploratory, pre-registered): scan every curve for non-monotone shapes and sign reversals; Benjamini-Hochberg q=0.10 within the class; each hit re-run on fresh seeds, reported as found / replicated / not replicated. Class verdict rule (fixed before use): supported = at least half of ALL FDR hits of the class replicate (hits that could not be re-run count as not replicated); mixed = some but fewer; not supported = no FDR hit or none replicated; not testable = hits not yet re-run or cells missing.",
   "examples": [
    {
     "cid": "C3-00027",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On ml-latest (k=5), EASE with 50% weight on personalisation beats the random-hidden hybrid on panel NDCG@100 on real later choices at N=100 (+0.016) but trails it at N=2000 (-0.010).",
     "reading_zh": "在ml-latest（每人5条）上，就留出人群真实后续选择上的NDCG@100而言，N=100时EASE个性化模型(个性化权重50%)优于按随机隐藏选权重的混合榜（+0.016），N=2000时则劣于它（-0.010）。"
    },
    {
     "cid": "C3-00030",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On ml-1m (k=5), item-kNN with 50% weight on personalisation beats the random-hidden hybrid on panel NDCG@100 on real later choices at N=100 (+0.035) but trails it at N=1000 (-0.032).",
     "reading_zh": "在ml-1m（每人5条）上，就留出人群真实后续选择上的NDCG@100而言，N=100时近邻(kNN)个性化模型(个性化权重50%)优于按随机隐藏选权重的混合榜（+0.035），N=1000时则劣于它（-0.032）。"
    },
    {
     "cid": "C3-00031",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On ml-1m (k=5), EASE with 50% weight on personalisation beats the random-hidden hybrid on panel NDCG@100 on real later choices at N=100 (+0.035) but trails it at N=1000 (-0.032).",
     "reading_zh": "在ml-1m（每人5条）上，就留出人群真实后续选择上的NDCG@100而言，N=100时EASE个性化模型(个性化权重50%)优于按随机隐藏选权重的混合榜（+0.035），N=1000时则劣于它（-0.032）。"
    }
@@ -101,7 +101,7 @@
   "id": "x11_c4_interaction",
   "title_en": "Surprise hunt, pattern class 4 interaction (N x k, breadth vs depth) (exploratory)",
   "title_zh": "意外发现搜索：4 交互作用（人数×每人条数；广度与深度）（探索性）",
-  "verdict": "not testable",
+  "verdict": "supported",
   "numbers": {
    "scanned": 7647,
    "skipped_untestable": 70,
@@ -109,28 +109,28 @@
    "nominal_p_lt_0.05": 2061,
    "significant_q_le_0.10": 1802,
    "rerun_on_fresh": 20,
-   "replicated": 0,
+   "replicated": 20,
    "total_hypotheses_all_classes": 40356
   },
-  "reading_en": "Of 7647 hypotheses scanned (40356 in all classes), 1802 pass the false-discovery control (q <= 0.10); they have NOT yet been re-run on fresh draws, so none is a finding.",
-  "reading_zh": "共扫描7647个这类假设（所有类别合计40356个），1802个通过假发现率控制(q<=0.10)；尚未用新抽样重跑，所以都还不算发现。",
+  "reading_en": "Of 7647 hypotheses scanned (40356 in all classes), 1802 pass the false-discovery control; 20 of the 20 re-run on fresh draws replicated (same sign, one-sided p < 0.05). Only the replicated ones count as findings; all remain exploratory. eligible=806 tested_for_replication=20 ",
+  "reading_zh": "共扫描7647个这类假设（所有类别合计40356个），1802个通过假发现率控制；用新抽样重跑的20个中有20个重现（同方向且单侧p<0.05）。只有重现的才算发现，且仍属探索性。",
   "rule": "X11 (exploratory, pre-registered): scan every curve for non-monotone shapes and sign reversals; Benjamini-Hochberg q=0.10 within the class; each hit re-run on fresh seeds, reported as found / replicated / not replicated. Class verdict rule (fixed before use): supported = at least half of ALL FDR hits of the class replicate (hits that could not be re-run count as not replicated); mixed = some but fewer; not supported = no FDR hit or none replicated; not testable = hits not yet re-run or cells missing.",
   "examples": [
    {
     "cid": "C4-00009",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On lastfm-1k, going from N=100 to N=200 changes the list quality against Truth A (NDCG@100) of the plain count list by a different amount when k=5 than when k=all (difference of differences +0.155).",
     "reading_zh": "在lastfm-1k上，从N=100增到N=200，朴素计数榜的对真值A的榜单质量(NDCG@100)变化量在每人5条与每人all条时不同（差之差+0.155）。"
    },
    {
     "cid": "C4-00013",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On lastfm-1k, going from N=100 to N=200 changes the list quality against Truth A (NDCG@100) of the lower-bound list by a different amount when k=5 than when k=all (difference of differences +0.151).",
     "reading_zh": "在lastfm-1k上，从N=100增到N=200，下界榜的对真值A的榜单质量(NDCG@100)变化量在每人5条与每人all条时不同（差之差+0.151）。"
    },
    {
     "cid": "C4-00022",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "On amazon-video-games, going from N=40 to N=100 changes the list quality against Truth A (NDCG@100) of the lower-bound list by a different amount when k=5 than when k=10 (difference of differences -0.148).",
     "reading_zh": "在amazon-video-games上，从N=40增到N=100，下界榜的对真值A的榜单质量(NDCG@100)变化量在每人5条与每人10条时不同（差之差-0.148）。"
    }
@@ -140,7 +140,7 @@
   "id": "x11_c5_heterogeneity",
   "title_en": "Surprise hunt, pattern class 5 cross-dataset heterogeneity (exploratory)",
   "title_zh": "意外发现搜索：5 不同数据集上效果方向相反（探索性）",
-  "verdict": "not testable",
+  "verdict": "supported",
   "numbers": {
    "scanned": 482,
    "skipped_untestable": 0,
@@ -148,28 +148,28 @@
    "nominal_p_lt_0.05": 192,
    "significant_q_le_0.10": 189,
    "rerun_on_fresh": 4,
-   "replicated": 0,
+   "replicated": 4,
    "total_hypotheses_all_classes": 40356
   },
-  "reading_en": "Of 482 hypotheses scanned (40356 in all classes), 189 pass the false-discovery control (q <= 0.10); they have NOT yet been re-run on fresh draws, so none is a finding.",
-  "reading_zh": "共扫描482个这类假设（所有类别合计40356个），189个通过假发现率控制(q<=0.10)；尚未用新抽样重跑，所以都还不算发现。",
+  "reading_en": "Of 482 hypotheses scanned (40356 in all classes), 189 pass the false-discovery control; 4 of the 4 re-run on fresh draws replicated (same sign, one-sided p < 0.05). Only the replicated ones count as findings; all remain exploratory. eligible=4 tested_for_replication=4 ",
+  "reading_zh": "共扫描482个这类假设（所有类别合计40356个），189个通过假发现率控制；用新抽样重跑的4个中有4个重现（同方向且单侧p<0.05）。只有重现的才算发现，且仍属探索性。",
   "rule": "X11 (exploratory, pre-registered): scan every curve for non-monotone shapes and sign reversals; Benjamini-Hochberg q=0.10 within the class; each hit re-run on fresh seeds, reported as found / replicated / not replicated. Class verdict rule (fixed before use): supported = at least half of ALL FDR hits of the class replicate (hits that could not be re-run count as not replicated); mixed = some but fewer; not supported = no FDR hit or none replicated; not testable = hits not yet re-run or cells missing.",
   "examples": [
    {
     "cid": "C5-00026",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "For knn.w100-pop on panel NDCG@100 on real later choices at N=2000, k=10, the effect is +0.027 on amazon-software but -0.010 on gowalla.",
     "reading_zh": "在N=2000、每人10条时，“近邻(kNN)个性化模型(个性化权重100%)减热门榜”在留出人群真实后续选择上的NDCG@100上，于amazon-software为+0.027，于gowalla为-0.010，方向相反。"
    },
    {
     "cid": "C5-00032",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "For ease.w100-pop on panel NDCG@100 on real later choices at N=2000, k=10, the effect is +0.014 on amazon-software but -0.017 on ml-latest.",
     "reading_zh": "在N=2000、每人10条时，“EASE个性化模型(个性化权重100%)减热门榜”在留出人群真实后续选择上的NDCG@100上，于amazon-software为+0.014，于ml-latest为-0.017，方向相反。"
    },
    {
     "cid": "C5-00041",
-    "status": "not run",
+    "status": "replicated",
     "reading_en": "For ease.w50-pop on panel NDCG@100 on real later choices at N=1000, k=20, the effect is +0.012 on kuairand-pure but -0.011 on ml-1m.",
     "reading_zh": "在N=1000、每人20条时，“EASE个性化模型(个性化权重50%)减热门榜”在留出人群真实后续选择上的NDCG@100上，于kuairand-pure为+0.012，于ml-1m为-0.011，方向相反。"
    }
@@ -190,7 +190,7 @@
    "replicated": 0,
    "total_hypotheses_all_classes": 40356
   },
-  "reading_en": "Of 993 hypotheses scanned (40356 in all classes), none survives the false-discovery control, so nothing of this kind is reported as a finding.",
+  "reading_en": "Of 993 hypotheses scanned (40356 in all classes), none survives the false-discovery control, so nothing of this kind is reported as a finding. eligible=0 tested_for_replication=0 ",
   "reading_zh": "共扫描993个这类假设（所有类别合计40356个），没有一个通过假发现率控制，因此不作为发现报告。",
   "rule": "X11 (exploratory, pre-registered): scan every curve for non-monotone shapes and sign reversals; Benjamini-Hochberg q=0.10 within the class; each hit re-run on fresh seeds, reported as found / replicated / not replicated. Class verdict rule (fixed before use): supported = at least half of ALL FDR hits of the class replicate (hits that could not be re-run count as not replicated); mixed = some but fewer; not supported = no FDR hit or none replicated; not testable = hits not yet re-run or cells missing.",
   "examples": []
@@ -210,8 +210,8 @@
    "replicated": 0,
    "total_hypotheses_all_classes": 40356
   },
-  "reading_en": "Of 2442 hypotheses scanned (40356 in all classes), 27 pass the false-discovery control (q <= 0.10); they have NOT yet been re-run on fresh draws, so none is a finding.",
-  "reading_zh": "共扫描2442个这类假设（所有类别合计40356个），27个通过假发现率控制(q<=0.10)；尚未用新抽样重跑，所以都还不算发现。",
+  "reading_en": "Of 2442 hypotheses scanned, 27 pass the false-discovery control but none could be re-run because the fresh data lack their cells; none is a finding. eligible=0 tested_for_replication=0 ",
+  "reading_zh": "共扫描2442个，27个通过假发现率控制，但新数据里缺少对应格子，无法重跑，因此都不算发现。",
   "rule": "X11 (exploratory, pre-registered): scan every curve for non-monotone shapes and sign reversals; Benjamini-Hochberg q=0.10 within the class; each hit re-run on fresh seeds, reported as found / replicated / not replicated. Class verdict rule (fixed before use): supported = at least half of ALL FDR hits of the class replicate (hits that could not be re-run count as not replicated); mixed = some but fewer; not supported = no FDR hit or none replicated; not testable = hits not yet re-run or cells missing.",
   "examples": []
  },
@@ -230,7 +230,7 @@
    "replicated": 0,
    "total_hypotheses_all_classes": 40356
   },
-  "reading_en": "Of 1131 hypotheses scanned (40356 in all classes), none survives the false-discovery control, so nothing of this kind is reported as a finding.",
+  "reading_en": "Of 1131 hypotheses scanned (40356 in all classes), none survives the false-discovery control, so nothing of this kind is reported as a finding. eligible=0 tested_for_replication=0 ",
   "reading_zh": "共扫描1131个这类假设（所有类别合计40356个），没有一个通过假发现率控制，因此不作为发现报告。",
   "rule": "X11 (exploratory, pre-registered): scan every curve for non-monotone shapes and sign reversals; Benjamini-Hochberg q=0.10 within the class; each hit re-run on fresh seeds, reported as found / replicated / not replicated. Class verdict rule (fixed before use): supported = at least half of ALL FDR hits of the class replicate (hits that could not be re-run count as not replicated); mixed = some but fewer; not supported = no FDR hit or none replicated; not testable = hits not yet re-run or cells missing.",
   "examples": []

@@ -24,14 +24,15 @@ FAMILIES = [
     ("an_window", "Exploratory: stale list, shrinkage and recency weighting (window truth)", "探索性：旧榜、收缩和近期加权（窗口真相）", ("an_window_",)),
     ("an_explore_a", "Exploratory: scaling, theory check, drift", "探索性：缩放规律、理论检验、漂移", ("an_explore_a_",)),
     ("an_explore_b", "Exploratory: rank sets, biased samplers, recency, subgroups, privacy", "探索性：排名置信集、有偏抽样、近期偏好、子群体、隐私", ("an_explore_b_",)),
+    ("an_followups", "Follow-up checks of our first explanations", "对我们最初解释的后续检验", ("an_followups_",)),
     ("an_hunt", "Exploratory: surprise hunt with fresh-seed replication", "探索性：惊喜搜索与新种子复现", ("hunt_",)),
     ("an_extra", "Exploratory: profile length vs training depth, self-assessment, unbiased vs plain count", "探索性：历史长度与训练深度、自我评估、无偏与朴素计数", ("an_extra_",)),
     ("an_curves", "Exploratory: two speeds of learning", "探索性：两种学习速度", ("an_curves_",)),
     ("an_stoprule", "Exploratory: a stop rule from inside the sample", "探索性：来自样本内部的切换规则", ("an_stoprule_",)),
 ]
 
-BADGE_EN = {"supported": "SUPPORTED", "not supported": "NOT SUPPORTED", "mixed": "MIXED", "not testable": "NOT TESTABLE"}
-BADGE_ZH = {"supported": "支持", "not supported": "不支持", "mixed": "混合", "not testable": "无法检验"}
+BADGE_EN = {"descriptive": "DESCRIPTIVE", "supported": "SUPPORTED", "not supported": "NOT SUPPORTED", "mixed": "MIXED", "not testable": "NOT TESTABLE"}
+BADGE_ZH = {"descriptive": "描述性", "supported": "支持", "not supported": "不支持", "mixed": "混合", "not testable": "无法检验"}
 
 
 def load(name):
@@ -82,18 +83,18 @@ def render(lang):
         if not items and not figs:
             continue
         parts.append(f"\n### {t_en if en else t_zh}\n")
+        parts.append(("\nNumbers behind this block: `results/small_sample_popularity/03_tables/" + name + "_*.csv` and `" + name + "_verdicts.json`.\n")
+                     if en else ("\n这一块背后的数字：`results/small_sample_popularity/03_tables/" + name + "_*.csv` 和 `" + name + "_verdicts.json`。\n"))
         used = set()
         for it in items:
             vid = it.get("id", "?")
             title = it.get("title_en" if en else "title_zh", "")
             badge = (BADGE_EN if en else BADGE_ZH).get(it.get("verdict"), it.get("verdict"))
-            parts.append(f"\n#### {vid}. {title} — **{badge}**\n")
+            head = title if title.startswith(str(vid)) else f"{vid}. {title}"
+            parts.append(f"\n#### {head} — **{badge}**\n")
             parts.append(it.get("reading_en" if en else "reading_zh", "") + "\n")
             if it.get("rule"):
                 parts.append(("\n*Rule fixed in advance:* " if en else "\n*事先定好的规则：* ") + str(it["rule"]) + "\n")
-            tbl = numbers_table(it.get("numbers"), lang)
-            if tbl:
-                parts.append("\n" + tbl)
             for f in fig_match(figs, vid):
                 used.add(f)
                 parts.append(f"\n![{f}]({FIG}/{f})\n")

@@ -686,7 +686,7 @@ def x7(ctx: Ctx):
 def plot_x7(ctx: Ctx, ds_rows: list[dict], per_arm: dict):
     arms = list(per_arm)
     fig, axes = plt.subplots(len(arms), 1, figsize=(FIG_W, 3.1 * len(arms) + 1.2), squeeze=False)
-    spec = (("A", "tab:orange", "Truth A (same-window community list)"),
+    spec = (("A", "tab:orange", "Truth A (full earlier community list, all choices before T0)"),
             ("B", "tab:blue", "Truth B (community's later choices)"),
             ("U", "tab:green", "Truth B (held-out panel's later choices)"))
     for ax, arm in zip(axes[:, 0], arms):

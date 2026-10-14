@@ -22,7 +22,7 @@ BASE = "results/small_sample_popularity"
 
 def main():
     rows = [json.loads(l) for l in open(f"{BASE}/00_safety/governor_log.jsonl")]
-    st = [r for r in rows if "state" in r]
+    st = [r for r in rows if "state" in r and "fan" in r]
     ev = [r for r in rows if "event" in r]
     t = np.array([r["t"] for r in st], float)
     fan = np.array([r["fan"] for r in st], float)

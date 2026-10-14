@@ -1,36 +1,37 @@
 {
- "governed_hours": 4.69,
- "samples": 5607,
+ "governed_hours": 5.29,
+ "samples": 6305,
  "fan_rpm": {
   "median": 1463.0,
-  "p99": 1625.9399999999996,
+  "p99": 1619.0,
   "max": 1742.0,
   "share_above_1750": 0.0,
   "share_above_2100": 0.0
  },
  "smoothed_temp_c": {
-  "median": 63.1,
-  "p99": 72.19399999999996,
-  "max": 73.1
+  "median": 63.0,
+  "p99": 72.19600000000001,
+  "max": 73.3
  },
  "raw_temp_c": {
   "max": 81.9,
-  "share_above_78": 0.033707865168539325
+  "share_above_78": 0.03409992069785884
  },
  "workers_target": {
-  "2": 2309,
-  "3": 2219,
-  "4": 336,
-  "1": 721,
-  "0": 22
+  "2": 2591,
+  "3": 2459,
+  "4": 370,
+  "1": 842,
+  "0": 43
  },
- "freezes": 1,
+ "freezes": 2,
  "governor_events": {
-  "freeze": 1
+  "freeze": 2,
+  "governor thread exited": 2
  },
  "swap_gb_first_last": [
   26.14,
-  31.66
+  31.6
  ],
  "disk_free_gb_min": 10.6,
  "worker_memory_gb_max": 2.19,

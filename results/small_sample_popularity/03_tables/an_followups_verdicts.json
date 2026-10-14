@@ -1,0 +1,68 @@
+[
+ {
+  "id": "F1",
+  "title_en": "Breadth makes lists more repeatable even though it does not make them better",
+  "title_zh": "广度让榜单更稳定，但并没有让它更好",
+  "verdict": "descriptive",
+  "numbers": {
+   "pairs": 46,
+   "share_wide_smaller_se": 0.8478260869565217,
+   "median_se_ratio_wide_over_deep": 0.8779856036645217
+  },
+  "reading_en": "At equal total choices, the draw-to-draw standard error of list quality is smaller for the wide cell in 39 of 46 pairs (median ratio 0.88), while the average quality is the same (C1). Breadth buys stability, not accuracy.",
+  "reading_zh": "总选择数相同时，46 个对里有 39 个，宽格子在不同抽样之间的榜单质量标准误更小（中位数比值 0.88），而平均质量相同（C1）。广度换来的是稳定性，不是准确性。",
+  "rule": "Descriptive follow-up to C1; no registered threshold."
+ },
+ {
+  "id": "F2",
+  "title_en": "Subgroups: the reversed sign survives, but weaker, once never-reached series are dropped",
+  "title_zh": "子群体：去掉从未达到交叉点的序列后，反向的符号仍然存在，但变弱",
+  "verdict": "descriptive",
+  "numbers": {
+   "n_uncensored": 94,
+   "n_censored": 70,
+   "rho_uncensored": -0.19918237053076673,
+   "ci": [
+    -0.3677044543499589,
+    -0.008907874073386559
+   ],
+   "mean_distinctiveness_censored": 0.2560256428571429,
+   "mean_distinctiveness_uncensored": 0.3866940531914892
+  },
+  "reading_en": "Among the 94 series where the subgroup sample did beat the global list, the rank correlation between distinctiveness and the sample size at which it did is -0.20 (interval -0.37 to -0.01); the 70 series that never got there are less distinctive on average (0.26 vs 0.39), which is why the first number (-0.44) overstated it.",
+  "reading_zh": "在子群体样本确实胜过全局榜的 94 个序列里，差异度与取胜所需样本量的秩相关为 -0.20（区间 -0.37 到 -0.01）；从未达到的 70 个序列平均差异度更低（0.26 对 0.39），这就是第一个数字（-0.44）被夸大的原因。",
+  "rule": "Descriptive follow-up to X8; no registered threshold."
+ },
+ {
+  "id": "F3",
+  "title_en": "The in-sample hold-out barely beats always guessing the more common outcome",
+  "title_zh": "样本内留出检验几乎不比「永远猜更常见的结果」好",
+  "verdict": "descriptive",
+  "numbers": {
+   "draws": 2640,
+   "accuracy_time_holdout": 0.6825757575757576,
+   "base_rate_accuracy": 0.6731060606060606,
+   "share_draws_personalised_better_on_panel": 0.3268939393939394
+  },
+  "reading_en": "Personalised beats popularity on the panel in 33% of draws, so always guessing the more common outcome is right 67% of the time; the time-ordered in-sample hold-out is right 68% of the time. It adds little skill.",
+  "reading_zh": "个性化在验证小组上胜过热门的抽样占 33%，所以永远猜更常见的结果，对的比例是 67%；按时间留出的样本内检验对的比例是 68%。几乎没有增加判断力。",
+  "rule": "Descriptive follow-up to X16; no registered threshold."
+ },
+ {
+  "id": "F4",
+  "title_en": "Recency sampling: the community's later list improves a lot, held-out people only a little",
+  "title_zh": "近期抽样：群体之后的榜单提升很多，留出的人只提升一点点",
+  "verdict": "descriptive",
+  "numbers": {
+   "median_dB_later_list": 0.0369484,
+   "median_dU_held_out_people": 0.00225179,
+   "datasets_negative_on_people": [
+    "gowalla",
+    "lastfm-1k"
+   ]
+  },
+  "reading_en": "A recent-window sample beats a uniform sample of the same size by a median +0.037 NDCG@100 against the community's later list, but only by +0.0023 for held-out people, and it is negative in 2 of 11 datasets (gowalla, lastfm-1k).",
+  "reading_zh": "近期窗口样本对群体之后的榜单，比同样大小的均匀样本好，NDCG@100 中位数 +0.037；但对留出的人只好 +0.0023，并且在 11 个数据集里有 2 个为负（gowalla, lastfm-1k）。",
+  "rule": "Descriptive follow-up to X7; no registered threshold."
+ }
+]

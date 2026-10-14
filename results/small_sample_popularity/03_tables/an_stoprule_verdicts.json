@@ -1,0 +1,22 @@
+[
+ {
+  "id": "X16",
+  "title_en": "Can the sample tell when personalising starts to pay? (exploratory)",
+  "title_zh": "样本自己能否判断何时个性化开始划算？（探索性）",
+  "rule": "Time-ordered in-sample gap predicts the sign of the panel gap with accuracy >= 0.80, and its AUC beats the random hold-out's (interval over datasets above 0).",
+  "verdict": "not supported",
+  "numbers": {
+   "accuracy_time": 0.683,
+   "accuracy_random": 0.679,
+   "auc_time_minus_random": -0.021,
+   "auc_diff_ci_lo": -0.045,
+   "auc_diff_ci_hi": -0.0,
+   "inflation_time": 0.0135,
+   "inflation_random": 0.0167,
+   "n_datasets": 7,
+   "n_draws": 2640
+  },
+  "reading_en": "Hiding each sampled person's latest choices predicts whether personalising helps on the real panel with accuracy 68% (random hiding: 68%). Random hiding overstates the benefit of personalising by +0.017 NDCG on average, time-ordered hiding by +0.014.",
+  "reading_zh": "把每个被抽中者最新的选择藏起来，预测个性化在真实验证小组上是否有帮助，准确率为 68%（随机藏：68%）。随机藏平均高估个性化的好处 +0.017 NDCG，按时间藏为 +0.014。"
+ }
+]

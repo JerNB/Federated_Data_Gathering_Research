@@ -27,3 +27,17 @@ in_universe,gowalla,10,standard,none (> 4000)
 in_universe,gowalla,10,in_universe,none (> 4000)
 in_universe,gowalla,all,standard,1000
 in_universe,gowalla,all,in_universe,1000
+small_N,ml-latest,10,"standard, grid from N=20",4000
+small_N,ml-latest,all,"standard, grid from N=20",<= 20 (smallest tested)
+small_N,ml-1m,10,"standard, grid from N=20",none (> 1000)
+small_N,ml-1m,all,"standard, grid from N=20",100
+small_N,amazon-video-games,10,"standard, grid from N=20",none (> 2000)
+small_N,amazon-video-games,all,"standard, grid from N=20",none (> 2000)
+small_N,amazon-musical-instruments,10,"standard, grid from N=20",none (> 2000)
+small_N,amazon-musical-instruments,all,"standard, grid from N=20",none (> 2000)
+small_N,amazon-software,10,"standard, grid from N=20",400
+small_N,amazon-software,all,"standard, grid from N=20",<= 20 (smallest tested)
+small_N,kuairand-pure,10,"standard, grid from N=20",2000
+small_N,kuairand-pure,all,"standard, grid from N=20",<= 20 (smallest tested)
+small_N,gowalla,10,"standard, grid from N=20",none (> 4000)
+small_N,gowalla,all,"standard, grid from N=20",1000

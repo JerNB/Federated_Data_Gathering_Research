@@ -26,3 +26,7 @@ datasets/npz/
 results/small_sample_popularity/**/*.jsonl
 results/small_sample_popularity/**/raw/
 datasets/frames/
+results/small_sample_popularity/02_runs/
+results/small_sample_popularity/02_runs_fresh/
+results/small_sample_popularity/02_runs_mini/
+datasets/fetch.log

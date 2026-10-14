@@ -1,0 +1,43 @@
+[02:25:09] stage ref: ran 0 of 11 tasks in 2s; governor {}
+
+thread 'main' (35203444) panicked at /rustc/b940084d7eb6a299eb4bfeb8e34901bc051e7ac4/library/std/src/io/stdio.rs:1168:9:
+failed printing to stdout: Broken pipe (os error 32)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+/Users/LeoQin/.local/share/uv/python/cpython-3.13.5-macos-aarch64-none/lib/python3.13/multiprocessing/resource_tracker.py:301: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown: {'/mp-w5pokjf3', '/mp-h13u6hdj', '/mp-wyd407l6', '/mp-cwwcgty1', '/mp-pjb8jvc3'}
+  warnings.warn(
+[02:33:34] stage ref: ran 0 of 11 tasks in 2s; governor {}
+
+thread 'main' (35224679) panicked at /rustc/b940084d7eb6a299eb4bfeb8e34901bc051e7ac4/library/std/src/io/stdio.rs:1168:9:
+failed printing to stdout: Broken pipe (os error 32)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+/Users/LeoQin/.local/share/uv/python/cpython-3.13.5-macos-aarch64-none/lib/python3.13/multiprocessing/resource_tracker.py:301: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown: {'/mp-mwzu7evh', '/mp-asx4u2zg', '/mp-p0oloqiq', '/mp-wijdj7ie', '/mp-8yx01uam'}
+  warnings.warn(
+[02:35:39] stage ref: ran 0 of 11 tasks in 2s; governor {}
+
+thread 'main' (35228943) panicked at /rustc/b940084d7eb6a299eb4bfeb8e34901bc051e7ac4/library/std/src/io/stdio.rs:1168:9:
+failed printing to stdout: Broken pipe (os error 32)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+/Users/LeoQin/.local/share/uv/python/cpython-3.13.5-macos-aarch64-none/lib/python3.13/multiprocessing/resource_tracker.py:301: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown: {'/mp-nat9mce7', '/mp-yaq3h3_j', '/mp-3f7fc3rf', '/mp-ibum5vrs', '/mp-3i8pb9fo'}
+  warnings.warn(
+[02:45:41] stage ref: ran 11 of 11 tasks in 2s; governor {}
+/Users/LeoQin/.local/share/uv/python/cpython-3.13.5-macos-aarch64-none/lib/python3.13/multiprocessing/resource_tracker.py:301: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown: {'/mp-axhcro9q', '/mp-pvym4rv0', '/mp-f0qsbguz', '/mp-3jcmssf9', '/mp-o99ek9qy'}
+  warnings.warn(
+[02:58:44] stage ref: ran 0 of 11 tasks in 0s; governor {}
+/Users/LeoQin/.local/share/uv/python/cpython-3.13.5-macos-aarch64-none/lib/python3.13/multiprocessing/resource_tracker.py:301: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown: {'/mp-gq_15x8f', '/mp-lbhgzn18', '/mp-2f2lo7kw', '/mp-bmxrggs8', '/mp-btv9j_8j'}
+  warnings.warn(
+[02:59:21] stage ref: ran 0 of 11 tasks in 0s; governor {}
+[03:27:45] stage e2: ran 2640 of 2640 tasks in 1705s; governor {'state': 'run', 'target': 4, 'fan': 1485, 'temp': 66.6, 'raw_temp': 65.9, 'cpu_w': 13.9, 'rss_gb': 1.73, 'swap_gb': 31.77, 'disk_gb': 15.5}
+[04:46:15] stage e1: ran 28080 of 28080 tasks in 4710s; governor {'state': 'run', 'target': 3, 'fan': 1452, 'temp': 61.7, 'raw_temp': 62.4, 'cpu_w': 15.7, 'rss_gb': 0.47, 'swap_gb': 31.07, 'disk_gb': 17.0}
+[04:53:18] stage e2p: ran 888 of 888 tasks in 423s; governor {'state': 'run', 'target': 3, 'fan': 1468, 'temp': 63.2, 'raw_temp': 63.4, 'cpu_w': 13.4, 'rss_gb': 1.09, 'swap_gb': 31.03, 'disk_gb': 17.0}
+[04:53:26] stage e8: ran 1240 of 1240 tasks in 8s; governor {'state': 'run', 'target': 4, 'fan': 1440, 'temp': 64.6, 'raw_temp': 75.4, 'cpu_w': 17.9, 'rss_gb': 0.47, 'swap_gb': 31.03, 'disk_gb': 17.0}
+[04:54:01] stage e4: ran 1260 of 1260 tasks in 35s; governor {'state': 'run', 'target': 2, 'fan': 1548, 'temp': 68.8, 'raw_temp': 64.7, 'cpu_w': 11.7, 'rss_gb': 0.7, 'swap_gb': 30.99, 'disk_gb': 17.0}
+[04:58:29] stage e6: ran 3900 of 3900 tasks in 269s; governor {'state': 'run', 'target': 2, 'fan': 1464, 'temp': 67.4, 'raw_temp': 64.3, 'cpu_w': 10.1, 'rss_gb': 0.83, 'swap_gb': 30.83, 'disk_gb': 16.6}
+[05:34:35] stage e5: ran 41280 of 41280 tasks in 2166s; governor {'state': 'run', 'target': 2, 'fan': 1482, 'temp': 70.4, 'raw_temp': 65.6, 'cpu_w': 10.3, 'rss_gb': 0.53, 'swap_gb': 31.46, 'disk_gb': 15.5}
+/Users/LeoQin/.local/share/uv/python/cpython-3.13.5-macos-aarch64-none/lib/python3.13/multiprocessing/resource_tracker.py:301: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown: {'/mp-zb_25upz', '/mp-mp5owxzs', '/mp-w1vhi230', '/mp-chdbwa6p', '/mp-viq5ea7s'}
+  warnings.warn(
+[07:26:49] stage e7: ran 11597 of 33630 tasks in 1871s; governor {'state': 'run', 'target': 2, 'fan': 1483, 'temp': 63.1, 'raw_temp': 61.5, 'cpu_w': 10.3, 'rss_gb': 0.49, 'swap_gb': 31.67, 'disk_gb': 14.2}
+[07:29:24] stage e2s: ran 1500 of 1500 tasks in 155s; governor {'state': 'run', 'target': 3, 'fan': 1497, 'temp': 65.4, 'raw_temp': 65.8, 'cpu_w': 13.7, 'rss_gb': 1.25, 'swap_gb': 31.66, 'disk_gb': 14.2}
+[07:58:03] stage e2c: ran 2640 of 2640 tasks in 1718s; governor {'state': 'run', 'target': 3, 'fan': 1467, 'temp': 63.2, 'raw_temp': 63.9, 'cpu_w': 13.9, 'rss_gb': 1.53, 'swap_gb': 31.61, 'disk_gb': 14.1}
+fresh e5: ran 280 of 280
+fresh e1: ran 680 of 680
+fresh e2: ran 260 of 260
