@@ -47,7 +47,7 @@ datasets/fetch.sh                       # download the public data
 scripts/ssp/run_overnight.sh            # all stages; safe to stop and restart
 .venv/bin/python3 scripts/ssp/aggregate.py
 # analysis, one script per family (each writes tables and figures):
-for s in an_confirm2 an_window an_explore_a an_explore_b an_extra an_hunt; do .venv/bin/python3 scripts/ssp/$s.py; done
+for s in an_confirm2 an_window an_explore_a an_explore_b an_extra an_stoprule an_curves an_hunt; do .venv/bin/python3 scripts/ssp/$s.py; done
 .venv/bin/python3 scripts/ssp/make_report.py
 ```
 
