@@ -89,7 +89,7 @@ def _r(x):
     return round(float(x), 5) if np.isfinite(x) else None
 
 
-def pop_estimators(fr, S, w, n_users, rng, with_ht: bool):
+def pop_estimators(fr, S, w, n_users, rng, with_ht: bool, row_ts=None):
     """Dict name -> full-catalogue score vector."""
     c = E.pop_count(S)
     out = {"count": c}
@@ -102,6 +102,9 @@ def pop_estimators(fr, S, w, n_users, rng, with_ht: bool):
         out["shrunk"] = E.pop_shrunk(c, fr.count_old + 0.1, kap)
         out["_kappa"] = kap
     out["lcb"] = E.pop_lcb(c, n_users)
+    if fr.has_time and row_ts is not None and fr.T0 > fr.T_old:
+        # half-life = the span of the recent window (T_old, T0]; exploratory, added before the e1 stage ran
+        out["decay"] = E.pop_decay(S, row_ts, fr.T0, fr.T0 - fr.T_old)
     return out
 
 
@@ -112,7 +115,7 @@ def run_e1(task: dict) -> dict:
     fr = frame(task["dataset"])
     rng = rng_for(task["key"])
     S, w, n_users, row_ts = sample(fr, task, rng)
-    ests = pop_estimators(fr, S, w, n_users, rng, with_ht=task.get("users", "uniform") != "uniform")
+    ests = pop_estimators(fr, S, w, n_users, rng, with_ht=True, row_ts=row_ts)
     row = {"dataset": task["dataset"], "N": task["N"], "k": task["k"], "draw": task["draw"],
            "users": task.get("users", "uniform"), "rows": task.get("rows", "random"),
            "arm": task.get("arm", "uniform"), "n_users": int(n_users), "n_rows": int(S.nnz), "items_seen": int((np.asarray(S.sum(0)).ravel() > 0).sum())}
@@ -221,6 +224,88 @@ def run_e2(task: dict) -> dict:
             row[f"hyb_{mode}.U_ndcg"] = _r(grid[ch])
             row[f"pers_{mode}.U_ndcg"] = _r(grid[(pure[0], pure[1], 1.0)])
     row["omega"] = int(len(om))
+    row["sec"] = _r(time.time() - t0)
+    return row
+
+
+# ------------------------------------------------------------------ E2P
+
+PANEL_K = (1, 2, 5, 10, 20, None)
+
+
+def run_e2p(task: dict) -> dict:
+    """Decouple 'how deep the sample was' from 'how long the served person's profile is'.
+
+    One model fit on the sample (k = task k), then the SAME panel is served with profiles of every length,
+    overall and by panel-history tercile. Fixed model settings (no hold-out): popularity, kNN, EASE (lambda
+    ratio 0.25) at weight 1 and 0.5 on the personalised part.
+    """
+    t0 = time.time()
+    fr = frame(task["dataset"])
+    rng = rng_for(task["key"])
+    S, w, n_users, row_ts = sample(fr, task, rng)
+    c = E.pop_count(S)
+    om = E.universe(c, J_CAP_E2, rng)
+    S_om = S[:, om].tocsr()
+    G = E.gram(S_om)
+    md = max(float(np.mean(np.diag(G))) if len(G) else 1.0, 1e-6)
+    B_e = E.ease_B(G, 0.25 * md)
+    W_k = E.knn_W(G)
+    zpop = E.zscore_rows(c[om])
+    prow = panel_rows(fr)
+    n_hist = np.diff(fr.e_c[prow].indptr)
+    terc = np.digitize(n_hist, np.quantile(n_hist, [1 / 3, 2 / 3]))
+    row = {"dataset": task["dataset"], "N": task["N"], "k": task["k"], "draw": task["draw"], "omega": int(len(om))}
+    for kp in [x for x in PANEL_K if x is None or x <= fr.min_rows]:
+        prof = F.eval_profiles(fr, kp, rng, prow)
+        pn = E.Panel(fr, prow, prof, om)
+        se = E.zscore_rows(E.apply_model(pn.profile, B_e))
+        sk = E.zscore_rows(E.apply_model(pn.profile, W_k))
+        tag = "all" if kp is None else str(kp)
+        for stratum in ("all", 0, 1, 2):
+            m = np.ones(pn.E, bool) if stratum == "all" else (terc == stratum)
+            if m.sum() < 10:
+                continue
+            sub = pn if stratum == "all" else pn.subset(m)
+            for name, vec in (("pop", zpop), ("ease100", se[m]), ("knn100", sk[m]),
+                              ("ease50", 0.5 * zpop + 0.5 * se[m]), ("knn50", 0.5 * zpop + 0.5 * sk[m])):
+                row[f"kp{tag}.s{stratum}.{name}"] = _r(E.rank_eval(vec, sub, rng=rng)["ndcg"])
+    row["sec"] = _r(time.time() - t0)
+    return row
+
+
+# ------------------------------------------------------------------ E8
+
+def run_e8(task: dict) -> dict:
+    """Can one sample tell how good its own list is?  User-level vs row-level bootstrap prediction."""
+    t0 = time.time()
+    fr = frame(task["dataset"])
+    rng = rng_for(task["key"])
+    S, w, n_users, row_ts = sample(fr, task, rng)
+    c = E.pop_count(S)
+    obs = np.flatnonzero(c > 0)
+    Sc = S[:, obs].tocsr()
+    cobs = c[obs]
+    L = M.top_m(c, 100, rng)
+    row = {"dataset": task["dataset"], "N": task["N"], "k": task["k"], "draw": task["draw"], "n_users": int(n_users),
+           "n_rows": int(S.nnz), "items_seen": int(len(obs))}
+    row["real_A"] = _r(M.ndcg_vs_gain(L, fr.count_A, 100))
+    row["real_Au"] = _r(M.ndcg_vs_gain(L, E.user_norm_counts(fr), 100))
+    row["real_B"] = _r(M.ndcg_vs_gain(L, fr.count_B, 100))
+    nb = task.get("n_boot", 40)
+    # user-level bootstrap: resample whole people
+    Wt = rng.multinomial(n_users, np.full(n_users, 1.0 / n_users), size=nb).astype(np.float32)
+    cu = np.asarray(Sc.T @ Wt.T)                       # J_obs x nb
+    vals = []
+    for b in range(nb):
+        top = M.top_m(cu[:, b], 100, rng)
+        vals.append(M.ndcg_vs_gain(top, cobs, 100))
+    row["pred_user"], row["pred_user_sd"] = _r(np.mean(vals)), _r(np.std(vals))
+    # row-level bootstrap: resample choices as if independent
+    p = cobs / cobs.sum()
+    cr = rng.multinomial(int(S.nnz), p, size=nb).astype(np.float64)
+    vals = [M.ndcg_vs_gain(M.top_m(cr[b], 100, rng), cobs, 100) for b in range(nb)]
+    row["pred_row"], row["pred_row_sd"] = _r(np.mean(vals)), _r(np.std(vals))
     row["sec"] = _r(time.time() - t0)
     return row
 
@@ -368,7 +453,7 @@ def run_ref(task: dict) -> dict:
     return row
 
 
-KINDS = {"e1": run_e1, "e2": run_e2, "e4": run_e4, "e5": run_e5, "e6": run_e6, "ref": run_ref}
+KINDS = {"e1": run_e1, "e2": run_e2, "e2p": run_e2p, "e8": run_e8, "e4": run_e4, "e5": run_e5, "e6": run_e6, "ref": run_ref}
 
 
 def run_task(task: dict) -> dict:

@@ -37,6 +37,12 @@ def pop_ht(S: sp.csr_matrix, user_w: np.ndarray) -> np.ndarray:
     return np.asarray(S.T @ user_w).ravel().astype(np.float64)
 
 
+def pop_decay(S: sp.csr_matrix, row_ts: np.ndarray, t_ref: int, half_life: float) -> np.ndarray:
+    """Recency-weighted count: a choice made `half_life` seconds before t_ref counts half as much."""
+    w = np.exp2(-(t_ref - row_ts.astype(np.float64)) / max(half_life, 1.0))
+    return np.bincount(S.indices, weights=w, minlength=S.shape[1])
+
+
 def pop_shrunk(c: np.ndarray, prior_counts: np.ndarray, kappa: float) -> np.ndarray:
     """(c + kappa * pi) / (n + kappa) with pi = normalised prior counts."""
     n = c.sum()
@@ -55,6 +61,18 @@ def pop_lcb(c: np.ndarray, n_users: int, z: float = 1.0) -> np.ndarray:
 
 # ------------------------------------------------------------------ list vs truth
 
+def user_norm_counts(fr) -> np.ndarray:
+    """Truth A_u: every person weighs 1 and spreads it over their own choices (sum_u x_uj / n_u).
+
+    Plain sample counts at k < n_u estimate THIS list, not Truth A, because a person with a short history
+    contributes a larger share of their rows (k / n_u) than a person with a long one.
+    """
+    if not hasattr(fr, "_count_Au"):
+        w = np.repeat(1.0 / np.maximum(fr.n_c, 1), fr.n_c)
+        fr._count_Au = np.bincount(fr.c_idx, weights=w, minlength=fr.n_items)
+    return fr._count_Au
+
+
 def list_metrics(score: np.ndarray, fr, rng: np.random.Generator, prefix: str) -> dict:
     """Quality of a score vector as a whole-list estimate of truth A (and B)."""
     out = {}
@@ -69,6 +87,10 @@ def list_metrics(score: np.ndarray, fr, rng: np.random.Generator, prefix: str) -
     out[f"{prefix}.B_ndcg100"] = M.ndcg_vs_gain(est_top, tB, 100)
     out[f"{prefix}.B_mass10"] = M.mass_captured(M.top_m(score, 10, rng), tB, 10)
     out[f"{prefix}.B_ov100"] = M.overlap_at_m(score, tB, 100, rng)
+    tU = user_norm_counts(fr)
+    out[f"{prefix}.Au_ndcg100"] = M.ndcg_vs_gain(est_top, tU, 100)
+    out[f"{prefix}.Au_ov10"] = M.overlap_at_m(score, tU, 10, rng)
+    out[f"{prefix}.Au_ov100"] = M.overlap_at_m(score, tU, 100, rng)
     # window truth: items counted only in (T_old, T0], disjoint from the stale list
     tW = fr.count_Aw
     if tW.sum() > 0:
@@ -100,6 +122,12 @@ class Panel:
         self.profile = profiles[:, omega].tocsr()                        # E x J_c
         self.n_rel = np.asarray(fr.e_f[panel_rows].sum(1)).ravel()       # full-catalogue relevant count
         self.E = len(panel_rows)
+
+    def subset(self, mask: np.ndarray) -> "Panel":
+        p = object.__new__(Panel)
+        p.seen, p.rel, p.profile = self.seen[mask], self.rel[mask], self.profile[mask]
+        p.n_rel, p.E = self.n_rel[mask], int(mask.sum())
+        return p
 
 
 def rank_eval(scores: np.ndarray, pn: Panel, m: int = 100, rng: np.random.Generator | None = None) -> dict:

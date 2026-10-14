@@ -29,6 +29,9 @@ R_E4 = 30
 R_E5 = 40
 R_E6 = 20
 R_E7 = 30
+R_E2P = 12
+R_E8 = 20
+E8_DATASETS = ["ml-latest", "ml-1m", "amazon-video-games", "amazon-musical-instruments", "amazon-software", "kuairand-pure"]
 E2_DATASETS = ["ml-latest", "ml-1m", "amazon-video-games", "amazon-musical-instruments",
                "amazon-software", "kuairand-pure", "gowalla"]
 E4_DATASETS = ["ml-latest", "ml-1m", "amazon-video-games", "kuairand-pure", "gowalla", "amazon-movies-tv"]
@@ -76,6 +79,18 @@ def build(stage):
                 for k in k_grid(ds, [5, 10, 20, None]):
                     for d in range(R_E2):
                         out.append(T("e2", ds, d, N=N, k=k))
+    elif stage == "e2p":
+        for ds in E2_DATASETS:
+            for N in [n for n in (100, 200, 400, 1000, 2000, 4000) if n <= 0.4 * meta(ds)["n_pop"]]:
+                for k in (5, None):
+                    for d in range(R_E2P):
+                        out.append(T("e2p", ds, d, N=N, k=k))
+    elif stage == "e8":
+        for ds in E8_DATASETS:
+            for N in [n for n in (100, 200, 400, 1000, 2000, 4000) if n <= 0.4 * meta(ds)["n_pop"]]:
+                for k in (5, None):
+                    for d in range(R_E8):
+                        out.append(T("e8", ds, d, N=N, k=k))
     elif stage == "e4":
         for ds in E4_DATASETS:
             for N in [n for n in (100, 400, 1000, 4000) if n <= 0.4 * meta(ds)["n_pop"]]:
@@ -103,21 +118,23 @@ def build(stage):
                             out.append(T("e6", ds, d, N=N, k=k, eps=eps))
     elif stage == "e7":      # biased samplers, same estimators as e1
         arms = {"activity": dict(users="activity"), "inv_activity": dict(users="inv_activity"),
-                "recent_rows": dict(rows="recent"), "recent_window": dict(window=True)}
+                "recent_rows": dict(rows="recent"), "recent_window": dict(window=True),
+                "boot": dict(users="replace")}
         for ds in DATASETS:
             for arm, kw in arms.items():
                 for N in n_grid(ds):
-                    for k in k_grid(ds, [5, 20, None]):
+                    # 'boot' (people drawn with replacement) carries the whole k grid: it is the clean C1 check
+                    for k in k_grid(ds, K_GRID if arm == "boot" else [5, 20, None]):
                         if arm == "recent_rows" and k is None:
                             continue
-                        for d in range(R_E7):
+                        for d in range(20 if arm == "boot" else R_E7):
                             out.append(dict(T("e1", ds, d, N=N, k=k, arm=arm), **kw))
     else:
         raise SystemExit(f"unknown stage {stage}")
     return out
 
 
-STAGES = ["ref", "e1", "e2", "e4", "e5", "e6", "e7"]
+STAGES = ["ref", "e2", "e1", "e2p", "e8", "e4", "e6", "e5", "e7"]
 
 
 def main():

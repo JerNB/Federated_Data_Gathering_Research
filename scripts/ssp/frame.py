@@ -166,6 +166,7 @@ def draw_users(fr: Frame, n: int, rng: np.random.Generator, mode: str = "uniform
     """Pick about n POP users (rows of the frame). Returns (rows, pi) with exact inclusion probabilities.
 
     uniform: exactly n users without replacement, pi = n / pool size.
+    replace: n independent draws with replacement (a person can appear twice), pi = n / pool size.
     activity (prob ~ n_c) and inv_activity (prob ~ 1/n_c): Poisson sampling. User u joins independently with
       pi_u = min(1, lam * w_u), lam chosen so that sum(pi_u) = n. The sample size is random (about n), and the
       Horvitz-Thompson weights 1/pi_u are exactly unbiased.
@@ -174,6 +175,10 @@ def draw_users(fr: Frame, n: int, rng: np.random.Generator, mode: str = "uniform
     n = min(n, len(pool))
     if mode == "uniform":
         rows = rng.choice(pool, n, replace=False)
+        return rows, np.full(n, n / len(pool))
+    if mode == "replace":
+        # independent draws, a person may appear twice: no finite-population correction, expected count n/|pool|
+        rows = rng.choice(pool, n, replace=True)
         return rows, np.full(n, n / len(pool))
     w = fr.n_c[pool].astype(np.float64)
     w = w if mode == "activity" else 1.0 / np.maximum(w, 1)
@@ -257,6 +262,8 @@ def load_frame(name: str, **kw) -> Frame:
             return pickle.load(f)
     fr = build_frame(name, **kw)
     os.makedirs("datasets/frames", exist_ok=True)
-    with open(path, "wb") as f:
+    tmp = f"{path}.{os.getpid()}.tmp"
+    with open(tmp, "wb") as f:
         pickle.dump(fr, f, protocol=4)
+    os.replace(tmp, path)          # atomic: another worker never reads a half-written pickle
     return fr
