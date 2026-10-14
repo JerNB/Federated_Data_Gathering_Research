@@ -1,95 +1,148 @@
-# Useful conclusions: Small-Sample Popularity Estimate (negative-result framing)
+# Conclusions (plain version): can you build a reliable "most popular" list by asking only a few people?
 
-Chinese version: [`03_conclusions_zh.md`](03_conclusions_zh.md). Full numbers: [`02_results_en.md`](02_results_en.md).
-Pre-registered plan: [`01_preregistration_en.md`](01_preregistration_en.md). Tables: `results/small_sample_popularity/03_tables/`; figures: `04_figures/`.
+Chinese version: [`03_conclusions_zh.md`](03_conclusions_zh.md). Full numbers and figures: [`02_results_en.md`](02_results_en.md).
+Pre-registration (predictions written before the runs): [`01_preregistration_en.md`](01_preregistration_en.md).
 
-Basis: 11 public datasets, 117,069 small tasks, plus 1,220 fresh-seed replications. Each conclusion has a strength label:
-**Confirmed** = a pre-registered test or a replicated, consistent result; **Exploratory** = seen in the data, not pre-registered.
+What we did: 11 public datasets (movies, music, products, check-ins), 117,069 small experiments, plus 1,220 repeats with new random seeds.
 
-## A. One-sentence position
+---
 
-A popularity list from a few hundred people is close to the whole community's list at that moment. What goes wrong is that
-the moment passes. Three simple ideas that sounded right (breadth beats depth, an in-sample hybrid blend, one crossover
-size) did not hold as stated, and the reasons are informative.
+## 1. Eight terms you need
 
-## B. Conclusions we can argue (ordered by how well supported)
+1. **Popularity list**: sort everything by how many times it was chosen. The simplest recommender.
+2. **Small sample**: ask only **N people at random**, and see only **k records** from each. Real case: in federated
+   learning, only a few people agree to share data.
+3. **Two "right answers"** (we test both):
+   - **A: the whole community's list at that time.** Question: does a few people's list look like everyone's list?
+   - **B: what people chose afterwards.** Question: can this list predict the future?
+4. **NDCG@100**: a score from 0 to 1 for how closely our top 100 matches the right answer, with top places counting more.
+   1 = identical. 0.88 = very similar, but the first few places may differ.
+5. **Personalized model**: looks at each person's own history and recommends different things to each person.
+   Smarter than a popularity list, but needs more data.
+6. **Hybrid**: part popularity list, part personalized. Our idea was "let the sample decide the mix".
+7. **Crossover N\***: how many people you need before personalization starts to beat the popularity list.
+   A smaller N\* means personalization helps sooner.
+8. **Drift**: tastes change over time. A list made today is a little stale tomorrow.
 
-1. **Falsified: an in-sample hybrid blend is not safe (C2). Confirmed.**
-   - Within 0.002 of the better pure list in only 70% of 132 cells (falsifier: below 75%).
-   - On average worse by 0.0018 NDCG@100 [-0.0029, -0.0008]; better in 1 of 7 datasets.
-   - Cause (checked): the in-sample hold-out that picks the blend is right 68% of the time, but always guessing
-     "popularity" is already right 67%. It also overstates the gain from personalizing by +0.014 to +0.017.
-   - Wording: "choosing the blend inside a small sample has almost no skill beyond the base rate."
-2. **Breadth versus depth is a tie in accuracy, but not in repeatability (C1). Confirmed as inconclusive.**
-   - Breadth wins 61% of 46 pairs; pooled difference +0.0005 [-0.003, +0.004].
-   - Breadth gives a smaller draw-to-draw standard error in 39 of 46 pairs (median ratio 0.88).
-   - The unbiased weighted estimator favors depth (-0.008 [-0.012, -0.005]).
-   - Wording: "More people buys stability, not accuracy."
-3. **Unbiased is not better (X15). Exploratory, consistent.**
-   - The statistically unbiased weighted count beats the plain count in only 3 of 50 series, and only at N at least 10%
-     of the group.
-   - Wording: "In small samples, the textbook-correct estimator loses to the biased one."
-4. **A crossover sample size exists, but it is small and not a single number (C3). Mixed.**
-   - At k = all it exists in 5 of 7 datasets (needed 5); at k = 10 in 3 (needed 4).
-   - Post hoc: at or below 20 people in ml-latest, amazon-software, kuairand-pure; 100 in ml-1m; 1,000 in gowalla;
-     none up to 2,000 in the two small Amazon sets.
-   - Wording: "N* depends on the dataset more than on history length. No dataset has N* rising with k."
-5. **Time is a bigger error than sample size (X10, X7, X12). Exploratory, 10 of 10 datasets.**
-   - The gap between the community's earlier list and its later list: 0.66 NDCG@100. Sampling gap at 1,000 people: 0.003.
-   - A recent-window sample beats a same-size uniform sample on later choices in 10 of 11 datasets (median +0.037).
-   - Recency-weighted counts win 179 of 223 cells (+0.013), but lose 119 of 223 on the old target.
-   - Honest limit: the 0.66 is an oracle ceiling, not a measured loss. Recency methods recover about 2% of it.
-   - For held-out people the gain is small: median +0.002, negative in gowalla and lastfm-1k.
-6. **Popularity saturates, personalization does not (X17). Exploratory.**
-   - From N = 100 to the largest N, popularity grows by a factor 1.22, the best personalized model by 1.94.
-   - Popularity reaches 95% of its best at least two grid steps earlier in 4 of 7 datasets.
-   - Nothing is observed beyond N = 4,000.
-7. **Naive rank intervals are overconfident (X5). Exploratory, strong.**
-   - Bootstrap interval covers 0.85 of true ranks 51-200 (median); below 0.93 in 79% of cells.
-   - Mogstad et al. sets reach 0.95 in every cell but are 3.0 times wider.
-   - Wording: "A leaderboard from a small sample needs wider intervals than the bootstrap gives."
-8. **A sample cannot judge its own draw (X14). Exploratory.** The bootstrap predicts the level of quality (ratio 1.00 at
-   N >= 200) but not which draw is better (Spearman 0.18).
-9. **Privacy has a price you can name (X9). Exploratory, mixed.**
-   - Central DP at epsilon >= 2 and N >= 2,000 keeps a median 0.86 of the non-private quality.
-   - Local DP needs a median 50 times more people (lower bound).
-   - Noise removes 96% of top-10 overlap but only 93% of top-100 overlap: not head-concentrated, as predicted.
-10. **Subgroups: the prediction failed (X8).** The more a subgroup differs from the global list, the smaller the sample
-    at which its own sample wins (Spearman -0.44; -0.20 [-0.37, -0.01] among the 94 series that reached a crossover).
-    Part of the larger number is censoring.
-11. **Learning speed differs by dataset shape (X3, mixed).** The error exponent correlates with top-heaviness (0.54 at
-    k = all, 0.76 at k = 5). A single power law fits only 4 of 11 datasets at k = all.
-12. **Surprise hunt.** 40,356 comparisons scanned; the 50 largest eligible re-ran on fresh seeds and all 50 replicated.
-    Most are small-N artifacts or breadth-depth interactions; none is claimed as important.
+---
 
-## C. Argument for a negative-result paper
+## 2. The one-page answer
 
-- The three claims were written down and committed before any real run (amendments A1-A15, all dated and listed).
-- Two of three failed on pre-registered falsifiers, and we explain why (items 1, 2, 3).
-- Side results (items 5, 6, 7) give a usable diagnosis: sampling is not the main error, staleness is.
-- Suggested title: *"Small samples are enough for popularity. The list going stale is the problem."*
+> **A small sample is enough for a popularity list. The real problem is that the list goes stale.**
+> A list from a few hundred people already looks a lot like everyone's list at that moment. But once the moment has
+> passed, the gap between the list and the future is far larger than the gap caused by asking only a few hundred people.
 
-## D. What not to claim
+Before running, we wrote down 3 predictions. **Result: one inconclusive, one overturned, one half right.**
+That is useful: why these three plausible ideas fail is itself a finding.
 
-- Not one N* number; not that breadth beats depth; not that the hybrid is safe.
-- Not that recency fixes recover the drift gap (about 2% only).
-- Not any of the 50 hunt results as discoveries.
-- Not that the shared-provider reviews are an outside audit.
+---
 
-## E. Open work, ranked by value
+## 3. The three predictions and what happened
 
-1. A stop-or-refresh rule: when to resample, evaluated on the later list with the half-life chosen inside the sample.
-   This would turn the drift ceiling into a measured loss.
-2. Redo C2 and C3 with a second disjoint panel; bootstrap over panel people; test fixed rules such as "always
-   personalize at k = all" against the hybrid.
-3. Lift the 1,500-item cap on gowalla, amazon-video-games and ml-latest (only 6-37% of later choices fall inside it).
-4. X4 and X13 could not be tested on the data we have.
+### 1. "More people beats longer histories" (C1): inconclusive
 
-## F. Files in reading order
+- **Idea:** with a fixed budget (say 10,000 records), ask 1,000 people with 10 records each, or 100 people with 100 each?
+  We guessed the first is better.
+- **Result:** accuracy is almost a tie (the first wins in 61% of 46 settings; average gap 0.0005, negligible).
+- **Interesting part:** the "more people" version is **more stable**. Repeat the draw many times and the list wobbles
+  less (in 39 of 46 settings).
+- **In one line:** more people buys stability, not accuracy.
 
-1. `docs/small_sample/00_start_here_en.md`
-2. `docs/small_sample/01_preregistration_en.md`
-3. `docs/small_sample/02_results_en.md`
-4. this file
-5. Figures: `F2-C1_contrasts.png`, `F2-C2a_hybrid_vs_pure.png`, `F2-C3a_crossover_table.png`,
-   `an_explore_a_x10_drift_vs_sampling.png`, `an_explore_b_x7_recency.png`, `an_curves_two_speeds.png`
+### 2. "Let the sample choose the mix" (C2): overturned
+
+- **Idea:** hide some people's records as a test, use the test score to pick the mix of popularity and personalized, and
+  the result should never be worse than the better of the two.
+- **Result:** it fails. On average it is slightly worse, and better in only 1 of 7 datasets.
+- **Why:** the test has almost no skill. It is right 68% of the time, but **always guessing "use popularity" with no test
+  is already right 67%**. It also overstates how much personalization helps.
+- **In one line:** choosing the mix inside a small sample is as good as not choosing.
+
+### 3. "A crossover N\* exists" (C3): half right
+
+- **Idea:** past some sample size, personalization beats popularity, and the threshold drops as histories get longer.
+- **Result:** a crossover does exist, but **it is not one universal number**:
+  - some datasets (ml-latest, amazon-software, kuairand-pure) need only about 20 people;
+  - others need 100 (ml-1m) or 1,000 (gowalla);
+  - two smaller Amazon datasets show none up to 2,000.
+  - "Longer histories lower the threshold" was not observed.
+- **Note:** the 20-person level comes from a stage we **added afterwards**, once we saw our smallest planned size (100)
+  was too coarse. Label it as such.
+- **In one line:** the threshold depends on the dataset, not on history length.
+
+---
+
+## 4. New findings worth a paper (exploratory: not predicted in advance, seen in the data)
+
+### 4. Time costs more accuracy than a small sample does
+
+- **Plain version:** like guessing next month's bestsellers from last month's chart.
+- **Data:** the gap between an earlier list and a later list is 0.66 points; the gap from asking only 1,000 people is
+  0.003. True in 10 of 10 datasets we could judge.
+- **Repair:** using only recent records, or weighting new records more, does help (wins 179 of 223 settings), but
+  recovers only about **2%** of the gap.
+- **Honest limit:** 0.66 is a **ceiling** computed with the future answer in hand; no real method can reach it.
+
+### 5. The popularity list tops out early; the personalized model keeps improving
+
+- **Plain version:** a popularity list is "read the chart", which a few hundred people reveal; personalization is
+  "know each person", which keeps improving with more people.
+- **Data:** growing from 100 people to the largest sample (up to 4,000), popularity improves 1.22 times, personalized 1.94 times.
+- **Limit:** nothing was tested beyond 4,000 people.
+
+### 6. The mathematically "unbiased" estimate does worse in practice
+
+- **Plain version:** "unbiased" = right on average but jumpy each time; "biased" = slightly off but steady. With small
+  samples, **steady beats exact**.
+- **Data:** in 50 settings, the unbiased method beat plain counting in only 3.
+
+### 7. The usual "rank error bar" is too optimistic
+
+- **Plain version:** we say "this item ranks 80th, give or take: 60 to 100".
+- **Data:** the common bootstrap range actually contains the true rank only 85% of the time. A stricter method
+  (Mogstad et al.) always did (reaching 95%) but its range is **3 times wider**.
+- **In one line:** to rank from a small sample, accept wide ranges or don't trust the exact rank.
+
+### 8. What privacy costs
+
+- **Plain version:** differential privacy adds noise so nobody can tell whether one person took part.
+- **Data:** with a trusted center adding the noise (central), at privacy strength ε ≥ 2 and 2,000+ people, list quality
+  stays at 86%. With each person adding noise on their own phone (local), you need **about 50 times** more people.
+- **In one line:** local privacy is expensive, and it is paid for with headcount.
+
+### 9. Special subgroups: we guessed backwards
+
+- **Idea:** the more a subgroup differs from the crowd, the more it needs its own data.
+- **Result:** the more unusual the subgroup, the **sooner** its own sample beats the crowd list (correlation −0.44).
+  After removing the effect of series that never found a crossover, only −0.20 is left, which is weak.
+
+---
+
+## 5. How to tell this negative result
+
+1. All three predictions were written and committed before the runs (pre-registration, 15 dated amendments), not picked afterwards.
+2. Two failures were judged by failure lines set in advance, and we found why.
+3. The by-products give a usable diagnosis: stop worrying about how many people to ask; worry about how fast the list expires.
+
+Suggested title: *"Small samples are enough for popularity. The list going stale is the problem."*
+
+## 6. Do not say
+
+- "N\* is X" (there is no single number).
+- "More people always beats longer histories."
+- "The hybrid is safe."
+- "We solved staleness" (only about 2% recovered).
+- Most of the 50 replicated "surprise hunt" results are small-sample artifacts; do not call them important.
+- The reviews were by subagents from the same provider, not an outside audit.
+
+## 7. Next steps, by value
+
+1. **Build a "when to ask again" rule**, turning the 0.66 ceiling into a measurable loss.
+2. Redo C2 and C3 with a different, non-overlapping test group, to confirm they are not a quirk of one group.
+3. Remove the "choose among only 1,500 candidates" limit (on some datasets it covers only 6-37% of real choices).
+4. Two things we wanted to test (X4, X13) cannot be tested with the current data.
+
+## 8. Reading order
+
+1. `00_start_here_en.md` → 2. `01_preregistration_en.md` → 3. `02_results_en.md` → 4. this file
+5. Figures (`results/small_sample_popularity/04_figures/`): `F2-C1_contrasts.png`, `F2-C2a_hybrid_vs_pure.png`,
+   `F2-C3a_crossover_table.png`, `an_explore_a_x10_drift_vs_sampling.png`, `an_explore_b_x7_recency.png`, `an_curves_two_speeds.png`
