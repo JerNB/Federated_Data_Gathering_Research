@@ -151,8 +151,13 @@ def rank_eval(scores: np.ndarray, pn: Panel, m: int = 100, rng: np.random.Genera
     idcg = np.concatenate([[0.0], np.cumsum(1.0 / LOG2[:m])])[ideal_n]
     ndcg = np.where(idcg > 0, dcg / np.maximum(idcg, 1e-12), np.nan)
     rec = hit.sum(1) / np.maximum(pn.n_rel, 1)
+    # "in-universe" NDCG: only relevant items a model could reach (inside Omega) count, and only people who have any
+    n_in = pn.rel.sum(1)
+    idcg_in = np.concatenate([[0.0], np.cumsum(1.0 / LOG2[:m])])[np.minimum(n_in, m).astype(int)]
+    ndcg_in = np.where(idcg_in > 0, dcg / np.maximum(idcg_in, 1e-12), np.nan)
     return {"ndcg": float(np.nanmean(ndcg)), "recall": float(np.mean(rec)),
-            "hit": float(np.mean(hit.any(1)))}
+            "hit": float(np.mean(hit.any(1))),
+            "ndcg_in": float(np.nanmean(ndcg_in)) if np.isfinite(ndcg_in).any() else float("nan")}
 
 
 def zscore_rows(a: np.ndarray) -> np.ndarray:

@@ -194,16 +194,17 @@ def run_e2(task: dict) -> dict:
     md = max(float(np.mean(np.diag(G))) if len(G) else 1.0, 1e-6)
     zpop = E.zscore_rows(c[om])
     base = E.rank_eval(zpop, pn, rng=rng)
-    row["pop.U_ndcg"], row["pop.U_recall"] = _r(base["ndcg"]), _r(base["recall"])
+    row["pop.U_ndcg"], row["pop.U_recall"], row["pop.U_ndcg_in"] = _r(base["ndcg"]), _r(base["recall"]), _r(base["ndcg_in"])
     # models fitted on the whole sample at each lambda ratio, scored at every blend weight
     scores = {}
     for r in R_GRID:
         scores[("ease", r)] = E.zscore_rows(E.apply_model(pn.profile, E.ease_B(G, r * md)))
     scores[("knn", 0.0)] = E.zscore_rows(E.apply_model(pn.profile, E.knn_W(G)))
-    grid = {}
+    grid, grid_in = {}, {}
     for (mdl, r), sc in scores.items():
         for wt in W_GRID:
-            grid[(mdl, r, wt)] = E.rank_eval((1 - wt) * zpop + wt * sc, pn, rng=rng)["ndcg"]
+            ev = E.rank_eval((1 - wt) * zpop + wt * sc, pn, rng=rng)
+            grid[(mdl, r, wt)], grid_in[(mdl, r, wt)] = ev["ndcg"], ev["ndcg_in"]
     # oracle (panel-tuned, an upper bound) and fixed reference points
     row["oracle_best.U_ndcg"] = _r(max(grid.values()))
     row["ease_r25.w100.U_ndcg"] = _r(grid[("ease", 0.25, 1.0)])
@@ -223,6 +224,8 @@ def run_e2(task: dict) -> dict:
             row[f"hyb_{mode}.w"], row[f"hyb_{mode}.model"] = ch[2], ch[0]
             row[f"hyb_{mode}.U_ndcg"] = _r(grid[ch])
             row[f"pers_{mode}.U_ndcg"] = _r(grid[(pure[0], pure[1], 1.0)])
+            row[f"hyb_{mode}.U_ndcg_in"] = _r(grid_in[ch])
+            row[f"pers_{mode}.U_ndcg_in"] = _r(grid_in[(pure[0], pure[1], 1.0)])
     row["omega"] = int(len(om))
     row["sec"] = _r(time.time() - t0)
     return row
