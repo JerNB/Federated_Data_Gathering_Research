@@ -87,9 +87,10 @@ def build(stage):
             groups = [f"activity:{i}" for i in range(3)] + [f"joined:{i}" for i in range(3)]
             if ds in ("ml-latest", "ml-1m"):
                 groups += [f"genre:{g}" for g in GENRES]
-            pool = meta(ds)["n_pop"] // 3
             for g in groups:
-                for N in [n for n in (10, 20, 50, 100, 200, 500, 1000) if n <= 0.5 * pool]:
+                # genre fans = top 15% by genre share; terciles = one third of the group
+                pool = meta(ds)["n_pop"] * (0.15 if g.startswith("genre:") else 1 / 3)
+                for N in [n for n in (10, 20, 50, 100, 200, 500, 1000) if n <= 0.4 * pool]:
                     for k in (5, None):
                         for d in range(R_E5):
                             out.append(T("e5", ds, d, group=g, N=N, k=k))

@@ -28,6 +28,8 @@ def bound_contributions(X: sp.csr_matrix, k: int, rng: np.random.Generator) -> s
     Returns:
         Binary float32 csr matrix X_k with at most k non-zeros per row.
     """
+    if not (isinstance(k, (int, np.integer)) and k >= 1):
+        raise ValueError(f"k must be a positive integer, got {k!r}")
     if k < 1:
         raise ValueError("k must be >= 1")
     Xc = sp.csr_matrix(X, copy=True)

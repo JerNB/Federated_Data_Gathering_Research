@@ -69,6 +69,13 @@ def list_metrics(score: np.ndarray, fr, rng: np.random.Generator, prefix: str) -
     out[f"{prefix}.B_ndcg100"] = M.ndcg_vs_gain(est_top, tB, 100)
     out[f"{prefix}.B_mass10"] = M.mass_captured(M.top_m(score, 10, rng), tB, 10)
     out[f"{prefix}.B_ov100"] = M.overlap_at_m(score, tB, 100, rng)
+    # window truth: items counted only in (T_old, T0], disjoint from the stale list
+    tW = fr.count_Aw
+    if tW.sum() > 0:
+        out[f"{prefix}.W_ov10"] = M.overlap_at_m(score, tW, 10, rng)
+        out[f"{prefix}.W_ov100"] = M.overlap_at_m(score, tW, 100, rng)
+        out[f"{prefix}.W_rbo90"] = M.rbo_from_scores(score, tW, 0.9, 100, rng)
+        out[f"{prefix}.W_ndcg100"] = M.ndcg_vs_gain(est_top, tW, 100)
     return out
 
 
@@ -95,9 +102,15 @@ class Panel:
         self.E = len(panel_rows)
 
 
-def rank_eval(scores: np.ndarray, pn: Panel, m: int = 100) -> dict:
-    """NDCG@m, recall@m, hit@m for E users. scores is E x J_c (or 1 x J_c, broadcast)."""
-    s = np.where(pn.seen, -np.inf, np.broadcast_to(scores, pn.seen.shape))
+def rank_eval(scores: np.ndarray, pn: Panel, m: int = 100, rng: np.random.Generator | None = None) -> dict:
+    """NDCG@m, recall@m, hit@m for E users. scores is E x J_c (or 1 x J_c, broadcast).
+
+    Ties are broken uniformly at random (a jitter far below any real score gap), as the pre-registration says.
+    """
+    rng = rng if rng is not None else np.random.default_rng(0)
+    base = np.broadcast_to(np.asarray(scores, dtype=np.float32), pn.seen.shape)
+    jitter = rng.random(pn.seen.shape, dtype=np.float32) * 1e-5
+    s = np.where(pn.seen, -np.inf, base + jitter)
     m_eff = min(m, s.shape[1])
     part = np.argpartition(-s, m_eff - 1, axis=1)[:, :m_eff]
     vals = np.take_along_axis(s, part, 1)

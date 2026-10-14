@@ -40,6 +40,7 @@ class Frame:
     count_A: np.ndarray              # float64 (n_items,)
     count_B: np.ndarray
     count_old: np.ndarray
+    count_Aw: np.ndarray             # truth over the window (T_old, T0] only: disjoint from the stale list
     # EVAL panel (CSR): all collection choices, and future choices
     e_c: sp.csr_matrix
     e_f: sp.csr_matrix
@@ -114,8 +115,10 @@ def build_frame(name: str, seed: int = 20261014, eval_frac: float = 0.2, cut_q: 
     count_B = np.bincount(item[sel_f], minlength=n_items).astype(np.float64)
     if has_time:
         count_old = np.bincount(pi[pt <= T_old], minlength=n_items).astype(np.float64)
+        count_Aw = np.bincount(pi[pt > T_old], minlength=n_items).astype(np.float64)
     else:
         count_old = np.zeros(n_items)
+        count_Aw = np.zeros(n_items)
     first_ts = np.zeros(len(pop_users), np.int64)
     if has_time:
         firsts = np.full(n_users, np.iinfo(np.int64).max, np.int64)
@@ -149,7 +152,7 @@ def build_frame(name: str, seed: int = 20261014, eval_frac: float = 0.2, cut_q: 
 
     return Frame(name=name, n_items=n_items, min_rows=f, has_time=has_time, T0=T0, T_old=T_old,
                  c_ptr=c_ptr, c_idx=pi.astype(np.int32), c_ts=pt, n_c=n_c, n_f=n_f,
-                 count_A=count_A, count_B=count_B, count_old=count_old, e_c=e_c, e_f=e_f,
+                 count_A=count_A, count_B=count_B, count_old=count_old, count_Aw=count_Aw, e_c=e_c, e_f=e_f,
                  first_ts=first_ts, genre_share=genre_share,
                  meta=dict(seed=seed, positive_threshold=thr, n_pop=len(pop_users),
                            n_eval=int(e_f.shape[0]), n_rows_coll=int(len(pi)),
@@ -160,10 +163,12 @@ def build_frame(name: str, seed: int = 20261014, eval_frac: float = 0.2, cut_q: 
 
 def draw_users(fr: Frame, n: int, rng: np.random.Generator, mode: str = "uniform",
                pool: np.ndarray | None = None):
-    """Pick n POP users (rows of the frame). Returns (rows, pi) with inclusion probabilities.
+    """Pick about n POP users (rows of the frame). Returns (rows, pi) with exact inclusion probabilities.
 
-    mode: uniform | activity (prob ~ n_c) | inv_activity (prob ~ 1/n_c)
-    pi for weighted modes uses the standard with-replacement approximation min(1, n w / sum w).
+    uniform: exactly n users without replacement, pi = n / pool size.
+    activity (prob ~ n_c) and inv_activity (prob ~ 1/n_c): Poisson sampling. User u joins independently with
+      pi_u = min(1, lam * w_u), lam chosen so that sum(pi_u) = n. The sample size is random (about n), and the
+      Horvitz-Thompson weights 1/pi_u are exactly unbiased.
     """
     pool = np.arange(fr.n_pop) if pool is None else pool
     n = min(n, len(pool))
@@ -172,9 +177,20 @@ def draw_users(fr: Frame, n: int, rng: np.random.Generator, mode: str = "uniform
         return rows, np.full(n, n / len(pool))
     w = fr.n_c[pool].astype(np.float64)
     w = w if mode == "activity" else 1.0 / np.maximum(w, 1)
-    p = w / w.sum()
-    pick = rng.choice(len(pool), n, replace=False, p=p)
-    return pool[pick], np.minimum(1.0, n * p[pick])
+    lo, hi = 0.0, 1.0
+    while np.minimum(1.0, hi * w).sum() < n:
+        hi *= 2
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        if np.minimum(1.0, mid * w).sum() < n:
+            lo = mid
+        else:
+            hi = mid
+    p = np.minimum(1.0, hi * w)
+    pick = np.flatnonzero(rng.random(len(pool)) < p)
+    if len(pick) == 0:
+        pick = np.array([int(np.argmax(p))])
+    return pool[pick], p[pick]
 
 
 def draw_rows(fr: Frame, users: np.ndarray, k: int | None, rng: np.random.Generator,

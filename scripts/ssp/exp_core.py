@@ -54,14 +54,30 @@ def prior_pi(fr: F.Frame) -> np.ndarray:
     return (c + 0.1) / (c.sum() + 0.1 * len(c))
 
 
+_WIN: dict = {}
+
+
+def window_pool(fr: F.Frame) -> np.ndarray:
+    """POP users with at least one collection choice after T_old (people active in the recent window)."""
+    key = id(fr)
+    if key not in _WIN:
+        _WIN.clear()
+        n_win = np.add.reduceat((fr.c_ts >= fr.T_old).astype(np.int64), fr.c_ptr[:-1])
+        n_win = np.where(np.diff(fr.c_ptr) > 0, n_win, 0)
+        _WIN[key] = np.flatnonzero(n_win > 0)
+    return _WIN[key]
+
+
 def sample(fr, task, rng):
     """Draw the users and their rows for a task. Returns S, user weights, n_users, row_ts."""
     mode = task.get("users", "uniform")
     rule = task.get("rows", "random")
     k = task["k"]
     k = None if k in (None, 0) else int(k)
-    users, pi = F.draw_users(fr, task["N"], rng, mode, task.get("pool"))
-    ts_min = fr.T_old if (task.get("window") and fr.has_time) else None
+    window = bool(task.get("window")) and fr.has_time
+    pool = window_pool(fr) if window else task.get("pool")
+    users, pi = F.draw_users(fr, task["N"], rng, mode, pool)
+    ts_min = fr.T_old if window else None
     S, kept, avail, row_ts = F.draw_rows(fr, users, k, rng, rule, ts_min)
     nonempty = kept > 0
     w = np.zeros(len(users))
@@ -96,11 +112,10 @@ def run_e1(task: dict) -> dict:
     fr = frame(task["dataset"])
     rng = rng_for(task["key"])
     S, w, n_users, row_ts = sample(fr, task, rng)
-    ests = pop_estimators(fr, S, w, n_users, rng, with_ht=task.get("users", "uniform") != "uniform"
-                          or task.get("rows", "random") != "random")
+    ests = pop_estimators(fr, S, w, n_users, rng, with_ht=task.get("users", "uniform") != "uniform")
     row = {"dataset": task["dataset"], "N": task["N"], "k": task["k"], "draw": task["draw"],
            "users": task.get("users", "uniform"), "rows": task.get("rows", "random"),
-           "n_rows": int(S.nnz), "items_seen": int((np.asarray(S.sum(0)).ravel() > 0).sum())}
+           "arm": task.get("arm", "uniform"), "n_users": int(n_users), "n_rows": int(S.nnz), "items_seen": int((np.asarray(S.sum(0)).ravel() > 0).sum())}
     if "_kappa" in ests:
         row["kappa"] = _r(ests.pop("_kappa"))
     # list quality vs truth A and B
@@ -115,7 +130,7 @@ def run_e1(task: dict) -> dict:
     om = E.universe(c, J_CAP, rng)
     pn = E.Panel(fr, prow, prof, om)
     for name, sc in ests.items():
-        for k_, v in E.rank_eval(sc[om][None, :], pn).items():
+        for k_, v in E.rank_eval(sc[om][None, :], pn, rng=rng).items():
             row[f"{name}.U_{k_}"] = _r(v)
     row["omega"] = int(len(om))
     row["sec"] = _r(time.time() - t0)
@@ -147,10 +162,10 @@ def holdout_choice(S, row_ts, om, rng, mode: str):
     for r in R_GRID:
         sc = E.zscore_rows(E.apply_model(V, E.ease_B(Gv, r * mdv)))
         for wt in W_GRID:
-            table[("ease", r, wt)] = E.rank_eval((1 - wt) * zv + wt * sc, cvp)["ndcg"]
+            table[("ease", r, wt)] = E.rank_eval((1 - wt) * zv + wt * sc, cvp, rng=rng)["ndcg"]
     sc = E.zscore_rows(E.apply_model(V, E.knn_W(Gv)))
     for wt in W_GRID:
-        table[("knn", 0.0, wt)] = E.rank_eval((1 - wt) * zv + wt * sc, cvp)["ndcg"]
+        table[("knn", 0.0, wt)] = E.rank_eval((1 - wt) * zv + wt * sc, cvp, rng=rng)["ndcg"]
     ok = {kk: v for kk, v in table.items() if np.isfinite(v)}
     if not ok:
         return None, None, None
@@ -175,7 +190,7 @@ def run_e2(task: dict) -> dict:
     G = E.gram(S_om)
     md = max(float(np.mean(np.diag(G))) if len(G) else 1.0, 1e-6)
     zpop = E.zscore_rows(c[om])
-    base = E.rank_eval(zpop, pn)
+    base = E.rank_eval(zpop, pn, rng=rng)
     row["pop.U_ndcg"], row["pop.U_recall"] = _r(base["ndcg"]), _r(base["recall"])
     # models fitted on the whole sample at each lambda ratio, scored at every blend weight
     scores = {}
@@ -185,7 +200,7 @@ def run_e2(task: dict) -> dict:
     grid = {}
     for (mdl, r), sc in scores.items():
         for wt in W_GRID:
-            grid[(mdl, r, wt)] = E.rank_eval((1 - wt) * zpop + wt * sc, pn)["ndcg"]
+            grid[(mdl, r, wt)] = E.rank_eval((1 - wt) * zpop + wt * sc, pn, rng=rng)["ndcg"]
     # oracle (panel-tuned, an upper bound) and fixed reference points
     row["oracle_best.U_ndcg"] = _r(max(grid.values()))
     row["ease_r25.w100.U_ndcg"] = _r(grid[("ease", 0.25, 1.0)])
@@ -253,6 +268,7 @@ def run_e4(task: dict) -> dict:
 def subgroup_pool(fr: F.Frame, kind: str) -> np.ndarray:
     if kind.startswith("genre:"):
         g = kind.split(":", 1)[1]
+        g = g if g in fr.genre_share else next(x for x in fr.genre_share if x.startswith(g))  # Children / Children's
         share = fr.genre_share[g]
         thr = np.quantile(share, 0.85)
         return np.flatnonzero(share >= thr)
@@ -347,7 +363,7 @@ def run_ref(task: dict) -> dict:
             continue
         for k_, v in E.list_metrics(sc.astype(np.float64), fr, rng, name).items():
             row[k_] = _r(v)
-        for k_, v in E.rank_eval(sc[om][None, :].astype(np.float32), pn).items():
+        for k_, v in E.rank_eval(sc[om][None, :].astype(np.float32), pn, rng=rng).items():
             row[f"{name}.U_{k_}"] = _r(v)
     return row
 

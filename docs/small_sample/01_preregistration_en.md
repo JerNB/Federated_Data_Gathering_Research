@@ -145,3 +145,17 @@ Each carries a prediction so that a miss is visible. False-discovery control: Be
 ## 10. Compute rules for the overnight run
 
 CPU only, no GPU. A governor reads die temperature, fan speed, memory and disk every 3 seconds. On this machine the fans idle at about 1,400 rpm and start rising once the die stays near 80 °C, so the run slows or freezes when the die passes 72 °C or the fans pass 1,750 rpm, and freezes all workers when it passes 78 °C or 2,100 rpm. At most 4 workers, 8 GB of worker memory, and at least 10 GB of disk left free. Every task is repeatable from its key.
+
+## 11. Amendments (2026-10-14, made after an independent code review and BEFORE any real run)
+
+An independent review of the code (a subagent on the same provider, so not an outside audit) found issues. Each is fixed or declared here. No real-run result had been seen; the pilot draws on ml-1m are not used anywhere.
+
+| # | Change | Why |
+| --- | --- | --- |
+| A1 | The **stale list** (choices before the 55th percentile) is a nested part of Truth A (choices before T0), about two thirds of its rows, so "stale beats samples" would be partly mechanical. X1 and X2 are therefore scored against a **window truth** (choices between the 55th percentile and T0 only), using samples drawn only from that window (`recent_window` arm). The main grid's `shrunk` estimator is still reported but is flagged "prior overlaps the truth". | Remove overlap between prior and truth |
+| A2 | C3 uses **k = 10** and **k = all** (k = 20 exists in only 4 of the 7 model-stage datasets, so "5 of 7" could never be met). Prediction: N* exists at k = all in at least 5 of 7 datasets and at k = 10 in at least 4 of 7. Falsifier unchanged. | Rule was unmeetable by construction |
+| A3 | Frame rule: at least 20 earlier choices when 3,000 or more people qualify, else 10, else 5. In practice amazon-movies-tv and amazon-books use 20; the three smaller Amazon sets use 10. | Table in section 3 was wrong |
+| A4 | Biased samplers (activity-weighted, inverse-activity) use **Poisson sampling**: each person joins independently with a known probability, so the sample size is random (about N) and the weighted count is exactly unbiased. | The first design had biased weights at large N |
+| A5 | Ties in the panel scoring are broken at random. Time-ordered hiding cannot separate choices with the same timestamp (common on ml-1m and bulk-imported data), so there it is only partly time-ordered. The ml-1m panel has 194 people only, so its panel numbers are noisy. | Reported limits |
+| A6 | Genre subgroups are the 15% of people with the highest share of that genre; the sample size N is capped at 40% of the subgroup. | Keep a real sampling situation |
+| A7 | `ht` (weighted count) is reported only for the activity-biased samplers, not for "recent rows". | It is not a valid weighting there |
