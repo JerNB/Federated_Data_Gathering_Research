@@ -14,3 +14,7 @@ get https://snap.stanford.edu/data/loc-gowalla_totalCheckins.txt.gz gowalla.txt.
 get https://snap.stanford.edu/data/loc-brightkite_totalCheckins.txt.gz brightkite.txt.gz
 get https://zenodo.org/records/10439422/files/KuaiRand-Pure.tar.gz kuairand_pure.tar.gz
 get http://mtg.upf.edu/static/datasets/last.fm/lastfm-dataset-1K.tar.gz lastfm_1k.tar.gz
+# seasonality / more product categories (added for the refresh and two-round studies)
+for c in Toys_and_Games Grocery_and_Gourmet_Food Pet_Supplies Sports_and_Outdoors Cell_Phones_and_Accessories Arts_Crafts_and_Sewing Office_Products Patio_Lawn_and_Garden Health_and_Household Electronics Automotive; do
+  get $AM/$c.csv.gz amazon_$(echo $c | tr 'A-Z' 'a-z').csv.gz
+done

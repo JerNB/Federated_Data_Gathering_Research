@@ -190,6 +190,10 @@ JOBS = {
     "amazon-movies-tv": lambda: _amazon("amazon-movies-tv", "amazon_movies_tv.csv.gz"),
     "amazon-books": lambda: _amazon("amazon-books", "amazon_books.csv.gz"),
     "amazon-software": lambda: _amazon("amazon-software", "amazon_software.csv.gz"),
+    **{f"amazon-{s.lower().replace('_', '-')}": (lambda s=s: _amazon(f"amazon-{s.lower().replace('_', '-')}", f"amazon_{s.lower()}.csv.gz"))
+       for s in ("Toys_and_Games", "Grocery_and_Gourmet_Food", "Pet_Supplies", "Sports_and_Outdoors",
+                 "Cell_Phones_and_Accessories", "Arts_Crafts_and_Sewing", "Office_Products",
+                 "Patio_Lawn_and_Garden", "Health_and_Household", "Electronics", "Automotive")},
     "gowalla": lambda: _checkins("gowalla", "gowalla.txt.gz"),
     "brightkite": lambda: _checkins("brightkite", "brightkite.txt.gz"),
     "lastfm-1k": prep_lastfm,
