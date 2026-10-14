@@ -1,0 +1,54 @@
+{
+ "governed_hours": 4.69,
+ "samples": 5607,
+ "fan_rpm": {
+  "median": 1463.0,
+  "p99": 1625.9399999999996,
+  "max": 1742.0,
+  "share_above_1750": 0.0,
+  "share_above_2100": 0.0
+ },
+ "smoothed_temp_c": {
+  "median": 63.1,
+  "p99": 72.19399999999996,
+  "max": 73.1
+ },
+ "raw_temp_c": {
+  "max": 81.9,
+  "share_above_78": 0.033707865168539325
+ },
+ "workers_target": {
+  "2": 2309,
+  "3": 2219,
+  "4": 336,
+  "1": 721,
+  "0": 22
+ },
+ "freezes": 1,
+ "governor_events": {
+  "freeze": 1
+ },
+ "swap_gb_first_last": [
+  26.14,
+  31.66
+ ],
+ "disk_free_gb_min": 10.6,
+ "worker_memory_gb_max": 2.19,
+ "calibration_before_run": {
+  "0": {
+   "last_fan_mean": 1461.0,
+   "last_temp_mean": 43.287375,
+   "max_fan": 1493.0
+  },
+  "2": {
+   "last_fan_mean": 2359.75,
+   "last_temp_mean": 83.299125,
+   "max_fan": 2447.0
+  },
+  "4": {
+   "last_fan_mean": 3050.25,
+   "last_temp_mean": 82.70325,
+   "max_fan": 3240.0
+  }
+ }
+}
