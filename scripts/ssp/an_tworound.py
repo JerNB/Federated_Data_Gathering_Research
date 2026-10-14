@@ -1,21 +1,24 @@
-"""T1 (exploratory, written before running): ask in two rounds instead of one.
+"""T1 (exploratory): can a two-round shortlist reduce the number of people needed?
 
-Same people budget, same message size per person (at most k items). N people are drawn without replacement.
-  one-round : all N people each report k random choices; the list is the top 100 by count.
-  two-round : half of the N people report k random choices -> shortlist S = top 250 items;
-              the other half each report k random choices among their choices INSIDE S;
-              the final list ranks the items in S by round-2 counts.
-Scored by top-100 overlap with the whole community's list (truth A, all choices) and with the user-normalised list
-(truth Au, the one a k-capped sample really targets). Primary = Au overlap@100 (as registered in A9 for k < all).
-Saving factor at a cell = (one-round N giving the same overlap, log-linear interpolation) / N; right-censored at the
-largest N when the two-round list beats everything on the one-round curve.
-Predictions fixed before the run:
-  T1  at k = 5, two-round beats one-round in >= 60% of (dataset, N) cells with N >= 400 and a gain interval above 0
-      in >= half of the datasets;
-  T2  median saving factor at k = 5 is >= 1.5;
-  T3  the saving factor is larger at k = 1 than at k = 5, and larger at k = 5 than at k = 20 (median over datasets).
+Amendment A16 (after the first run): the first implementation discarded round-1 counts and sampled round 2 without
+correcting its within-shortlist inclusion probabilities. That run is retained as ``an_tworound_*`` but is not used
+as the primary result. This run uses the corrected estimator below and writes ``an_tworound_amended_*``.
+
+Same people budget and at most k uploaded items per person. N people are drawn without replacement.
+  one-round : all N people report k random choices, inverse-probability weighted for user-normalised truth Au.
+  two-round : half report k random choices; their weighted counts form shortlist S; the other half report k random
+              choices among their choices inside S, with the matching Horvitz-Thompson weight. The final score on S
+              is the sum of both halves' weighted counts, so round 1 is not discarded.
+Primary metric: overlap@100 with Au, the list where each person contributes total weight one. A = whole-row truth is
+also reported. Saving factor = one-round N needed for the same Au overlap divided by two-round N; endpoint cells are
+censored rather than treated as exact.
+
+Predictions fixed before the first run:
+  T1  at k = 5, corrected two-round beats one-round in >= 60% of (dataset, N) cells with N >= 400 and in at least
+      half of the cells for at least half of the datasets;
+  T2  median uncensored saving factor at k = 5 is >= 1.5;
+  T3  saving is larger at k = 1 than at k = 5, and larger at k = 5 than at k = 20.
 Sensitivity (reported, not judged): shortlist 150 and 500 at k = 5.
-Writes <out>/03_tables/an_tworound_cells.csv, an_tworound_verdicts.json, <out>/04_figures/an_tworound.png
 """
 import csv
 import json
@@ -39,10 +42,11 @@ NS = [100, 200, 400, 800, 1600, 3200, 6400]
 KS = [1, 5, 20]
 DRAWS = 30
 SHORT = 250
+TAG = "an_tworound_amended"
 
 
 def report(fr, users, k, rng, allowed=None):
-    """Count vector: each user reports at most k random choices (optionally only items in `allowed`)."""
+    """Estimate user-normalised truth with exact inclusion-probability weights."""
     starts, lens = fr.c_ptr[users], fr.n_c[users]
     total = int(lens.sum())
     grp = np.repeat(np.arange(len(users)), lens)
@@ -52,13 +56,21 @@ def report(fr, users, k, rng, allowed=None):
     if allowed is not None:
         keep0 = allowed[items]
         items, grp = items[keep0], grp[keep0]
+    n_available = np.bincount(grp, minlength=len(users)).astype(np.int64)
     rnd = rng.random(len(items))
-    o = np.lexsort((rnd, grp))
-    items, grp = items[o], grp[o]
-    cnt = np.bincount(grp, minlength=len(users))
-    off2 = np.arange(len(items)) - np.repeat(np.cumsum(cnt) - cnt, cnt)
-    items = items[off2 < k]
-    return np.bincount(items, minlength=fr.n_items).astype(np.float64)
+    order = np.lexsort((rnd, grp))
+    items, grp = items[order], grp[order]
+    n_for_row = n_available[grp]
+    off2 = np.arange(len(items)) - np.repeat(np.cumsum(n_available) - n_available, n_available)
+    keep = off2 < k
+    items, grp, n_for_row = items[keep], grp[keep], n_for_row[keep]
+    n_original = lens[grp].astype(np.float64)
+    n_reported = np.minimum(k, n_for_row).astype(np.float64)
+    if allowed is None:
+        weights = 1.0 / n_reported
+    else:
+        weights = n_for_row.astype(np.float64) / (n_reported * n_original)
+    return np.bincount(items, weights=weights, minlength=fr.n_items).astype(np.float64)
 
 
 def run_dataset(name, rng):
@@ -80,7 +92,7 @@ def run_dataset(name, rng):
                     allowed = np.zeros(fr.n_items, bool)
                     allowed[S] = True
                     cb = report(fr, u[h:], k, rng, allowed)
-                    sc2 = np.where(allowed, cb, -1.0)
+                    sc2 = np.where(allowed, ca + cb, -1.0)
                     two = dict(U=M.overlap_at_m(sc2, tU, 100, rng), A=M.overlap_at_m(sc2, tA, 100, rng))
                     if sz == SHORT:
                         out.append(dict(dataset=name, k=k, N=N, shortlist=sz, draw=dr, arm="one", **one))
@@ -97,7 +109,7 @@ def main():
     for n in names:
         rows += run_dataset(n, rng)
     os.makedirs(f"{OUT}/03_tables", exist_ok=True)
-    with open(f"{OUT}/03_tables/an_tworound_cells.csv", "w", newline="") as fh:
+    with open(f"{OUT}/03_tables/{TAG}_cells.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0]))
         w.writeheader()
         w.writerows(rows)
@@ -133,13 +145,13 @@ def summarise(rows, rng):
                 if v2 > vs_m[-1]:
                     eq, cens = Ns[-1], True
                 elif v2 <= vs_m[0]:
-                    eq, cens = Ns[0], False
+                    eq, cens = Ns[0], True
                 else:
                     eq, cens = float(np.exp(np.interp(v2, vs_m, np.log(Ns)))), False
                 cells.append(dict(dataset=d, k=k, N=N, one=v1, two=v2, gain=v2 - v1, lo=float(np.percentile(bs, 2.5)),
                                   hi=float(np.percentile(bs, 97.5)), saving=eq / N, saving_censored=cens))
     json_cells = cells
-    with open(f"{OUT}/03_tables/an_tworound_summary_cells.csv", "w", newline="") as fh:
+    with open(f"{OUT}/03_tables/{TAG}_summary_cells.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(cells[0]))
         w.writeheader()
         w.writerows(cells)
@@ -147,7 +159,7 @@ def summarise(rows, rng):
     t1_frac = float(np.mean([c["gain"] > 0 for c in c5])) if c5 else float("nan")
     t1_ds = {d: float(np.mean([c["gain"] > 0 and c["lo"] > 0 for c in c5 if c["dataset"] == d])) for d in datasets if any(c["dataset"] == d for c in c5)}
     t1_half = sum(1 for v in t1_ds.values() if v >= 0.5)
-    med = lambda k: float(np.median([c["saving"] for c in cells if c["k"] == k and c["N"] >= 400])) if any(c["k"] == k for c in cells) else float("nan")
+    med = lambda k: float(np.median([c["saving"] for c in cells if c["k"] == k and c["N"] >= 400 and not c["saving_censored"]])) if any(c["k"] == k and c["N"] >= 400 and not c["saving_censored"] for c in cells) else float("nan")
     sens = {}
     for sz in (150, SHORT, 500):
         g = []
@@ -166,7 +178,7 @@ def summarise(rows, rng):
         T2=dict(rule="median saving factor at k=5 >= 1.5", median=med(5)),
         T3=dict(rule="saving k=1 > k=5 > k=20", k1=med(1), k5=med(5), k20=med(20)),
         sensitivity_mean_gain_k5_by_shortlist=sens)
-    json.dump(verdict, open(f"{OUT}/03_tables/an_tworound_verdicts.json", "w"), indent=1,
+    json.dump(verdict, open(f"{OUT}/03_tables/{TAG}_verdicts.json", "w"), indent=1,
               default=lambda x: None if not np.isfinite(x) else x)
     os.makedirs(f"{OUT}/04_figures", exist_ok=True)
     fig, ax = plt.subplots(1, 2, figsize=(11, 4.4))
@@ -184,7 +196,7 @@ def summarise(rows, rng):
     for a in ax:
         a.set_xlabel("people N"); a.legend()
     fig.tight_layout()
-    fig.savefig(f"{OUT}/04_figures/an_tworound.png", dpi=130)
+    fig.savefig(f"{OUT}/04_figures/{TAG}.png", dpi=130)
     print(json.dumps(verdict, indent=1, default=str))
 
 
