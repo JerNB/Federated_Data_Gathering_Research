@@ -239,6 +239,7 @@ def run_tasks(fn: Callable[[dict], dict], tasks: Iterable[dict], gov: Governor,
     out = open(out_jsonl, "a")
     err = open(out_jsonl + ".errors", "a")
     pool_restarts = 0
+    blame: dict = {}
     try:
         while todo:
             if not gov.alive():
@@ -264,6 +265,7 @@ def run_tasks(fn: Callable[[dict], dict], tasks: Iterable[dict], gov: Governor,
                         try:
                             row = f.result()
                         except BrokenProcessPool:
+                            running[f] = t          # keep it so it is re-queued below
                             raise
                         except Exception as e:
                             attempts[t[key]] = attempts.get(t[key], 0) + 1
@@ -283,8 +285,16 @@ def run_tasks(fn: Callable[[dict], dict], tasks: Iterable[dict], gov: Governor,
                     raise
                 err.write(json.dumps({"event": "pool rebuilt", "n": pool_restarts}) + "\n")
                 err.flush()
-                # Re-queue everything unfinished (in flight or waiting) on a fresh pool.
-                todo = list(running.values()) + queue
+                # Re-queue everything unfinished on a fresh pool. A task in flight at three crashes is
+                # blamed, logged as failed and dropped (it would otherwise crash every new pool).
+                todo = list(queue)
+                for t in running.values():
+                    blame[t[key]] = blame.get(t[key], 0) + 1
+                    if blame[t[key]] >= 3:
+                        err.write(json.dumps({key: t[key], "error": "worker pool crashed 3 times on this task"}) + "\n")
+                        err.flush()
+                    else:
+                        todo.append(t)
                 gov._signal(signal.SIGCONT)
             finally:
                 ex.shutdown(wait=False, cancel_futures=True)
