@@ -1009,8 +1009,8 @@ def main():
         r, x1curves = run_x1(D, tabdir, figdir)
         return r
 
-    verdicts.append(guarded("X1", X1_TITLE, X1_RULE, do_x1))
-    verdicts.append(guarded("X2", X2_TITLE, X2_RULE, lambda: run_x2(D, x1curves, None, tabdir, figdir)))
+    # X1 and X2 on the main grid are superseded by an_window.py (amendment A1: on the main grid the stale list
+    # is a nested part of Truth A, so those two families are scored on the window truth there instead).
     verdicts.append(guarded("X3", X3_TITLE, X3_RULE, lambda: run_x3(D, tabdir, figdir)))
     verdicts.append(guarded("X4", X4_TITLE, X4_RULE, lambda: run_x4(D, tabdir, figdir)))
     verdicts.append(guarded("X10", X10_TITLE, X10_RULE, lambda: run_x10(D, tabdir, figdir)))
