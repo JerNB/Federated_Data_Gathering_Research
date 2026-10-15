@@ -18,3 +18,7 @@ get http://mtg.upf.edu/static/datasets/last.fm/lastfm-dataset-1K.tar.gz lastfm_1
 for c in Toys_and_Games Grocery_and_Gourmet_Food Pet_Supplies Sports_and_Outdoors Cell_Phones_and_Accessories Arts_Crafts_and_Sewing Office_Products Patio_Lawn_and_Garden Health_and_Household Electronics Automotive; do
   get $AM/$c.csv.gz amazon_$(echo $c | tr 'A-Z' 'a-z').csv.gz
 done
+# fresh holdout categories for the hypothesis tournament
+for c in Baby_Products CDs_and_Vinyl Industrial_and_Scientific Beauty_and_Personal_Care Tools_and_Home_Improvement; do
+  get $AM/$c.csv.gz amazon_$(echo $c | tr 'A-Z' 'a-z').csv.gz
+done

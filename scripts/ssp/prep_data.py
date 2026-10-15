@@ -193,7 +193,10 @@ JOBS = {
     **{f"amazon-{s.lower().replace('_', '-')}": (lambda s=s: _amazon(f"amazon-{s.lower().replace('_', '-')}", f"amazon_{s.lower()}.csv.gz"))
        for s in ("Toys_and_Games", "Grocery_and_Gourmet_Food", "Pet_Supplies", "Sports_and_Outdoors",
                  "Cell_Phones_and_Accessories", "Arts_Crafts_and_Sewing", "Office_Products",
-                 "Patio_Lawn_and_Garden", "Health_and_Household", "Electronics", "Automotive")},
+                 "Patio_Lawn_and_Garden", "Health_and_Household", "Electronics", "Automotive",
+                 # fresh holdout for the hypothesis tournament (never used in earlier studies)
+                 "Baby_Products", "CDs_and_Vinyl", "Industrial_and_Scientific", "Beauty_and_Personal_Care",
+                 "Tools_and_Home_Improvement")},
     "gowalla": lambda: _checkins("gowalla", "gowalla.txt.gz"),
     "brightkite": lambda: _checkins("brightkite", "brightkite.txt.gz"),
     "lastfm-1k": prep_lastfm,
