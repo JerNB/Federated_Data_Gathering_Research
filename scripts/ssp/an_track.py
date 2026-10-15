@@ -249,8 +249,8 @@ def main():
 
     def pc_fn(d):
         ns = sorted(by[d])
-        if not ns:
-            return None
+        if not ns or med_active[d] <= 0:
+            return None                       # share of active people undefined (log has empty windows)
         ma = med_active[d]
         reach = [n for n in ns if by[d][n]["Leq_fixed2"] <= 1.0]
         n1, status = None, ""

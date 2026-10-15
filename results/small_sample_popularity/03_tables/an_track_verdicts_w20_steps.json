@@ -1,0 +1,232 @@
+{
+ "PA": {
+  "verdict": "not supported",
+  "Amazon": {
+   "passed": 0,
+   "judged": 4,
+   "datasets": [],
+   "failed": [
+    "amazon-books",
+    "amazon-electronics",
+    "amazon-movies-tv",
+    "amazon-video-games"
+   ]
+  },
+  "Other": {
+   "passed": 1,
+   "judged": 3,
+   "datasets": [
+    "kuairand-pure"
+   ],
+   "failed": [
+    "brightkite",
+    "ml-latest"
+   ]
+  }
+ },
+ "PB": {
+  "verdict": "mixed",
+  "Amazon": {
+   "passed": 4,
+   "judged": 4,
+   "datasets": [
+    "amazon-books",
+    "amazon-electronics",
+    "amazon-movies-tv",
+    "amazon-video-games"
+   ],
+   "failed": []
+  },
+  "Other": {
+   "passed": 0,
+   "judged": 3,
+   "datasets": [],
+   "failed": [
+    "brightkite",
+    "kuairand-pure",
+    "ml-latest"
+   ]
+  }
+ },
+ "PC": {
+  "verdict": "mixed",
+  "Amazon": {
+   "passed": 0,
+   "judged": 3,
+   "datasets": [],
+   "failed": [
+    "amazon-books",
+    "amazon-electronics",
+    "amazon-movies-tv"
+   ]
+  },
+  "Other": {
+   "passed": 4,
+   "judged": 4,
+   "datasets": [
+    "brightkite",
+    "kuairand-pure",
+    "ml-1m",
+    "ml-latest"
+   ],
+   "failed": []
+  }
+ },
+ "PD": {
+  "verdict": "not supported",
+  "Amazon": {
+   "cells": 19,
+   "tuning_matters_cells": 3,
+   "selector_recovers_half": 0,
+   "frac_recovers": 0.0,
+   "harmful_cells": 19,
+   "frac_harm": 1.0
+  },
+  "Other": {
+   "cells": 16,
+   "tuning_matters_cells": 9,
+   "selector_recovers_half": 8,
+   "frac_recovers": 0.8888888888888888,
+   "harmful_cells": 4,
+   "frac_harm": 0.25
+  }
+ },
+ "skipped_cells": [],
+ "reported": {
+  "hstar_slope_by_stratum": {
+   "Amazon": {
+    "median": -0.11957689595051854,
+    "n": 3
+   },
+   "Other": {
+    "median": -0.35296425647064644,
+    "n": 2
+   }
+  },
+  "hstar_slopes": {
+   "amazon-books": {
+    "slope": -0.11957689595051854,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "lo",
+     "100": "",
+     "300": "",
+     "1000": ""
+    }
+   },
+   "amazon-cell-phones-and-accessories": {
+    "slope": null,
+    "n_interior": 1,
+    "edges": {
+     "10": ""
+    }
+   },
+   "amazon-electronics": {
+    "slope": -0.6547600448325409,
+    "n_interior": 3,
+    "edges": {
+     "10": "lo",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "amazon-movies-tv": {
+    "slope": 0.15668742362626428,
+    "n_interior": 3,
+    "edges": {
+     "10": "",
+     "30": "lo",
+     "100": "",
+     "300": ""
+    }
+   },
+   "amazon-office-products": {
+    "slope": null,
+    "n_interior": 0,
+    "edges": {
+     "10": "lo"
+    }
+   },
+   "amazon-toys-and-games": {
+    "slope": null,
+    "n_interior": 1,
+    "edges": {
+     "10": ""
+    }
+   },
+   "amazon-video-games": {
+    "slope": null,
+    "n_interior": 2,
+    "edges": {
+     "10": "lo",
+     "30": "",
+     "100": ""
+    }
+   },
+   "brightkite": {
+    "slope": -0.19999287673313493,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "gowalla": {
+    "slope": null,
+    "n_interior": 1,
+    "edges": {
+     "10": ""
+    }
+   },
+   "kuairand-pure": {
+    "slope": null,
+    "n_interior": 2,
+    "edges": {
+     "10": "hi",
+     "30": "hi",
+     "100": "hi",
+     "300": "",
+     "1000": ""
+    }
+   },
+   "ml-1m": {
+    "slope": null,
+    "n_interior": 0,
+    "edges": {
+     "10": "hi"
+    }
+   },
+   "ml-latest": {
+    "slope": -0.505935636208158,
+    "n_interior": 5,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": "",
+     "1000": ""
+    }
+   }
+  },
+  "hstar_vs_new_share": {
+   "Amazon": {
+    "n": 4,
+    "spearman": -0.19999999999999998
+   },
+   "Other": {
+    "n": 2,
+    "spearman": null
+   },
+   "All": {
+    "n": 6,
+    "spearman": -0.3142857142857143
+   }
+  }
+ },
+ "n_cells": 35,
+ "n_datasets": 12
+}

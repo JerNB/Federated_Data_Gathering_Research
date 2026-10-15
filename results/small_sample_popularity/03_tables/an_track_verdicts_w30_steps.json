@@ -1,0 +1,371 @@
+{
+ "PA": {
+  "verdict": "supported",
+  "Amazon": {
+   "passed": 12,
+   "judged": 15,
+   "datasets": [
+    "amazon-arts-crafts-and-sewing",
+    "amazon-automotive",
+    "amazon-books",
+    "amazon-cell-phones-and-accessories",
+    "amazon-grocery-and-gourmet-food",
+    "amazon-health-and-household",
+    "amazon-musical-instruments",
+    "amazon-office-products",
+    "amazon-patio-lawn-and-garden",
+    "amazon-pet-supplies",
+    "amazon-sports-and-outdoors",
+    "amazon-toys-and-games"
+   ],
+   "failed": [
+    "amazon-electronics",
+    "amazon-movies-tv",
+    "amazon-video-games"
+   ]
+  },
+  "Other": {
+   "passed": 3,
+   "judged": 4,
+   "datasets": [
+    "brightkite",
+    "gowalla",
+    "kuairand-pure"
+   ],
+   "failed": [
+    "ml-latest"
+   ]
+  }
+ },
+ "PB": {
+  "verdict": "mixed",
+  "Amazon": {
+   "passed": 15,
+   "judged": 15,
+   "datasets": [
+    "amazon-arts-crafts-and-sewing",
+    "amazon-automotive",
+    "amazon-books",
+    "amazon-cell-phones-and-accessories",
+    "amazon-electronics",
+    "amazon-grocery-and-gourmet-food",
+    "amazon-health-and-household",
+    "amazon-movies-tv",
+    "amazon-musical-instruments",
+    "amazon-office-products",
+    "amazon-patio-lawn-and-garden",
+    "amazon-pet-supplies",
+    "amazon-sports-and-outdoors",
+    "amazon-toys-and-games",
+    "amazon-video-games"
+   ],
+   "failed": []
+  },
+  "Other": {
+   "passed": 1,
+   "judged": 4,
+   "datasets": [
+    "brightkite"
+   ],
+   "failed": [
+    "gowalla",
+    "kuairand-pure",
+    "ml-latest"
+   ]
+  }
+ },
+ "PC": {
+  "verdict": "mixed",
+  "Amazon": {
+   "passed": 4,
+   "judged": 7,
+   "datasets": [
+    "amazon-musical-instruments",
+    "amazon-pet-supplies",
+    "amazon-sports-and-outdoors",
+    "amazon-video-games"
+   ],
+   "failed": [
+    "amazon-books",
+    "amazon-electronics",
+    "amazon-movies-tv"
+   ]
+  },
+  "Other": {
+   "passed": 5,
+   "judged": 5,
+   "datasets": [
+    "brightkite",
+    "gowalla",
+    "kuairand-pure",
+    "ml-1m",
+    "ml-latest"
+   ],
+   "failed": []
+  }
+ },
+ "PD": {
+  "verdict": "mixed",
+  "Amazon": {
+   "cells": 69,
+   "tuning_matters_cells": 13,
+   "selector_recovers_half": 4,
+   "frac_recovers": 0.3076923076923077,
+   "harmful_cells": 33,
+   "frac_harm": 0.4782608695652174
+  },
+  "Other": {
+   "cells": 19,
+   "tuning_matters_cells": 14,
+   "selector_recovers_half": 11,
+   "frac_recovers": 0.7857142857142857,
+   "harmful_cells": 0,
+   "frac_harm": 0.0
+  }
+ },
+ "skipped_cells": [],
+ "reported": {
+  "hstar_slope_by_stratum": {
+   "Amazon": {
+    "median": -0.171360872277473,
+    "n": 14
+   },
+   "Other": {
+    "median": -0.4196316790147654,
+    "n": 3
+   }
+  },
+  "hstar_slopes": {
+   "amazon-arts-crafts-and-sewing": {
+    "slope": -0.18767355813007436,
+    "n_interior": 3,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": ""
+    }
+   },
+   "amazon-automotive": {
+    "slope": -0.22098791088034622,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "amazon-books": {
+    "slope": -0.09147132790331479,
+    "n_interior": 6,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": "",
+     "1000": "",
+     "3000": ""
+    }
+   },
+   "amazon-cell-phones-and-accessories": {
+    "slope": -0.15504818642487164,
+    "n_interior": 3,
+    "edges": {
+     "10": "lo",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "amazon-electronics": {
+    "slope": -0.26466030442539207,
+    "n_interior": 3,
+    "edges": {
+     "10": "lo",
+     "30": "",
+     "100": "",
+     "300": "",
+     "1000": "lo",
+     "3000": "lo"
+    }
+   },
+   "amazon-grocery-and-gourmet-food": {
+    "slope": -0.0670301793643882,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "amazon-health-and-household": {
+    "slope": -0.24994931025056025,
+    "n_interior": 5,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": "",
+     "1000": ""
+    }
+   },
+   "amazon-movies-tv": {
+    "slope": 0.08510815077036074,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": "",
+     "1000": "lo",
+     "3000": "lo"
+    }
+   },
+   "amazon-musical-instruments": {
+    "slope": -0.2321951759508643,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "amazon-office-products": {
+    "slope": null,
+    "n_interior": 2,
+    "edges": {
+     "10": "lo",
+     "30": "",
+     "100": ""
+    }
+   },
+   "amazon-patio-lawn-and-garden": {
+    "slope": -0.19837399470741132,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "amazon-pet-supplies": {
+    "slope": -0.20576975200061623,
+    "n_interior": 5,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": "",
+     "1000": ""
+    }
+   },
+   "amazon-software": {
+    "slope": null,
+    "n_interior": 2,
+    "edges": {
+     "10": "",
+     "30": ""
+    }
+   },
+   "amazon-sports-and-outdoors": {
+    "slope": -0.07837462233546363,
+    "n_interior": 5,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": "",
+     "1000": ""
+    }
+   },
+   "amazon-toys-and-games": {
+    "slope": -0.1435686198183745,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "amazon-video-games": {
+    "slope": -0.06546328692919826,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "brightkite": {
+    "slope": -0.1624075354091024,
+    "n_interior": 4,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "gowalla": {
+    "slope": -0.4713899266573783,
+    "n_interior": 3,
+    "edges": {
+     "10": "hi",
+     "30": "",
+     "100": "",
+     "300": ""
+    }
+   },
+   "kuairand-pure": {
+    "slope": null,
+    "n_interior": 1,
+    "edges": {
+     "10": "hi",
+     "30": "hi",
+     "100": "hi",
+     "300": ""
+    }
+   },
+   "ml-1m": {
+    "slope": null,
+    "n_interior": 1,
+    "edges": {
+     "10": "hi",
+     "30": ""
+    }
+   },
+   "ml-latest": {
+    "slope": -0.4196316790147654,
+    "n_interior": 5,
+    "edges": {
+     "10": "",
+     "30": "",
+     "100": "",
+     "300": "",
+     "1000": ""
+    }
+   }
+  },
+  "hstar_vs_new_share": {
+   "Amazon": {
+    "n": 15,
+    "spearman": -0.6749999999999999
+   },
+   "Other": {
+    "n": 3,
+    "spearman": null
+   },
+   "All": {
+    "n": 18,
+    "spearman": -0.4489164086687306
+   }
+  }
+ },
+ "n_cells": 88,
+ "n_datasets": 21
+}
