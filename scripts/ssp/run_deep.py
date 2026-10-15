@@ -72,7 +72,11 @@ def main():
         for nw in st["n_win"]:
             for ds in logs:
                 D = T.prepare(ds, nw)
-                arms = [a for a in arms_all if not (a.startswith("seas") and D["window_days"] > 182)]
+                lag = int(round(365.0 / D["window_days"]))
+                span = (nw - 2) - 8 + 1
+                active = max(0, (nw - 2) - max(8, lag + 1) + 1) / span if span > 0 else 0.0
+                seas_ok = D["window_days"] <= 182 and lag >= 2 and active >= 0.5           # seasonal term active in at least half of the steady steps
+                arms = [a for a in arms_all if not (a.startswith("seas") and not seas_ok)]
                 if stage == "seas" and len(arms) <= 1:
                     continue
                 for n in eligible_n(D["active"], st["n"]):

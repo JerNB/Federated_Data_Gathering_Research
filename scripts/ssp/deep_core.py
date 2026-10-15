@@ -8,11 +8,12 @@ An arm is "<aggregator>[@<sampling scheme>]", e.g. "decay:h=2", "holt:a=0.3,b=0.
 
 Sampling schemes (people chosen each round; all take at most n active people):
   std                 n random active people, all their rows (default)
-  pps                 n people drawn with probability proportional to their number of rows in the round
+  pps                 n people drawn with probability proportional to their number of rows in the round (oracle: the server cannot know it before asking)
+  ppsprev             feasible variant: probability proportional to the person's rows in the previous round (1 if absent)
   panel:rho=R         persistent panel; each retained member is dropped with probability R, gaps refilled with new random people
   varn                n_w = n * exp(N(0, 0.6)) clipped to [n/4, 4n]
   cap:c=C             each person reports at most C random rows
-  gauss:eps=E,c=C     central DP: cap C rows, analytic Gaussian noise (delta=1e-5, L2 sensitivity sqrt(C)) on EVERY item count
+  gauss:eps=E,c=C     central DP (epsilon per round): cap C rows, analytic Gaussian noise (delta=1e-5, L2 sensitivity sqrt(C)) on every item already in the catalogue
   oue:eps=E           local DP: one random row per person, optimised unary encoding, exact binomial simulation of the aggregate
 
 Aggregators (state over rounds, list = best items first, up to 300):
@@ -52,7 +53,7 @@ import track_core as T
 KS = (10, 30, 100, 300)
 DISC = 1.0 / np.log2(np.arange(300) + 2.0)
 HGRID = [0.25, 0.5, 1.0, 2.0, 4.0, 8.0, float("inf")]
-FIRST_STEP = 2
+FIRST_STEP = 0
 STEADY = 8                      # steps >= STEADY are "steady state"; earlier steps are the burn-in
 DELTA = 1e-5
 _SIG: dict = {}
@@ -90,11 +91,12 @@ def norm(x: np.ndarray) -> np.ndarray:
     return x / s if s != 0 else x
 
 
-def top_idx(score: np.ndarray, m: int = 300) -> np.ndarray:
+def top_idx(score: np.ndarray, m: int = 300, key: np.ndarray | None = None) -> np.ndarray:
+    """Indices of the m best scores, best first; ties broken by `key` (a per-draw random permutation shared by all arms), else by index."""
     n = score.shape[0]
     m = min(m, n)
     idx = np.argpartition(-score, m - 1)[:m]
-    return idx[np.lexsort((idx, -score[idx]))]
+    return idx[np.lexsort(((idx if key is None else key[idx]), -score[idx]))]
 
 
 def decay_factor(h: float) -> float:
@@ -193,16 +195,33 @@ class Sampler:
             c = int(par["c"])
             cnt = self._counts(k, sel, cap=c)
             sigma = gauss_sigma(par["eps"], float(np.sqrt(c)))
-            cnt = cnt + self.rng.normal(0.0, sigma, cnt.shape).astype(np.float32)
+            act = D["first"] <= k                                          # noise only on items already seen in the catalogue
+            cnt[act] += self.rng.normal(0.0, sigma, int(act.sum())).astype(np.float32)
             return Obs(cnt, len(sel), noisy=True)
         if kind == "oue":
             sel = self._pick(k, n)
             c = self._counts(k, sel, cap=1)
             e = np.exp(par["eps"])
             p, q = 0.5, 1.0 / (e + 1.0)
-            obs = self.rng.binomial(c.astype(np.int64), p) + self.rng.binomial(len(sel) - c.astype(np.int64), q)
-            est = (obs - len(sel) * q) / (p - q)
-            return Obs(est.astype(np.float32), len(sel), noisy=True)
+            act = D["first"] <= k
+            ci = c[act].astype(np.int64)
+            obs = self.rng.binomial(ci, p) + self.rng.binomial(len(sel) - ci, q)
+            est = np.zeros_like(c)
+            est[act] = ((obs - len(sel) * q) / (p - q)).astype(np.float32)
+            return Obs(est, len(sel), noisy=True)
+        if kind == "ppsprev":                                              # feasible variant: weight = rows in the previous round
+            uk = D["users_in"][k]
+            if k == 0 or len(uk) <= n:
+                sel = uk if len(uk) <= n else self.rng.choice(uk, n, replace=False)
+            else:
+                a, b = D["off"][k - 1], D["off"][k]
+                up, rows = np.unique(D["user"][a:b], return_counts=True)
+                pos = np.searchsorted(up, uk)
+                pos[pos >= len(up)] = 0
+                w = np.where(up[pos] == uk, rows[pos], 1).astype(np.float64)
+                keys = self.rng.random(len(uk)) ** (1.0 / w)
+                sel = uk[np.argpartition(-keys, n - 1)[:n]]
+            return Obs(self._counts(k, sel), len(sel))
         raise ValueError(self.kind)
 
 
@@ -224,10 +243,13 @@ class Agg:
     def z(self):
         return np.zeros(self.n_items, np.float64)
 
+    def top(self, s: np.ndarray, m: int = 300) -> np.ndarray:
+        return top_idx(s, m, self.ctx["tiekey"])
+
     def setup(self): ...
     def update(self, obs: Obs, w: int): ...
     def score(self) -> np.ndarray: raise NotImplementedError
-    def ranked(self) -> np.ndarray: return top_idx(self.score())
+    def ranked(self) -> np.ndarray: return self.top(self.score())
     def extra(self) -> dict: return {}
 
 
@@ -278,9 +300,13 @@ class Rrf(Decay):
 
     def update(self, obs, w):
         self.s *= self.d
-        top = top_idx(obs.cnt, 1000)
-        top = top[obs.cnt[top] > 0]
-        self.s[top] += 1.0 / (self.par.get("k", 60.0) + np.arange(len(top)) + 1.0)
+        pos = np.nonzero(obs.cnt > 0)[0]
+        if len(pos):
+            v = obs.cnt[pos]
+            asc = np.sort(v)
+            rank = 1 + (len(asc) - np.searchsorted(asc, v, side="right"))          # tied counts share a rank
+            keep = rank <= 1000
+            self.s[pos[keep]] += 1.0 / (self.par.get("k", 60.0) + rank[keep])
 
 
 class TwoSpeed(Agg):
@@ -373,7 +399,7 @@ class Hyst(Decay):
         if self.prev is not None:
             sc = sc.copy()
             sc[self.prev[:100]] *= 1.0 + self.par["d"]
-        return top_idx(sc)
+        return self.top(sc)
 
 
 class Reserve(Agg):
@@ -389,11 +415,11 @@ class Reserve(Agg):
 
     def ranked(self):
         r = int(self.par["r"])
-        base = top_idx(self.s[2.0])
+        base = self.top(self.s[2.0])
         head = base[: 100 - r]
         rising = norm(self.s[1.0]) - norm(self.s[4.0])
         rising[head] = -np.inf
-        rise = top_idx(rising, r)
+        rise = self.top(rising, r)
         rest = base[100 - r:]
         return np.concatenate([head, rise, rest[~np.isin(rest, rise)]])[:300]
 
@@ -411,8 +437,8 @@ class Splice(Agg):
 
     def ranked(self):
         k1 = int(self.par["k"])
-        first = top_idx(self.a, k1)
-        rest = top_idx(self.b, 300)
+        first = self.top(self.a, k1)
+        rest = self.top(self.b, 300)
         return np.concatenate([first, rest[~np.isin(rest, first)]])[:300]
 
 
@@ -481,7 +507,7 @@ class Half(Decay):
     def extra(self):
         if self.sa.sum() <= 0 or self.sb.sum() <= 0:
             return {}
-        a, b = top_idx(self.sa, 100), top_idx(self.sb, 100)
+        a, b = self.top(self.sa, 100), self.top(self.sb, 100)
         return {"agree": len(np.intersect1d(a, b)) / 100.0}
 
 
@@ -507,7 +533,7 @@ class SelfSel(Agg):
         for i in range(len(HGRID)):
             self.s[i] *= self.d[i]
             self.s[i] += obs.share
-        self.lists = [top_idx(v, 100) for v in self.s]
+        self.lists = [self.top(v, 100) for v in self.s]
 
     def score(self): return self.s[self.choice]
 
@@ -524,7 +550,7 @@ class AThr(Decay):
 
     def ranked(self):
         sc = np.where(self.c >= self.par["t"], self.s, 0.0)
-        top = top_idx(sc)
+        top = self.top(sc)
         return top[sc[top] > 0]
 
 
@@ -557,9 +583,11 @@ def run_cell(task: dict) -> dict:
     selfnd = np.full((draws, len(arms), S), np.nan)
     mm = {m: np.full((draws, len(arms), S), np.nan) for m in mnames}
     people = np.zeros((draws, len(arms)))
+    rows_used = np.zeros((draws, len(arms)))
     full = lambda k: D["counts"][k]
     for dr in range(draws):
-        ctx = dict(n_items=D["n_items"], window_days=D["window_days"], n=n, n_win=nw, draw=dr, full=full)
+        ctx = dict(n_items=D["n_items"], window_days=D["window_days"], n=n, n_win=nw, draw=dr, full=full,
+                   tiekey=np.random.default_rng(seed_of(task["dataset"], n, dr, nw, tag, "tie")).permutation(D["n_items"]).astype(np.int32))
         samplers = {s: Sampler(s, D, n, (task["dataset"], n, dr, nw, tag), need_half and s == "std") for s in schemes}
         aggs = [KINDS[parse(split_arm(a)[0])[0]](a, ctx) for a in arms]
         for w in range(0, last + 1):
@@ -576,6 +604,7 @@ def run_cell(task: dict) -> dict:
                         selfnd[dr, ai, w - 1 - FIRST_STEP] = float(np.sum(g[ag.prev[:100]] * DISC[:min(100, len(ag.prev))])) / idcg
                 ag.update(o, w)
                 people[dr, ai] += o.people
+                rows_used[dr, ai] += float(o.cnt.sum()) if not o.noisy else 0.0
             if w < FIRST_STEP:
                 continue
             j = w - FIRST_STEP
@@ -614,7 +643,8 @@ def run_cell(task: dict) -> dict:
     r5 = lambda a: np.round(a, 5).tolist()
     return dict(kind="deep", dataset=task["dataset"], n=n, n_win=nw, arms=arms, steps=steps, window_days=D["window_days"],
                active=D["active"].tolist(), nd100=r5(nd100), selfnd=r5(selfnd), metrics=metrics,
-               people_per_round=[round(float(x), 2) for x in people.mean(axis=0) / (last + 1)])
+               people_per_round=[round(float(x), 2) for x in people.mean(axis=0) / (last + 1)],
+               rows_per_round=[round(float(x), 1) for x in rows_used.mean(axis=0) / (last + 1)])
 
 
 def run_task(task: dict) -> dict:

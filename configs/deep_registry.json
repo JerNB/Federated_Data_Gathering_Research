@@ -6,6 +6,10 @@
  "alpha": 0.05,
  "bh_q": 0.1,
  "min_logs": 6,
+ "clean_set": [
+  "holdout_fresh",
+  "new_holdout"
+ ],
  "split": {
   "salt": "deep-split-v1",
   "discovery": {
@@ -69,11 +73,13 @@
    "n": [
     30,
     100,
-    300
+    300,
+    1000
    ],
-   "draws": 12,
+   "draws": 16,
    "n_win": [
-    30
+    30,
+    60
    ],
    "seed_tag": "agg"
   },
@@ -89,7 +95,7 @@
     100,
     300
    ],
-   "draws": 12,
+   "draws": 16,
    "n_win": [
     45,
     60,
@@ -113,7 +119,7 @@
     1000,
     3000
    ],
-   "draws": 12,
+   "draws": 16,
    "n_win": [
     30
    ],
@@ -130,7 +136,7 @@
    "n": [
     100
    ],
-   "draws": 12,
+   "draws": 16,
    "n_win": [
     20,
     30,
@@ -153,9 +159,10 @@
     3000,
     10000
    ],
-   "draws": 8,
+   "draws": 12,
    "n_win": [
-    30
+    30,
+    90
    ],
    "seed_tag": "dp"
   }
@@ -224,10 +231,13 @@
    ],
    "ref": "decay:h=2",
    "prediction": {
-    "text": "Gain: mean diff >= +0.01 at n=100 (set after a one-log smoke test showed +0.043; see disclosure).",
-    "gain": true
+    "text": "No gain: the 95% interval of the mean diff excludes +0.01. (A one-log smoke test first showed +0.043; the design review found that it came from breaking ties by item id, which follows item age; with random tie-breaks the same smoke shows -0.026, so the prediction was reset to no gain before the real run.)",
+    "gain": false
    },
-   "anchor": "Cormack et al. 2009 RRF k=60 beat score fusion by 4-5% MAP in retrieval; Renda and Straccia 2003 found score sums beat Borda in metasearch"
+   "anchor": "Cormack et al. 2009 RRF k=60 beat score fusion by 4-5% MAP in retrieval; Renda and Straccia 2003 found score sums beat Borda in metasearch",
+   "exclude_discovery": [
+    "amazon-musical-instruments"
+   ]
   },
   {
    "id": "D04",
@@ -256,22 +266,22 @@
    "family": "A combine rounds",
    "kind": "paired",
    "direction": "sup",
-   "title_en": "Shrink each round toward the tracker",
-   "title_zh": "每轮份额向已有榜单收缩",
-   "statement_en": "Shrinking each round's shares toward the tracker's own shares (empirical-Bayes style, weight 0.5) gives a better list.",
-   "statement_zh": "把每轮份额向追踪器自身的份额收缩（经验贝叶斯式，权重 0.5），榜单更好。",
+   "title_en": "Finer half-life grid",
+   "title_zh": "更细的半衰期网格",
+   "statement_en": "A half-life of 3 rounds beats the baseline half-life of 2 rounds (the earlier grid steps by a factor of 2, so the true optimum may lie between grid points).",
+   "statement_zh": "半衰期 3 轮比基线半衰期 2 轮更好（早先的网格每档差 2 倍，真正的最优值可能落在两档之间）。",
    "stage": "agg",
-   "primary": "eb:a=0.5",
+   "primary": "decay:h=3",
    "secondary": [
-    "eb:a=0.25",
-    "eb:a=1.0"
+    "decay:h=1.5",
+    "decay:h=2.5"
    ],
    "ref": "decay:h=2",
    "prediction": {
-    "text": "No gain at 30 rounds: mean diff <= +0.005 (Clevenson-Zidek shrinkage cannot change a ranking when all items have equal exposure).",
+    "text": "No gain: the 95% interval of the mean diff excludes +0.01 (the optimum is flat around 2 rounds). Replaces an empirical-Bayes arm that the design review showed is algebraically a longer half-life.",
     "gain": false
    },
-   "anchor": "Efron and Morris / Clevenson-Zidek: shrinkage of Poisson counts with equal exposure is a rank-preserving rescaling; here the prior is the tracker so it acts as extra smoothing"
+   "anchor": "Exponential smoothing practice: a flat optimum; earlier tracking study found best half-life 2 in 13 of 14 Amazon logs at the factor-2 grid"
   },
   {
    "id": "D06",
@@ -364,8 +374,8 @@
    "direction": "sup",
    "title_en": "Same season last year",
    "title_zh": "去年同一季节",
-   "statement_en": "At 60 and 90 rounds (rounds of 3-4.5 months) adding the shares of the same season one year earlier (weight 0.5) gives a better list.",
-   "statement_zh": "在 60 轮和 90 轮（每轮 3 到 4.5 个月）下，加入一年前同一季节的份额（权重 0.5），榜单更好。",
+   "statement_en": "At 90 rounds (rounds of about 3 months) adding the shares of the same season one year earlier (weight 0.5) gives a better list. Cells where the seasonal term is active in fewer than half of the steady steps are not run.",
+   "statement_zh": "在 90 轮（每轮约 3 个月）下，加入一年前同一季节的份额（权重 0.5），榜单更好。季节项在不到一半稳态步中起作用的格子不运行。",
    "stage": "seas",
    "primary": "seas:g=0.5",
    "secondary": [
@@ -386,18 +396,17 @@
    "direction": "sup",
    "title_en": "Rotating panel",
    "title_zh": "轮换小组",
-   "statement_en": "Keeping 75% of last round's reporters (rotation rate 0.25) gives a better list than asking fresh people every round.",
-   "statement_zh": "保留上一轮 75% 的汇报者（轮换率 0.25），比每轮都问新的人榜单更好。",
+   "statement_en": "Keeping 75% of last round's reporters who are active again (rotation rate 0.25; gaps refilled with fresh people) gives a better list than a panel that is refreshed completely (rotation rate 1.0, the same sampler).",
+   "statement_zh": "保留上一轮仍然活跃的 75% 的汇报者（轮换率 0.25，空缺用新人补足），比完全更新的小组（轮换率 1.0，同一个抽样器）榜单更好。",
    "stage": "agg",
    "primary": "decay:h=2@panel:rho=0.25",
    "secondary": [
     "decay:h=2@panel:rho=0.1",
-    "decay:h=2@panel:rho=0.5",
-    "decay:h=2@panel:rho=1.0"
+    "decay:h=2@panel:rho=0.5"
    ],
-   "ref": "decay:h=2",
+   "ref": "decay:h=2@panel:rho=1.0",
    "prediction": {
-    "text": "No gain, and a loss that grows with overlap: rho=0.25 diff <= 0.0; rho=0.1 worse than rho=0.25 in at least 60% of logs.",
+    "text": "No gain, and a loss that grows with overlap: the 95% interval of the diff excludes +0.01; rho=0.1 worse than rho=0.25 in at least 60% of logs.",
     "gain": false
    },
    "anchor": "Cantwell 2008, Kish 1999: gain depends on within-unit correlation rho (about 0 for item-level popularity on review logs); plain decayed sum: fresh wins when drift is slow"
@@ -409,17 +418,22 @@
    "direction": "sup",
    "title_en": "Ask people in proportion to activity",
    "title_zh": "按活跃度比例抽人",
-   "statement_en": "Drawing the n reporters with probability proportional to their rows in the round gives a better list than drawing them uniformly.",
-   "statement_zh": "按本轮行数成比例地抽 n 个汇报者，比均匀抽样榜单更好。",
+   "statement_en": "Drawing the n reporters with probability proportional to their rows in the round (an oracle: the server cannot know this before asking) gives a better list than drawing them uniformly; a feasible variant uses last round's rows.",
+   "statement_zh": "按本轮行数成比例地抽 n 个汇报者（这是不可行的“先知”做法：服务器在提问前并不知道），比均匀抽样榜单更好；可行的变体使用上一轮的行数。",
    "stage": "agg",
    "primary": "decay:h=2@pps",
-   "secondary": [],
+   "secondary": [
+    "decay:h=2@ppsprev"
+   ],
    "ref": "decay:h=2",
    "prediction": {
-    "text": "Gain: mean diff >= +0.01 at n=100 (set after a one-log smoke showed +0.048; note the pooled row count is size-biased).",
+    "text": "Oracle arm: gain of at least +0.01 at n=100, but with about 1.8 times more rows collected per round (a one-log smoke showed +0.067 with 1.8x rows); the feasible arm (last round's rows) is secondary and expected to show no gain. Rows per round are reported next to every difference.",
     "gain": true
    },
-   "anchor": "Hansen-Hurwitz / Horvitz-Thompson: with p proportional to size and an uncorrected pooled count the estimate is size-biased, but the target (row counts) is itself dominated by heavy users"
+   "anchor": "Hansen-Hurwitz / Horvitz-Thompson: with p proportional to size and an uncorrected pooled count the estimate is size-biased, but the target (row counts) is itself dominated by heavy users; the oracle also collects more rows per person asked (reported as rows per round)",
+   "exclude_discovery": [
+    "amazon-musical-instruments"
+   ]
   },
   {
    "id": "D13",
@@ -441,7 +455,10 @@
     "text": "Gain: mean diff >= +0.01 against equal weighting under the same variable round sizes (set after a one-log smoke showed +0.033).",
     "gain": true
    },
-   "anchor": "Inverse-variance weighting (standard); variance of a round's share vector is proportional to 1/n_w"
+   "anchor": "Inverse-variance weighting (standard); variance of a round's share vector is proportional to 1/n_w",
+   "exclude_discovery": [
+    "amazon-musical-instruments"
+   ]
   },
   {
    "id": "D14",
@@ -450,12 +467,12 @@
    "direction": "sup",
    "title_en": "Do samples add to a periodic census",
    "title_zh": "样本能给定期普查再加分吗",
-   "statement_en": "If a full count is available every 4 rounds, adding the continuous n=100 samples (weight 2 on the census) to the census beats using the census alone.",
-   "statement_zh": "如果每 4 轮有一次全量统计，再加上每轮 n=100 的样本（普查权重 2），比只用普查更好。",
+   "statement_en": "If a full count is available every 4 rounds, adding the continuous n=100 samples (the census counts 8 times one round's sample) to the census beats using the census alone.",
+   "statement_zh": "如果每 4 轮有一次全量统计，再加上每轮 n=100 的样本（普查的权重是一轮样本的 8 倍），比只用普查更好。",
    "stage": "agg",
-   "primary": "cens:m=4,w=2",
+   "primary": "cens:m=4,w=8",
    "secondary": [
-    "cens:m=4,w=8",
+    "cens:m=4,w=2",
     "cens:m=8,w=2",
     "cens:m=8,w=8"
    ],
@@ -501,6 +518,9 @@
    "stage": "dp",
    "arms": [
     "decay:h=2",
+    "decay:h=2@gauss:eps=1000000,c=10",
+    "decay:h=2@gauss:eps=1000000,c=3",
+    "decay:h=2@cap:c=1",
     "decay:h=2@gauss:eps=1,c=10",
     "decay:h=2@gauss:eps=2,c=10",
     "decay:h=2@gauss:eps=4,c=10",
@@ -509,11 +529,11 @@
     "decay:h=2@gauss:eps=8,c=3"
    ],
    "prediction": {
-    "text": "At n=10000, eps=2 loses < 0.05 in at least 50% of eligible logs; at n=1000, eps=8 does NOT reach < 0.05 in at least 50% of logs.",
+    "text": "At n=10000 (90 rounds), eps=2 per round loses < 0.05 against the non-private baseline in at least 50% of eligible logs; at n=1000, eps=8 does NOT reach < 0.05 in at least 50% of logs (any round length). Also reported: noise-only loss against the capped, noise-free reference (eps=1e6) on the same people.",
     "cond": "n10000_eps2_ok_and_n1000_eps8_fail"
    },
    "anchor": "Balle-Wang analytic Gaussian (sigma 3.7/2.0/1.08 at eps 1/2/4 for L2 sensitivity 1); Desfontaines et al. / Korolova: thresholds need about 12 users at eps=1; amplification by subsampling not applied here (conservative)",
-   "analysis": "Per log and n in {1000,3000,10000}: NDCG@100 steady mean of each gauss arm minus the non-private baseline (same people). Table of loss by (eps,c,n) with share of logs with loss < 0.05; smallest n on the grid with loss < 0.05 per eps. Noise is added to every item of the catalogue (known domain), delta=1e-5."
+   "analysis": "Per log, n in {1000,3000,10000} and round length (30 and 90 rounds): NDCG@100 steady mean of each gauss arm minus the non-private baseline (same people), and minus the noise-free capped reference (gauss eps=1e6 with the same cap). Table of both losses by (eps,c,n,n_win) with share of logs with loss < 0.05; smallest n with loss < 0.05 per eps. Noise is added to every item already seen in the catalogue (delta=1e-5, analytic Gaussian); epsilon is per round (the same person may be asked again, no composition across rounds is applied, amplification by subsampling is not applied); basic composition over 30 rounds multiplies epsilon by 30."
   },
   {
    "id": "D17",
@@ -526,19 +546,20 @@
    "stage": "dp",
    "arms": [
     "decay:h=2",
+    "decay:h=2@cap:c=1",
     "decay:h=2@oue:eps=1",
     "decay:h=2@oue:eps=2",
     "decay:h=2@oue:eps=4",
     "decay:h=2@oue:eps=8"
    ],
    "prediction": {
-    "text": "At n=10000, eps=4 loses > 0.1 in at least 50% of eligible logs.",
+    "text": "At n=10000 (90 rounds), eps=4 loses > 0.1 against the non-private baseline in at least 50% of eligible logs. Also reported: loss against the one-row-per-person noise-free reference.",
     "op": ">",
     "value": 0.1,
     "share": 0.5
    },
    "anchor": "Wang et al. 2017: Var = 4 n e^eps/(e^eps-1)^2 per count (std 0.19 of share at eps=1, n=100 per LitPrivacy); local DP needs about 50-100x more people in our main study (X9)",
-   "analysis": "Same layout as D16 for the oue arms. Report loss by (eps,n) and the share of logs with loss > 0.1 at n=10000, eps=4."
+   "analysis": "Same layout as D16 for the oue arms (reference decay:h=2@cap:c=1). Report loss by (eps,n,n_win) and the share of logs with loss > 0.1 at n=10000, eps=4 (90 rounds)."
   },
   {
    "id": "D18",
@@ -562,7 +583,7 @@
     "value": 50
    },
    "anchor": "LitPrivacy: deployed thresholds 10-50 users (Chrome k=10-50, TrieHH theta=10-17); publishable items <= n*c/tau",
-   "analysis": "From the len100 and prec100 metrics of athr arms vs n in {10,30,100,300,1000,3000}: table of median published length and precision by (t,n); the smallest n for which t=5 publishes a full 100 items."
+   "analysis": "From the len100 and prec100 metrics of athr arms vs n in {10,30,100,300,1000,3000}: table of median published length and precision by (t,n); the smallest n for which t=5 publishes a full 100 items. In these logs each (person, item) pair appears once, so an item's count is its number of distinct reporters (decayed over rounds)."
   },
   {
    "id": "D19",
@@ -657,9 +678,8 @@
     "decay:h=inf"
    ],
    "prediction": {
-    "text": "Median round at which mean NDCG (over draws) first reaches 90% of the steady mean is <= 3 for h=2 and >= 4 for h=inf, at n=100.",
-    "h2_max": 3,
-    "hinf_min": 4
+    "text": "Median round at which mean NDCG (over draws) first reaches 90% of the steady mean is <= 3 for h=2 at n=100 (logs whose first scored round is already above 90% are left-censored and excluded). The h=inf row is reported but decides nothing (its list is not a steady state).",
+    "h2_max": 3
    },
    "anchor": "Exponential smoothing: effective memory 1/(1-2^(-1/h)) = 3.4 rounds at h=2",
    "analysis": "From the per-step nd100 arrays (steps start at round 2): steady mean = mean over steps >= 8; first step index (round number = step) at which the draw-mean reaches 0.9 x steady; by half-life and n in {30,100,300}."
@@ -697,7 +717,7 @@
     "decay:h=2"
    ],
    "prediction": {
-    "text": "Spearman correlation across (log, n_win, n) cells between steady mean selfnd and steady mean nd100 of the baseline is >= 0.7 (pooled over stages cal and plan; also reported within each n).",
+    "text": "MEDIAN over n values (those with at least 12 cells) of the within-n Spearman correlation across (log, n_win) cells between steady mean selfnd and steady mean nd100 of the baseline is >= 0.7; the pooled correlation across n is also reported (it is inflated because both rise with n).",
     "rho": 0.7
    },
    "anchor": "LitMonitoring: the next-round sample gives an unbiased unnormalised DCG (prequential scheme, Gama et al. 2013); the sample-ideal normaliser is biased upward",
@@ -738,7 +758,7 @@
     "half:h=2"
    ],
    "prediction": {
-    "text": "Spearman(agree, nd100) across (log, n) cells with n >= 300 is >= 0.7; at n=30 it is below 0.5.",
+    "text": "MEDIAN over n in {300,1000,3000} (those with at least 12 cells) of the within-n Spearman(agree, nd100) across logs is >= 0.7; at n=30 the within-n correlation is below 0.5.",
     "rho": 0.7,
     "lo_rho": 0.5
    },
@@ -756,6 +776,9 @@
    "stage": "cal",
    "arms": [
     "decay:h=2",
+    "decay:days=3",
+    "decay:days=10",
+    "decay:days=30",
     "decay:days=100",
     "decay:days=200",
     "decay:days=300",
@@ -766,7 +789,7 @@
     "decay:days=1500"
    ],
    "prediction": {
-    "text": "For at least 80% of Amazon (log, n_win in {30,45,60,90}) cells the NDCG regret of each of 300, 400, 534, 700 days is <= 0.01 relative to the best of the eight days values.",
+    "text": "For at least 80% of Amazon (log, n_win in {30,45,60,90}) cells the NDCG regret of each of 300, 400, 534, 700 days is <= 0.01 relative to the best of the days values. Reported separately for the clean set (holdout_fresh and new logs) because the anchor numbers come from older logs.",
     "share": 0.8,
     "margin": 0.01
    },
@@ -784,6 +807,9 @@
    "stage": "cal",
    "arms": [
     "decay:h=2",
+    "decay:days=3",
+    "decay:days=10",
+    "decay:days=30",
     "decay:days=100",
     "decay:days=200",
     "decay:days=300",
@@ -800,7 +826,7 @@
     "decay:h=inf"
    ],
    "prediction": {
-    "text": "At least 60% of eligible non-Amazon logs have max/min best days <= 2 across n_win 45, 60, 90 (best over the combined days and rounds grid, using decay:days arms only for the days axis).",
+    "text": "At least 60% of eligible non-Amazon logs have max/min best days <= 2 across n_win 45, 60, 90 (decay:days arms only). A log is censored (left out, counted) when its best days is at the edge of the grid (3 or 1500 days) at any of the three widths or when all days arms are within 0.001 NDCG of each other.",
     "share": 0.6,
     "factor": 2.0
    },
@@ -846,7 +872,7 @@
     "decay:h=2"
    ],
    "prediction": {
-    "text": "Spearman between the vector of mean diffs (arm minus baseline, n=100, all logs) under NDCG@100 and under each other metric is >= 0.9; number of arms whose sign flips with |diff| > 0.005 under NDCG@100 is 0.",
+    "text": "Among agg arms other than the oracle and census arms (fulldecay, cens, censold) and with |mean diff in NDCG@100| <= 0.02, the Spearman between mean diffs (arm minus baseline, n=100, 30 rounds, all logs) under NDCG@100 and under each other metric is >= 0.9; number of arms whose sign flips with |diff| > 0.005 under NDCG@100 is 0.",
     "rho": 0.9
    },
    "anchor": "LitMonitoring: NDCG@k vs recall@k vs RBO agree on large effects, can disagree on small ones",
@@ -854,7 +880,7 @@
   }
  ],
  "protocol": {
-  "paired": "Primary combination: n=100, 30 rounds, nd100 steady-state (steps >= 8) mean over draws, one diff per log (arm minus ref). Discovery = logs of groups discovery + new_discovery; holdout = holdout_old + holdout_fresh + new_holdout. Per hypothesis one-sided t p-value on the discovery logs; Benjamini-Hochberg at q=0.10 across all paired hypotheses whose prediction claims a gain, a loss bound or a difference; a hypothesis is CONFIRMED only if it passes BH on discovery with mean diff >= margin (superiority) AND on the holdout logs the diff has the same sign, mean >= margin and one-sided p < 0.05 / (number of hypotheses selected). Non-inferiority (D08): lower one-sided t bound of the diff > -0.005 and churn cut >= 30% on discovery and holdout. Every verdict also gets a plain label from the 95% t interval of the mean diff over all logs: GAIN (lower bound > +margin/2 ... see analysis), LOSS, NO DIFFERENCE (interval inside +/- margin), INCONCLUSIVE.",
+  "paired": "Primary combination: n=100, 30 rounds, nd100 steady-state (steps >= 8) mean over draws, one diff per log (arm minus ref). Discovery = logs of groups discovery + new_discovery; holdout = holdout_old + holdout_fresh + new_holdout. Per hypothesis one-sided t p-value on the discovery logs; Benjamini-Hochberg at q=0.10 across all paired hypotheses whose prediction claims a gain, a loss bound or a difference; a hypothesis is CONFIRMED only if it passes BH on discovery with mean diff >= margin (superiority) AND on the holdout logs the diff has the same sign, mean >= margin and one-sided p < 0.05 / (number of hypotheses selected). Non-inferiority (D08): lower one-sided t bound of the diff > -0.005 and churn cut >= 30% on discovery and holdout. Plain labels come from the 95% t interval of the mean diff over all logs: GAIN (lower bound > 0 and mean >= 0.01), SMALL GAIN, NO DIFFERENCE (interval inside +/- 0.01), SMALL LOSS, LOSS (upper bound < 0 and mean <= -0.01), INCONCLUSIVE. A prediction of 'no gain' counts as MET only if the upper 95% bound of the mean diff is below +0.01 (a gain of 0.01 is ruled out); a prediction of a gain counts as MET only if the holdout logs alone show label GAIN. CONFIRMED additionally requires a positive mean on the clean replication set (holdout_fresh plus new_holdout). Rows of secondary arms and of non-primary (people, rounds) combinations are EXPLORATORY (no multiplicity control). D03, D12 and D13 exclude the smoke-test log amazon-musical-instruments from the discovery set.",
   "calc": "Each calculator hypothesis states a numeric prediction; the verdict is MET or NOT MET on the stated numbers plus the full table. No multiplicity adjustment: these are measurements with pre-set thresholds.",
   "eligibility": "A (log, n, n_win) cell is run only if at least 10 steps have all of rounds w-7..w+1 with >= 5n active people (same rule as before).",
   "seasons": "seas arms are only run at round lengths of at most 182 days (lag of at least 2 rounds)."
