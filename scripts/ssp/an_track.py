@@ -24,13 +24,14 @@ PRIMARY predictions (verdicts), n = 100 people per round unless stated:
       stratum for which the share is determined (n_L1 reached inside the grid, or the grid ends at >= 1% of active people
       without reaching it, or the smallest eligible n is below 1% of active people and already reaches it).
   PD  The server's own prequential rule (share error) works: over all cells where cross-fit tuning beats fixed h=2 by
-      >= 0.01, the self-tuned score minus fixed h=2 is >= half of the tuned gain in >= 2/3 of those cells, per stratum;
+      >= 0.01 (measured on the steps the self-tuned rule is scored on, i.e. from the 4th valid step), the self-tuned score
+      minus fixed h=2 is >= half of the tuned gain in >= 2/3 of those cells, per stratum;
       and over all cells the self-tuned score is more than 0.01 below fixed h=2 in <= 10% of cells.
 REPORTED, not judged: h* (parabola in log h) and its slope against n; h* vs new-item share of the next head (P2 of the
 design); the NDCG-based selector; information ceiling M0 (a list from half the people of the target window scored on the
 other half vs lagged full lists); drift profile M1 (noise-corrected squared share change V(k) and TV(k) floor-corrected,
-log-log slopes); people-per-round table (n_L1 and n for 80% of the gap between the 1-window-old full list and the best
-full-community tracker).
+log-log slopes); people-per-round table (n_L1, and n_80gap = smallest n whose fixed-h=2 score closes 80% of the gap between
+the 1-window-old full list and the best full-community tracker; h* = 16 means 'at the 8 / infinity edge', a proxy).
 """
 import argparse
 import csv
@@ -174,7 +175,8 @@ def cell_stats(dsf, cell):
                sel_mean_h_idx=float(np.nanmean(np.array(sel_h))) if np.isfinite(np.array(sel_h, float)).any() else float("nan"),
                Leq_fixed2=eq_age(float(F2.mean()), fb)[0], Leq_fixed2_flag=eq_age(float(F2.mean()), fb)[1],
                Leq_tuned=eq_age(float(X.mean()), fb)[0], Leq_best=eq_age(float(Ti.mean(1).max()), fb)[0],
-               Leq_last=eq_age(float(Ti[ILAST].mean()), fb)[0], full_lag1=float(fb[1]), full_lag0=float(fb[0]))
+               Leq_last=eq_age(float(Ti[ILAST].mean()), fb)[0], full_lag1=float(fb[1]), full_lag0=float(fb[0]),
+               full_best_tracker=float(np.nanmean(np.array(dsf["tracker_ndcg"], float)[:, idx], 1).max()))
     return res
 
 
@@ -247,8 +249,12 @@ def main():
             status = "<=smallest" if n1 == ns[0] else "reached"
         else:
             status = ">largest"
+        tgt_hit = [n for n in ns if by[d][n]["fixed2"] >= by[d][n]["full_lag1"]
+                   + 0.8 * (by[d][n]["full_best_tracker"] - by[d][n]["full_lag1"])]
+        n80 = tgt_hit[0] if tgt_hit else None
         calc.append(dict(dataset=d, stratum=stratum(d), n_L1=n1 if n1 else f">{ns[-1]}", status=status,
                          median_active=ma, share=(n1 / ma if n1 else float("nan")),
+                         n_80gap=(n80 if n80 else f">{ns[-1]}"), n_80gap_share=(n80 / ma if n80 else float("nan")),
                          largest_n=ns[-1], largest_share=ns[-1] / ma))
         if status == "reached":
             return n1 / ma >= 0.01
@@ -268,8 +274,14 @@ def main():
                      frac_harm=len(harm) / max(len(rs), 1))
     def pd_ok(x):
         return (x["tuning_matters_cells"] == 0 or x["frac_recovers"] >= 2 / 3) and x["frac_harm"] <= 0.10
-    pd_verdict = ("supported" if pd_ok(pd["Amazon"]) and pd_ok(pd["Other"]) else
-                  "mixed" if pd_ok(pd["Amazon"]) or pd_ok(pd["Other"]) else "not supported")
+    n_other = len({r["dataset"] for r in rows if stratum(r["dataset"]) == "Other"})
+    if pd["Amazon"]["cells"] == 0:
+        pd_verdict = "not judged"
+    elif n_other < 3:
+        pd_verdict = "Amazon only: supported" if pd_ok(pd["Amazon"]) else "Amazon only: not supported"
+    else:
+        pd_verdict = ("supported" if pd_ok(pd["Amazon"]) and pd_ok(pd["Other"]) else
+                      "mixed" if pd_ok(pd["Amazon"]) or pd_ok(pd["Other"]) else "not supported")
     # reported: h* vs n slope, h* vs new share
     slopes = {}
     for d in names:
@@ -312,8 +324,17 @@ def main():
                     reported=dict(hstar_slope_by_stratum={s: dict(median=(float(np.median(v)) if v else None), n=len(v)) for s, v in sl_vals.items()},
                                   hstar_slopes=slopes, hstar_vs_new_share=p2),
                     n_cells=len(rows), n_datasets=len(by))
-    json.dump(verdicts, open(f"{a.out}/03_tables/an_track_verdicts.json", "w"), indent=1,
-              default=lambda x: None if isinstance(x, float) and not np.isfinite(x) else str(x))
+    def clean(o):
+        if isinstance(o, dict):
+            return {str(k): clean(v) for k, v in o.items()}
+        if isinstance(o, (list, tuple)):
+            return [clean(v) for v in o]
+        if isinstance(o, (float, np.floating)):
+            return float(o) if np.isfinite(o) else None
+        if isinstance(o, (np.integer,)):
+            return int(o)
+        return o
+    json.dump(clean(verdicts), open(f"{a.out}/03_tables/an_track_verdicts.json", "w"), indent=1, allow_nan=False)
     # figures
     fig, ax = plt.subplots(1, 3, figsize=(15, 4.4))
     for d in names:
