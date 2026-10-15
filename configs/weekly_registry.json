@@ -1,0 +1,194 @@
+{
+ "version": "weekly-1",
+ "frozen_note": "Frozen before any weekly run. Predictions set from the deep programme results (docs 12) and the cadence of the logs; no weekly smoke run has been looked at.",
+ "span_rule": "Each log is cut to its densest 156 consecutive weeks (most positive events); logs shorter than 156 weeks are excluded. Items are re-numbered to those present in the span.",
+ "round_days": [
+  7,
+  14,
+  28
+ ],
+ "eligibility": "A log is used at sample size n when the median weekly number of active people in its span is at least 3 n.",
+ "split": {
+  "salt": "deep-split-v1",
+  "discovery": {
+   "amazon": [
+    "amazon-arts-crafts-and-sewing",
+    "amazon-books",
+    "amazon-electronics",
+    "amazon-musical-instruments",
+    "amazon-office-products",
+    "amazon-patio-lawn-and-garden",
+    "amazon-pet-supplies",
+    "amazon-video-games"
+   ],
+   "other": [
+    "gowalla",
+    "ml-latest"
+   ]
+  },
+  "holdout_old": {
+   "amazon": [
+    "amazon-automotive",
+    "amazon-cell-phones-and-accessories",
+    "amazon-grocery-and-gourmet-food",
+    "amazon-health-and-household",
+    "amazon-movies-tv",
+    "amazon-sports-and-outdoors",
+    "amazon-toys-and-games"
+   ],
+   "other": [
+    "brightkite",
+    "kuairand-pure"
+   ]
+  },
+  "holdout_fresh": [
+   "amazon-baby-products",
+   "amazon-cds-and-vinyl",
+   "amazon-industrial-and-scientific",
+   "amazon-beauty-and-personal-care",
+   "amazon-tools-and-home-improvement"
+  ],
+  "new_discovery": [
+   "beeradvocate",
+   "goodreads-children",
+   "ratebeer"
+  ],
+  "new_holdout": [
+   "goodreads-comics",
+   "goodreads-poetry",
+   "steam"
+  ]
+ },
+ "days_grid": [
+  7,
+  14,
+  28,
+  56,
+  112,
+  224,
+  448,
+  896
+ ],
+ "ref_days": 56,
+ "stages": {
+  "a": {
+   "n": [
+    100,
+    1000
+   ],
+   "draws": 8,
+   "seed_tag": "weekly-a",
+   "note": "decay at each half-life in days, plus decay:h=2 (two rounds), at 7/14/28-day rounds"
+  },
+  "b": {
+   "n": [
+    100
+   ],
+   "draws": 12,
+   "seed_tag": "weekly-b",
+   "round_days": [
+    7
+   ],
+   "note": "natural round sizes: a fixed share f of each week's active people, f = 100 / median weekly active; decay:days=56 equal weights vs ivw g=0.5,1,2"
+  },
+  "c": {
+   "n": [
+    25,
+    100,
+    300
+   ],
+   "draws": 8,
+   "seed_tag": "weekly-c",
+   "days": [
+    28,
+    56,
+    112,
+    224
+   ],
+   "note": "cadence: weekly rounds of n people vs one 28-day round of 4n people, both scored on every following week"
+  }
+ },
+ "metric": "NDCG@100 of the published top-100 against the full next-round counts, mean over steady rounds (round >= 8) and draws; one number per log, cell or setting.",
+ "statistics": "Per-log values are the unit. Share tests: a prediction about a share of logs is met when the share reaches its threshold. Mean-difference tests: mean over logs with a 95% bootstrap CI over logs; reported separately for discovery logs, old and fresh holdout logs, and the clean set (holdout_fresh + new_holdout). No multiplicity correction beyond reporting every hypothesis.",
+ "hypotheses": [
+  {
+   "id": "W1",
+   "stage": "a",
+   "title_en": "Best memory at weekly rounds",
+   "title_zh": "每周一轮时的最佳记忆长度",
+   "statement_en": "With weekly rounds of 100 people, the best half-life is at least 28 days (4 rounds), longer than the 2 rounds that suit rounds of months.",
+   "statement_zh": "每周一轮、每轮 100 人时，最佳半衰期至少 28 天（4 轮），长于按月计轮时适用的 2 轮。",
+   "prediction": "In at least 70% of eligible logs the best half-life (days grid, 7-day rounds, n=100) is >= 28 days.",
+   "share": 0.7
+  },
+  {
+   "id": "W2",
+   "stage": "a",
+   "title_en": "Smaller sample, longer memory",
+   "title_zh": "样本越小，记忆越长",
+   "statement_en": "With 100 people per week the best half-life is longer than with 1,000 people per week.",
+   "statement_zh": "每周 100 人时的最佳半衰期，长于每周 1,000 人时的。",
+   "prediction": "In at least 70% of logs eligible at both n, best half-life at n=100 is >= that at n=1,000 (ties count), and strictly longer in at least 40%.",
+   "share": 0.7,
+   "strict": 0.4
+  },
+  {
+   "id": "W3",
+   "stage": "a",
+   "title_en": "Set memory in days, not in rounds",
+   "title_zh": "记忆长度按天设，不按轮设",
+   "statement_en": "A fixed 56-day half-life beats a fixed 2-round half-life when rounds are 7 days long.",
+   "statement_zh": "当每轮 7 天时，固定 56 天的半衰期优于固定 2 轮的半衰期。",
+   "prediction": "At 7-day rounds, n=100, mean paired gain of half-life 56 days over 2 rounds >= +0.01 NDCG, and positive in at least 70% of logs.",
+   "gain": 0.01,
+   "share": 0.7
+  },
+  {
+   "id": "W4",
+   "stage": "b",
+   "title_en": "Weight weeks by reporters when sizes vary naturally",
+   "title_zh": "轮人数自然波动时按人数加权",
+   "statement_en": "When each week's sample is a fixed share of that week's active people, weighting weeks by reporters beats equal weights.",
+   "statement_zh": "当每周样本是该周活跃人数的固定比例时，按人数加权优于等权。",
+   "prediction": "Mean paired gain of ivw g=1 over equal weights >= +0.005 NDCG and positive in at least 60% of logs. (The deep programme's +0.046 used an invented 16-fold spread; real spread is smaller.)",
+   "gain": 0.005,
+   "share": 0.6
+  },
+  {
+   "id": "W5",
+   "stage": "a",
+   "title_en": "Self-score tracks quality inside one log",
+   "title_zh": "自评分在同一日志内部也跟踪质量",
+   "statement_en": "Within one log, over weeks, the self-score (previous list scored on this week's reporters) rises and falls with the true quality.",
+   "statement_zh": "在同一份日志内，按周看，自评分（上一周榜单用本周汇报者打分）与真实质量同升同降。",
+   "prediction": "Median over logs of the within-log Spearman correlation (7-day rounds, n=100, half-life 56 days, steady rounds, draw-averaged) >= 0.5.",
+   "rho": 0.5
+  },
+  {
+   "id": "W6",
+   "stage": "a",
+   "title_en": "Low self-score alarm",
+   "title_zh": "低自评分报警",
+   "statement_en": "Weeks with a self-score in the log's lowest 10% are mostly weeks of low true quality.",
+   "statement_zh": "自评分处于该日志最低 10% 的周，大多也是真实质量偏低的周。",
+   "prediction": "Among the weeks with self-score in the lowest 10% of a log, at least 40% are in the lowest 25% of true quality (chance is 25%); pooled over eligible logs.",
+   "share": 0.4
+  },
+  {
+   "id": "W7",
+   "stage": "c",
+   "title_en": "Many small rounds beat few big rounds",
+   "title_zh": "多个小轮胜过少数大轮",
+   "statement_en": "With the same people per 28 days, four weekly rounds of n people give a better list than one monthly round of 4n people.",
+   "statement_zh": "每 28 天人数相同时，每周 n 人、共四轮，得到的榜单优于每月一轮 4n 人。",
+   "prediction": "At n=100 per week, with the best half-life of each design picked per log, weekly beats monthly by >= +0.02 NDCG on average and in at least 70% of logs.",
+   "gain": 0.02,
+   "share": 0.7
+  }
+ ],
+ "protocol": [
+  "Registry committed before the first weekly run.",
+  "Smoke run on one log only checks that cells run and sizes are as designed; no result is looked at before the full run.",
+  "Every hypothesis is reported, met or not."
+ ]
+}

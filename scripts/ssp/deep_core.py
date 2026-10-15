@@ -163,7 +163,7 @@ class Sampler:
         uk = self.D["users_in"][k]
         if len(uk) <= n:
             return uk
-        return (self.rsel if self.kind in ("std", "cap", "gauss", "oue") else self.rng).choice(uk, n, replace=False)
+        return (self.rsel if self.kind in ("std", "cap", "gauss", "oue", "frac") else self.rng).choice(uk, n, replace=False)
 
     def round(self, k: int) -> Obs:
         kind, par, D, n = self.kind, self.par, self.D, self.n
@@ -175,6 +175,10 @@ class Sampler:
                 h = len(sel) // 2
                 half = (self._counts(k, sel[p[:h]]), self._counts(k, sel[p[h:]]))
             return Obs(self._counts(k, sel), len(sel), half=half)
+        if kind == "frac":                                                 # natural size variation: a fixed share of that round's active people
+            nk = max(5, int(round(par["f"] * len(self.D["users_in"][k]))))
+            sel = self._pick(k, nk)
+            return Obs(self._counts(k, sel), len(sel), n_w=len(sel))
         if kind == "varn":
             nw = int(np.clip(n * np.exp(self.rng.normal(0, 0.6)), max(n // 4, 1), 4 * n))
             sel = self._pick(k, nw)
@@ -460,7 +464,8 @@ class Splice(Agg):
 
 class Ivw(Decay):
     def setup(self):
-        self.d, self.s = decay_factor(2.0), self.z()
+        h = self.par["days"] / self.ctx["window_days"] if "days" in self.par else 2.0
+        self.d, self.s = decay_factor(h), self.z()
 
     def update(self, obs, w):
         wt = (obs.n_w / self.ctx["n"]) ** self.par["g"]
