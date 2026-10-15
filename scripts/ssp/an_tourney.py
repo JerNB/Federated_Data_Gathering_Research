@@ -58,16 +58,16 @@ def cell_means(r):
     return {p: float(np.nanmean(a[:, i, :])) for i, p in enumerate(r["policies"])}
 
 
-def per_n_diffs(rows, nwin=30):
-    """{policy: {n: {log: diff vs baseline}}}"""
+def per_n_diffs(rows, nwin=None):
+    """{policy: {(n_win, n): {log: diff vs baseline}}}; nwin=None keeps every window width."""
     acc = defaultdict(lambda: defaultdict(dict))
     for r in rows:
-        if r["n_win"] != nwin:
+        if nwin is not None and r["n_win"] != nwin:
             continue
         m = cell_means(r)
         for p, v in m.items():
             if p != BASE and BASE in m:
-                acc[p][r["n"]][r["dataset"]] = v - m[BASE]
+                acc[p][(r["n_win"], r["n"])][r["dataset"]] = v - m[BASE]
     return acc
 
 
@@ -126,24 +126,27 @@ def save(name, rows):
 
 
 def stage_table(stage, rows):
-    level = {"screen": 0.05, "full": ALPHA / (K * NV), "holdout": ALPHA / NV, "robust": ALPHA / NV}[stage]
-    diffs = per_n_diffs(rows, nwin=60 if stage == "robust" else 30)
+    sc = REG["stages"][stage]
+    combos = len(sc["n"]) * len(sc.get("n_win", [30]))          # (window width, n) combinations judged separately
+    level = {"screen": 0.05, "full": ALPHA / (K * combos), "holdout": ALPHA / combos, "robust": ALPHA / combos}[stage]
+    diffs = per_n_diffs(rows, nwin=60 if stage == "robust" else None)
     table = []
     for h in REG["hypotheses"]:
         for role, p in [("primary", h["primary"])] + [("secondary", s) for s in h["secondary"]]:
-            for n in sorted(diffs.get(p, {})):
-                st = judge(h["kind"], diffs[p][n], level)
-                row = dict(hypothesis=h["id"], rule=p, role=role, kind=h["kind"], n=n)
+            for nw, n in sorted(diffs.get(p, {})):
+                st = judge(h["kind"], diffs[p][(nw, n)], level)
+                cid = n if (nw == 30 or stage == "robust") else f"{n}@{nw}w"      # combination id; plain n means 30 windows
+                row = dict(hypothesis=h["id"], rule=p, role=role, kind=h["kind"], n=n, n_win=nw, cid=cid)
                 row.update({k.rstrip("_"): (round(x, 5) if isinstance(x, float) else x) for k, x in st.items()})
                 if stage == "screen":
                     row["keep"] = bool(st["mean"] is not None and screen_keep(h["kind"], st["mean"]))
                 if h["primary"].startswith("cad:"):
                     sc = "cad" + str(int(float(p.split("m=")[1])))
-                    rr = [r["people_per_round"][sc] / r["people_per_round"]["std"] for r in rows if r["n"] == n and sc in r["people_per_round"] and "std" in r["people_per_round"] and r["people_per_round"]["std"] > 0]
+                    rr = [r["people_per_round"][sc] / r["people_per_round"]["std"] for r in rows if r["n"] == n and r["n_win"] == nw and sc in r["people_per_round"] and "std" in r["people_per_round"] and r["people_per_round"]["std"] > 0]
                     row["people_ratio_vs_baseline"] = round(float(np.mean(rr)), 3) if rr else None
                 if stage in ("holdout", "robust"):
                     row["fresh_ok"] = fresh_same_sign(h["kind"], st)
-                    row["n_fresh_logs"] = sum(1 for k in diffs[p][n] if k in FRESH)
+                    row["n_fresh_logs"] = sum(1 for k in diffs[p][(nw, n)] if k in FRESH)
                     row["pass"] = bool(st["pass_"] and row["fresh_ok"])
                 table.append(row)
     return table
@@ -171,7 +174,7 @@ def main():
         if stage == "screen":
             surv["screen"] = [i for i in ids if any(r["keep"] for r in table if r["hypothesis"] == i and r["role"] == "primary")]
         else:
-            ns = {i: sorted({r["n"] for r in table if r["hypothesis"] == i and r["role"] == "primary" and r["pass"]}) for i in ids}
+            ns = {i: sorted({r["cid"] for r in table if r["hypothesis"] == i and r["role"] == "primary" and r["pass"]}) for i in ids}
             surv[stage + "_n"] = {i: v for i, v in ns.items() if v}
             surv[stage] = [i for i in ids if ns[i]]
         json.dump(surv, open(f"{TAB}/tourney{GEN}_survivors.json", "w"), indent=1)
@@ -179,7 +182,7 @@ def main():
             if r["role"] != "primary":
                 continue
             tag = ("KEEP" if r["keep"] else "KILL") if stage == "screen" else ("PASS" if r["pass"] else ("----" if r["testable"] else "n/a "))
-            print(f"{r['hypothesis']} {r['rule']:13s} n={r['n']:<4d} logs={r['n_logs']:2d} mean={r['mean']:+.4f} lo={r['lo']:+.4f} hi={r['hi']:+.4f} "
+            print(f"{r['hypothesis']} {r['rule']:13s} n={r['n']:<4d} w={r['n_win']:<3d} logs={r['n_logs']:2d} mean={r['mean']:+.4f} lo={r['lo']:+.4f} hi={r['hi']:+.4f} "
                   f"pos={r['frac_pos']:.2f} min={r['minimum']:+.4f} {tag}")
         print(stage, "->", surv[stage])
     elif stage == "cal":
@@ -313,15 +316,28 @@ def final():
         elif "full" not in surv:
             status = "discovery stage not analysed (INCOMPLETE)"
         elif not fn:
-            status = "failed on discovery logs"
+            rr = [r for r in prim("full", i) if r["testable"] == "True"]
+            if h["kind"] == "noninferiority" and rr and all(float(r["mean"]) > -MARGIN for r in rr):
+                status = "not shown on discovery logs (mean loss inside the margin, but the interval is wider than the margin)"
+            else:
+                status = "failed on discovery logs"
         elif "holdout_n" not in surv:
             status = "passed discovery, holdout not analysed (INCOMPLETE)"
         elif not conf:
             status = "passed discovery, failed holdout"
-        elif robust_run and not (set(conf) & rn):
-            status = "confirmed on holdout at n=" + ",".join(map(str, conf)) + ", did NOT hold at 60 windows"
         elif robust_run:
-            status = "CONFIRMED at n=" + ",".join(map(str, sorted(set(conf) & rn))) + " (discovery, holdout, 60 windows; Amazon-dominated logs)"
+            rob_n = set(REG["stages"].get("robust", {}).get("n", []))
+            held, failed, untested = sorted(set(conf) & rn), sorted((set(conf) & rob_n) - rn), sorted(set(conf) - rob_n)
+            parts = []
+            if held:
+                parts.append("CONFIRMED at n=" + ",".join(map(str, held)) + " (discovery, holdout, 60 windows; Amazon-dominated logs)")
+            if failed:
+                parts.append("confirmed on holdout at n=" + ",".join(map(str, failed)) + ", did NOT hold at 60 windows")
+            if untested:
+                parts.append("confirmed on holdout at n=" + ",".join(map(str, untested)) + " (30 windows only; the 60-window check runs at n=100)")
+            status = "; ".join(parts)
+        elif "robust" not in REG["stages"]:
+            status = "CONFIRMED at n=" + ",".join(map(str, conf)) + " (discovery and holdout; Amazon-dominated logs)"
         else:
             status = "confirmed on holdout at n=" + ",".join(map(str, conf)) + " (60-window check not run)"
         def mean_at(s):

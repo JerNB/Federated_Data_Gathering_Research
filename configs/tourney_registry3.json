@@ -1,0 +1,141 @@
+{
+ "version": 4,
+ "baseline": "decay:h=2",
+ "effect_margin": 0.01,
+ "family_size": 12,
+ "n_values": [
+  30,
+  100,
+  300
+ ],
+ "min_logs_per_n": 4,
+ "alpha": 0.05,
+ "scope_note": "Amazon review logs only (about 8 discovery, 7 older holdout and 4-5 fresh). Nothing here says what the half-life in days is for other kinds of logs.",
+ "split": {
+  "salt": "tourney-split-v1",
+  "discovery": {
+   "amazon": [
+    "amazon-arts-crafts-and-sewing",
+    "amazon-books",
+    "amazon-electronics",
+    "amazon-musical-instruments",
+    "amazon-office-products",
+    "amazon-patio-lawn-and-garden",
+    "amazon-pet-supplies",
+    "amazon-video-games"
+   ],
+   "other": [
+    "gowalla",
+    "ml-latest"
+   ]
+  },
+  "holdout_old": {
+   "amazon": [
+    "amazon-automotive",
+    "amazon-cell-phones-and-accessories",
+    "amazon-grocery-and-gourmet-food",
+    "amazon-health-and-household",
+    "amazon-movies-tv",
+    "amazon-sports-and-outdoors",
+    "amazon-toys-and-games"
+   ],
+   "other": [
+    "brightkite",
+    "kuairand-pure"
+   ]
+  },
+  "holdout_fresh": [
+   "amazon-baby-products",
+   "amazon-cds-and-vinyl",
+   "amazon-industrial-and-scientific",
+   "amazon-beauty-and-personal-care",
+   "amazon-tools-and-home-improvement"
+  ]
+ },
+ "hypotheses": [
+  {
+   "id": "H14",
+   "name": "forget in days, not in rounds",
+   "kind": "superiority",
+   "primary": "decay:days=534",
+   "secondary": [
+    "decay:days=400",
+    "decay:days=700"
+   ],
+   "statement": "On Amazon review logs, a half-life fixed at 534 days (about 1.5 years) gives a better list than a half-life of 2 rounds when the log is cut into rounds of a different length (20, 45, 60 or 90 rounds instead of 30).",
+   "prediction": "Holds at 60 and 90 rounds (2 rounds is then far shorter than 1.5 years) and probably at 20 rounds; no difference at 30 rounds, where 2 rounds is already about 1.5 years."
+  },
+  {
+   "id": "H15",
+   "name": "forgetting in days never hurts",
+   "kind": "noninferiority",
+   "primary": "decay:days=534",
+   "secondary": [
+    "decay:days=400",
+    "decay:days=700"
+   ],
+   "statement": "On Amazon review logs, the 534-day half-life loses less than 0.01 NDCG against 2 rounds at every round length tested.",
+   "prediction": "Holds."
+  }
+ ],
+ "gates": {
+  "unit": "Everything is judged SEPARATELY for each n (people per round) on the logs eligible at that n; at least min_logs_per_n logs are required, otherwise that n is 'not testable'. A missing expected cell makes the whole stage INCOMPLETE (no verdict).",
+  "screen": "n = 30 and 100, 6 draws, own draws. Keep a hypothesis if its primary rule moves the right way at any tested n: superiority mean diff > +0.005; noninferiority mean diff > -0.01; dominated mean diff < -0.005.",
+  "full": "PASS at an n: superiority = mean diff >= +0.01 AND diff>0 in >=70% of logs AND one-sided t lower bound at level alpha/(family*3) > 0; noninferiority = t lower bound of mean diff > -0.01 AND worst log diff > -0.03; dominated = mean diff <= -0.01 AND diff<0 in >=70% of logs AND t upper bound < 0. A hypothesis advances if it PASSES at one or more n.",
+  "holdout": "same rule at level alpha/3 for each n, plus the mean diff on the fresh logs alone must have the same sign (superiority > 0; noninferiority > -0.01; dominated < 0). CONFIRMED only at the n values that PASS both discovery and holdout."
+ },
+ "stages": {
+  "screen": {
+   "logs": [
+    "discovery_amazon"
+   ],
+   "n": [
+    100
+   ],
+   "draws": 6,
+   "n_win": [
+    20,
+    60,
+    90
+   ],
+   "seed_tag": "screen3"
+  },
+  "full": {
+   "logs": [
+    "discovery_amazon"
+   ],
+   "n": [
+    30,
+    100
+   ],
+   "draws": 12,
+   "n_win": [
+    20,
+    30,
+    45,
+    60,
+    90
+   ]
+  },
+  "holdout": {
+   "logs": [
+    "holdout_old_amazon",
+    "holdout_fresh"
+   ],
+   "n": [
+    30,
+    100
+   ],
+   "draws": 12,
+   "n_win": [
+    20,
+    30,
+    45,
+    60,
+    90
+   ]
+  }
+ },
+ "generation": 3,
+ "designed_after": "Generation 3 follows the generation-1 calendar check (H8: at 90 rounds the days-based half-life beat the rounds-based one in 9 of 11 logs; 3 of 4 fresh logs within 0.005 of best). The number 534 days is the median of the Amazon half-lives found in the earlier tracking study on the old discovery and holdout logs, so only the 4 or 5 fresh Amazon categories are blind to it. The family size counts all 12 hypotheses tried so far. Only Amazon logs are used because the days value is Amazon-specific (Gowalla is about 83 days)."
+}

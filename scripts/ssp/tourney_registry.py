@@ -122,7 +122,34 @@ G2.pop("h8", None)
 G2["gates"] = dict(REG["gates"], robust="Confirmed hypotheses are rerun with 60 windows (rounds half as long) at n=100 on all logs and must pass the holdout rule again; "
                                          "a claim that does not hold at 60 windows is reported as confirmed only at 30 windows.")
 
+H3 = [
+    dict(id="H14", name="forget in days, not in rounds", kind="superiority", primary="decay:days=534", secondary=["decay:days=400", "decay:days=700"],
+         statement="On Amazon review logs, a half-life fixed at 534 days (about 1.5 years) gives a better list than a half-life of 2 rounds when the log is cut into rounds of a different length (20, 45, 60 or 90 rounds instead of 30).",
+         prediction="Holds at 60 and 90 rounds (2 rounds is then far shorter than 1.5 years) and probably at 20 rounds; no difference at 30 rounds, where 2 rounds is already about 1.5 years."),
+    dict(id="H15", name="forgetting in days never hurts", kind="noninferiority", primary="decay:days=534", secondary=["decay:days=400", "decay:days=700"],
+         statement="On Amazon review logs, the 534-day half-life loses less than 0.01 NDCG against 2 rounds at every round length tested.",
+         prediction="Holds."),
+]
+G3 = dict(REG)
+G3.update(
+    version=4,
+    generation=3,
+    family_size=len(H) + len(H2) + len(H3),
+    hypotheses=H3,
+    designed_after=("Generation 3 follows the generation-1 calendar check (H8: at 90 rounds the days-based half-life beat the rounds-based one in 9 of 11 logs; 3 of 4 fresh logs within 0.005 of best). "
+                    "The number 534 days is the median of the Amazon half-lives found in the earlier tracking study on the old discovery and holdout logs, so only the 4 or 5 fresh Amazon categories are blind to it. "
+                    "The family size counts all 12 hypotheses tried so far. Only Amazon logs are used because the days value is Amazon-specific (Gowalla is about 83 days)."),
+    scope_note="Amazon review logs only (about 8 discovery, 7 older holdout and 4-5 fresh). Nothing here says what the half-life in days is for other kinds of logs.",
+    stages=dict(
+        screen=dict(logs=["discovery_amazon"], n=[100], draws=6, n_win=[20, 60, 90], seed_tag="screen3"),
+        full=dict(logs=["discovery_amazon"], n=[30, 100], draws=12, n_win=[20, 30, 45, 60, 90]),
+        holdout=dict(logs=["holdout_old_amazon", "holdout_fresh"], n=[30, 100], draws=12, n_win=[20, 30, 45, 60, 90]),
+    ),
+)
+G3.pop("h7", None)
+G3.pop("h8", None)
 if __name__ == "__main__":
     json.dump(REG, open("configs/tourney_registry.json", "w"), indent=1)
     json.dump(G2, open("configs/tourney_registry2.json", "w"), indent=1)
+    json.dump(G3, open("configs/tourney_registry3.json", "w"), indent=1)
     print(json.dumps(REG["split"], indent=1))

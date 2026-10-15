@@ -7,6 +7,7 @@ so differences between rules are paired.
 
 A rule is named "type:param=value". Types:
   decay:h=H        decayed sum of per-round shares, half-life H rounds (H = inf: plain sum). Baseline is decay:h=2.
+  decay:days=D     the same with the half-life fixed in calendar days (h = D / round length in days).
   slide:K=K        plain sum of the last K rounds' shares.
   mom:beta=B       decay h=2 share + B * (recent share (h=1) - older share (h=4)): extra weight on rising items.
   blend            half recent (h=1) share + half long-run (h=inf) share.
@@ -65,12 +66,14 @@ def _norm(x: np.ndarray) -> np.ndarray:
 
 
 class Policy:
-    def __init__(self, pid: str, n_items: int):
+    def __init__(self, pid: str, n_items: int, window_days: float = 1.0):
         self.pid = pid
         self.kind, self.par = parse(pid)
         z = lambda: np.zeros(n_items, np.float64)
         if self.kind in ("decay", "thresh", "cap", "cad"):
             h = self.par.get("h", 2.0)
+            if "days" in self.par:                      # half-life given in calendar days
+                h = self.par["days"] / window_days
             self.d = T._decay(h)
             self.s = z()
         elif self.kind == "slide":
@@ -169,7 +172,7 @@ def run_cell(task: dict) -> dict:
     for dr in range(draws):
         rng = np.random.default_rng(seed_of(task["dataset"], n, dr, nw, tag))
         rng_cad = {s: np.random.default_rng(seed_of(task["dataset"], n, dr, nw, s, tag)) for s in schemes if s.startswith(("cad", "cap"))}
-        pol = [Policy(p, D["n_items"]) for p in pids]
+        pol = [Policy(p, D["n_items"], D["window_days"]) for p in pids]
         carry = {s: 0 for s in schemes}
         for w in range(0, last_step + 1):
             sel = _select(D, w, n, rng)

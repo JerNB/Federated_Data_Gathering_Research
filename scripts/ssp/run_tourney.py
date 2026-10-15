@@ -44,7 +44,9 @@ def logs_for(reg, groups):
     sp = reg["split"]
     out = []
     for g in groups:
-        if g == "all_eligible":
+        if g.endswith("_amazon"):
+            out += sp[g[:-len("_amazon")]]["amazon"]
+        elif g == "all_eligible":
             for k in ("discovery", "holdout_old"):
                 out += sp[k]["amazon"] + sp[k]["other"]
         elif g == "holdout_fresh":
@@ -60,14 +62,17 @@ def survivors(reg, stage):
     s = json.load(open(p)) if os.path.exists(p) else {}
     if prev not in s:
         sys.exit(f"missing '{prev}' in {p}: run an_tourney.py {prev} first (refusing to treat this as 'all hypotheses killed')")
-    return [h for h in reg["hypotheses"] if h["id"] in s[prev]]
+    ids = s[prev]
+    if stage == "robust":   # the 60-window check runs at n=100: only hypotheses confirmed at n=100 can be tested there
+        ids = [i for i in ids if 100 in s.get("full_n", {}).get(i, []) and 100 in s.get("holdout_n", {}).get(i, [])]
+    return [h for h in reg["hypotheses"] if h["id"] in ids]
 
 
 def policies_of(hyps):
     out = []
     for h in hyps:
         out += [h["primary"]] + h["secondary"]
-    return out
+    return list(dict.fromkeys(out))
 
 
 def main():
