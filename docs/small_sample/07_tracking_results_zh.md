@@ -52,7 +52,7 @@
 
 **稳健性预测 R 失败**：每种宽度下最多有 2 个标签与 30 窗口相同（要求 3 个）。“h = 2 就够了”这条规则不能原样跨窗口宽度迁移；对 10 个 Amazon 类别和 Gowalla，最佳半衰期表现得像一条日历规则（见下一段）。
 
-- **日历半衰期（事后，探索性；n = 100）。** 把在两个或更多窗口宽度下有结果的 18 个数据集的网格最佳半衰期换算成天：18 个里 11 个在所有运行过的窗口宽度下（只有 30 和 60 窗口）最佳半衰期的天数相同：10 个普通 Amazon 类别为 494 到 587 天（约 1.5 年），Gowalla 为 83 天。其余 7 个里有 6 个只差一个网格档（books ×1.5；electronics、movies-tv、toys、video games、Brightkite ×2）；只有 MovieLens latest 差得更多（×3）。electronics、movies-tv、video games、toys、Brightkite 在 30 和 60 窗口下以“轮”计的半衰期不变（20 窗口下 electronics、movies-tv、video games 为 1 轮，Brightkite 为 4 轮）；按轮数或按天数都只差一个网格档，所以对它们来说，2 倍一档的网格分不出是日历规则还是按轮数的规则。MovieLens latest 在三种宽度下都是 1 轮，更符合按轮数的规则，而不是日历规则。KuaiRand（20 和 30 窗口下不遗忘，60 窗口下为 8 轮，约 4 天）、software（只有一种宽度）和 MovieLens 1M（没有结果）没有计入。n = 30 时情况不同（例如 books ×5.3）。
+- **日历半衰期（事后，探索性；n = 100）。** 把在两个或更多窗口宽度下有有限最佳半衰期的 18 个数据集的网格最佳半衰期换算成天：18 个里 11 个在所有运行过的窗口宽度下（只有 30 和 60 窗口）最佳半衰期的天数相同：10 个普通 Amazon 类别为 494 到 587 天（约 1.5 年），Gowalla 为 83 天。其余 7 个里有 6 个只差一个网格档（books ×1.5；electronics、movies-tv、toys、video games、Brightkite ×2）；只有 MovieLens latest 差得更多（×3）。electronics、movies-tv、video games、toys、Brightkite 在 30 和 60 窗口下以“轮”计的半衰期不变（20 窗口下 electronics、movies-tv、video games 为 1 轮，Brightkite 为 4 轮）；按轮数或按天数都最多差一个网格档，所以对它们来说，2 倍一档的网格分不出是日历规则还是按轮数的规则。MovieLens latest 在三种宽度下都是 1 轮，更符合按轮数的规则，而不是日历规则。KuaiRand（20 和 30 窗口下不遗忘，60 窗口下为 8 轮，约 4 天）、software（只有一种宽度）和 MovieLens 1M（没有结果）没有计入。n = 30 时情况不同（例如 books ×5.3）。
 
 ## 六、这些结果没有说明什么
 
