@@ -155,7 +155,7 @@ def run(deep, reg, outdir):
             pred_met, why = None, f"fewer than {MIN_LOGS} logs at the primary combination"
         elif i == "D01":
             und = sec.get("holt:a=0.3,b=0.1,p=1.0", {}).get("mean")
-            pred_met = hi_ < MARGIN and und is not None and und <= -0.02
+            pred_met = hi_ < MARGIN and abs(m) <= 0.005 and und is not None and und <= -0.02
             why = f"damped {m:+.4f} (upper bound {hi_:+.4f}); undamped {und}"
         elif i == "D02":
             pred_met = lo_ > -0.003 and hi_ < 0.003
@@ -166,10 +166,15 @@ def run(deep, reg, outdir):
             pred_met = (np.mean(am) <= 0.005 if am else False) and (np.mean(ot) >= 0.005 if ot else False)
             why = f"Amazon {np.mean(am) if am else float('nan'):+.4f}; other {np.mean(ot) if ot else float('nan'):+.4f}"
         elif i == "D08":
-            ch = _churn_cut(deep, h)
-            res[i]["churn_cut"] = ch
-            pred_met = ch is not None and ch >= 0.30 and lo_ >= -0.005
-            why = f"churn cut {ch if ch is None else round(ch, 3)}; NDCG diff {m:+.4f} (lower bound {lo_:+.4f}, needs >= -0.005)"
+            parts = []
+            for sp_ in ("discovery", "holdout"):
+                ch_ = _churn_cut(deep, h, sp_)
+                dv = np.array([x for k, x in d0.items() if deep.split(k) == sp_])
+                lo2 = _ci(dv)[0] if len(dv) >= MIN_LOGS else float("nan")
+                parts.append((sp_, ch_, lo2))
+            res[i]["churn_cut"] = parts
+            pred_met = all(c is not None and c >= 0.30 and np.isfinite(l2) and l2 >= -0.005 for _, c, l2 in parts)
+            why = "; ".join(f"{sp_}: churn cut {c if c is None else round(c, 3)}, NDCG lower bound {l2:+.4f}" for sp_, c, l2 in parts) + " (needs cut >= 0.30 and lower bound >= -0.005 on both)"
         elif i == "D10":
             am = [x for k, x in d0.items() if deep.stratum(k) == "amazon"]
             ot = [x for k, x in d0.items() if deep.stratum(k) == "other"]
@@ -185,6 +190,9 @@ def run(deep, reg, outdir):
         elif pr.get("gain"):
             pred_met = hlab == "GAIN"
             why = f"holdout label {hlab} (holdout mean {np.mean(hv) if hv else float('nan'):+.4f}); all-log label {lab}"
+        elif i in ("D04", "D06", "D09", "D14"):
+            pred_met = hi_ < MARGIN and m <= 0.005
+            why = f"mean {m:+.4f} (needs <= +0.005), upper 95% bound {hi_:+.4f} (a gain of 0.01 is {'ruled out' if hi_ < MARGIN else 'NOT ruled out'})"
         else:
             pred_met = hi_ < MARGIN
             why = f"mean {m:+.4f}, upper 95% bound {hi_:+.4f} (a gain of 0.01 is {'ruled out' if hi_ < MARGIN else 'NOT ruled out'})"
@@ -219,11 +227,13 @@ def run(deep, reg, outdir):
 BASE_ = "decay:h=2"
 
 
-def _churn_cut(deep, h):
+def _churn_cut(deep, h, split=None):
     """Relative churn reduction of the hysteresis arm vs the baseline at the primary combination (mean over logs)."""
     vals = []
     for r in deep.cells(h["stage"]):
         if r["n"] != 100 or r["n_win"] != 30 or not deep.has(r, h["primary"]) or not deep.has(r, h["ref"]):
+            continue
+        if split is not None and deep.split(r["dataset"]) != split:
             continue
         a, b = np.nanmean(deep.steady(r, h["primary"], "churn")), np.nanmean(deep.steady(r, h["ref"], "churn"))
         if np.isfinite(a) and np.isfinite(b) and b > 0:

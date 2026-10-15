@@ -64,9 +64,10 @@ def gauss_sigma(eps: float, sens: float, delta: float = DELTA) -> float:
     key = (eps, sens, delta)
     if key not in _SIG:
         from scipy.stats import norm
-        ok = lambda sg: norm.cdf(sens / (2 * sg) - eps * sg / sens) - np.exp(eps) * norm.cdf(-sens / (2 * sg) - eps * sg / sens) <= delta
-        lo, hi = 1e-3 * sens, 1e4 * sens
-        for _ in range(100):
+        from scipy.special import log_ndtr, ndtr
+        ok = lambda sg: ndtr(sens / (2 * sg) - eps * sg / sens) - np.exp(eps + log_ndtr(-sens / (2 * sg) - eps * sg / sens)) <= delta
+        lo, hi = 1e-9 * sens, 1e4 * sens
+        for _ in range(200):
             mid = np.sqrt(lo * hi)
             lo, hi = (lo, mid) if ok(mid) else (mid, hi)
         _SIG[key] = hi
@@ -95,8 +96,20 @@ def top_idx(score: np.ndarray, m: int = 300, key: np.ndarray | None = None) -> n
     """Indices of the m best scores, best first; ties broken by `key` (a per-draw random permutation shared by all arms), else by index."""
     n = score.shape[0]
     m = min(m, n)
-    idx = np.argpartition(-score, m - 1)[:m]
-    return idx[np.lexsort(((idx if key is None else key[idx]), -score[idx]))]
+    s = np.round(score, 12)                                   # float noise must not decide ties
+    thr = np.partition(s, n - m)[n - m]                       # value of the m-th best score
+    above = np.flatnonzero(s > thr)
+    tied = np.flatnonzero(s == thr)
+    need = m - len(above)
+    if len(tied) > need:                                      # ties at the cut-off are resolved by the key, not by position
+        if need <= 0:
+            tied = tied[:0]
+        elif key is None:
+            tied = tied[:need]
+        else:
+            tied = tied[np.argpartition(key[tied], need - 1)[:need]]
+    idx = np.concatenate([above, tied])
+    return idx[np.lexsort(((idx if key is None else key[idx]), -s[idx]))]
 
 
 def decay_factor(h: float) -> float:
@@ -216,9 +229,12 @@ class Sampler:
             else:
                 a, b = D["off"][k - 1], D["off"][k]
                 up, rows = np.unique(D["user"][a:b], return_counts=True)
-                pos = np.searchsorted(up, uk)
-                pos[pos >= len(up)] = 0
-                w = np.where(up[pos] == uk, rows[pos], 1).astype(np.float64)
+                if len(up) == 0:
+                    w = np.ones(len(uk))
+                else:
+                    pos = np.searchsorted(up, uk)
+                    pos[pos >= len(up)] = 0
+                    w = np.where(up[pos] == uk, rows[pos], 1).astype(np.float64)
                 keys = self.rng.random(len(uk)) ** (1.0 / w)
                 sel = uk[np.argpartition(-keys, n - 1)[:n]]
             return Obs(self._counts(k, sel), len(sel))
