@@ -1,0 +1,5 @@
+n,table_half_life_rounds,discovery_logs,holdout_logs,holdout_regret_table,holdout_regret_2rounds
+30,32,12,15,0.01195,0.14876
+100,16,12,15,0.01827,0.17057
+300,8,10,14,0.024,0.10647
+1000,4,5,12,0.01854,0.0472

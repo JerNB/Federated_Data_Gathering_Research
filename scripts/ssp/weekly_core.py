@@ -100,7 +100,11 @@ def cadence(task: dict) -> dict:
     n_items = D["n_items"]
     out = {f"{kind}|{d}": [] for kind in ("week", "month") for d in days_grid}
     for dr in range(draws):
-        rng = np.random.default_rng(T.seed_of(task["dataset"], n, dr, "cadence", bool(task.get("match_rows"))))
+        # Preserve the original people-matched stream; rows-matched cadence gets a separate stream.
+        seed_parts = [task["dataset"], n, dr, "cadence"]
+        if task.get("match_rows"):
+            seed_parts.append(True)
+        rng = np.random.default_rng(T.seed_of(*seed_parts))
         mask = np.zeros(D["n_users"] + 1, bool)
 
         def counts(k0, k1, sel):

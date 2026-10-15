@@ -1,5 +1,5 @@
 #!/bin/sh
-# Weekly-cadence programme: stages a, b, c (each resumable). Then the analysis.
+# Weekly-cadence programme: stages a through e (each resumable). Run an_weekly.py separately for analysis.
 #   nice -n 10 caffeinate -i sh scripts/ssp/run_weekly_night.sh
 cd "$(dirname "$0")/../.." || exit 1
 PY=".venv/bin/python3 -W ignore"

@@ -1,6 +1,6 @@
 """Weekly-cadence programme under the quiet governor. Resumable.
 
-    nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_weekly.py --stage a|b|c [--workers 3] [--smoke LOG]
+    nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_weekly.py --stage a|b|c|d|e [--workers 3] [--smoke LOG]
 Rows go to results/small_sample_popularity/02_runs/weekly.jsonl (gitignored). Registry: configs/weekly_registry.json.
 """
 from __future__ import annotations

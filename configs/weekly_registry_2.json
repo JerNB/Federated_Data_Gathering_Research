@@ -1,6 +1,6 @@
 {
  "version": "weekly-2",
- "frozen_note": "Written AFTER stages a, b, c of weekly-1 were analysed (their verdicts are in 03_tables/weekly). It is post-hoc in design (suggested by what stage a showed) but confirmatory in data: new sample sizes (30, 300, 3000), new random seeds, new cadence design (rows matched), and the memory rule is fitted on discovery logs only and scored on holdout logs.",
+ "frozen_note": "Written AFTER stages a, b, c of weekly-1 were analysed (their verdicts are in 03_tables/weekly). It is post-hoc in design (suggested by what stage a showed). Stage d adds new sample sizes (30, 300, 3000), and stage e adds a new rows-matched cadence; W8-W10 also reuse the already-run stage-a cells at n=100 and n=1000. The memory rule is fitted on discovery logs only and scored on holdout logs.",
  "stages": {
   "d": {
    "n": [

@@ -1,4 +1,4 @@
-"""Analysis of the weekly-cadence programme: verdicts for W1-W7 against configs/weekly_registry.json.
+"""Analysis of the weekly-cadence programme: verdicts for W1-W11 from weekly_registry.json and weekly_registry_2.json.
 
     .venv/bin/python3 -W ignore scripts/ssp/an_weekly.py
 Writes results/small_sample_popularity/03_tables/weekly/*.csv and weekly_verdicts.json.
@@ -47,7 +47,7 @@ def load():
     for l in open(f"{RUNS}/weekly.jsonl"):
         r = json.loads(l)
         if r["kind"] == "cadence":
-            cad[(r["dataset"], r["n"])] = r
+            cad[(r["key"].split("|", 1)[0], r["dataset"], r["n"])] = r
             continue
         steps = np.array(r["steps"])
         st = np.flatnonzero(steps >= STEADY)
@@ -75,7 +75,7 @@ def diff_report(d):
 def w(path, rows, head):
     os.makedirs(OUT, exist_ok=True)
     with open(f"{OUT}/{path}", "w", newline="") as f:
-        cw = csv.writer(f)
+        cw = csv.writer(f, lineterminator="\n")
         cw.writerow(head)
         cw.writerows(rows)
 
@@ -92,16 +92,20 @@ def main():
         c = cells.get((l, n, rd, "std"))
         if not c:
             return None
-        v = [c["val"][f"decay:days={d}"] for d in DAYS]
-        return DAYS[int(np.argmax(v))]
+        ds = [int(a.split("=")[1]) for a in c["arms"] if a.startswith("decay:days=")]
+        v = [c["val"][f"decay:days={d}"] for d in ds]
+        return ds[int(np.argmax(v))]
 
     # ---- best half-life table (all cells)
+    cell_days = sorted({int(a.split("@", 1)[0].split("=")[1]) for c in cells.values() for a in c["arms"] if a.startswith("decay:days=")})
     rows = []
     for (l, n, rd, sch), c in sorted(cells.items()):
         if sch != "std":
             continue
-        rows.append([l, n, rd, best_days(l, n, rd)] + [round(c["val"][f"decay:days={d}"], 5) for d in DAYS] + [round(c["val"]["decay:h=2"], 5)])
-    w("a_cells.csv", rows, ["log", "n", "round_days", "best_days"] + [f"nd100_days{d}" for d in DAYS] + ["nd100_h2rounds"])
+        rows.append([l, n, rd, best_days(l, n, rd)] +
+                    [round(c["val"][f"decay:days={d}"], 5) if f"decay:days={d}" in c["val"] else "" for d in cell_days] +
+                    [round(c["val"]["decay:h=2"], 5)])
+    w("a_cells.csv", rows, ["log", "n", "round_days", "best_days"] + [f"nd100_days{d}" for d in cell_days] + ["nd100_h2rounds"])
 
     # ---- W1
     b1 = {l: best_days(l, 100, 7) for l in used if best_days(l, 100, 7) is not None}
@@ -198,7 +202,7 @@ def main():
     for n in (25, 100, 300):
         dd, dfix = {}, {}
         for l in used:
-            r = cad.get((l, n))
+            r = cad.get(("c", l, n))
             if not r:
                 continue
             m = {k: float(np.nanmean(v)) for k, v in r["mean"].items()}
@@ -211,6 +215,82 @@ def main():
             d7[f"n{n}"] = dict(best=diff_report(dd), fixed56=diff_report(dfix))
     V["W7"] = d7
     w("c_cadence.csv", rows, ["log", "n_weekly", "weekly_best", "monthly_best", "diff_best", "diff_halflife56"])
+    # ---- W11 (rows matched)
+    d11 = {}
+    for n in (25, 100, 300):
+        dd = {}
+        for l in used:
+            r = cad.get(("e", l, n))
+            if r:
+                m = {k: float(np.nanmean(v)) for k, v in r["mean"].items()}
+                dd[l] = max(v for k, v in m.items() if k.startswith("week|")) - max(v for k, v in m.items() if k.startswith("month|"))
+        if dd:
+            d11[f"n{n}"] = diff_report(dd)
+    V["W11"] = d11
+    # ---- W8, W9, W10 (stages a and d pooled)
+    NS = [30, 100, 300, 1000, 3000]
+    rows, ok8 = [], {}
+    for n in NS:
+        for l in used:
+            b7, b28 = best_days(l, n, 7), best_days(l, n, 28)
+            if b7 and b28:
+                r7, r28 = b7 / 7, b28 / 28
+                ok8[(l, n)] = abs(np.log2(r7 / r28)) <= 1.0 + 1e-9
+                rows.append([l, n, b7, b28, r7, r28])
+    w("f_best_rounds_by_round_length.csv", rows, ["log", "n", "best_days_7d", "best_days_28d", "best_rounds_7d", "best_rounds_28d"])
+    V["W8"] = dict(pairs=len(ok8), share_within_factor2=float(np.mean(list(ok8.values()))) if ok8 else None,
+                   by_n={str(n): dict(n=sum(1 for k in ok8 if k[1] == n), share=float(np.mean([v for k, v in ok8.items() if k[1] == n])) if any(k[1] == n for k in ok8) else None) for n in NS})
+    d_pairs = [v for (l, n), v in ok8.items() if n in (30, 300, 3000)]
+    V["W8"]["stage_d_only"] = dict(pairs=len(d_pairs), share_within_factor2=float(np.mean(d_pairs)) if d_pairs else None)
+    tab = {}
+    for n in NS:
+        for rd in (7, 28):
+            bs = [best_days(l, n, rd) / rd for l in used if best_days(l, n, rd)]
+            if bs:
+                tab[f"n{n}|{rd}d"] = dict(median_rounds=float(np.median(bs)), n=len(bs))
+    V["best_rounds_table"] = tab
+    # table rule fitted on discovery logs, scored on holdout logs
+    RS = [1, 2, 4, 8, 16, 32]
+
+    def regret_cell(l, n, rd, r):
+        c = cells[(l, n, rd, "std")]
+        ds = [int(a.split("=")[1]) for a in c["arms"] if a.startswith("decay:days=")]
+        best = max(c["val"][f"decay:days={d}"] for d in ds)
+        d = int(round(r * rd))
+        return best - c["val"][f"decay:days={d}"]
+    table, rows9 = {}, []
+    for n in NS:
+        disc = [(l, rd) for l in GROUPS["discovery"] for rd in (7, 28) if (l, n, rd, "std") in cells]
+        hold = [(l, rd) for l in GROUPS["holdout"] for rd in (7, 28) if (l, n, rd, "std") in cells]
+        nh = len({l for l, _ in hold})
+        if len({l for l, _ in disc}) < 3 or nh < 6:
+            continue
+        sc = {r: np.mean([regret_cell(l, n, rd, r) for l, rd in disc]) for r in RS}
+        rstar = min(sc, key=sc.get)
+        table[n] = rstar
+        rt = float(np.mean([regret_cell(l, n, rd, rstar) for l, rd in hold]))
+        r2 = float(np.mean([regret_cell(l, n, rd, 2) for l, rd in hold]))
+        rows9.append([n, rstar, len({l for l, _ in disc}), nh, round(rt, 5), round(r2, 5)])
+    w("g_memory_table.csv", rows9, ["n", "table_half_life_rounds", "discovery_logs", "holdout_logs", "holdout_regret_table", "holdout_regret_2rounds"])
+    if rows9:
+        mt, m2 = float(np.mean([r[4] for r in rows9])), float(np.mean([r[5] for r in rows9]))
+        V["W9"] = dict(table={str(k): v for k, v in table.items()}, holdout_regret_table=mt, holdout_regret_2rounds=m2, ratio=mt / m2 if m2 else None,
+                       per_n=[dict(n=r[0], table=r[1], regret_table=r[4], regret_2rounds=r[5], holdout_logs=r[3]) for r in rows9])
+        stage_d_rows = [r for r in rows9 if r[0] in (30, 300, 3000)]
+        if stage_d_rows:
+            V["W9"]["stage_d_only"] = dict(
+                n=[r[0] for r in stage_d_rows],
+                holdout_regret_table=float(np.mean([r[4] for r in stage_d_rows])),
+                holdout_regret_2rounds=float(np.mean([r[5] for r in stage_d_rows])),
+                ratio=float(np.mean([r[4] for r in stage_d_rows]) / np.mean([r[5] for r in stage_d_rows])),
+            )
+    rho10 = {}
+    for l in used:
+        pts = [(n, best_days(l, n, 7)) for n in NS if best_days(l, n, 7)]
+        if len(pts) >= 3:
+            rho10[l] = float(spearmanr([np.log(a) for a, _ in pts], [b for _, b in pts]).statistic)
+    V["W10"] = dict(n=len(rho10), share_le_m07=float(np.mean([v <= -0.7 for v in rho10.values()])) if rho10 else None,
+                    median_rho=float(np.median(list(rho10.values()))) if rho10 else None)
     json.dump(V, open(f"{OUT}/weekly_verdicts.json", "w"), indent=1)
     print(json.dumps({k: V[k] for k in ("n_cells", "W1", "W2", "W5", "W6")}, indent=1)[:3000])
 
