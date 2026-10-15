@@ -12,7 +12,10 @@ A rule is named "type:param=value". Types:
   blend            half recent (h=1) share + half long-run (h=inf) share.
   thresh:t=T       items with fewer than T reported rows in a round are dropped before sharing (decay h=2).
   cap:c=C          each reporter contributes at most C rows per round (C rows chosen at random), decay h=2.
-  cad:m=M          budget moved to every M-th round: 0 reporters, then M*n reporters (decay h=2).
+  cad:m=M          budget moved to every M-th round: 0 reporters, then the people the baseline would have asked over those
+                   M rounds (unspent budget carried to the next asking round) (decay h=2).
+  athr:t=T         decay h=2 list, but only items with a decayed report count >= T may appear (threshold on the running count).
+  pwr:p=P          decayed sum of per-round shares raised to the power P (P<1 damps heavy hitters).
 """
 from __future__ import annotations
 
@@ -76,14 +79,28 @@ class Policy:
             self.a, self.b, self.c = z(), z(), z()
         elif self.kind == "blend":
             self.a, self.b = z(), z()
+        elif self.kind == "athr":
+            self.d = T._decay(2.0)
+            self.s, self.c = z(), z()
+        elif self.kind == "pwr":
+            self.d = T._decay(2.0)
+            self.s = z()
         else:
             raise ValueError(pid)
 
-    def update(self, share: np.ndarray):
+    def update(self, share: np.ndarray, raw: np.ndarray | None = None):
         k = self.kind
         if k in ("decay", "thresh", "cap", "cad"):
             self.s *= self.d
             self.s += share
+        elif k == "athr":
+            self.s *= self.d
+            self.s += share
+            self.c *= self.d
+            self.c += raw
+        elif k == "pwr":
+            self.s *= self.d
+            self.s += _norm(np.power(share, self.par["p"]))
         elif k == "slide":
             self.q.append(share)
         elif k == "mom":
@@ -96,8 +113,10 @@ class Policy:
 
     def score(self) -> np.ndarray:
         k = self.kind
-        if k in ("decay", "thresh", "cap", "cad"):
+        if k in ("decay", "thresh", "cap", "cad", "pwr"):
             return self.s
+        if k == "athr":
+            return np.where(self.c >= self.par["t"], self.s, 0.0)
         if k == "slide":
             return np.sum(self.q, axis=0)
         if k == "mom":
@@ -151,6 +170,7 @@ def run_cell(task: dict) -> dict:
         rng = np.random.default_rng(seed_of(task["dataset"], n, dr, nw, tag))
         rng_cad = {s: np.random.default_rng(seed_of(task["dataset"], n, dr, nw, s, tag)) for s in schemes if s.startswith(("cad", "cap"))}
         pol = [Policy(p, D["n_items"]) for p in pids]
+        carry = {s: 0 for s in schemes}
         for w in range(0, last_step + 1):
             sel = _select(D, w, n, rng)
             cnt = {}
@@ -164,8 +184,9 @@ def run_cell(task: dict) -> dict:
                 else:
                     m_ = int(s[3:])
                     if (w + dr) % m_ == 0:
-                        budget = int(base_n[max(0, w - m_ + 1): w + 1].sum())   # same realised people as the baseline over the period
+                        budget = int(base_n[max(0, w - m_ + 1): w + 1].sum()) + carry[s]   # baseline's realised people + unspent budget
                         sel_c = _select(D, w, budget, rng_cad[s])
+                        carry[s] = budget - len(sel_c)
                         people_used[s] += len(sel_c)
                         cnt[s] = _counts(D, w, sel_c, mask)
                     else:
@@ -175,7 +196,7 @@ def run_cell(task: dict) -> dict:
                 rows_used[s] += float(cnt[s].sum())
             shr = {s: T._shares(c) for s, c in cnt.items()}
             for p in pol:
-                p.update(shr[scheme_of(p.pid)])
+                p.update(shr[scheme_of(p.pid)], cnt[scheme_of(p.pid)])
             if w < FIRST_STEP:
                 continue
             truth = D["counts"][w + 1]

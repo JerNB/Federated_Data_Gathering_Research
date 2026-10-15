@@ -16,10 +16,11 @@ from collections import defaultdict
 import numpy as np
 from scipy import stats
 
+GEN = os.environ.get("TOURNEY_GEN", "")
 OUT = "results/small_sample_popularity"
 TAB = f"{OUT}/03_tables"
-RUNS = f"{OUT}/02_runs/tourney.jsonl"
-REG = json.load(open("configs/tourney_registry.json"))
+RUNS = f"{OUT}/02_runs/tourney{GEN}.jsonl"
+REG = json.load(open(f"configs/tourney_registry{GEN}.json"))
 BASE = REG["baseline"]
 MARGIN = REG["effect_margin"]
 K = REG["family_size"]
@@ -41,7 +42,7 @@ def rows_of(stage):
 
 
 def check_complete(stage, rows):
-    p = f"{OUT}/02_runs/tourney_expected_{stage}.json"
+    p = f"{OUT}/02_runs/tourney{GEN}_expected_{stage}.json"
     if not os.path.exists(p):
         sys.exit(f"INCOMPLETE: {p} missing; run run_tourney.py --stage {stage} first")
     exp = json.load(open(p))
@@ -108,7 +109,7 @@ def screen_keep(kind, mean):
 
 
 def load_surv():
-    p = f"{TAB}/tourney_survivors.json"
+    p = f"{TAB}/tourney{GEN}_survivors.json"
     return json.load(open(p)) if os.path.exists(p) else {}
 
 
@@ -125,8 +126,8 @@ def save(name, rows):
 
 
 def stage_table(stage, rows):
-    level = {"screen": 0.05, "full": ALPHA / (K * NV), "holdout": ALPHA / NV}[stage]
-    diffs = per_n_diffs(rows)
+    level = {"screen": 0.05, "full": ALPHA / (K * NV), "holdout": ALPHA / NV, "robust": ALPHA / NV}[stage]
+    diffs = per_n_diffs(rows, nwin=60 if stage == "robust" else 30)
     table = []
     for h in REG["hypotheses"]:
         for role, p in [("primary", h["primary"])] + [("secondary", s) for s in h["secondary"]]:
@@ -136,8 +137,13 @@ def stage_table(stage, rows):
                 row.update({k.rstrip("_"): (round(x, 5) if isinstance(x, float) else x) for k, x in st.items()})
                 if stage == "screen":
                     row["keep"] = bool(st["mean"] is not None and screen_keep(h["kind"], st["mean"]))
-                if stage == "holdout":
+                if h["primary"].startswith("cad:"):
+                    sc = "cad" + str(int(float(p.split("m=")[1])))
+                    rr = [r["people_per_round"][sc] / r["people_per_round"]["std"] for r in rows if r["n"] == n and sc in r["people_per_round"] and "std" in r["people_per_round"] and r["people_per_round"]["std"] > 0]
+                    row["people_ratio_vs_baseline"] = round(float(np.mean(rr)), 3) if rr else None
+                if stage in ("holdout", "robust"):
                     row["fresh_ok"] = fresh_same_sign(h["kind"], st)
+                    row["n_fresh_logs"] = sum(1 for k in diffs[p][n] if k in FRESH)
                     row["pass"] = bool(st["pass_"] and row["fresh_ok"])
                 table.append(row)
     return table
@@ -145,18 +151,21 @@ def stage_table(stage, rows):
 
 def main():
     stage = sys.argv[1]
-    if stage in ("screen", "full", "holdout"):
+    if stage in ("screen", "full", "holdout", "robust"):
         rows = rows_of(stage)
         if not rows and stage == "full" and "screen" in load_surv() and not load_surv()["screen"]:
             surv = load_surv(); surv["full"] = []; surv["full_n"] = {}
-            json.dump(surv, open(f"{TAB}/tourney_survivors.json", "w"), indent=1)
+            json.dump(surv, open(f"{TAB}/tourney{GEN}_survivors.json", "w"), indent=1)
             print("full: every hypothesis was killed at screen; nothing to run")
+            return
+        if not rows and stage == "robust" and not load_surv().get("holdout"):
+            print("robust: nothing was confirmed on the holdout logs; nothing to run")
             return
         if not rows:
             sys.exit(f"no rows for stage {stage}")
         check_complete(stage, rows)
         table = stage_table(stage, rows)
-        save(f"tourney_{stage}.csv", table)
+        save(f"tourney{GEN}_{stage}.csv", table)
         surv = load_surv()
         ids = [h["id"] for h in REG["hypotheses"]]
         if stage == "screen":
@@ -165,7 +174,7 @@ def main():
             ns = {i: sorted({r["n"] for r in table if r["hypothesis"] == i and r["role"] == "primary" and r["pass"]}) for i in ids}
             surv[stage + "_n"] = {i: v for i, v in ns.items() if v}
             surv[stage] = [i for i in ids if ns[i]]
-        json.dump(surv, open(f"{TAB}/tourney_survivors.json", "w"), indent=1)
+        json.dump(surv, open(f"{TAB}/tourney{GEN}_survivors.json", "w"), indent=1)
         for r in table:
             if r["role"] != "primary":
                 continue
@@ -229,7 +238,7 @@ def cal():
                            calendar_wins=bool(cal_p != rnd_p and m.get(cal_p, -1) > m.get(rnd_p, -1)))
             out.append(rec)
     if out:
-        save("tourney_cal.csv", out)
+        save(f"tourney{GEN}_cal.csv", out)
     for nw in (90, 45):
         sep = [o for o in out if o["n_win"] == nw and o.get("separable")]
         fl = [o for o in out if o["n_win"] == nw and o["flagged_same_in_days"]]
@@ -246,7 +255,7 @@ def cal():
             fr.append(dict(dataset=r["dataset"], window_days=round(r["window_days"], 1), best_h=b.split("=")[1], cal_h=pk.split("=")[1],
                            regret_of_534_days=round(m[b] - m[pk], 5), within_0_005=bool(m[b] - m[pk] <= 0.005)))
     if fr:
-        save("tourney_cal_fresh.csv", fr)
+        save(f"tourney{GEN}_cal_fresh.csv", fr)
         print("H8(b) fresh logs with calendar-rule regret <= 0.005:", sum(f["within_0_005"] for f in fr), "/", len(fr))
     else:
         print("H8(b): no fresh-log h-grid rows (holdout stage not run at n=100)")
@@ -275,7 +284,7 @@ def offline():
         rows.append(dict(dataset=d, new_share=round(new[d], 3), pred_h=round(pred, 2), rule_idx=gi, regret_rule=round(best - per[d][gi], 5),
                          regret_fixed2=round(best - per[d][3], 5), rule_better=bool(per[d][gi] > per[d][3] + 1e-9),
                          rule_worse=bool(per[d][gi] < per[d][3] - 1e-9)))
-    save("tourney_offline_h7.csv", rows)
+    save(f"tourney{GEN}_offline_h7.csv", rows)
     dm = np.array([r["regret_rule"] - r["regret_fixed2"] for r in rows])
     t = stats.ttest_1samp(dm, 0.0)
     print(f"H7: logs {len(rows)}; rule better in {sum(r['rule_better'] for r in rows)}, worse in {sum(r['rule_worse'] for r in rows)}, "
@@ -286,31 +295,42 @@ def offline():
 
 def final():
     surv = load_surv()
-    tabs = {s: (list(csv.DictReader(open(f"{TAB}/tourney_{s}.csv"))) if os.path.exists(f"{TAB}/tourney_{s}.csv") else []) for s in ("screen", "full", "holdout")}
+    stages = ("screen", "full", "holdout", "robust")
+    tabs = {s: (list(csv.DictReader(open(f"{TAB}/tourney{GEN}_{s}.csv"))) if os.path.exists(f"{TAB}/tourney{GEN}_{s}.csv") else []) for s in stages}
     prim = lambda s, i: [r for r in tabs[s] if r["hypothesis"] == i and r["role"] == "primary"]
     ledger = []
     for h in REG["hypotheses"]:
         i = h["id"]
         fn = set(surv.get("full_n", {}).get(i, []))
         hn = set(surv.get("holdout_n", {}).get(i, []))
+        rn = set(surv.get("robust_n", {}).get(i, []))
         conf = sorted(fn & hn)
-        if not prim("screen", i):
-            status = "no screen result"
-        elif i not in surv.get("screen", []):
+        robust_run = "robust" in surv
+        if "screen" not in surv:
+            status = "screen stage not analysed (INCOMPLETE)"
+        elif i not in surv["screen"]:
             status = "killed at screen"
+        elif "full" not in surv:
+            status = "discovery stage not analysed (INCOMPLETE)"
         elif not fn:
             status = "failed on discovery logs"
+        elif "holdout_n" not in surv:
+            status = "passed discovery, holdout not analysed (INCOMPLETE)"
         elif not conf:
-            status = "passed discovery, failed holdout" if tabs["holdout"] else "passed discovery, holdout not run"
+            status = "passed discovery, failed holdout"
+        elif robust_run and not (set(conf) & rn):
+            status = "confirmed on holdout at n=" + ",".join(map(str, conf)) + ", did NOT hold at 60 windows"
+        elif robust_run:
+            status = "CONFIRMED at n=" + ",".join(map(str, sorted(set(conf) & rn))) + " (discovery, holdout, 60 windows; Amazon-dominated logs)"
         else:
-            status = "CONFIRMED at n=" + ",".join(map(str, conf)) + " (Amazon-dominated logs)"
+            status = "confirmed on holdout at n=" + ",".join(map(str, conf)) + " (60-window check not run)"
         def mean_at(s):
             rr = prim(s, i)
             return "; ".join(f"n={r['n']}:{float(r['mean']):+.4f}" for r in rr) if rr else ""
         ledger.append(dict(id=i, name=h["name"], kind=h["kind"], rule=h["primary"], status=status,
-                           screen=mean_at("screen"), full=mean_at("full"), holdout=mean_at("holdout")))
-    save("tourney_ledger.csv", ledger)
-    json.dump(ledger, open(f"{TAB}/tourney_final.json", "w"), indent=1)
+                           screen=mean_at("screen"), full=mean_at("full"), holdout=mean_at("holdout"), robust=mean_at("robust")))
+    save(f"tourney{GEN}_ledger.csv", ledger)
+    json.dump(ledger, open(f"{TAB}/tourney{GEN}_final.json", "w"), indent=1)
     for r in ledger:
         print(r["id"], r["rule"], "->", r["status"])
 

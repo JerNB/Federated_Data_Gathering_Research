@@ -20,6 +20,7 @@ import quiet as Q  # noqa: E402  (sets one BLAS thread per process before numpy)
 
 import numpy as np  # noqa: E402
 
+GEN = os.environ.get("TOURNEY_GEN", "")        # "" = generation 1, "2" = generation 2 (own registry, rows and tables)
 RUNS = "results/small_sample_popularity/02_runs"
 TABLES = "results/small_sample_popularity/03_tables"
 HGRID = ["decay:h=0.25", "decay:h=0.5", "decay:h=1", "decay:h=2", "decay:h=4", "decay:h=8", "decay:h=inf"]
@@ -54,8 +55,8 @@ def logs_for(reg, groups):
 
 
 def survivors(reg, stage):
-    p = f"{TABLES}/tourney_survivors.json"
-    prev = {"full": "screen", "holdout": "full"}[stage]
+    p = f"{TABLES}/tourney{GEN}_survivors.json"
+    prev = {"full": "screen", "holdout": "full", "robust": "holdout"}[stage]
     s = json.load(open(p)) if os.path.exists(p) else {}
     if prev not in s:
         sys.exit(f"missing '{prev}' in {p}: run an_tourney.py {prev} first (refusing to treat this as 'all hypotheses killed')")
@@ -72,18 +73,18 @@ def policies_of(hyps):
 def main():
     import tourney_core as C
     import track_core as T
-    reg = json.load(open("configs/tourney_registry.json"))
+    reg = json.load(open(f"configs/tourney_registry{GEN}.json"))
     stage = arg("--stage")
     st = reg["stages"][stage]
     smoke = arg("--smoke")
-    out = "/tmp/tourney_smoke.jsonl" if smoke else f"{RUNS}/tourney.jsonl"
+    out = "/tmp/tourney_smoke.jsonl" if smoke else f"{RUNS}/tourney{GEN}.jsonl"
     logs = [smoke] if smoke else logs_for(reg, st["logs"])
     if stage == "screen":
         pol = policies_of(reg["hypotheses"])
-    elif stage in ("full", "holdout"):
+    elif stage in ("full", "holdout", "robust"):
         pol = policies_of(survivors(reg, stage))
-        if stage == "full" and not pol:
-            print("stage full: no surviving hypotheses; nothing to run")
+        if stage in ("full", "robust") and not pol:
+            print(f"stage {stage}: no surviving hypotheses; nothing to run")
             return
     else:
         pol = []
@@ -106,7 +107,7 @@ def main():
                     tasks.append(dict(key=f"{stage}|{ds}|{n}|{nw}", dataset=ds, n=n, n_win=nw, draws=st["draws"], policies=plist,
                                   seed_tag=st.get("seed_tag", "")))
         if not smoke:
-            json.dump({t["key"]: t["policies"] for t in tasks}, open(f"{RUNS}/tourney_expected_{stage}.json", "w"))
+            json.dump({t["key"]: t["policies"] for t in tasks}, open(f"{RUNS}/tourney{GEN}_expected_{stage}.json", "w"))
         print(f"[{time.strftime('%H:%M:%S')}] stage {stage}: {len(tasks)} cells over {len(set(t['dataset'] for t in tasks))} logs; "
               f"{len(pol)} candidate rules", flush=True)
         done = Q.run_tasks(C.run_task, tasks, gov, out)

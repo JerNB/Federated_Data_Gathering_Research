@@ -87,6 +87,42 @@ REG = dict(
             note="amazon-industrial-and-scientific is eligible only at n=30, so (b) has about 4 logs."),
 )
 
+H2 = [
+    dict(id="H9", name="batch the questions", kind="noninferiority", primary="cad:m=2", secondary=["cad:m=4"],
+         statement="Asking every second round (the people of two rounds at once, unspent budget carried forward) instead of every round loses less than 0.01 NDCG.",
+         prediction="Holds. Informed by generation 1: the 'batching is worse' claim (H5) was killed at screen with a mean difference of about 0.0003."),
+    dict(id="H10", name="how many rows per person", kind="noninferiority", primary="cap:c=10", secondary=["cap:c=30"],
+         statement="Letting each person report at most 10 rows per round loses less than 0.01 NDCG.",
+         prediction="Holds only where people report few rows; generation 1 showed a cap of 3 loses about 0.05, so 10 may still fail on heavy-user logs."),
+    dict(id="H11", name="threshold on the running count", kind="noninferiority", primary="athr:t=3", secondary=["athr:t=5"],
+         statement="Publishing only items whose decayed report count is at least 3 loses less than 0.01 NDCG.",
+         prediction="Holds. Generation 1 showed a per-round threshold of 2 loses 0.06 to 0.10 because most items are reported once per round, but items in the top 100 accumulate counts over rounds."),
+    dict(id="H12", name="damp heavy hitters", kind="superiority", primary="pwr:p=0.5", secondary=["pwr:p=0.75"],
+         statement="Summing per-round shares raised to the power 0.5 (so a few heavy items cannot crowd out rising ones) gives a better list than plain shares.",
+         prediction="Fails: generation 1 killed every variant that changes the weighting of the baseline."),
+]
+G2 = dict(REG)
+G2.update(
+    version=3,
+    generation=2,
+    family_size=len(H) + len(H2),
+    hypotheses=H2,
+    designed_after=("Generation 2 was designed after the generation-1 screen and its discovery-log numbers were seen (all six generation-1 rules were killed at screen; "
+                    "no rule was evaluated on any holdout log). The family size counts all 10 hypotheses tried so far, so the multiple-testing level is stricter. "
+                    "Holdout logs are still unopened for every rule."),
+    stages=dict(
+        screen=dict(logs=["discovery"], n=[30, 100], draws=6, seed_tag="screen2"),
+        full=dict(logs=["discovery"], n=[30, 100, 300], draws=12),
+        holdout=dict(logs=["holdout_old", "holdout_fresh"], n=[30, 100, 300], draws=12),
+        robust=dict(logs=["discovery", "holdout_old", "holdout_fresh"], n=[100], draws=12, n_win=[60]),
+    ),
+)
+G2.pop("h7", None)
+G2.pop("h8", None)
+G2["gates"] = dict(REG["gates"], robust="Confirmed hypotheses are rerun with 60 windows (rounds half as long) at n=100 on all logs and must pass the holdout rule again; "
+                                         "a claim that does not hold at 60 windows is reported as confirmed only at 30 windows.")
+
 if __name__ == "__main__":
     json.dump(REG, open("configs/tourney_registry.json", "w"), indent=1)
+    json.dump(G2, open("configs/tourney_registry2.json", "w"), indent=1)
     print(json.dumps(REG["split"], indent=1))
