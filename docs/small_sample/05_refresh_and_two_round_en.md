@@ -42,10 +42,10 @@ Result at k=5:
 - Two-round won in 42.6% of dataset/sample-size comparisons with N >= 400. The pre-registered threshold was 60%.
 - Only 7 of 22 datasets had a positive gain with intervals above zero in at least half of their sample-size comparisons. The threshold was 11 of 22.
 - The people-saving factor was 0.968 when endpoint-censored cells were counted at their bounds; the uncensored median was 0.856. A factor of 1.0 means no saving. A factor above 1.0 would mean fewer people. Therefore the typical result was not a saving. At N=6,400 two-round often beat the best one-round point, but the size of that saving is censored.
-- The result depends on sample size: at k=5, mean gain was -0.055 at N=400, -0.048 at N=800, -0.017 at N=1,600, +0.005 at N=3,200 and +0.024 at N=6,400.
+- The result depends on sample size and on k. At k=5, mean gain was -0.055 at N=400, -0.048 at N=800, -0.016 at N=1,600, +0.005 at N=3,200 and +0.024 at N=6,400. At k=1 the pattern is reversed: two-round wins at N=400-800 (+0.029 and +0.014 on average) and loses at N=1,600 and above.
 - A larger shortlist helped: mean gain was -0.057 with 150 candidates, -0.020 with 250, and +0.007 with 500. This is a small gain, not a demonstrated saving.
 
-Plain interpretation: **with a small or medium sample, splitting the people into discovery and confirmation wastes information. With a large sample, the design may help a little, but this experiment does not show a useful reduction in the number of people.**
+Plain interpretation: **at k=5 and k=20 with N of 200 or more, splitting the people into discovery and confirmation wastes information at small and medium N; at the largest N the design may help a little. At k=1 the effect flips with N. This experiment does not show a useful reduction in the number of people at any k.**
 
 Do not generalise this to every possible two-round protocol. The test used an equal split, a fixed shortlist, and equal-weight pooling.
 
@@ -60,4 +60,4 @@ Do not generalise this to every possible two-round protocol. The test used an eq
 
 ## Verification
 
-The season-window checks found no future leakage or metric-range errors. The corrected two-round estimator matched hand-computed user-normalised counts, and a throwaway rerun reproduced the first dataset's 1,440 rows exactly. The final Opus reviewer returned PASS for the corrected run. No repository test suite exists.
+The season-window checks found no future leakage or metric-range errors. The corrected two-round estimator matched hand-computed user-normalised counts and was unbiased in a 40,000-repeat Monte Carlo probe, and throwaway reruns reproduced the first dataset's rows exactly for both experiments. Reviewers (same provider, not an outside audit) found and I fixed the two estimator defects above and several wording problems. No repository test suite exists.
