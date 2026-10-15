@@ -1,0 +1,9 @@
+log,group,best_days_45,best_days_60,best_days_90,max_over_min,within_factor,combined_best_days_45,combined_best_days_60,combined_best_days_90,combined_max_over_min
+beeradvocate,new,200,200,100,2.0,True,200.0,187.350828,124.900552,1.601274
+brightkite,old,100,100,100,1.0,True,100.0,125.433813,100.0,1.254338
+goodreads-children,new,200,200,200,1.0,True,200.0,169.483068,200.0,1.180059
+goodreads-poetry,new,100,100,100,1.0,True,135.732372,101.799279,135.732372,1.333333
+gowalla,old,30,30,30,1.0,True,55.64472,41.73354,55.64472,1.333333
+ml-latest,old,300,200,200,1.5,True,231.530661,200.0,200.0,1.157653
+ratebeer,new,300,300,200,1.5,True,300.0,286.2,190.8,1.572327
+steam,new,200,100,100,2.0,True,200.0,175.933333,100.0,2.0

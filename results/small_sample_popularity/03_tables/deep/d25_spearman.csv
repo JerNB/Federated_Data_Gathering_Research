@@ -1,0 +1,8 @@
+group,value,n_cells,rho,p
+pooled,all,124,0.722958,0.0
+by_n_win,20,10,0.660606,0.037588
+by_n_win,30,26,0.574701,0.002135
+by_n_win,45,29,0.715764,1.3e-05
+by_n_win,60,29,0.773892,1e-06
+by_n_win,90,30,0.850501,0.0
+churn_vs_best_days_ratio,per log,29,-0.223644,0.243523

@@ -1,0 +1,57 @@
+log,stratum,m,breakeven_n,censored_never,above_300,note
+amazon-arts-crafts-and-sewing,amazon,4,,,,not eligible (no n=300 cell)
+amazon-automotive,amazon,4,,1,1,largest n seen 300
+amazon-baby-products,amazon,4,,1,1,largest n seen 300
+amazon-beauty-and-personal-care,amazon,4,,1,1,largest n seen 300
+amazon-books,amazon,4,300,0,0,largest n seen 3000
+amazon-cds-and-vinyl,amazon,4,300,0,0,largest n seen 1000
+amazon-cell-phones-and-accessories,amazon,4,,1,1,largest n seen 300
+amazon-electronics,amazon,4,300,0,0,largest n seen 3000
+amazon-grocery-and-gourmet-food,amazon,4,,1,1,largest n seen 300
+amazon-health-and-household,amazon,4,,1,1,largest n seen 1000
+amazon-industrial-and-scientific,amazon,4,,,,not eligible (no n=300 cell)
+amazon-movies-tv,amazon,4,300,0,0,largest n seen 3000
+amazon-musical-instruments,amazon,4,,1,1,largest n seen 300
+amazon-office-products,amazon,4,,,,not eligible (no n=300 cell)
+amazon-patio-lawn-and-garden,amazon,4,,1,1,largest n seen 300
+amazon-pet-supplies,amazon,4,,1,1,largest n seen 1000
+amazon-sports-and-outdoors,amazon,4,,1,1,largest n seen 1000
+amazon-tools-and-home-improvement,amazon,4,,1,1,largest n seen 1000
+amazon-toys-and-games,amazon,4,,1,1,largest n seen 300
+amazon-video-games,amazon,4,300,0,0,largest n seen 300
+beeradvocate,other,4,,,,not eligible (no n=300 cell)
+brightkite,other,4,300,0,0,largest n seen 300
+goodreads-poetry,other,4,300,0,0,largest n seen 1000
+gowalla,other,4,,1,1,largest n seen 300
+kuairand-pure,other,4,300,0,0,largest n seen 300
+ml-latest,other,4,300,0,0,largest n seen 1000
+ratebeer,other,4,100,0,0,largest n seen 300
+steam,other,4,300,0,0,largest n seen 3000
+amazon-arts-crafts-and-sewing,amazon,8,,,,not eligible (no n=300 cell)
+amazon-automotive,amazon,8,,1,1,largest n seen 300
+amazon-baby-products,amazon,8,100,0,0,largest n seen 300
+amazon-beauty-and-personal-care,amazon,8,300,0,0,largest n seen 300
+amazon-books,amazon,8,300,0,0,largest n seen 3000
+amazon-cds-and-vinyl,amazon,8,300,0,0,largest n seen 1000
+amazon-cell-phones-and-accessories,amazon,8,100,0,0,largest n seen 300
+amazon-electronics,amazon,8,100,0,0,largest n seen 3000
+amazon-grocery-and-gourmet-food,amazon,8,300,0,0,largest n seen 300
+amazon-health-and-household,amazon,8,300,0,0,largest n seen 1000
+amazon-industrial-and-scientific,amazon,8,,,,not eligible (no n=300 cell)
+amazon-movies-tv,amazon,8,100,0,0,largest n seen 3000
+amazon-musical-instruments,amazon,8,100,0,0,largest n seen 300
+amazon-office-products,amazon,8,,,,not eligible (no n=300 cell)
+amazon-patio-lawn-and-garden,amazon,8,300,0,0,largest n seen 300
+amazon-pet-supplies,amazon,8,300,0,0,largest n seen 1000
+amazon-sports-and-outdoors,amazon,8,300,0,0,largest n seen 1000
+amazon-tools-and-home-improvement,amazon,8,300,0,0,largest n seen 1000
+amazon-toys-and-games,amazon,8,300,0,0,largest n seen 300
+amazon-video-games,amazon,8,30,0,0,largest n seen 300
+beeradvocate,other,8,,,,not eligible (no n=300 cell)
+brightkite,other,8,300,0,0,largest n seen 300
+goodreads-poetry,other,8,30,0,0,largest n seen 1000
+gowalla,other,8,,1,1,largest n seen 300
+kuairand-pure,other,8,300,0,0,largest n seen 300
+ml-latest,other,8,30,0,0,largest n seen 1000
+ratebeer,other,8,30,0,0,largest n seen 300
+steam,other,8,100,0,0,largest n seen 3000

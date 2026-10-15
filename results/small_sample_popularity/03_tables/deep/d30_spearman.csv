@@ -1,0 +1,5 @@
+metric,n_arms,rho_vs_nd100,p,n_sign_flips,flipped_arms
+nd10,23,0.743761,4.7e-05,1,decay:h=2.5
+nd30,23,0.901903,0.0,1,decay:h=2.5
+nd300,23,0.971344,0.0,0,
+rec100,23,0.969368,0.0,0,

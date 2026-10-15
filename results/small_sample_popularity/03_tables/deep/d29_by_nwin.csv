@@ -1,0 +1,11 @@
+n_win,stratum,n_cells,n_gain_cells,n_recovered,n_harmful
+20,other,5,3,2,0
+20,amazon,5,0,0,0
+30,other,7,5,2,0
+30,amazon,19,2,1,12
+45,other,9,6,2,1
+45,amazon,20,6,1,13
+60,other,9,4,3,1
+60,amazon,20,13,1,10
+90,other,10,5,4,0
+90,amazon,20,15,6,3

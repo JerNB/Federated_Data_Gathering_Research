@@ -316,10 +316,10 @@ def run_d26(deep, reg, outdir):
               f"这些单元上的相关系数分别为 {_f(rho_hi)} 和 {_f(rho30)}。")
     else:
         en = (f"Split-half agreement is the overlap of the top-100 lists built from two random halves of the reporters. Its Spearman "
-              f"rank correlation (1 = same ordering) with the true NDCG@100 is {_f(rho_hi)} over {n_hi} cells with n of 300 or more "
+              f"rank correlation (1 = same ordering) with the true NDCG@100 is {_f(rho_hi)} (median over the {n_hi} value(s) of n in 300, 1000, 3000 that have at least 12 logs) "
               f"(bar {hi}) and {_f(rho30)} at n=30 over {n30} cells (must be below {lo}). The prediction is {verdict}.")
         zh = (f"半样本一致度是用随机分成的两半汇报者各自建出的前 100 名榜单的重合程度。它与真实 NDCG@100 的秩相关（1 表示排序一致）"
-              f"在 n 不小于 300 的 {n_hi} 个单元上为 {_f(rho_hi)}（门槛 {hi}），在 n=30 的 {n30} 个单元上为 {_f(rho30)}（须低于 {lo}）。"
+              f"在 n 取 300、1000、3000 且日志数不少于 12 的 {n_hi} 个取值上取中位数为 {_f(rho_hi)}（门槛 {hi}），在 n=30 的 {n30} 个单元上为 {_f(rho30)}（须低于 {lo}）。"
               f"预测{'成立' if verdict == 'MET' else '不成立'}。")
     return _result("D26", verdict, nums, en, zh, [t1, t2])
 
