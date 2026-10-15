@@ -1,0 +1,17 @@
+hypothesis,rule,role,kind,n,n_win,cid,n_logs,testable,mean,median,frac_pos,frac_neg,minimum,lo,hi,amazon_mean,other_mean,fresh_mean,pass,keep,people_ratio_vs_baseline
+H9,cad:m=2,primary,noninferiority,30,30,30,10,True,-0.00629,-0.00722,0.3,0.7,-0.03176,-0.01338,0.00081,-0.00969,0.00734,,False,True,0.982
+H9,cad:m=2,primary,noninferiority,100,30,100,10,True,-0.00143,-0.00102,0.5,0.5,-0.02348,-0.01079,0.00793,-0.00523,0.01377,,False,True,0.98
+H9,cad:m=4,secondary,noninferiority,30,30,30,10,True,-0.0063,-0.00899,0.2,0.8,-0.04925,-0.02438,0.01179,-0.01443,0.02624,,False,True,0.957
+H9,cad:m=4,secondary,noninferiority,100,30,100,10,True,-0.01381,-0.01213,0.2,0.8,-0.06071,-0.02947,0.00186,-0.01931,0.00818,,False,False,0.954
+H10,cap:c=10,primary,noninferiority,30,30,30,10,True,-0.01555,-2e-05,0.5,0.5,-0.12072,-0.03804,0.00693,0.0003,-0.07894,,False,False,
+H10,cap:c=10,primary,noninferiority,100,30,100,10,True,-0.01088,-0.00162,0.1,0.9,-0.05276,-0.02245,0.0007,-0.00146,-0.04854,,False,False,
+H10,cap:c=30,secondary,noninferiority,30,30,30,10,True,-0.00399,5e-05,0.6,0.4,-0.03528,-0.01043,0.00246,6e-05,-0.02017,,False,True,
+H10,cap:c=30,secondary,noninferiority,100,30,100,10,True,-0.00064,-2e-05,0.5,0.5,-0.00601,-0.00175,0.00046,-1e-05,-0.00317,,True,True,
+H11,athr:t=3,primary,noninferiority,30,30,30,10,True,-0.16898,-0.18408,0.1,0.9,-0.30474,-0.22182,-0.11615,-0.19456,-0.06668,,False,False,
+H11,athr:t=3,primary,noninferiority,100,30,100,10,True,-0.19443,-0.22464,0.1,0.9,-0.33105,-0.2513,-0.13755,-0.21194,-0.12437,,False,False,
+H11,athr:t=5,secondary,noninferiority,30,30,30,10,True,-0.17897,-0.19364,0.0,1.0,-0.33022,-0.23498,-0.12296,-0.20596,-0.07102,,False,False,
+H11,athr:t=5,secondary,noninferiority,100,30,100,10,True,-0.25285,-0.27032,0.1,0.9,-0.42531,-0.32674,-0.17897,-0.27794,-0.15251,,False,False,
+H12,pwr:p=0.5,primary,superiority,30,30,30,10,True,-0.00521,-0.00271,0.1,0.9,-0.02331,-0.00934,-0.00109,-0.00318,-0.01334,,False,False,
+H12,pwr:p=0.5,primary,superiority,100,30,100,10,True,-0.01192,-0.00914,0.0,1.0,-0.02822,-0.01713,-0.00671,-0.01046,-0.01775,,False,False,
+H12,pwr:p=0.75,secondary,superiority,30,30,30,10,True,-0.00125,-0.00027,0.5,0.5,-0.00848,-0.00297,0.00048,-0.00033,-0.00492,,False,False,
+H12,pwr:p=0.75,secondary,superiority,100,30,100,10,True,-0.00397,-0.00328,0.2,0.8,-0.01156,-0.00627,-0.00167,-0.00314,-0.00729,,False,False,

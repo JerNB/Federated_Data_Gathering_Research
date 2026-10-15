@@ -1,0 +1,7 @@
+hypothesis,rule,role,kind,n,n_logs,testable,mean,median,frac_pos,frac_neg,minimum,lo,hi,amazon_mean,other_mean,fresh_mean,pass,people_ratio_vs_baseline
+H9,cad:m=2,primary,noninferiority,30,10,True,0.00066,-0.00117,0.4,0.6,-0.01322,-0.01656,0.01788,-0.0035,0.01731,,False,0.982
+H9,cad:m=2,primary,noninferiority,100,10,True,-0.00045,-0.00144,0.4,0.6,-0.01302,-0.01205,0.01116,-0.00223,0.00668,,False,0.98
+H9,cad:m=2,primary,noninferiority,300,8,True,-0.01624,-0.016,0.125,0.875,-0.03083,-0.03114,-0.00134,-0.01659,-0.01518,,False,0.98
+H9,cad:m=4,secondary,noninferiority,30,10,True,-0.00662,-0.01252,0.2,0.8,-0.04489,-0.04665,0.03342,-0.0166,0.03329,,False,0.944
+H9,cad:m=4,secondary,noninferiority,100,10,True,-0.01425,-0.01104,0.2,0.8,-0.06625,-0.0467,0.0182,-0.01926,0.00576,,False,0.941
+H9,cad:m=4,secondary,noninferiority,300,8,True,-0.05297,-0.04604,0.0,1.0,-0.09764,-0.09932,-0.00663,-0.06199,-0.02593,,False,0.939

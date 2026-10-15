@@ -174,7 +174,7 @@ def main():
         if stage == "screen":
             surv["screen"] = [i for i in ids if any(r["keep"] for r in table if r["hypothesis"] == i and r["role"] == "primary")]
         else:
-            ns = {i: sorted({r["cid"] for r in table if r["hypothesis"] == i and r["role"] == "primary" and r["pass"]}) for i in ids}
+            ns = {i: sorted({r["cid"] for r in table if r["hypothesis"] == i and r["role"] == "primary" and r["pass"]}, key=str) for i in ids}
             surv[stage + "_n"] = {i: v for i, v in ns.items() if v}
             surv[stage] = [i for i in ids if ns[i]]
         json.dump(surv, open(f"{TAB}/tourney{GEN}_survivors.json", "w"), indent=1)
@@ -307,7 +307,7 @@ def final():
         fn = set(surv.get("full_n", {}).get(i, []))
         hn = set(surv.get("holdout_n", {}).get(i, []))
         rn = set(surv.get("robust_n", {}).get(i, []))
-        conf = sorted(fn & hn)
+        conf = sorted(fn & hn, key=str)
         robust_run = "robust" in surv
         if "screen" not in surv:
             status = "screen stage not analysed (INCOMPLETE)"
@@ -319,15 +319,19 @@ def final():
             rr = [r for r in prim("full", i) if r["testable"] == "True"]
             if h["kind"] == "noninferiority" and rr and all(float(r["mean"]) > -MARGIN for r in rr):
                 status = "not shown on discovery logs (mean loss inside the margin, but the interval is wider than the margin)"
+            elif h["kind"] == "superiority" and any(float(r["mean"]) >= MARGIN and float(r["frac_pos"]) >= 0.7 for r in rr):
+                status = "effect seen but NOT proven on discovery logs (mean gain above the margin, interval reaches 0 at the strict level)"
             else:
                 status = "failed on discovery logs"
+            if hn:
+                status += "; the holdout logs alone pass at n=" + ",".join(map(str, sorted(hn, key=str)))
         elif "holdout_n" not in surv:
             status = "passed discovery, holdout not analysed (INCOMPLETE)"
         elif not conf:
             status = "passed discovery, failed holdout"
         elif robust_run:
             rob_n = set(REG["stages"].get("robust", {}).get("n", []))
-            held, failed, untested = sorted(set(conf) & rn), sorted((set(conf) & rob_n) - rn), sorted(set(conf) - rob_n)
+            held, failed, untested = sorted(set(conf) & rn, key=str), sorted((set(conf) & rob_n) - rn, key=str), sorted(set(conf) - rob_n, key=str)
             parts = []
             if held:
                 parts.append("CONFIRMED at n=" + ",".join(map(str, held)) + " (discovery, holdout, 60 windows; Amazon-dominated logs)")

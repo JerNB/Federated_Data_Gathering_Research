@@ -21,7 +21,10 @@ Pre-registered predictions (written before this script was run):
       BOTH fixed alternatives: 2 rounds, and 534 days. Paired one-sided t test over cells, p < 0.05 for each.
   P3  The same holds on the non-Amazon logs alone (mean regret of the drift rule below that of 534 days), because 534 days
       is Amazon-specific by construction. Reported with its number of cells; no test is run below 8 cells.
-Anything not met is reported as not met. The drift half-life uses the whole community's counts (ceiling for what a server could
+Anything not met is reported as not met.
+Note added after the run (reviewer finding): for 9 old-holdout logs at 30 rounds, grid_means() takes the tournament holdout rows (same
+policies, same people) over the tracking rows. Using the tracking rows instead changes no best half-life and moves the correlation
+from 0.4923 to 0.4920. The drift half-life uses the whole community's counts (ceiling for what a server could
 estimate from its own samples); an estimate from samples is not tested here.
 """
 import csv

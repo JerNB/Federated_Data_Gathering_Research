@@ -1,0 +1,7 @@
+id,name,kind,rule,status,screen,full,holdout,robust
+H1,plain recent window beats decay,superiority,slide:K=3,killed at screen,n=30:-0.0276; n=100:-0.0390,,,
+H2,rising items,superiority,mom:beta=1,killed at screen,n=30:-0.0227; n=100:-0.0393,,,
+H3,two timescales,superiority,blend,killed at screen,n=30:-0.0376; n=100:-0.0816,,,
+H4,cap what each person reports,noninferiority,cap:c=3,killed at screen,n=30:-0.0447; n=100:-0.0504,,,
+H5,"ask every round, not in batches",dominated,cad:m=2,killed at screen,n=30:+0.0009; n=100:+0.0028,,,
+H6,minimum count per item,noninferiority,thresh:t=2,killed at screen,n=30:-0.0960; n=100:-0.0644,,,

@@ -1,0 +1,24 @@
+[
+ {
+  "id": "H14",
+  "name": "forget in days, not in rounds",
+  "kind": "superiority",
+  "rule": "decay:days=534",
+  "status": "effect seen but NOT proven on discovery logs (mean gain above the margin, interval reaches 0 at the strict level); the holdout logs alone pass at n=100@60w,100@90w,30@60w,30@90w",
+  "screen": "n=100:+0.0051; n=100:+0.0204; n=100:+0.0395",
+  "full": "n=30:+0.0014; n=100:+0.0058; n=30:+0.0006; n=100:+0.0002; n=30:+0.0094; n=100:+0.0082; n=30:+0.0242; n=100:+0.0208; n=30:+0.0447; n=100:+0.0413",
+  "holdout": "n=30:+0.0010; n=100:-0.0009; n=30:-0.0003; n=100:-0.0016; n=30:+0.0069; n=100:+0.0074; n=30:+0.0176; n=100:+0.0244; n=30:+0.0399; n=100:+0.0539",
+  "robust": ""
+ },
+ {
+  "id": "H15",
+  "name": "forgetting in days never hurts",
+  "kind": "noninferiority",
+  "rule": "decay:days=534",
+  "status": "CONFIRMED at n=100,30 (discovery and holdout; Amazon-dominated logs)",
+  "screen": "n=100:+0.0051; n=100:+0.0204; n=100:+0.0395",
+  "full": "n=30:+0.0014; n=100:+0.0058; n=30:+0.0006; n=100:+0.0002; n=30:+0.0094; n=100:+0.0082; n=30:+0.0242; n=100:+0.0208; n=30:+0.0447; n=100:+0.0413",
+  "holdout": "n=30:+0.0010; n=100:-0.0009; n=30:-0.0003; n=100:-0.0016; n=30:+0.0069; n=100:+0.0074; n=30:+0.0176; n=100:+0.0244; n=30:+0.0399; n=100:+0.0539",
+  "robust": ""
+ }
+]

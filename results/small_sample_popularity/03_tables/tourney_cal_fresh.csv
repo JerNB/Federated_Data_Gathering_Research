@@ -1,0 +1,5 @@
+dataset,window_days,best_h,cal_h,regret_of_534_days,within_0_005
+amazon-baby-products,266.4,2,2,0.0,True
+amazon-cds-and-vinyl,314.4,4,2,0.00471,True
+amazon-beauty-and-personal-care,276.7,2,2,0.0,True
+amazon-tools-and-home-improvement,289.7,4,2,0.00725,False

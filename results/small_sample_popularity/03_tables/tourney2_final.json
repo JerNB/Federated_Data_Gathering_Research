@@ -1,0 +1,46 @@
+[
+ {
+  "id": "H9",
+  "name": "batch the questions",
+  "kind": "noninferiority",
+  "rule": "cad:m=2",
+  "status": "failed on discovery logs",
+  "screen": "n=30:-0.0063; n=100:-0.0014",
+  "full": "n=30:+0.0007; n=100:-0.0004; n=300:-0.0162",
+  "holdout": "",
+  "robust": ""
+ },
+ {
+  "id": "H10",
+  "name": "how many rows per person",
+  "kind": "noninferiority",
+  "rule": "cap:c=10",
+  "status": "killed at screen",
+  "screen": "n=30:-0.0155; n=100:-0.0109",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ },
+ {
+  "id": "H11",
+  "name": "threshold on the running count",
+  "kind": "noninferiority",
+  "rule": "athr:t=3",
+  "status": "killed at screen",
+  "screen": "n=30:-0.1690; n=100:-0.1944",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ },
+ {
+  "id": "H12",
+  "name": "damp heavy hitters",
+  "kind": "superiority",
+  "rule": "pwr:p=0.5",
+  "status": "killed at screen",
+  "screen": "n=30:-0.0052; n=100:-0.0119",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ }
+]

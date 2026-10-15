@@ -1,0 +1,68 @@
+[
+ {
+  "id": "H1",
+  "name": "plain recent window beats decay",
+  "kind": "superiority",
+  "rule": "slide:K=3",
+  "status": "killed at screen",
+  "screen": "n=30:-0.0276; n=100:-0.0390",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ },
+ {
+  "id": "H2",
+  "name": "rising items",
+  "kind": "superiority",
+  "rule": "mom:beta=1",
+  "status": "killed at screen",
+  "screen": "n=30:-0.0227; n=100:-0.0393",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ },
+ {
+  "id": "H3",
+  "name": "two timescales",
+  "kind": "superiority",
+  "rule": "blend",
+  "status": "killed at screen",
+  "screen": "n=30:-0.0376; n=100:-0.0816",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ },
+ {
+  "id": "H4",
+  "name": "cap what each person reports",
+  "kind": "noninferiority",
+  "rule": "cap:c=3",
+  "status": "killed at screen",
+  "screen": "n=30:-0.0447; n=100:-0.0504",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ },
+ {
+  "id": "H5",
+  "name": "ask every round, not in batches",
+  "kind": "dominated",
+  "rule": "cad:m=2",
+  "status": "killed at screen",
+  "screen": "n=30:+0.0009; n=100:+0.0028",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ },
+ {
+  "id": "H6",
+  "name": "minimum count per item",
+  "kind": "noninferiority",
+  "rule": "thresh:t=2",
+  "status": "killed at screen",
+  "screen": "n=30:-0.0960; n=100:-0.0644",
+  "full": "",
+  "holdout": "",
+  "robust": ""
+ }
+]

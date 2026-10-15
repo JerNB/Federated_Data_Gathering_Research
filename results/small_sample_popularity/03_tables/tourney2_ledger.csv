@@ -1,0 +1,5 @@
+id,name,kind,rule,status,screen,full,holdout,robust
+H9,batch the questions,noninferiority,cad:m=2,failed on discovery logs,n=30:-0.0063; n=100:-0.0014,n=30:+0.0007; n=100:-0.0004; n=300:-0.0162,,
+H10,how many rows per person,noninferiority,cap:c=10,killed at screen,n=30:-0.0155; n=100:-0.0109,,,
+H11,threshold on the running count,noninferiority,athr:t=3,killed at screen,n=30:-0.1690; n=100:-0.1944,,,
+H12,damp heavy hitters,superiority,pwr:p=0.5,killed at screen,n=30:-0.0052; n=100:-0.0119,,,
