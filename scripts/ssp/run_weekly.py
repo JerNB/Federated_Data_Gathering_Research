@@ -35,7 +35,11 @@ def main():
     import weekly_core as W
     reg = json.load(open("configs/weekly_registry.json"))
     stage = arg("--stage")
-    st = reg["stages"][stage]
+    if stage in ("d", "e"):
+        reg2 = json.load(open("configs/weekly_registry_2.json"))
+        st = reg2["stages"][stage]
+    else:
+        st = reg["stages"][stage]
     smoke = arg("--smoke")
     out = "/tmp/weekly_smoke.jsonl" if smoke else f"{RUNS}/weekly.jsonl"
     logs = [smoke] if smoke else [l for l in all_logs(reg) if os.path.exists(f"datasets/npz/{l}.npz")]
@@ -60,6 +64,17 @@ def main():
                     for n in ns:
                         tasks.append(dict(key=f"a|{ds}|{n}|{rd}", dataset=ds, n=n, n_win=156 * 7 // rd, round_days=rd, draws=st["draws"],
                                           arms=arms, seed_tag=st["seed_tag"]))
+            elif stage == "d":
+                ns = [n for n in st["n"] if med >= 3 * n]
+                for rd in st["round_days"]:
+                    arms = ["decay:h=2"] + [f"decay:days={d}" for d in st["days"]]
+                    for n in ns:
+                        tasks.append(dict(key=f"d|{ds}|{n}|{rd}", dataset=ds, n=n, n_win=156 * 7 // rd, round_days=rd, draws=st["draws"],
+                                          arms=arms, seed_tag=st["seed_tag"]))
+            elif stage == "e":
+                for n in st["n"]:
+                    if med >= 3 * n:
+                        tasks.append(dict(key=f"e|{ds}|{n}", kind="cadence", match_rows=True, dataset=ds, n=n, draws=st["draws"], days=st["days"]))
             elif stage == "b":
                 n = st["n"][0]
                 if med < 3 * n:

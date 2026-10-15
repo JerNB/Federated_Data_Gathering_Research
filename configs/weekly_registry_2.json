@@ -1,0 +1,91 @@
+{
+ "version": "weekly-2",
+ "frozen_note": "Written AFTER stages a, b, c of weekly-1 were analysed (their verdicts are in 03_tables/weekly). It is post-hoc in design (suggested by what stage a showed) but confirmatory in data: new sample sizes (30, 300, 3000), new random seeds, new cadence design (rows matched), and the memory rule is fitted on discovery logs only and scored on holdout logs.",
+ "stages": {
+  "d": {
+   "n": [
+    30,
+    300,
+    3000
+   ],
+   "draws": 8,
+   "seed_tag": "weekly-d",
+   "round_days": [
+    7,
+    28
+   ],
+   "days": [
+    7,
+    14,
+    28,
+    56,
+    112,
+    224,
+    448,
+    896,
+    1792
+   ],
+   "note": "same arms as stage a plus half-life 1792 days"
+  },
+  "e": {
+   "n": [
+    25,
+    100,
+    300
+   ],
+   "draws": 8,
+   "seed_tag": "weekly-e",
+   "days": [
+    28,
+    56,
+    112,
+    224
+   ],
+   "note": "cadence with rows matched: the monthly round takes random people from the 28 days until it holds as many rows as the four weekly samples of that draw"
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "W8",
+   "stage": "a+d",
+   "title_en": "Memory counted in rounds does not depend on round length",
+   "title_zh": "按轮数计的记忆长度不随轮长变化",
+   "statement_en": "At a fixed number of people per round, the best half-life in rounds is about the same for 7-day and 28-day rounds.",
+   "statement_zh": "每轮人数固定时，7 天轮和 28 天轮的最佳半衰期（按轮数）大致相同。",
+   "prediction": "In at least 70% of (log, n) pairs with n in 30, 100, 300, 1,000, 3,000 the best half-life in rounds at 7-day and at 28-day rounds differ by at most one grid step (a factor of 2).",
+   "share": 0.7
+  },
+  {
+   "id": "W9",
+   "stage": "a+d",
+   "title_en": "A one-line memory table beats 2 rounds",
+   "title_zh": "一行记忆表优于固定 2 轮",
+   "statement_en": "Choose the half-life in rounds by sample size from a table fitted on discovery logs only; on holdout logs it is within 0.03 NDCG of the best grid value and its regret is at most one third of the regret of 2 rounds.",
+   "statement_zh": "只用探索日志拟合一张按样本量查的半衰期（轮数）表；在保留日志上，它与网格最佳值相差不超过 0.03 NDCG，且遗憾不超过固定 2 轮的三分之一。",
+   "prediction": "On holdout logs, mean regret of the table rule <= 0.03 and <= one third of the mean regret of half-life 2 rounds (7- and 28-day rounds pooled, n in 30..3,000 with at least 6 holdout logs).",
+   "regret": 0.03,
+   "ratio": 0.3333333333333333
+  },
+  {
+   "id": "W10",
+   "stage": "a+d",
+   "title_en": "Bigger sample, shorter memory",
+   "title_zh": "样本越大，记忆越短",
+   "statement_en": "Across the sample sizes 30 to 3,000, the best half-life shortens as n grows.",
+   "statement_zh": "在 30 到 3,000 的样本量范围内，n 越大，最佳半衰期越短。",
+   "prediction": "For at least 70% of logs the Spearman correlation between log n and best half-life in days (7-day rounds) is <= -0.7.",
+   "share": 0.7,
+   "rho": -0.7
+  },
+  {
+   "id": "W11",
+   "stage": "e",
+   "title_en": "Many small rounds still win when rows are matched",
+   "title_zh": "行数匹配后多个小轮仍占优",
+   "statement_en": "With the same number of collected rows per 28 days, weekly rounds beat one monthly round at every size tested.",
+   "statement_zh": "每 28 天收集的行数相同时，每周一轮在所有测试的样本量下都优于每月一轮。",
+   "prediction": "At each n in 25, 100, 300 the mean paired gain of weekly over monthly (best half-life of each, per log) is > 0 and positive in at least 60% of logs.",
+   "share": 0.6
+  }
+ ]
+}

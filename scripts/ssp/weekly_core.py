@@ -100,7 +100,7 @@ def cadence(task: dict) -> dict:
     n_items = D["n_items"]
     out = {f"{kind}|{d}": [] for kind in ("week", "month") for d in days_grid}
     for dr in range(draws):
-        rng = np.random.default_rng(T.seed_of(task["dataset"], n, dr, "cadence"))
+        rng = np.random.default_rng(T.seed_of(task["dataset"], n, dr, "cadence", bool(task.get("match_rows"))))
         mask = np.zeros(D["n_users"] + 1, bool)
 
         def counts(k0, k1, sel):
@@ -110,6 +110,7 @@ def cadence(task: dict) -> dict:
             mask[sel] = False
             return np.bincount(D["item"][a:b][m], minlength=n_items).astype(np.float64)
 
+        wk_rows = 0.0
         wk_state = {d: np.zeros(n_items) for d in days_grid}
         mo_state = {d: np.zeros(n_items) for d in days_grid}
         mo_list = {d: None for d in days_grid}
@@ -119,12 +120,21 @@ def cadence(task: dict) -> dict:
             uk = D["users_in"][w]
             sel = uk if len(uk) <= n else rng.choice(uk, n, replace=False)
             cw = counts(w, w + 1, sel)
+            wk_rows += float(cw.sum())
             sw = cw / cw.sum() if cw.sum() > 0 else cw
             for d in days_grid:
                 wk_state[d] = wk_state[d] * (2.0 ** (-7.0 / d)) + sw
             if w % 4 == 3 and w >= 3:                                   # a 28-day round ends here
                 uu = np.unique(np.concatenate(D["users_in"][w - 3:w + 1]))
-                sel = uu if len(uu) <= 4 * n else rng.choice(uu, 4 * n, replace=False)
+                if task.get("match_rows"):                                 # take people until the monthly round holds as many rows as the 4 weekly samples
+                    a, b = D["off"][w - 3], D["off"][w + 1]
+                    up, rc = np.unique(D["user"][a:b], return_counts=True)
+                    perm = rng.permutation(len(up))
+                    cut = int(np.searchsorted(np.cumsum(rc[perm]), wk_rows)) + 1
+                    sel = up[perm[:cut]]
+                else:
+                    sel = uu if len(uu) <= 4 * n else rng.choice(uu, 4 * n, replace=False)
+                wk_rows = 0.0
                 cm = counts(w - 3, w + 1, sel)
                 sm = cm / cm.sum() if cm.sum() > 0 else cm
                 for d in days_grid:
