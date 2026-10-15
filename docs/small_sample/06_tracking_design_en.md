@@ -66,3 +66,13 @@ Reported only, not judged: h* (parabola in log h) and its slope against n; h* ag
 ## 8. Safety
 
 Counts only, no model training, CPU only, 2 workers under the existing governor (fan limits 1,750/2,100 rpm, memory 8 GB, disk 10 GB free). Raw rows and run logs stay out of Git.
+
+## 9. Extensions declared after the primary run, before they run (post hoc)
+
+The primary run (pre-registered rules) finished and was committed first. Two things limit it: the pre-registered n eligibility (10th-percentile rule) stops most logs at n of 100 to 300, because early windows are thin, so "people per round to match a one-window-old full count" is often undetermined; and one window width (1/30 of the span, about 9 months for Amazon) was used.
+
+- **E1 (more n).** Same 30 windows; n is eligible if at least 10 steps have at least 5n active people in every window w-7..w+1 (the step-validity rule alone). Not judged; completes the people-per-round table (PC) and recomputes PA-PD on all eligible logs. The primary verdicts are not replaced.
+- **E2 (window width).** Windows 1/20 and 1/60 of the span (about 14 and 4.5 months for Amazon), same grids and eligibility as E1.
+- **Robustness prediction R.** At least 3 of the 4 verdicts (PA, PB, PC, PD; their stratum labels) keep the same label at 1/20 and at 1/60 as at 1/30 under E1 eligibility. Differences are reported, not fixed.
+
+Everything else (draws, half-lives, metrics, strata) is unchanged. Code: `run_track.py --nwin 20|60 --elig steps`, `an_track.py --nwin ... --elig ...`.

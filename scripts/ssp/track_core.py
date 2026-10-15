@@ -43,9 +43,9 @@ def seed_of(*parts) -> int:
     return zlib.crc32("|".join(str(p) for p in parts).encode()) & 0x7FFFFFFF
 
 
-def prepare(name: str) -> dict:
+def prepare(name: str, n_win: int = N_WIN) -> dict:
     """Load a dataset once per process: rows sorted by window, per-window counts and active people."""
-    if _CACHE.get("name") == name:
+    if _CACHE.get("key") == (name, n_win):
         return _CACHE["data"]
     _CACHE.clear()
     z = np.load(f"{NPZ}/{name}.npz")
@@ -55,14 +55,14 @@ def prepare(name: str) -> dict:
     ts = z["ts"][pos].astype(np.int64)
     n_items = int(z["item"].max()) + 1
     lo, hi = int(ts.min()), int(ts.max())
-    width = (hi - lo) / N_WIN
-    win = np.minimum(((ts - lo) // width).astype(np.int16), N_WIN - 1)
+    width = (hi - lo) / n_win
+    win = np.minimum(((ts - lo) // width).astype(np.int16), n_win - 1)
     order = np.argsort(win, kind="stable")
     user, item, win = user[order], item[order], win[order]
-    off = np.searchsorted(win, np.arange(N_WIN + 1))
+    off = np.searchsorted(win, np.arange(n_win + 1))
     users_in, active, counts, rows = [], [], [], []
-    first = np.full(n_items, N_WIN, np.int16)
-    for k in range(N_WIN):
+    first = np.full(n_items, n_win, np.int16)
+    for k in range(n_win):
         a, b = off[k], off[k + 1]
         u = np.unique(user[a:b])
         users_in.append(u)
@@ -73,8 +73,8 @@ def prepare(name: str) -> dict:
         first[seen & (first > k)] = k
     data = dict(name=name, user=user, item=item, off=off, users_in=users_in, active=np.array(active),
                 rows=np.array(rows), counts=counts, first=first, n_items=n_items,
-                n_users=int(user.max()) + 1, window_days=width / 86400.0)
-    _CACHE["name"], _CACHE["data"] = name, data
+                n_users=int(user.max()) + 1, window_days=width / 86400.0, n_win=n_win)
+    _CACHE["key"], _CACHE["data"] = (name, n_win), data
     return data
 
 
@@ -101,20 +101,22 @@ def sample_window(D: dict, k: int, n: int, rng: np.random.Generator, mask: np.nd
 
 def run_n(task: dict) -> dict:
     """One (dataset, n) cell: DRAWS draws of the sampled tracker. Returns nested lists [draw][h][step]."""
-    D = prepare(task["dataset"])
+    nw = int(task.get("n_win", N_WIN))
+    D = prepare(task["dataset"], nw)
     n = int(task["n"])
     mask = np.zeros(D["n_users"] + 1, bool)
-    steps = list(range(FIRST_STEP, LAST_STEP + 1))
+    last_step = nw - 2
+    steps = list(range(FIRST_STEP, last_step + 1))
     truth_ndcg, self_mse, self_ndcg = [], [], []
     for dr in range(DRAWS):
-        rng = np.random.default_rng(seed_of(task["dataset"], n, dr))
-        samp = [sample_window(D, k, n, rng, mask) for k in range(N_WIN)]
+        rng = np.random.default_rng(seed_of(task["dataset"], n, dr) if nw == N_WIN else seed_of(task["dataset"], n, dr, nw))
+        samp = [sample_window(D, k, n, rng, mask) for k in range(nw)]
         shr = [_shares(c) for c in samp]
         s = [np.zeros(D["n_items"], np.float64) for _ in H]
         t_nd = [[np.nan] * len(steps) for _ in H]
         s_mse = [[np.nan] * len(steps) for _ in H]
         s_nd = [[np.nan] * len(steps) for _ in H]
-        for w in range(0, LAST_STEP + 1):
+        for w in range(0, last_step + 1):
             for i, h in enumerate(H):
                 s[i] = s[i] * _decay(h) + shr[w]
             if w < FIRST_STEP:
@@ -135,7 +137,7 @@ def run_n(task: dict) -> dict:
         self_mse.append(s_mse)
         self_ndcg.append(s_nd)
     r = lambda a: np.round(np.asarray(a, np.float64), 6).tolist()
-    return dict(kind="n", dataset=task["dataset"], n=n, steps=steps, H=[None if np.isinf(h) else h for h in H],
+    return dict(kind="n", dataset=task["dataset"], n=n, n_win=nw, steps=steps, H=[None if np.isinf(h) else h for h in H],
                 truth_ndcg=r(truth_ndcg), self_mse=r(self_mse), self_ndcg=r(self_ndcg))
 
 
@@ -145,10 +147,12 @@ def _tv(a: np.ndarray, b: np.ndarray) -> float:
 
 def run_full(task: dict) -> dict:
     """Per-dataset full-community quantities: lags, full trackers, M0 ceiling, M1 drift profile, new-item share."""
-    D = prepare(task["dataset"])
+    nw = int(task.get("n_win", N_WIN))
+    D = prepare(task["dataset"], nw)
     name = task["dataset"]
-    rng = np.random.default_rng(seed_of(name, "full"))
-    steps = list(range(FIRST_STEP, LAST_STEP + 1))
+    rng = np.random.default_rng(seed_of(name, "full") if nw == N_WIN else seed_of(name, "full", nw))
+    last_step = nw - 2
+    steps = list(range(FIRST_STEP, last_step + 1))
     nI = D["n_items"]
     C = D["counts"]
     lag_nd = [[np.nan] * len(steps) for _ in LAGS]
@@ -159,7 +163,7 @@ def run_full(task: dict) -> dict:
     new_share = [np.nan] * len(steps)
     born_share = [np.nan] * len(steps)
     s = [np.zeros(nI, np.float64) for _ in H]
-    for w in range(0, LAST_STEP + 1):
+    for w in range(0, last_step + 1):
         for i, h in enumerate(H):
             s[i] = s[i] * _decay(h) + _shares(C[w].astype(np.float64))
         if w < FIRST_STEP:
@@ -204,15 +208,15 @@ def run_full(task: dict) -> dict:
             m0_h2[j] = float(np.mean(h2s))
     # ---- M1: drift profile with three disjoint person groups
     grp = np.random.default_rng(seed_of(name, "groups")).integers(0, 3, D["n_users"] + 1)
-    G = np.zeros((3, N_WIN, nI), np.float32)
-    for k in range(N_WIN):
+    G = np.zeros((3, nw, nI), np.float32)
+    for k in range(nw):
         a, b = D["off"][k], D["off"][k + 1]
         g = grp[D["user"][a:b]]
         for q in range(3):
             G[q, k] = np.bincount(D["item"][a:b][g == q], minlength=nI)
     tot = G.sum(2)                                            # (3, windows) rows per group-window
     items = np.argsort(-G[0].sum(0))[:1000]                   # chosen by group 0 only
-    ok = [k for k in range(FIRST_STEP, N_WIN) if tot[1, k] >= 300 and tot[2, k] >= 300]
+    ok = [k for k in range(FIRST_STEP, nw) if tot[1, k] >= 300 and tot[2, k] >= 300]
     x1 = G[1][:, items] / np.maximum(tot[1][:, None], 1)
     x2 = G[2][:, items] / np.maximum(tot[2][:, None], 1)
     ks = [1, 2, 3, 4, 6, 8]
@@ -225,7 +229,7 @@ def run_full(task: dict) -> dict:
         Dtv[k] = float(np.mean([_tv(G[1][t], G[2][t + k]) - _tv(G[1][t], G[2][t]) for t in pairs]))
     scale = float(np.mean([np.mean(x1[t] * x2[t]) for t in ok])) if ok else float("nan")
     r = lambda a: np.round(np.asarray(a, np.float64), 6).tolist()
-    return dict(kind="full", dataset=name, steps=steps, H=[None if np.isinf(h) else h for h in H],
+    return dict(kind="full", dataset=name, n_win=nw, steps=steps, H=[None if np.isinf(h) else h for h in H],
                 window_days=D["window_days"], n_items=nI, n_users=D["n_users"], active=D["active"].tolist(),
                 rows=D["rows"].tolist(), lag_ndcg=r(lag_nd), tracker_ndcg=r(trk_nd), m0_half=r(m0_half),
                 m0_lag=r(m0_lag), m0_h2=r(m0_h2), new_share=r(new_share), born_share=r(born_share),

@@ -59,20 +59,25 @@ def stratum(name: str) -> str:
     return "Amazon" if name.startswith("amazon") else "Other"
 
 
-def load(path):
+def load(path, nwin=30):
     full, cells = {}, {}
     for ln in open(path):
         try:
             r = json.loads(ln)
         except Exception:
             continue
-        if "error" in r:
+        if "error" in r or r.get("n_win", 30) != nwin:
             continue
         if r.get("kind") == "full":
             full[r["dataset"]] = r
         elif r.get("kind") == "n":
             cells[(r["dataset"], r["n"])] = r
     return full, cells
+
+
+def p10_ok(active, n):
+    """Pre-registered eligibility: n <= 20% of the 10th-percentile active people per window over windows 8..end."""
+    return n <= 0.2 * float(np.percentile(np.asarray(active)[FIRST:], 10))
 
 
 def block_ci(x, B=1000, block=3):
@@ -184,8 +189,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", default="results/small_sample_popularity/02_runs/track.jsonl")
     ap.add_argument("--out", default="results/small_sample_popularity")
+    ap.add_argument("--nwin", type=int, default=30)
+    ap.add_argument("--elig", default="p10", choices=["p10", "steps"])
     a = ap.parse_args()
-    full, cells = load(a.runs)
+    suf = "" if (a.nwin == 30 and a.elig == "p10") else f"_w{a.nwin}_{a.elig}"
+    full, cells = load(a.runs, a.nwin)
+    if a.elig == "p10":
+        cells = {k: c for k, c in cells.items() if k[0] in full and p10_ok(full[k[0]]["active"], k[1])}
     rows, skipped = [], []
     for (ds, n), c in sorted(cells.items()):
         if ds not in full:
@@ -197,7 +207,7 @@ def main():
             rows.append(r)
     os.makedirs(f"{a.out}/03_tables", exist_ok=True)
     os.makedirs(f"{a.out}/04_figures", exist_ok=True)
-    with open(f"{a.out}/03_tables/an_track_cells.csv", "w", newline="") as fh:
+    with open(f"{a.out}/03_tables/an_track_cells{suf}.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0]))
         w.writeheader()
         w.writerows(rows)
@@ -312,11 +322,11 @@ def main():
                         half_list_score=float(m0h), full_lag0_on_half=float(m0l[0]), ratio_lag0_over_half=float(m0l[0] / m0h) if m0h > 0 else None,
                         V_slope=slope(Vp), TV_slope=slope(Tp),
                         new_share_next_head=new_sh[d], born_share=float(np.nanmean(r["born_share"]))))
-    with open(f"{a.out}/03_tables/an_track_m0m1.csv", "w", newline="") as fh:
+    with open(f"{a.out}/03_tables/an_track_m0m1{suf}.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(m01[0]))
         w.writeheader()
         w.writerows(m01)
-    with open(f"{a.out}/03_tables/an_track_calculator.csv", "w", newline="") as fh:
+    with open(f"{a.out}/03_tables/an_track_calculator{suf}.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(calc[0]))
         w.writeheader()
         w.writerows(sorted(calc, key=lambda x: x["dataset"]))
@@ -334,7 +344,7 @@ def main():
         if isinstance(o, (np.integer,)):
             return int(o)
         return o
-    json.dump(clean(verdicts), open(f"{a.out}/03_tables/an_track_verdicts.json", "w"), indent=1, allow_nan=False)
+    json.dump(clean(verdicts), open(f"{a.out}/03_tables/an_track_verdicts{suf}.json", "w"), indent=1, allow_nan=False)
     # figures
     fig, ax = plt.subplots(1, 3, figsize=(15, 4.4))
     for d in names:
@@ -356,7 +366,7 @@ def main():
     ax[2].set_xticks(x); ax[2].set_xticklabels([d.replace("amazon-", "a-") for d in lab], rotation=70, ha="right", fontsize=6)
     ax[2].set_ylabel("NDCG@100 at n=100"); ax[2].legend(fontsize=7)
     fig.tight_layout()
-    fig.savefig(f"{a.out}/04_figures/an_track_main.png", dpi=130)
+    fig.savefig(f"{a.out}/04_figures/an_track_main{suf}.png", dpi=130)
     print(json.dumps({k: (v if k in ("PD",) else {kk: vv for kk, vv in v.items() if kk in ("verdict",)} if isinstance(v, dict) and "verdict" in v else None)
                       for k, v in verdicts.items() if k in ("PA", "PB", "PC", "PD")}, indent=1, default=str))
     print("cells", len(rows), "datasets", len(by), "skipped", skipped)
