@@ -5,7 +5,7 @@ Data: 22 time-stamped logs (16 Amazon categories; MovieLens 1M and latest, Gowal
 
 ## 1. Short answer
 
-> **In product logs, 100 people per round give a list as good as a full count from about 1.3 to 8 rounds ago (median 4.4). Matching a full count one round old takes a few hundred to a few thousand people per round. Forget old answers at a fixed rate (about 2 rounds, roughly 1.5 years for Amazon); do not try to learn the rate from your own reports. In slow-changing logs (KuaiRand video views, Brightkite check-ins) a longer memory is better, and there the self-tuning works.**
+> **In product logs, 100 people per round give a list as good as a full count from about 1.3 to 8 rounds ago (median 4.4). Matching a full count one round old took 300 to 1,000 people per round in the 4 Amazon logs where it could be determined (300 to 10,000 with 4.5-month rounds). Forget at a fixed calendar rate, about 1.5 years for most Amazon categories (2 of our 9-month rounds); counted in rounds the rule did not carry over to other round lengths. Do not try to learn the rate from your own reports in product logs. In KuaiRand a longer memory is better and self-tuning recovered the gain in all 4 cells (the Other stratum: 9 of 12 cells, never harmful).**
 
 The numbers behind each part are below. Only four predictions were registered in advance; their verdicts come first. Everything else is labelled exploratory or post hoc.
 
@@ -15,7 +15,7 @@ The numbers behind each part are below. Only four predictions were registered in
 - **n**: people per round (random active people; each reports what they chose in that round).
 - **Half-life h (in rounds)**: after h rounds an old report counts half.
 - **Score**: NDCG@100 (1 = perfect) of the top-100 list against the whole community's choices in the next round.
-- **Equivalent age**: the tracker scores the same as a full-community list that is L rounds old. Smaller is better.
+- **Equivalent age**: the tracker scores the same as a full-community list that is L rounds old; L = 0 is the full count of the latest finished round, L = 1 the one before it. Smaller is better.
 
 ## 3. The four registered predictions (n = 100 people per round, h = 2 unless stated)
 
@@ -28,13 +28,13 @@ Verdicts need both strata (Amazon, Other) to pass; with fewer than 3 eligible Ot
 | **PC** matching a full count one round old needs at least 1% of active people | **Mixed** | 1 of 4 determined (books 0.98%, electronics 0.38%, movies-tv 0.51% are below 1%; video games 2.5%) | 4 of 4 |
 | **PD** the server can learn its own half-life | **Mixed** | **No**: the self-tuned list is more than 0.01 worse than h = 2 in 51% of 59 cells | **Yes**: recovers at least half of the tuning gain in 9 of 12 cells; harmful in 0 of 16 |
 
-Plain reading: in the Amazon product logs a fixed half-life of about 2 rounds is already as good as tuning, and self-tuning backfires. In KuaiRand and Brightkite a longer memory is better and self-tuning works; MovieLens latest is different (the best half-life is 1 round at n = 100 and shrinks to 0.5 at larger n), with small tuning gains.
+Plain reading: in the Amazon product logs a fixed half-life of about 2 rounds is already as good as tuning, and self-tuning backfires. In KuaiRand a longer memory is better and self-tuning recovered the tuning gain in all 4 cells; in Brightkite 1 of 2 cells (at n = 100 its tuning gain, +0.057, has a 95% lower bound just below 0, so PB counts it as "does not matter"). MovieLens latest is different (best half-life 1 round at n = 100, 0.5 at larger n), with small tuning gains. The PB "Other" label rests on bootstrap lower bounds near 0 (MovieLens latest +0.003); it was the same under three seeds.
 
 ## 4. What the numbers mean for a service
 
-1. **People per round.** The smallest n that matches a full count one round old (n_L1), where the grid reached it: books 1,000 (about 1% of active people), electronics 1,000 (0.4%), movies-tv 300 (0.5%), video games 300 (2.5%). For most other logs the grid stopped before reaching it. With 4.5-month rounds (extension E2), n_L1 stays at 300 to 3,000 for the big logs although the share of active people changes a lot (movies-tv 300, books 1,000, electronics 3,000). So the useful number is a count of people, not a percentage.
-2. **Half-life.** At n = 100 the best fixed half-life is 2 rounds in 13 of 14 Amazon logs with a result (4 in toys), with no gain from tuning. The textbook says the best half-life should fall with n like n to the minus one third or one half. We measured a median slope of **-0.13 (Amazon, 12 logs)** and -0.29 (Other, 2 logs): the best half-life hardly depends on n. It is pinned by how fast the product catalogue turns over, not by noise. Other logs at n = 100: Brightkite 8 rounds, KuaiRand no forgetting, MovieLens latest 1 round.
-3. **New items drive it.** Across Amazon logs the best half-life at n = 100 falls as the share of the next top 100 held by new items rises (Spearman -0.69, 14 logs). All logs together: -0.41 (16 logs).
+1. **People per round.** The smallest n that matches a full count one round old (n_L1), where the grid reached it at 30 windows: books 1,000 (about 1% of active people), electronics 1,000 (0.4%), movies-tv 300 (0.5%), video games 300 (2.5%). For most other logs the grid stopped before reaching it. With 4.5-month rounds (extension E2) n_L1 is determined for 10 of 16 Amazon logs: 300 (movies-tv, software, video games), 1,000 (books), 3,000 (electronics) and 10,000 (health, pet supplies, sports; 33 to 42% of active people). In books, electronics and movies-tv n_L1 changed less than the share of active people, which hints that a count of people matters more than a percentage, but the three 10,000 cases do not fit a fixed count.
+2. **Half-life.** At n = 100 the best fixed half-life is 2 rounds in 13 of 14 Amazon logs with a result (4 in toys), with no gain from tuning. The textbook says the best half-life should fall with n like n to the minus one third or one half. We measured a median slope of **-0.13 (Amazon, 12 logs)** and -0.29 (Other, 2 logs): the best half-life hardly depends on n. This goes with how fast the product catalogue turns over (see 3), not with sampling noise. Other logs at n = 100: Brightkite 8 rounds, KuaiRand no forgetting, MovieLens latest 1 round.
+3. **New items go with it.** Across Amazon logs the best half-life at n = 100 falls as the share of the next top 100 held by new items rises (Spearman -0.69, 14 logs). All logs together: -0.41 (16 logs). This is a correlation, not a tested cause.
 4. **Drift, not noise, is the limit.** A list built from half the people of the target round and scored on the other half reaches 0.44 to 1.0 (so sampling noise is small). A full list from the previous round reaches only 31% (movies-tv) to 106% (MovieLens 1M, whose timestamps are concentrated) of that level; median 85%; in books it is 42%.
 5. **Drift shape (exploratory).** The noise-corrected squared change of item shares grows with lag with a log-log slope of 0.2 to 1.26 (median 0.72); total variation 0.28 to 0.77 (median 0.58). Nothing is near 2, so popularity is not a steady trend; it behaves between saturating and random-walk.
 
@@ -52,7 +52,7 @@ Plain reading: in the Amazon product logs a fixed half-life of about 2 rounds is
 
 **Robustness prediction R failed**: at most 2 of 4 labels stay the same at each width (needed 3). The "h = 2 is enough" rule does not transfer across window widths as stated; it is a calendar rule that has to be re-read in days.
 
-- **Calendar half-life (post hoc, exploratory).** Converting each log's grid-best half-life to days, 11 of 18 logs have a best half-life within the same grid step in days at all widths: ordinary Amazon categories 495 to 590 days (about 1.5 years) and Gowalla 83 days. 7 logs change with the window (books, electronics, movies-tv, toys, video games, Brightkite, MovieLens latest): the fastest-changing logs want a shorter half-life than the coarse windows allow. The grid has factor-2 steps, so "same" means within one step.
+- **Calendar half-life (post hoc, exploratory).** Converting each log's grid-best half-life to days: 11 of 18 logs have the same best half-life in days at every width they were run at (only 30 and 60 windows): 10 ordinary Amazon categories at 494 to 587 days (about 1.5 years) and Gowalla at 83 days. The other 7 differ by at most one grid step for 6 of them (books x1.5; electronics, movies-tv, toys, video games, Brightkite x2), which the factor-2 grid cannot separate; only MovieLens latest differs more (x3). So the best half-life is roughly constant in calendar time within the resolution of the grid.
 
 ## 6. What this does not show
 
@@ -61,7 +61,7 @@ Plain reading: in the Amazon product logs a fixed half-life of about 2 rounds is
 - Only the 3 Other logs eligible at n = 100 (Brightkite, KuaiRand, MovieLens latest) can speak for slow-changing logs; the Other-stratum verdicts rest on 3 to 5 logs.
 - The three drift laws (random walk, steady trend) were not fitted to tracker behaviour; M1 reports log-log slopes only.
 - Raw event counts, so heavy users weigh more; the same person can be sampled in several rounds.
-- Reviews were by subagents of one provider (a code review and an execution-probe check found only analysis-script issues, fixed before the results were read); not an outside audit.
+- Reviews were by subagents of one provider (a code review and an execution-probe check found only analysis-script issues: the PD "Amazon only" rule, the n for 80% report, NaN-safe JSON; a later reviewer found the number and wording errors corrected in this document). The analysis-script fixes were made while the run was in progress and committed together with the results, so "fixed before the results were read" cannot be checked from the history. The PD docstring wording was also clarified after registration; the rule in the code did not change. Not an outside audit.
 
 ## 7. Files
 
