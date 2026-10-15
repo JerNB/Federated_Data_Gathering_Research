@@ -1,0 +1,54 @@
+{
+ "T1": {
+  "rule": "k=5: two-round > one-round in >=60% of cells (N>=400) and interval>0 in >=half of cells for >=half of datasets",
+  "frac_cells_gain_positive": 0.42574257425742573,
+  "datasets_with_half_cells_significant": 7,
+  "n_datasets": 22,
+  "per_dataset": {
+   "amazon-arts-crafts-and-sewing": 0.25,
+   "amazon-automotive": 0.2,
+   "amazon-books": 0.0,
+   "amazon-cell-phones-and-accessories": 0.2,
+   "amazon-electronics": 0.6,
+   "amazon-grocery-and-gourmet-food": 0.4,
+   "amazon-health-and-household": 0.4,
+   "amazon-movies-tv": 0.2,
+   "amazon-musical-instruments": 0.6,
+   "amazon-office-products": 0.0,
+   "amazon-patio-lawn-and-garden": 0.0,
+   "amazon-pet-supplies": 0.4,
+   "amazon-software": 0.8,
+   "amazon-sports-and-outdoors": 0.2,
+   "amazon-toys-and-games": 0.2,
+   "amazon-video-games": 0.6,
+   "brightkite": 0.0,
+   "gowalla": 0.0,
+   "kuairand-pure": 0.8,
+   "lastfm-1k": 0.0,
+   "ml-1m": 1.0,
+   "ml-latest": 0.6
+  }
+ },
+ "T2": {
+  "rule": "median saving factor at k=5 >= 1.5; censored cells use their endpoint bounds",
+  "median": 0.9676265467544992,
+  "median_uncensored": 0.8559278509685481,
+  "censored_cells": 18
+ },
+ "T3": {
+  "rule": "saving k=1 > k=5 > k=20; censored cells use endpoint bounds",
+  "k1": 1.0,
+  "k5": 0.9676265467544992,
+  "k20": 0.9845443426489763,
+  "uncensored": {
+   "k1": 0.9604268041501242,
+   "k5": 0.8559278509685481,
+   "k20": 0.939630523546636
+  }
+ },
+ "sensitivity_mean_gain_k5_by_shortlist": {
+  "150": -0.057204620462046225,
+  "250": -0.020386138613861404,
+  "500": 0.007207920792079191
+ }
+}

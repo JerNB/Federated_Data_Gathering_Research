@@ -1,7 +1,7 @@
 """T1 (exploratory): can a two-round shortlist reduce the number of people needed?
 
 Amendment A16 (after the first run): the first implementation discarded round-1 counts and sampled round 2 without
-correcting its within-shortlist inclusion probabilities. That run is retained as ``an_tworound_*`` but is not used
+correcting its within-shortlist inclusion probabilities. That run is retained as ``an_tworound_uncorrected_*`` but is not used
 as the primary result. This run uses the corrected estimator below and writes ``an_tworound_amended_*``.
 
 Same people budget and at most k uploaded items per person. N people are drawn without replacement.
@@ -15,8 +15,8 @@ censored rather than treated as exact.
 
 Predictions fixed before the first run:
   T1  at k = 5, corrected two-round beats one-round in >= 60% of (dataset, N) cells with N >= 400 and in at least
-      half of the cells for at least half of the datasets;
-  T2  median uncensored saving factor at k = 5 is >= 1.5;
+      half of the cells for at least half of the datasets; the gain interval must be above zero;
+  T2  median saving factor at k = 5 (using endpoint bounds for censored cells) is >= 1.5;
   T3  saving is larger at k = 1 than at k = 5, and larger at k = 5 than at k = 20.
 Sensitivity (reported, not judged): shortlist 150 and 500 at k = 5.
 """
@@ -121,9 +121,9 @@ def mean_by(rows, **kw):
     return float(np.mean(v)) if v else float("nan")
 
 
-def summarise(rows, rng):
+def summarise(rows, _rng=None):
     datasets = sorted({r["dataset"] for r in rows})
-    cells, savings = [], {}
+    cells = []
     for d in datasets:
         R = [r for r in rows if r["dataset"] == d]
         for k in KS:
@@ -141,7 +141,9 @@ def summarise(rows, rng):
                 a = np.array([r["U"] for r in R if r["k"] == k and r["N"] == N and r["shortlist"] == SHORT and r["arm"] == "one"])
                 b = np.array([r["U"] for r in R if r["k"] == k and r["N"] == N and r["shortlist"] == SHORT and r["arm"] == "two"])
                 diff = b - a
-                bs = np.array([rng.choice(diff, len(diff)).mean() for _ in range(500)])
+                seed = 20261018 + sum((i + 1) * ord(ch) for i, ch in enumerate(d)) + 1000 * k + N
+                bs_rng = np.random.default_rng(seed)
+                bs = np.array([bs_rng.choice(diff, len(diff)).mean() for _ in range(500)])
                 if v2 > vs_m[-1]:
                     eq, cens = Ns[-1], True
                 elif v2 <= vs_m[0]:
@@ -159,7 +161,9 @@ def summarise(rows, rng):
     t1_frac = float(np.mean([c["gain"] > 0 for c in c5])) if c5 else float("nan")
     t1_ds = {d: float(np.mean([c["gain"] > 0 and c["lo"] > 0 for c in c5 if c["dataset"] == d])) for d in datasets if any(c["dataset"] == d for c in c5)}
     t1_half = sum(1 for v in t1_ds.values() if v >= 0.5)
-    med = lambda k: float(np.median([c["saving"] for c in cells if c["k"] == k and c["N"] >= 400 and not c["saving_censored"]])) if any(c["k"] == k and c["N"] >= 400 and not c["saving_censored"] for c in cells) else float("nan")
+    med = lambda k, include_censored: float(np.median([c["saving"] for c in cells if c["k"] == k and c["N"] >= 400
+                                                        and (include_censored or not c["saving_censored"])])) if any(
+        c["k"] == k and c["N"] >= 400 and (include_censored or not c["saving_censored"]) for c in cells) else float("nan")
     sens = {}
     for sz in (150, SHORT, 500):
         g = []
@@ -175,8 +179,12 @@ def summarise(rows, rng):
     verdict = dict(
         T1=dict(rule="k=5: two-round > one-round in >=60% of cells (N>=400) and interval>0 in >=half of cells for >=half of datasets",
                 frac_cells_gain_positive=t1_frac, datasets_with_half_cells_significant=t1_half, n_datasets=len(t1_ds), per_dataset=t1_ds),
-        T2=dict(rule="median saving factor at k=5 >= 1.5", median=med(5)),
-        T3=dict(rule="saving k=1 > k=5 > k=20", k1=med(1), k5=med(5), k20=med(20)),
+        T2=dict(rule="median saving factor at k=5 >= 1.5; censored cells use their endpoint bounds",
+                median=med(5, True), median_uncensored=med(5, False),
+                censored_cells=sum(c["k"] == 5 and c["N"] >= 400 and c["saving_censored"] for c in cells)),
+        T3=dict(rule="saving k=1 > k=5 > k=20; censored cells use endpoint bounds",
+                k1=med(1, True), k5=med(5, True), k20=med(20, True),
+                uncensored=dict(k1=med(1, False), k5=med(5, False), k20=med(20, False))),
         sensitivity_mean_gain_k5_by_shortlist=sens)
     json.dump(verdict, open(f"{OUT}/03_tables/{TAG}_verdicts.json", "w"), indent=1,
               default=lambda x: None if not np.isfinite(x) else x)
