@@ -140,6 +140,7 @@ class Sampler:
         self.rsel = np.random.default_rng(seed_of(*seed, "sel"))      # same people for std / cap / gauss / oue
         self.mask = np.zeros(D["n_users"] + 1, bool)
         self.panel = np.empty(0, np.int32)
+        self.used = None                                              # single-use participants (gauss, fresh=1): users already drawn
 
     def _counts(self, k, sel, cap=None):
         D = self.D
@@ -192,7 +193,7 @@ class Sampler:
             if len(uk) <= n:
                 sel = uk
             else:
-                keys = self.rng.random(len(uk)) ** (1.0 / rows)
+                keys = self.rng.random(len(uk)) ** (1.0 / (rows if "a" not in par else rows.astype(np.float64) ** par["a"]))
                 sel = uk[np.argpartition(-keys, n - 1)[:n]]
             return Obs(self._counts(k, sel), len(sel))
         if kind == "panel":
@@ -208,7 +209,15 @@ class Sampler:
             self.panel = keep.astype(np.int32)
             return Obs(self._counts(k, keep), len(keep))
         if kind == "gauss":
-            sel = self._pick(k, n)
+            if par.get("fresh", 0.0):                                      # single-use participants: nobody is drawn twice, so eps is the whole per-person loss
+                if self.used is None:
+                    self.used = np.zeros(D["n_users"] + 1, bool)
+                uk = D["users_in"][k]
+                uk = uk[~self.used[uk]]
+                sel = uk if len(uk) <= n else self.rsel.choice(uk, n, replace=False)
+                self.used[sel] = True
+            else:
+                sel = self._pick(k, n)
             c = int(par["c"])
             cnt = self._counts(k, sel, cap=c)
             sigma = gauss_sigma(par["eps"], float(np.sqrt(c)))
@@ -239,7 +248,7 @@ class Sampler:
                     pos = np.searchsorted(up, uk)
                     pos[pos >= len(up)] = 0
                     w = np.where(up[pos] == uk, rows[pos], 1).astype(np.float64)
-                keys = self.rng.random(len(uk)) ** (1.0 / w)
+                keys = self.rng.random(len(uk)) ** (1.0 / (w if "a" not in par else w ** par["a"]))
                 sel = uk[np.argpartition(-keys, n - 1)[:n]]
             return Obs(self._counts(k, sel), len(sel))
         raise ValueError(self.kind)
@@ -605,14 +614,20 @@ def run_cell(task: dict) -> dict:
     mm = {m: np.full((draws, len(arms), S), np.nan) for m in mnames}
     people = np.zeros((draws, len(arms)))
     rows_used = np.zeros((draws, len(arms)))
+    audit_n = int(task.get("audit_n", 0))                              # optional unbiased audit sample (people per round) for a second self-score
+    selfaud = np.full((draws, len(arms), S), np.nan) if audit_n > 0 else None
+    ov_idx = [i for i, a in enumerate(arms) if split_arm(a)[1] == "std" and a.startswith("decay")] if task.get("save_overlap") else []
+    ovl = np.full((draws, len(ov_idx), len(ov_idx), S), np.nan) if ov_idx else None    # [draw][arm at t-1][arm at t][step]: share of the top 100 kept
     full = lambda k: D["counts"][k]
     for dr in range(draws):
         ctx = dict(n_items=D["n_items"], window_days=D["window_days"], n=n, n_win=nw, draw=dr, full=full,
                    tiekey=np.random.default_rng(seed_of(task["dataset"], n, dr, nw, tag, "tie")).permutation(D["n_items"]).astype(np.int32))
         samplers = {s: Sampler(s, D, n, (task["dataset"], n, dr, nw, tag), need_half and s == "std") for s in schemes}
+        audit = Sampler("std", D, audit_n, (task["dataset"], audit_n, dr, nw, tag, "audit"), False) if audit_n > 0 else None
         aggs = [KINDS[parse(split_arm(a)[0])[0]](a, ctx) for a in arms]
         for w in range(0, last + 1):
             obs = {s: sm.round(w) for s, sm in samplers.items()}
+            aobs = audit.round(w) if audit is not None else None
             for ai, ag in enumerate(aggs):
                 o = obs[ag.scheme]
                 if ag.prev is not None and w - 1 >= FIRST_STEP and o.cnt.sum() > 0:       # self-score of last round's list vs this sample
@@ -623,6 +638,13 @@ def run_cell(task: dict) -> dict:
                     idcg = o.idcg
                     if idcg > 0:
                         selfnd[dr, ai, w - 1 - FIRST_STEP] = float(np.sum(g[ag.prev[:100]] * DISC[:min(100, len(ag.prev))])) / idcg
+                if aobs is not None and ag.prev is not None and w - 1 >= FIRST_STEP and aobs.cnt.sum() > 0:      # the same score against the audit sample
+                    ga = aobs.cnt
+                    if aobs.idcg is None:
+                        ideal = np.sort(ga[top_idx(ga, 100)])[::-1]
+                        aobs.idcg = float(np.sum(ideal * DISC[:len(ideal)]))
+                    if aobs.idcg > 0:
+                        selfaud[dr, ai, w - 1 - FIRST_STEP] = float(np.sum(ga[ag.prev[:100]] * DISC[:min(100, len(ag.prev))])) / aobs.idcg
                 ag.update(o, w)
                 people[dr, ai] += o.people
                 rows_used[dr, ai] += float(o.cnt.sum()) if not o.noisy else 0.0
@@ -638,6 +660,9 @@ def run_cell(task: dict) -> dict:
             ig = gain[ti].astype(np.float64)
             idcg = {k: float(np.sum(ig[:k] * DISC[:k])) for k in KS}
             t100 = ti[:100]
+            if ovl is not None:
+                prevs = [ag.prev[:100] if ag.prev is not None else None for ag in aggs]
+                nows = {}
             for ai, ag in enumerate(aggs):
                 lst = ag.ranked()
                 g = gain[lst].astype(np.float64)
@@ -648,6 +673,8 @@ def run_cell(task: dict) -> dict:
                     else:
                         mm[name][dr, ai, j] = v
                 top100 = lst[:100]
+                if ovl is not None:
+                    nows[ai] = top100
                 mm["rec100"][dr, ai, j] = len(np.intersect1d(top100, t100)) / 100.0
                 mm["len100"][dr, ai, j] = len(top100)
                 mm["prec100"][dr, ai, j] = len(np.intersect1d(top100, t100)) / max(len(top100), 1)
@@ -656,16 +683,27 @@ def run_cell(task: dict) -> dict:
                 for k2, v2 in ag.extra().items():
                     mm[k2][dr, ai, j] = v2
                 ag.prev = lst
+            if ovl is not None:
+                for pa, ia in enumerate(ov_idx):
+                    if prevs[ia] is None:
+                        continue
+                    for pb, ib in enumerate(ov_idx):
+                        ovl[dr, pa, pb, j] = len(np.intersect1d(prevs[ia], nows[ib])) / 100.0
     steady = [i for i, s in enumerate(steps) if s >= STEADY]
     sm = lambda a: [[None if not np.isfinite(x) else round(float(x), 5) for x in row] for row in np.nanmean(a[:, :, steady], axis=2)] \
         if np.isfinite(a[:, :, steady]).any() else None
     with np.errstate(all="ignore"):
         metrics = {m: sm(a) for m, a in mm.items()}                    # [draw][arm] steady means
     r5 = lambda a: np.round(a, 5).tolist()
-    return dict(kind="deep", dataset=task["dataset"], n=n, n_win=nw, arms=arms, steps=steps, window_days=D["window_days"],
+    res = dict(kind="deep", dataset=task["dataset"], n=n, n_win=nw, arms=arms, steps=steps, window_days=D["window_days"],
                active=D["active"].tolist(), nd100=r5(nd100), selfnd=r5(selfnd), metrics=metrics,
                people_per_round=[round(float(x), 2) for x in people.mean(axis=0) / (last + 1)],
                rows_per_round=[round(float(x), 1) for x in rows_used.mean(axis=0) / (last + 1)])
+    if selfaud is not None:
+        res["audit_n"], res["selfaud"] = audit_n, r5(selfaud)
+    if ovl is not None:
+        res["ovl_arms"], res["ovl"] = [arms[i] for i in ov_idx], np.round(ovl, 3).tolist()
+    return res
 
 
 def run_task(task: dict) -> dict:

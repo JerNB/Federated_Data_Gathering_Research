@@ -1,0 +1,347 @@
+{
+ "version": "selfsel-stress-1",
+ "frozen_note": "Written after the confirmation (doc 15, K1-K13 CONFIRMED) and BEFORE any stress cell was run. A same-provider design critic, code reviewer, engine prober and verifier reviewed an earlier draft; their findings were adopted (see the changes listed in docs/small_sample/16): per-sampler gates for S1, the log as the unit for the S3 and S8 levels, a CI condition in S4, a capped noise-free reference for the price of privacy, a fill guard for S10, a not-evaluable rule for S6, a plan rebuilt from the stored rows, and partial analyses that cannot write official verdicts. Thresholds come from earlier documents (docs 12-15) and from design quantities computed from the std data, not from stress results. DISCLOSURES: (1) four smoke cells were run to check the code (amazon-musical-instruments bias n=30 and n=100 and churn n=100 on window w2; amazon-cell-phones-and-accessories dp n=1000 on window w1); only finiteness, shapes, exact replication of the std arms and the overlap diagonal were checked, but an engine smoke test on amazon-musical-instruments, n=100, 7-day, w2 printed the mean NDCG over all arms by sampler (std 0.549, pps 0.583, ppsprev 0.559, pps with a=-1 0.526) and a Gaussian-noise sampler at n=100, eps=4 gave 0.103 (n=100 is not a planned DP cell); those cells stay in the analysis, the engine smoke test cell IS the bias cell (amazon-musical-instruments, n=100) and S2's thresholds (+/-0.01) were written AFTER seeing those four numbers (pps +0.034, a=-1 -0.023 against std, averaged over all arms of that one cell); (2) S7 and S11 were written knowing doc 12's central-DP prices with a 2-round memory (loss against the non-private list at n=1000: 0.45, 0.39, 0.31, 0.20 for eps 1, 2, 4, 8); (3) family D runs on the weekly-study windows w1, the window on which the selector was designed, and the std side of those cells is already analysed in docs 13-14; (4) the engine edits (deep_core.py) were uncommitted until the freeze commit; (5) design quantities computed from std data before freezing: rows per reporter and the limits of the volunteer ratios (section design.design_quantities), zero duplicate (user, item, week) rows in the 17 DP windows, the expected number of times a person is drawn under plain sampling, and the fill of the single-use pool. The std arms of every stress cell replicate stored cells of the confirmation or weekly runs exactly (same seeds); an_stress.py aborts if they do not.",
+ "literature_note": "Read-only background, opened 2026-10-16 by librarian agents and not independently re-verified (see docs/small_sample/90_materials_ledger_en.md): (1) post-processing and disjoint-participant arguments imply that a decayed memory costs no extra privacy when every person reports in at most one round (Dwork & Roth, Algorithmic Foundations of DP; continual-observation papers matter only when the same person reports repeatedly); (2) probability-proportional-to-size sampling by rows makes an uncorrected count unbiased for the ROW-weighted total, which is our truth, so activity-driven volunteers are expected to be harmless or helpful and light-user volunteers harmful (Hansen-Hurwitz argument, derived and not sourced); (3) a small random reference sample is the textbook remedy for self-selection (Schnabel et al. 2016); (4) the selector is a prequential, follow-the-leader rule; fixed-share (Herbster & Warmuth 1998) and forecast combination (Timmermann 2006) are the standard repairs if it fails.",
+ "design": {
+  "question": "Does the self-score selector of docs 14-15 keep working when (B) reporters are volunteers who report with unequal chances, (D) reports carry differential-privacy noise, and what does it do to the published list week to week (C)?",
+  "families": {
+   "B": "volunteer bias, audit sample (window w2 = the confirmation windows, 7-day rounds, n = 30, 100, 300, 1000, every eligible log; 90 cells)",
+   "D": "central differential privacy (window w1 = the weekly-study windows, 7-day rounds, n = 1000 in 17 logs and n = 3000 in 7 logs; Gaussian mechanism eps = 2, 4, 8 with at most 10 rows per person; plus single-use participants at eps = 4)",
+   "C": "churn of the published list (the confirmation cells at n = 100 and 300, re-run with the overlap of consecutive lists stored)"
+  },
+  "samplers": {
+   "std": "n random active people per round report all their rows (the baseline of all earlier work)",
+   "A+": "pps: people drawn with probability proportional to their number of rows in the SAME round (oracle activity weighting; Efraimidis-Spirakis keys)",
+   "Ap": "ppsprev: probability proportional to their rows in the PREVIOUS round (feasible variant; 1 if absent)",
+   "A-": "pps with exponent a = -1: probability proportional to 1 / rows in the same round (light users volunteer)",
+   "gauss": "central DP: at most c = 10 random rows per person, Gaussian noise (analytic Gaussian, delta 1e-5, L2 sensitivity sqrt(10), valid because no (user, item, week) pair repeats in any of the 17 DP windows: checked, 0 duplicates; neighbouring data = one person added or removed) on the count of every item already seen; eps is PER ROUND as in doc 12 (no composition across rounds, no subsampling amplification); fresh people are drawn every round and a person MAY be drawn again in a later round",
+   "gauss+fresh": "the same with single-use participants: nobody is drawn twice, so each person takes part at most once and eps is then the whole per-person loss; design check: in all 17 windows at n = 1000 the pool never runs short (mean share of n filled >= 0.999); at n = 3000 it does in some windows, so S10 is registered at n = 1000 only",
+   "gauss_ref": "the capped noise-free reference: the same sampler with eps = 1e6 (negligible noise), used to separate the price of noise from the loss of the 10-row cap"
+  },
+  "audit": "In family B every cell also draws, independently, an unbiased audit sample of max(10, n/2) random active people per round (its own random stream). 'Audit self-score' = the same self-score computed against the audit sample instead of the reporters; 'audit selector' = the selector run on it.",
+  "truth": "As in all earlier work: the full community's row counts in the next round (row-weighted popularity). Person-weighted popularity is not tested.",
+  "arms": "Every sampler gets the same decay:days grid as the stored cell it replicates (family B and C: the grid of the confirmation cell, 8 or 9 half-lives from 7 to 896 or 1,792 days; family D: the grid of the weekly stage-a cell at n = 1000 and of the weekly stage-d cell at n = 3000); the std arms (including decay:h=2) are copied from the stored cell. The 2-round default is the decay:days arm nearest to 14 days.",
+  "rules": "selector, regret and tables as in the confirmation registry (selfsel_confirm_registry.json `rule`): regret = best fixed decay:days arm of the same cell and sampler (hindsight) minus the rule's mean nd100 over steady steps (step >= 8) and draws; selector = EWMA (half-life 26 steps) of the stored self-scores at steps < t, fallback arm nearest to 2 rounds; table = half-life in rounds r in {1,2,4,...,256} that minimises mean regret over the same-sampler cells of the OTHER logs at the same n (leave one log out), applied by snapping r x 7 days to the nearest arm; 'same-group' table = other logs of the same group (Amazon vs everything else), needs at least 3; in family D only the pooled table is used (groups are too small), fitted within the same eps and n.",
+  "units": "The log is the unit for the paired intervals of S3 and S8, for the level thresholds of S3 and S8 (each log's cells are averaged first, then the mean over logs), and for S9 and S11. The thresholds of S1, S2, S4, S5, S6, S7, S10, S12 and S13 are means or shares over cells, as each prediction says. Paired intervals: 95% bootstrap over logs (seed 7, 4,000 resamples; the function of the earlier studies). Cells missing a comparator are dropped from that comparison only and counted.",
+  "caveats": "Same 27 logs and windows as docs 14-15 (20 are Amazon); simulated reporters; the intervals over logs overstate independence; eps is per round and the Gaussian noise is applied to every seen item (a public catalogue is assumed, as in doc 12); the volunteer rules use only activity, never taste; truth is row-weighted. Family D at n = 3000 rests on 7 logs.",
+  "design_quantities": {
+   "note": "Computed from the std data before freezing; they decide only the manipulation thresholds of S1 and the caveats, not any selector result.",
+   "rows_per_reporter_std": "Amazon logs (20): mean 1.60 (1.35-1.91); other logs (7): mean 5.91 (1.19-19.62).",
+   "limit_ratios_small_sampling_fraction": "Limits of the volunteer ratios at a small sampling fraction (from rows per active person per week): A+ Amazon mean 1.90 (min 1.46), other mean 6.46 (min 1.80); A- Amazon mean 0.76 (max 0.84), other mean 0.45 (max 0.89).",
+   "expected_draws_per_person_plain_sampling_n1000": "Over the 17 DP windows (people active at least once): mean 0.07-0.70, 95th percentile 0.19-2.85, 99th percentile 0.47-7.03, maximum 5.9-34.5 times; the heaviest repeat participants are drawn many times, so under plain sampling the per-person loss of repeat participants is a multiple of eps (basic composition).",
+   "duplicates": "0 repeated (user, item, week) rows in all 17 DP windows.",
+   "single_use_pool": "n = 1000: all 17 logs fill >= 0.999 of n on average (min 0.996); n = 3000: 5 of 7 logs fill >= 0.95 on average.",
+   "measured_sampler_ratios": "Measured with the real samplers on the 27 w2 windows (rows per reporter relative to std; sampler property only, no list is built; 3 draws, steady rounds): over the 90 bias cells A+ mean 2.29 (Amazon 1.71, other 4.09; cell minimum 1.31), Ap mean 1.168 (Amazon 1.019, other 1.63; cell range 0.99-3.52), A- mean 0.695 (Amazon 0.767, other 0.471; cell maximum 0.91); by n (30, 100, 300, 1000): A+ 2.75, 2.36, 2.04, 1.69; Ap 1.28, 1.17, 1.11, 1.05; A- 0.68, 0.68, 0.71, 0.71. Consequence: on the Amazon logs (68 of the 90 cells) Ap is almost the same sampler as std (most Amazon reviewers are not active two weeks in a row), so S3b and S4b are in practice a test on the other logs and on small n. The S1 thresholds (A+ >= 1.3, Ap >= 1.1, A- <= 0.9) were set after seeing these ratios; S1 only gates interpretation."
+  },
+  "price_of_privacy": "price of a rule = its value (mean nd100 over steady steps and draws) with the capped noise-free reference sampler (eps = 1e6, same 10-row cap, same people) minus its value with noise; the loss of the cap itself (value on std minus value on the reference) is reported separately. The 2-round default is the decay:days arm nearest to 14 days, which every grid contains (asserted)."
+ },
+ "stage": {
+  "draws": 8,
+  "bias": {
+   "window": "w2",
+   "round_days": 7,
+   "n": [
+    30,
+    100,
+    300,
+    1000
+   ],
+   "samplers": [
+    "pps",
+    "ppsprev",
+    "pps:a=-1"
+   ],
+   "audit": "max(10, n // 2)",
+   "seed_tag": "selfsel-confirm"
+  },
+  "dp": {
+   "window": "w1",
+   "round_days": 7,
+   "n": [
+    1000,
+    3000
+   ],
+   "eps": [
+    2,
+    4,
+    8
+   ],
+   "c": 10,
+   "fresh_eps": 4,
+   "seed_tag_by_n": {
+    "1000": "weekly-a",
+    "3000": "weekly-d"
+   },
+   "reference_eps": 1000000,
+   "note": "arms per DP cell: the stored std arms, the days arms under gauss eps = 2, 4, 8, the days arms under gauss eps = 4 with fresh = 1, and the days arms under the capped noise-free reference (eps = 1e6)"
+  },
+  "churn": {
+   "window": "w2",
+   "round_days": 7,
+   "n": [
+    100,
+    300
+   ],
+   "seed_tag": "selfsel-confirm"
+  }
+ },
+ "criteria": {
+  "S1": {
+   "A+": {
+    "min_ratio": 1.3
+   },
+   "Ap": {
+    "min_ratio": 1.1
+   },
+   "A-": {
+    "max_ratio": 0.9
+   }
+  },
+  "S2": {
+   "A+": {
+    "min_gain": 0.01
+   },
+   "A-": {
+    "max_gain": -0.01
+   }
+  },
+  "S3": {
+   "max_mean_regret": 0.006,
+   "ci_upper_below": 0.0
+  },
+  "S4": {
+   "max_audit_gain": 0.002,
+   "ci_upper_below": 0.004
+  },
+  "S5": {
+   "max_audit_loss": 0.003
+  },
+  "S6": {
+   "eps": 4,
+   "min_factor": 2.0,
+   "min_share": 0.7,
+   "exclude_nonprivate_best_at_grid_top": true
+  },
+  "S7": {
+   "eps": 4,
+   "n": 1000,
+   "min_regret": 0.1
+  },
+  "S8": {
+   "eps": 4,
+   "n": 1000,
+   "max_mean_regret": 0.02,
+   "ci_upper_below": 0.0
+  },
+  "S9": {
+   "eps": 4,
+   "n": 1000,
+   "max_cost_ratio": 0.5,
+   "min_share_logs": 0.8,
+   "skip_logs_with_two_round_price_at_most": 0.0
+  },
+  "S10": {
+   "eps": 4,
+   "n": 1000,
+   "max_abs_diff": 0.01,
+   "min_fill": 0.95,
+   "min_cells": 8
+  },
+  "S11": {
+   "strong_privacy": {
+    "eps": 2,
+    "n": 1000,
+    "min_cost": 0.1
+   },
+   "weak_privacy": {
+    "eps": 8,
+    "n": 3000,
+    "max_cost": 0.03
+   }
+  },
+  "S12": {
+   "max_extra_churn": 0.03
+  },
+  "S13": {
+   "min_share": 0.9
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "S1",
+   "family": "B",
+   "title_en": "Manipulation check: heavy-user volunteers report more rows, light-user volunteers fewer (per sampler)",
+   "title_zh": "操作检验：偏爱重度用户的志愿者每人报告更多行，偏爱轻度用户的更少",
+   "statement_en": "The three volunteer samplers change who reports in the intended direction (Ap only weakly on Amazon logs; see design.design_quantities).",
+   "statement_zh": "三种志愿者抽样确实按预期方向改变了谁在汇报。",
+   "prediction": "Mean over bias cells of (rows per reporter under the sampler) / (rows per reporter under std): A+ >= 1.3, Ap >= 1.1 and A- <= 0.9. Each sampler is judged separately; a sampler that fails its check is 'not interpreted' in S3, S4 and the family flags."
+  },
+  {
+   "id": "S2",
+   "family": "B",
+   "title_en": "Against row-weighted truth, heavy-user volunteers help and light-user volunteers hurt",
+   "title_zh": "以按行计的真实答案衡量，重度用户志愿者有帮助，轻度用户志愿者有害",
+   "statement_en": "Activity-weighted reporters see a larger share of the rows that make up the truth.",
+   "statement_zh": "按活跃度加权的汇报者覆盖了构成真实答案的更大份额的行。",
+   "prediction": "Mean over bias cells of the best fixed arm's NDCG under the sampler minus under std: A+ >= +0.01 and A- <= -0.01 (Ap reported). A sampler whose S1 check failed is not interpreted."
+  },
+  {
+   "id": "S3a",
+   "family": "B",
+   "sampler": "A+",
+   "title_en": "Oracle heavy-user volunteers (A+): the selector keeps working",
+   "title_zh": "按当轮活跃度加权的志愿者（A+）：选择器仍然有效",
+   "statement_en": "With reporters drawn in proportion to their rows this week, the self-score selector stays close to the best fixed memory and beats a same-group table fitted on the other logs under the same bias.",
+   "statement_zh": "汇报者按本周行数加权抽取时，自评分选择器仍接近最佳固定记忆，并优于在同样偏差下用其他日志拟合的同分组表。",
+   "prediction": "7-day, window w2, sampler A+: the mean over logs of the log's mean selector regret is <= 0.006 and the paired per-log difference (selector minus same-group table fitted on the same sampler's other logs) has mean < 0 with 95% CI upper bound < 0. Reported as information: the selector regret minus the std selector regret on the same cells."
+  },
+  {
+   "id": "S3b",
+   "family": "B",
+   "sampler": "Ap",
+   "title_en": "Previous-week heavy-user volunteers (Ap): the selector keeps working",
+   "title_zh": "按上周活跃度加权的志愿者（Ap）：选择器仍然有效",
+   "statement_en": "Same as S3a for reporters drawn in proportion to last week's rows.",
+   "statement_zh": "同 S3a，汇报者按上周行数加权。",
+   "prediction": "7-day, window w2, sampler Ap: the mean over logs of the log's mean selector regret is <= 0.006 and the paired per-log difference (selector minus same-group table fitted on the same sampler's other logs) has mean < 0 with 95% CI upper bound < 0. Reported as information: the selector regret minus the std selector regret on the same cells."
+  },
+  {
+   "id": "S3c",
+   "family": "B",
+   "sampler": "A-",
+   "title_en": "Light-user volunteers (A-): the selector keeps working",
+   "title_zh": "偏爱轻度用户的志愿者（A-）：选择器仍然有效",
+   "statement_en": "Same as S3a for reporters drawn in proportion to 1 / rows (the adverse direction).",
+   "statement_zh": "同 S3a，汇报者按 1/行数 加权（不利方向）。",
+   "prediction": "7-day, window w2, sampler A-: the mean over logs of the log's mean selector regret is <= 0.006 and the paired per-log difference (selector minus same-group table fitted on the same sampler's other logs) has mean < 0 with 95% CI upper bound < 0. Reported as information: the selector regret minus the std selector regret on the same cells."
+  },
+  {
+   "id": "S4a",
+   "family": "B",
+   "sampler": "A+",
+   "title_en": "An audit sample of n/2 people does not help under oracle heavy-user volunteers (A+)",
+   "title_zh": "A+ 志愿者下半数人规模的审计样本没有帮助",
+   "statement_en": "Scoring the lists against a small unbiased audit sample instead of the biased reporters does not make the selector better.",
+   "statement_zh": "用一份小的无偏审计样本代替有偏的汇报者来给榜单打分，不会让选择器更好。",
+   "prediction": "Mean over bias cells of [regret of the selector on the reporters' self-score minus regret of the selector on the audit self-score] (audit = n/2 random people) < 0.002 for sampler A+ AND the 95% bootstrap CI upper bound over logs of that gain is < 0.004 (a positive value means the audit helps)."
+  },
+  {
+   "id": "S4b",
+   "family": "B",
+   "sampler": "Ap",
+   "title_en": "An audit sample of n/2 people does not help under previous-week heavy-user volunteers (Ap)",
+   "title_zh": "Ap 志愿者下半数人规模的审计样本没有帮助",
+   "statement_en": "Same as S4a for Ap.",
+   "statement_zh": "同 S4a，对 Ap。",
+   "prediction": "Mean over bias cells of [regret of the selector on the reporters' self-score minus regret of the selector on the audit self-score] (audit = n/2 random people) < 0.002 for sampler Ap AND the 95% bootstrap CI upper bound over logs of that gain is < 0.004 (a positive value means the audit helps)."
+  },
+  {
+   "id": "S4c",
+   "family": "B",
+   "sampler": "A-",
+   "title_en": "An audit sample of n/2 people does not help under light-user volunteers (A-)",
+   "title_zh": "A- 志愿者下半数人规模的审计样本没有帮助",
+   "statement_en": "Same as S4a for A-, the case where an audit is most likely to matter.",
+   "statement_zh": "同 S4a，对 A-；这是审计最可能有用的情形。",
+   "prediction": "Mean over bias cells of [regret of the selector on the reporters' self-score minus regret of the selector on the audit self-score] (audit = n/2 random people) < 0.002 for sampler A- AND the 95% bootstrap CI upper bound over logs of that gain is < 0.004 (a positive value means the audit helps)."
+  },
+  {
+   "id": "S5",
+   "family": "B",
+   "title_en": "At no bias an audit of half the size costs little",
+   "title_zh": "没有偏差时，半数人规模的审计样本代价很小",
+   "statement_en": "Run on an unbiased audit sample of n/2 people the selector is at most slightly worse than on the reporters' own self-score (the audit is a usable stand-in).",
+   "statement_zh": "在 n/2 人的无偏审计样本上运行选择器，至多比用汇报者自己的自评分略差（审计样本可以替代）。",
+   "prediction": "Sampler std, window w2: mean over cells of [regret of the audit selector minus regret of the standard selector] <= 0.003."
+  },
+  {
+   "id": "S6",
+   "family": "D",
+   "title_en": "Under privacy noise the best memory is longer",
+   "title_zh": "有隐私噪声时，最佳记忆更长",
+   "statement_en": "Noise is averaged out by remembering more rounds, so the hindsight-best half-life is longer with noise than without.",
+   "statement_zh": "多记几轮能把噪声平均掉，所以有噪声时事后最佳半衰期比无噪声时更长。",
+   "prediction": "Window w1, 7-day rounds, n = 1000 and 3000 cells pooled, eps = 4: in at least 70% of evaluable cells the best fixed half-life (days) under noise is at least 2 times the best fixed half-life of the same cell with the capped noise-free reference sampler (eps = 1e6, same 10-row cap; ties in the best value go to the shorter half-life). Cells whose reference best half-life is already the top of the grid cannot double and are not evaluable; their number is reported. If no cell is evaluable, S6 is not evaluable."
+  },
+  {
+   "id": "S7",
+   "family": "D",
+   "title_en": "Under privacy noise the 2-round default is costly",
+   "title_zh": "有隐私噪声时固定 2 轮代价很大",
+   "statement_en": "The memory choice matters much more with noise than without.",
+   "statement_zh": "有噪声时，记忆选择比无噪声时重要得多。",
+   "prediction": "eps = 4, n = 1000: mean regret of the 2-round default (nearest arm to 14 days, same noise) >= 0.10."
+  },
+  {
+   "id": "S8",
+   "family": "D",
+   "title_en": "Under privacy noise the self-score selector still finds the memory",
+   "title_zh": "有隐私噪声时，自评分选择器仍能找到合适的记忆",
+   "statement_en": "Scored against the noisy next round, the selector stays close to the best fixed memory and beats a table fitted on the other logs under the same noise.",
+   "statement_zh": "对着有噪声的下一轮打分，选择器仍接近最佳固定记忆，并优于在同样噪声下用其他日志拟合的表。",
+   "prediction": "eps = 4, n = 1000 (17 logs): the mean selector regret over logs is <= 0.02 and the paired per-log difference (selector minus pooled table fitted on the other logs' cells with the same noise and n) has mean < 0 with 95% CI upper bound < 0. Results for eps = 2, 8 and n = 3000 are reported."
+  },
+  {
+   "id": "S9",
+   "family": "D",
+   "title_en": "Choosing the memory well at least halves the price of privacy",
+   "title_zh": "把记忆选好，至少能把隐私的代价减半",
+   "statement_en": "The price of privacy of a rule is its value with the capped noise-free reference minus its value with noise. The selector pays at most half of what the 2-round default pays.",
+   "statement_zh": "一个规则的隐私代价 = 用“封顶（每人最多 10 行）但无噪声”的参照得到的 NDCG 减去有噪声时的 NDCG。选择器付出的不超过固定 2 轮的一半。",
+   "prediction": "eps = 4, n = 1000 (17 logs): the mean over ALL logs of the selector's price is <= 0.5 times the mean over ALL logs of the 2-round default's price, AND among the logs whose 2-round price is > 0 the share of logs where the selector's price is <= 0.5 times the 2-round price is at least 80% (logs with a 2-round price <= 0 enter the means but not the share, and are counted). The price against the uncapped std value and the cap loss are reported."
+  },
+  {
+   "id": "S10",
+   "family": "D",
+   "title_en": "Single-use participants change little",
+   "title_zh": "每人只参与一次几乎不改变结果",
+   "statement_en": "If nobody is drawn twice, eps is the whole per-person privacy loss (no composition). This costs almost no accuracy.",
+   "statement_zh": "如果没有人被抽到两次，ε 就是每人的全部隐私损失（无需组合计算）。这几乎不损失准确性。",
+   "prediction": "eps = 4, n = 1000: among cells whose single-use arms fill at least 95% of n people per round on average (all 17 do in the design check; if fewer than 8 cells qualify S10 is not evaluable), the mean over cells of (selector NDCG with single-use participants minus selector NDCG with plain sampling) lies within +/-0.01."
+  },
+  {
+   "id": "S11",
+   "family": "D",
+   "title_en": "A price list with the selector: strong privacy still costs, weak privacy at 3,000 people almost nothing",
+   "title_zh": "选择器下的价目表：强隐私仍有代价，3,000 人加弱隐私几乎没有代价",
+   "statement_en": "Two anchors of a price list for weekly rounds.",
+   "statement_zh": "每周一轮的价目表的两个锚点。",
+   "prediction": "Both must hold, with the price defined against the capped noise-free reference: (i) eps = 2, n = 1000: mean price of the selector >= 0.10; (ii) eps = 8, n = 3000: mean price of the selector <= 0.03."
+  },
+  {
+   "id": "S12",
+   "family": "C",
+   "title_en": "Switching memory adds little churn",
+   "title_zh": "切换记忆几乎不增加榜单抖动",
+   "statement_en": "Week to week the share of the published top 100 that changes is about that of the fixed memory that was best in hindsight.",
+   "statement_zh": "逐周看，发布的前 100 名中变化的比例，与事后最佳固定记忆的变化比例相当。",
+   "prediction": "Confirmation cells at n = 100 and 300, 7-day rounds: mean over cells of (churn of the selector's published list minus churn of the best fixed arm) <= 0.03, churn = 1 - (share of the top 100 kept from the previous round) averaged over steady steps."
+  },
+  {
+   "id": "S13",
+   "family": "C",
+   "title_en": "The selector's list is steadier than the 2-round default's (a consistency check)",
+   "title_zh": "选择器发布的榜单比固定 2 轮更稳定",
+   "statement_en": "Longer memory means fewer changes; the selector inherits it. Near certain by construction when the selector picks memories longer than 14 days; registered as a consistency check.",
+   "statement_zh": "记忆更长意味着变化更少；选择器继承了这一点。",
+   "prediction": "Same cells: the selector's churn is below the 2-round default's churn in at least 90% of cells."
+  }
+ ],
+ "interpretation_rules": {
+  "B_robust": "The selector is called robust to the tested volunteer biases if S3a, S3b and S3c are all met.",
+  "B_audit": "An audit of n/2 random people is called unhelpful if S4a, S4b and S4c are all met. If S4c alone fails, the write-up says an audit helps only when light users volunteer. Under A+ and Ap the reporters are more numerous than the audit and unbiased for row-weighted truth, so S4a and S4b are expected to pass by design.",
+  "D_memory_cuts_price": "Choosing the memory by the selector is called a way to cut the price of privacy if S8 and S9 are both met.",
+  "C_switching_cheap": "Switching between memories is called cheap if S12 and S13 are both met.",
+  "S1_S2": "S1 and S2 are manipulation and direction checks and carry no verdict about the selector. S1 is judged per sampler: if the check fails for a sampler, that sampler's S2, S3x and S4x are reported as 'not interpreted' and the family flags B_robust and B_audit_unhelpful are null.",
+  "family_flag_names": "Family flags in s_verdicts.json: B_robust, B_audit_unhelpful, D_memory_cuts_price, C_switching_cheap; null means not interpreted or not evaluable."
+ },
+ "statistics": "Every hypothesis is reported, met or not; there is no multiplicity correction. Cells missing a comparator (fewer than 3 same-group logs left) are dropped from that comparison only and counted. an_stress.py rebuilds the plan from the stored rows (run_stress.build), aborts if the plan file differs, if a family is empty, if the loaded cells are not exactly the planned cells, if a row key does not match its content, if a key is duplicated, if the errors file is not empty, or if a bias row lacks the audit self-score or a churn row lacks the overlaps, or if the std arms of a stress cell do not reproduce the stored cell they copy (exact equality of the stored rounded values; the earlier text said 1e-5); the std regrets must also reproduce k_cells.csv of the confirmation (family B). A partial analysis (--partial, --rows) is allowed only with --check-only and writes nothing. The verdict file stores the sha256 of this file, the scripts, the simulation code, the plan keys and the rows file.",
+ "after_the_verdicts": "Anything not listed (per-n splits, per-group splits, eps = 2 and 8 tests, grid-top counts, expected number of draws per person) is post hoc and labelled so. If S8 or S3 fails, the candidate repairs from the literature are: forecast combination (average the arms' score vectors with weights from the exponentially weighted self-scores), fixed-share weights, a longer self-score half-life for noisy targets, shrinkage of the selector toward a table; each needs its own registry and fresh data (a third window), not these cells. Not tested here and left open: person-weighted popularity, volunteers who differ in taste, a recurring panel, composition when a person is drawn in many rounds (plain sampling), local DP, private top-k mechanisms.",
+ "protocol": [
+  "1. Freeze: commit this registry, stress_core.py, run_stress.py, an_stress.py and the engine edits in deep_core.py before the run.",
+  "2. Run: nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_stress.py --family bias|churn|dp (resumable; rows to 02_runs/stress.jsonl, gitignored; family dp with 2 workers).",
+  "3. Analyse: .venv/bin/python3 -W ignore scripts/ssp/an_stress.py (writes 03_tables/stress/s_*.csv and s_verdicts.json).",
+  "4. Report every verdict; do not edit this file after step 2 except to add a dated erratum.",
+  "5. If cells fail and are then re-run successfully, move the errors file aside (do not delete it), state in the write-up how many cells failed once, and never drop a cell."
+ ]
+}
