@@ -45,6 +45,7 @@ class Limits:
     temp_hard: float = 78.0
     ram_budget_gb: float = 8.0   # total resident memory of our workers
     swap_growth_gb: float = 6.0  # freeze if swap grows this far above the start value
+    swap_frac_max: float = 0.85  # freeze if swap used exceeds this share of the swap total (a full swap makes macOS kill services)
     min_free_disk_gb: float = 10.0
     up_after_s: int = 120
     cool_after_s: int = 45
@@ -158,6 +159,7 @@ class Governor:
                 fan = max([f["rpm"] for f in d["fans"]] or [0])
                 raw = max(d["temp"]["cpu_temp_avg"], d["temp"]["gpu_temp_avg"])
                 swap = d["memory"]["swap_usage"] / 2**30
+                swap_total = d["memory"]["swap_total"] / 2**30
                 cpu_w = d["cpu_power"]
             except Exception as e:                # a bad line must not kill the control loop
                 self._note(event="bad sensor line", err=repr(e)[:120])
@@ -171,11 +173,12 @@ class Governor:
                 rss = 0.0
             disk = free_disk_gb()
             now = time.time()
+            swap_full = swap_total > 1.0 and swap > lim.swap_frac_max * swap_total
             hard = (fan > lim.fan_hard or temp > lim.temp_hard or rss > lim.ram_budget_gb * 1.2
-                    or swap > self._swap0 + lim.swap_growth_gb or disk < lim.min_free_disk_gb)
+                    or swap > self._swap0 + lim.swap_growth_gb or swap_full or disk < lim.min_free_disk_gb)
             soft = fan > lim.fan_soft or temp > lim.temp_soft or rss > lim.ram_budget_gb
             cool = (fan <= lim.fan_soft - 100 and temp <= lim.temp_soft - 5 and rss <= lim.ram_budget_gb
-                    and swap <= self._swap0 + lim.swap_growth_gb and disk >= lim.min_free_disk_gb)
+                    and swap <= self._swap0 + lim.swap_growth_gb and not swap_full and disk >= lim.min_free_disk_gb)
             if hard or (soft and self.target <= 1 and self.state == "run"):
                 # Too hot even at one worker: freeze the workers and wait to cool.
                 if self.state != "paused":
@@ -202,7 +205,7 @@ class Governor:
                 self._ok_since = now
             self.last = dict(state=self.state, target=self.target, fan=fan, temp=round(temp, 1),
                              raw_temp=round(raw, 1), cpu_w=round(cpu_w, 1), rss_gb=round(rss, 2),
-                             swap_gb=round(swap, 2), disk_gb=round(disk, 1))
+                             swap_gb=round(swap, 2), swap_total_gb=round(swap_total, 2), disk_gb=round(disk, 1))
             self._note(**self.last)
 
 

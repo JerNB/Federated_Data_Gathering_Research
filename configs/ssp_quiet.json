@@ -6,6 +6,7 @@
   "temp_hard": 78.0,
   "ram_budget_gb": 8.0,
   "swap_growth_gb": 6.0,
+  "swap_frac_max": 0.85,
   "min_free_disk_gb": 10.0,
   "up_after_s": 120,
   "cool_after_s": 45,
