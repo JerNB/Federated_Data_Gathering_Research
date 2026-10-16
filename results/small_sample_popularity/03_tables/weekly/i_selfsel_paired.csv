@@ -1,0 +1,7 @@
+round_days,comparison,mean_diff,ci_lo,ci_hi,share_logs_selector_better,logs
+7,selector minus two,-0.129133,-0.157564,-0.099834,1.0,27
+7,selector minus pooled,-0.027407,-0.041835,-0.015375,0.926,27
+7,selector minus same,-0.014122,-0.024092,-0.005877,0.704,27
+28,selector minus two,-0.080638,-0.100007,-0.06108,1.0,27
+28,selector minus pooled,-0.009851,-0.021272,-0.000898,0.519,27
+28,selector minus same,-0.005442,-0.01193,0.000345,0.481,27

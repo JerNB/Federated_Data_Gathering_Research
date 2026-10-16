@@ -1,0 +1,44 @@
+round_days,check,setting,cells,mean_regret
+7-day rounds,"self-score average, half-life in rounds",6,95,0.003544
+7-day rounds,"self-score average, half-life in rounds",13,95,0.002727
+7-day rounds,"self-score average, half-life in rounds",26,95,0.002689
+7-day rounds,"self-score average, half-life in rounds",52,95,0.002811
+7-day rounds,"self-score average, half-life in rounds",104,95,0.002966
+7-day rounds,"self-score average, half-life in rounds",cumulative mean,95,0.003214
+7-day rounds,selector worse than 2 rounds: largest amount in one cell,,95,0.002909
+7-day rounds,selector worse than 2 rounds by more than 0.01: number of cells,,95,0
+28-day rounds,"self-score average, half-life in rounds",6,95,0.007458
+28-day rounds,"self-score average, half-life in rounds",13,95,0.007401
+28-day rounds,"self-score average, half-life in rounds",26,95,0.007545
+28-day rounds,"self-score average, half-life in rounds",52,95,0.007727
+28-day rounds,"self-score average, half-life in rounds",104,95,0.007828
+28-day rounds,"self-score average, half-life in rounds",cumulative mean,95,0.007978
+28-day rounds,selector worse than 2 rounds: largest amount in one cell,,95,0.008811
+28-day rounds,selector worse than 2 rounds by more than 0.01: number of cells,,95,0
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 8-20",selector,95,0.006697
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 8-20",pooled table (LOO),95,0.011163
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 8-20",2 rounds,95,0.077507
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 20-40",selector,95,0.005859
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 20-40",pooled table (LOO),95,0.018369
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 20-40",2 rounds,95,0.122063
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 40-80",selector,95,0.002871
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 40-80",pooled table (LOO),95,0.027629
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 40-80",2 rounds,95,0.152206
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 80-200",selector,95,0.001106
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 80-200",pooled table (LOO),95,0.035692
+7-day rounds,"warm-up, regret vs the cell's best fixed arm, steps 80-200",2 rounds,95,0.138469
+7-day rounds,arm grid for the selector (regret vs all-arm best),factor 2 (all arms),95,0.002689
+7-day rounds,arm grid for the selector (regret vs all-arm best),"factor 4 (14, 56, 224, 896 d)",95,0.004664
+7-day rounds,arm grid for the selector (regret vs all-arm best),"factor 8 (14, 112, 896 d)",95,0.007257
+7-day rounds,"control, steps >= 40",2 rounds,95,0.14328
+7-day rounds,"control, steps >= 40",selector,95,0.001756
+7-day rounds,"control, steps >= 40",freeze after 8 weeks,95,0.05824
+7-day rounds,"control, steps >= 40",freeze after 12 weeks,95,0.040561
+7-day rounds,"control, steps >= 40",freeze after 20 weeks,95,0.026044
+7-day rounds,"control, steps >= 40",freeze after 40 weeks,95,0.010958
+7-day rounds,"control, steps >= 40",random arm (null),95,0.084448
+7-day rounds,"control, steps >= 40",history of the other logs (mean over logs),95,0.050198
+7-day rounds,second half of the steady steps (regret vs second-half best),2 rounds,95,0.138712
+7-day rounds,second half of the steady steps (regret vs second-half best),pooled table (LOO),95,0.036291
+7-day rounds,second half of the steady steps (regret vs second-half best),fixed arm best on 1st half (uses truth),95,0.002223
+7-day rounds,second half of the steady steps (regret vs second-half best),selector,95,0.001615

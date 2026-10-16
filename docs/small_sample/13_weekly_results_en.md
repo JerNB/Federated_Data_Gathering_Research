@@ -6,6 +6,8 @@
 
 Earlier results (doc 12) said "half-life of 2 rounds is hard to beat". That was measured with rounds of months. With **rounds of one to four weeks the best memory is much longer, and it depends on how many people answer per round**: about 32 rounds for 30 people, 16 for 100, 8 for 300, 4 for 1,000, 2 for 3,000 (only 7 logs). A one-line table built on discovery logs only, and scored on holdout logs, loses 0.018 NDCG against the best value on the grid; the old "2 rounds" loses 0.118. At 100 people per week, the hindsight grid best is about 0.60 versus 0.43 for 2 rounds; the discovery-fitted table rule, scored on holdout logs, avoids most of that loss.
 
+**Caveat added after the first draft (finding 6, post hoc):** the table is Amazon-weighted (20 of 27 logs). On the other logs (7; 4 at n = 1,000), leave-one-log-out, a table fitted on the remaining logs is no better than 2 rounds at n = 100 and 3.3 and 4.9 times worse at n = 300 and 1,000; at n = 30 it still beats 2 rounds by about 0.09. Read the numbers above as pooled values, not as a starting point for every domain.
+
 ## 1. What was done (plain words)
 
 1. **Logs.** 27 of the 30 logs (20 Amazon, 7 other). Three logs (gowalla, brightkite, kuairand-pure) are shorter than 156 weeks and are excluded. Each log is cut to its densest 156 weeks (about 3 years). The median weekly number of active people is 4,550 (range 614 to 24,864).
@@ -16,7 +18,7 @@ Earlier results (doc 12) said "half-life of 2 rounds is hard to beat". That was 
 
 ## 2. Findings
 
-1. **Memory table (W1, W2, W8, W9, W10). Use this instead of "2 rounds".**
+1. **Memory table (W1, W2, W8, W9, W10). Use this instead of "2 rounds" for Amazon-like logs; finding 6 shows it is not a universal default.**
 
    | People per round n | Half-life in rounds (fitted on discovery logs, 7- and 28-day rounds pooled) |
    |---|---|
@@ -40,6 +42,21 @@ Earlier results (doc 12) said "half-life of 2 rounds is hard to beat". That was 
 
 5. **A fixed 56-day memory beats "2 rounds" at 7-day rounds by +0.121 (W3).** This is the same finding as 1 seen from the other side: 2 rounds of 7 days is only 14 days of memory. The registered wording "set memory in days, not in rounds" is not what the data say (see W8: rounds at fixed n); do not quote it.
 
+6. **The table is Amazon-weighted (post hoc: written after findings 1–5, in neither registry).** `an_weekly_strata.py` re-reads the stored cells (no new simulation) and splits the logs into 20 Amazon and 7 other. The hindsight-best memory differs by domain at every n. Median best memory in rounds at 7-day rounds, Amazon / other: 128 / 16 at n = 30, 32 / 8 at n = 100, 16 / 4 at n = 300, 8 / 3 at n = 1,000; at 28-day rounds 32 / 16, 32 / 4, 16 / 2, 8 / 2 (`h_strata_best_rounds.csv`). Leave-one-log-out regret against each log's hindsight best (7- and 28-day rounds pooled; `h_strata_loo_regret.csv`):
+
+   | n | Group (logs) | 2 rounds | One table fitted on all other logs | Table fitted on the same group |
+   |---:|---|---:|---:|---:|
+   | 30 | Amazon (20) | 0.153 | 0.012 | 0.012 |
+   | 30 | other (7) | 0.104 | 0.014 | 0.007 |
+   | 100 | Amazon (20) | 0.189 | 0.018 | 0.015 |
+   | 100 | other (7) | 0.030 | 0.036 | 0.013 |
+   | 300 | Amazon (17) | 0.123 | 0.022 | 0.019 |
+   | 300 | other (7) | 0.014 | 0.047 | 0.014 |
+   | 1,000 | Amazon (13) | 0.051 | 0.018 | 0.026 |
+   | 1,000 | other (4) | 0.002 | 0.010 | 0.002 |
+
+   On the other logs the pooled table is worse than "2 rounds" at n = 100 (0.036 against 0.030), n = 300 (0.047 against 0.014) and n = 1,000 (0.010 against 0.002), and clearly better only at n = 30 (0.014 against 0.104). On Amazon logs it is better at every n. A table fitted on the same group stays within 0.02 of the hindsight best except for Amazon at n = 1,000 (0.026), but it needs a domain label and rests on 7 logs (4 at n = 1,000). Do not quote "16 rounds at 100 people" as a starting point for every domain: it is the Amazon-weighted pooled value. What holds in both groups is that at 30 people a long memory beats 2 rounds by about 0.09 or more. What else the best memory depends on besides n (drift speed, reports per person) is not tested here.
+
 ## 3. Scorecard
 
 | ID | Prediction | Result | Met |
@@ -62,9 +79,9 @@ Met 9 of 11. The two misses are about size of effect, not direction.
 
 1. **Doc 12's "2 rounds" and this table are for different round lengths.** Doc 12 cut each log into 30 rounds (mostly Amazon rounds of 3 to 9 months), where drift between rounds is large and 2 rounds was best. This study covers rounds of 7 to 28 days. Rounds between 28 days and 3 months were not tested, so the point where the advice switches is unknown.
 2. **Not a real federated deployment.** People are drawn at random from the log's active people each round; no real participation, dropout or delay.
-3. **Mostly Amazon:** 20 of 27 logs. On the 8-log clean set (holdout_fresh + new_holdout) W1, W3, W4, W7 (n = 100) and W11 keep their sign and the W5 median is 0.66.
+3. **Mostly Amazon:** 20 of 27 logs, and the memory table inherits it (finding 6). On the 8-log clean set (holdout_fresh + new_holdout) W1, W3, W4, W7 (n = 100) and W11 keep their sign and the W5 median is 0.66.
 4. **W8–W11 are post-hoc in design.** Stage d and stage e add new cells, but W8–W10 also reuse stage-a cells at n = 100 and 1,000. The table was fitted on 5 to 12 discovery logs and scored on 12 to 15 holdout logs.
-5. **Grid effects.** Half-lives are on a grid with steps of a factor 2, so "best" is accurate to about that step. A log spans about 1,092 days, so a half-life near 900 days or more means "do not forget". At 28-day rounds the best value sits at the top of the grid in 11 of 27 logs at n = 100 (896 days) and in 9 of 27 at n = 30 (1,792 days); at 7-day rounds and n = 30 it is at 896 or 1,792 days in 11 of 27 logs. Stage-a n = 100 and 1,000 cells did not include the 1,792-day option; stage-d n = 30, 300 and 3,000 cells did. The lower grid edge also matters: 7 days is best in 3/7 n = 3,000 logs and 2/17 n = 1,000 logs at 7-day rounds, and in 1/7 n = 3,000 and 1/24 n = 300 logs at 28-day rounds. So for small n the memory in the table is a lower bound: with at most 100 people per round and rounds of weeks, forget slowly or not at all. At n = 3,000 only 7 logs qualify, so it is not part of the rule test, and the W8 comparison is partly cut off at 28-day rounds.
+5. **Grid effects.** Half-lives are on a grid with steps of a factor 2, so "best" is accurate to about that step. A log spans about 1,092 days, so a half-life near 900 days or more means "do not forget". At 28-day rounds the best value sits at the top of the grid in 11 of 27 logs at n = 100 (896 days) and in 9 of 27 at n = 30 (1,792 days); at 7-day rounds and n = 30 it is at 896 or 1,792 days in 11 of 27 logs. Stage-a n = 100 and 1,000 cells did not include the 1,792-day option; stage-d n = 30, 300 and 3,000 cells did. The lower grid edge also matters: 7 days is best in 3/7 n = 3,000 logs and 2/17 n = 1,000 logs at 7-day rounds, and in 1/7 n = 3,000 and 1/24 n = 300 logs at 28-day rounds. So for small n the memory in the table is a lower bound: with at most 100 people per round and rounds of weeks, forget slowly or not at all (true of the Amazon logs; on the other logs the median best at n = 100 is 4 to 8 rounds, finding 6). At n = 3,000 only 7 logs qualify, so it is not part of the rule test, and the W8 comparison is partly cut off at 28-day rounds.
 6. **Cadence design.** The monthly design draws random people from the 28-day pool until its rows match the four weekly samples; this is one of several possible designs.
 7. **Self-score alarm** was tested on 27 logs with the 56-day half-life only, and the 10% / 25% cut-offs were set in the registry, not tuned.
 8. **Reviews** of the code and documents are same-provider subagents, not an outside audit.
@@ -74,6 +91,6 @@ Met 9 of 11. The two misses are about size of effect, not direction.
 ## 5. Files
 
 1. Plan and predictions: `configs/weekly_registry.json`, `configs/weekly_registry_2.json`.
-2. Code: `scripts/ssp/weekly_core.py` (rounds, cadence), `run_weekly.py`, `run_weekly_night.sh`, `an_weekly.py`; engine additions in `deep_core.py` (`frac` sampler, `ivw` with days).
-3. Tables: `results/small_sample_popularity/03_tables/weekly/` (`weekly_verdicts.json`, `a_cells.csv`, `a_regret_by_rule.csv`, `b_gain.csv`, `c_cadence.csv`, `e_within_log_selfscore.csv`, `f_best_rounds_by_round_length.csv`, `g_memory_table.csv`).
-4. Rerun: `nice -n 10 caffeinate -i sh scripts/ssp/run_weekly_night.sh` (resumable; about 20 minutes), then `.venv/bin/python3 -W ignore scripts/ssp/an_weekly.py`.
+2. Code: `scripts/ssp/weekly_core.py` (rounds, cadence), `run_weekly.py`, `run_weekly_night.sh`, `an_weekly.py`, `an_weekly_strata.py` (post hoc, finding 6); engine additions in `deep_core.py` (`frac` sampler, `ivw` with days).
+3. Tables: `results/small_sample_popularity/03_tables/weekly/` (`weekly_verdicts.json`, `a_cells.csv`, `a_regret_by_rule.csv`, `b_gain.csv`, `c_cadence.csv`, `e_within_log_selfscore.csv`, `f_best_rounds_by_round_length.csv`, `g_memory_table.csv`, `h_strata_best_rounds.csv`, `h_strata_loo_regret.csv`).
+4. Rerun: `nice -n 10 caffeinate -i sh scripts/ssp/run_weekly_night.sh` (resumable; about 20 minutes), then `.venv/bin/python3 -W ignore scripts/ssp/an_weekly.py` and `.venv/bin/python3 -W ignore scripts/ssp/an_weekly_strata.py`.
