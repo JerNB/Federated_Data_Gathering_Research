@@ -1,0 +1,257 @@
+{
+ "version": "selfsel-guard-2",
+ "frozen_note": "Written after the confirmation (doc 15) and BEFORE any window-3 cell was run. Parameters were tuned on the DEVELOPMENT windows w1 (weekly study) and w2 (confirmation) with scripts/ssp/tune_guard.py (370 stored cells; in-sample numbers in 03_tables/guard/g_dev_grid.csv are optimistic and are not results). The test is the fresh window w3: for every log with one, the densest 156 weeks that overlap neither w1 nor w2 (scripts/ssp/window3_core.py). A same-provider critic review of an earlier draft (version 1) found that the draft compared a fixed arm that saw two windows of self-scores with a plain selector that saw only w3; the draft's hypotheses were rebuilt around a CONTROL, the history-seeded selector 'warm', which gives the selector the same evidence. DISCLOSURES: (1) before this file was written, a probe computed for each log whether a third window exists, its median weekly active people, its share of rounds with enough truth rows, and the time order of the windows (26 of 27 logs have one; steam has none; two logs fail the truth-coverage rule); (2) the development numbers below, including the split by time order, were known when the thresholds were set; (3) the K12 'own history' comparator of doc 15 was an oracle (true NDCG of another window) and for 22 of 27 logs the other window lies in the FUTURE of the cell; for w3 the history windows w1 and w2 are also mostly later in time than w3, so 'history' in this programme means other eras of the same log: it tests stationarity of the best memory, not forecasting from the past; the development data split by time order (dev_numbers.by_time_order) and a post hoc causal subset on w3 (history windows strictly earlier than w3) are the only causal evidence; (4) reviews of this file are same-provider models, not an outside audit.",
+ "literature_note": "Read-only background (opened 2026-10-16 by librarian agents; not independently re-verified; see docs/small_sample/90_materials_ledger_en.md): the selector is a prequential follow-the-leader rule (Dawid 1984); fixed-share weights track a changing best expert (Herbster and Warmuth 1998); forecast combination often beats selection (Timmermann 2006); shrinking a selected model toward a prior choice is the standard remedy when few observations exist.",
+ "design": {
+  "question": "Can a server do better than the plain self-score selector at 30 people per round and at monthly rounds by seeding it with its own self-score history from other eras of the same log, or by guarding it with a table prior or fixed-share weights?",
+  "rules": {
+   "plain": "the selector of docs 14-15 (EWMA half-life 26 of the self-scores at steps < t; fallback arm nearest 2 rounds); it sees only the w3 window",
+   "warm": "the plain selector seeded with the HISTORY: at step t the score of an arm is (m 0.5^(t/26) H_a + sum_j w_j g_a(j)) / (m 0.5^(t/26) + sum_j w_j) where g_a(j) are the arm's self-scores at steps j < t with EWMA weights w_j, H_a is the arm's mean self-score (steady steps, draws) over the same log's w1 and w2 cells at the same n and round length (mean over the windows that exist; an arm missing in a window takes the value of the nearest half-life), and m = 38 pseudo-steps (the total weight of the EWMA, 1/(1-2^(-1/26))); the history weight decays like the EWMA. Uses only the server's own self-scores of other eras",
+   "warm104": "the same with m = 104 pseudo-steps (more weight on the history)",
+   "ownself": "a FIXED arm: the decay:days arm with the highest mean self-score over the same log's w1 and w2 cells (on the half-lives the cells have in common), snapped to the nearest arm of the w3 cell. Note: the best-arm rules (ownself, own_oracle) use only the half-lives the history cells have in common; warm fills a half-life missing in one history cell with the nearest one.",
+   "margin_ownself": "keep the ownself arm unless another arm's EWMA self-score exceeds it by more than delta = 0.01",
+   "margin_table": "keep the table arm unless another arm's EWMA self-score exceeds it by more than delta = 0.005. The table arm = the half-life in rounds that minimises mean regret over the OTHER logs' w1 and w2 cells at the same n and round length (same-group when at least 3 other logs, else pooled), snapped to the nearest arm. Needs some logs with known truth (a research table)",
+   "fixedshare": "Hedge with fixed share: weights start uniform; at step t the newest self-score (step t-1) updates w <- w * exp(eta * (g - max g)), normalise, then w <- (1-alpha) w + alpha / K with eta = 3 and alpha = 0.05; publish the arm of the largest weight (fallback arm nearest 2 rounds while the weights are equal)",
+   "own_oracle": "REFERENCE, not deployable: a fixed arm chosen by TRUE NDCG over the same log's w1 and w2 cells (the K12 comparator)",
+   "table_only": "REFERENCE: the table arm of margin_table used alone",
+   "two": "REFERENCE: the decay:days arm nearest to 2 rounds",
+   "same_w3": "REFERENCE: the K1-style same-window table: leave one log out over the w3 cells of the other logs of the same group at the same n and round length (needs at least 3)"
+  },
+  "regret": "best fixed decay:days arm of the w3 cell (hindsight) minus the rule's mean nd100 over steady steps (step >= 8) and draws.",
+  "regions": {
+   "n30_7d": "n = 30, 7-day rounds",
+   "n30_28d": "n = 30, 28-day rounds",
+   "n100plus_7d": "n >= 100, 7-day rounds",
+   "n100plus_28d": "n >= 100, 28-day rounds"
+  },
+  "min_logs": 8,
+  "units": "The log is the unit: a log's cells in a region are averaged first; paired differences are means over logs with a 95% bootstrap interval over logs (seed 7, 4,000 resamples). Tail statistics (G10) are over cells. A comparison drops the CELLS that lack a prior (no w1/w2 cell at that n and round length, or no other log for the table) and counts them (dropped_cells); a region or comparison with fewer than min_logs = 8 logs left is reported as not evaluable (met = null). The pooled history takes, for the best-arm rules, only the half-lives the history cells have in common (the grids of w1 and w2 can differ at n = 100 and 1,000). Tail statistics (G10) also need at least min_logs distinct logs, else met = null.",
+  "caveats": "w3 windows are mostly EARLIER eras of the logs (sparser, so fewer people qualify at n >= 300); the same 24 logs as before; 20 are Amazon; simulated random reporters; the history priors come from other eras (mostly later in time), see frozen_note (3); the dev tuning is in-sample; the history helps by adding evidence from other eras, which a log with no earlier era does not have."
+ },
+ "stage": {
+  "draws": 8,
+  "round_days": [
+   7,
+   28
+  ],
+  "n": [
+   30,
+   100,
+   300,
+   1000
+  ],
+  "seed_tag": "guard-w3",
+  "min_truth_coverage": 0.7,
+  "eligibility": "A log is used only if at least 70% of its w3 7-day rounds (steps >= 8) have at least 500 rows in the next round (the engine's truth threshold; amazon-musical-instruments 0.44 and amazon-industrial-and-scientific 0.38 are excluded by this rule, found in a design probe before freezing); then at sample size n when the median weekly number of active people (7-day rounds) is at least 3 n, applied to both round lengths.",
+  "arms": "decay:h=2 plus decay:days at the half-lives the confirmation used for that n (days_by_n of configs/selfsel_confirm_registry.json)",
+  "history_cells": "02_runs/weekly.jsonl (w1: stage a and d std cells) and 02_runs/confirm.jsonl (w2 cells)"
+ },
+ "params": {
+  "selector_halflife_steps": 26,
+  "warm_m": 38.0,
+  "warm_m_large": 104.0,
+  "delta_ownself": 0.01,
+  "delta_table": 0.005,
+  "fixedshare_eta": 3.0,
+  "fixedshare_alpha": 0.05,
+  "note": "chosen with tune_guard.py on the development windows (see frozen_note); warm_m = 38 is the principled default (the total weight of the EWMA), 104 the largest value tried; the margin delta is in units of the self-score (NDCG against the next round's sample)"
+ },
+ "dev_numbers": {
+  "note": "In-sample means over 370 development cells (w1 and w2; the history/prior comes from the OTHER window), known when the thresholds were set. Order of the rules: plain, warm38, warm104, ownself_only, margin_ownself(0.01), own_oracle, margin_table(0.005), table_only, fixedshare(3, 0.05).",
+  "n30_7d": [
+   0.00545,
+   0.00216,
+   0.00172,
+   0.00202,
+   0.00197,
+   0.00169,
+   0.0052,
+   0.00816,
+   0.00553
+  ],
+  "n30_28d": [
+   0.01454,
+   0.00442,
+   0.00335,
+   0.00436,
+   0.00427,
+   0.00377,
+   0.00589,
+   0.0049,
+   0.01426
+  ],
+  "n100plus_7d": [
+   0.00133,
+   0.00051,
+   0.00043,
+   0.001,
+   0.00085,
+   0.00086,
+   0.00176,
+   0.01667,
+   0.00114
+  ],
+  "n100plus_28d": [
+   0.00421,
+   0.00172,
+   0.00173,
+   0.00255,
+   0.00233,
+   0.00197,
+   0.00492,
+   0.01292,
+   0.0042
+  ],
+  "by_time_order": "Dev split by whether the history window lies EARLIER or LATER in time than the cell (regions n30_7d, n30_28d, n100plus_7d, n100plus_28d): plain earlier 0.00563, 0.01564, 0.00142, 0.00417; plain later 0.00526, 0.01344, 0.00124, 0.00425; warm38 earlier 0.00207, 0.00357, 0.00046, 0.00163; warm38 later 0.00226, 0.00526, 0.00056, 0.0018; ownself earlier 0.00252, 0.00465, 0.00102, 0.00275; ownself later 0.00152, 0.00407, 0.00098, 0.00235. The gain over plain holds when the history is earlier in time."
+ },
+ "criteria": {
+  "G1": {
+   "region": "n30_28d",
+   "max_mean_diff": -0.006,
+   "ci_upper_below": 0.0
+  },
+  "G2": {
+   "region": "n30_7d",
+   "max_mean_diff": -0.0015,
+   "ci_upper_below": 0.0
+  },
+  "G3": {
+   "ci_upper_below_7d": 0.001,
+   "ci_upper_below_28d": 0.002
+  },
+  "G4": {
+   "ci_lower_above": -0.001
+  },
+  "G5": {
+   "region": "n30_28d",
+   "max_mean_diff": -0.004,
+   "ci_upper_below": 0.0
+  },
+  "G6": {
+   "max_diff_7d": 0.001,
+   "max_diff_28d": 0.002
+  },
+  "G7": {
+   "min_gain_to_count": 0.0005
+  },
+  "G8": {
+   "max_mean_diff": -0.0005,
+   "ci_upper_below": 0.0
+  },
+  "G9": {
+   "max_abs_gap": 0.001
+  },
+  "G10": {
+   "max_share_over_0.01": 0.1,
+   "max_cell_regret": 0.03
+  },
+  "G11": {
+   "max_diff": 0.0005
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "G1",
+   "title_en": "A history-seeded selector fixes monthly rounds at 30 people",
+   "title_zh": "用历史自评分做“热启动”的选择器，修复“每月一轮、30 人”",
+   "statement_en": "Seeding the selector with the self-score history of the log's other eras is better than the plain selector at 28-day rounds and 30 people.",
+   "statement_zh": "用该日志其他时期的自评分历史给选择器“热启动”，在 28 天一轮、30 人时优于普通选择器。",
+   "prediction": "Region n30_28d: paired per-log difference (warm minus plain) has mean <= -0.006 and 95% CI upper bound < 0 (development: -0.0101)."
+  },
+  {
+   "id": "G2",
+   "title_en": "... and at weekly rounds with 30 people",
+   "title_zh": "……每周一轮、30 人时也成立",
+   "statement_en": "The same at 7-day rounds and 30 people.",
+   "statement_zh": "7 天一轮、30 人时同样成立。",
+   "prediction": "Region n30_7d: warm minus plain has mean <= -0.0015 and CI upper bound < 0 (development: -0.0033)."
+  },
+  {
+   "id": "G3",
+   "title_en": "... and it does no harm from 100 people up",
+   "title_zh": "……且从 100 人起没有害处",
+   "statement_en": "From 100 people up the history-seeded selector is not worse than the plain selector (non-inferiority).",
+   "statement_zh": "100 人及以上时，热启动选择器不比普通选择器差（非劣效）。",
+   "prediction": "Region n100plus_7d: CI upper bound of (warm minus plain) < +0.001; region n100plus_28d: CI upper bound < +0.002 (development: -0.0008 and -0.0025 on average). The margins (+0.001 and +0.002) are set at about the plain selector's own regret in those regions (development 0.00133 and 0.00421), i.e. a loss of less than the size of the quantity being improved."
+  },
+  {
+   "id": "G4",
+   "title_en": "Freezing the arm is not better than seeding",
+   "title_zh": "把选项冻结起来，并不比“热启动”更好",
+   "statement_en": "A fixed arm chosen by the same history is not better than the history-seeded selector (a control): what matters is the evidence volume, not the freezing.",
+   "statement_zh": "用同样历史选出的固定选项不优于热启动选择器：关键是证据量，不是冻结（对照）。",
+   "prediction": "In every region the lower bound of the 95% bootstrap interval over logs of (ownself minus warm) is > -0.001, i.e. the fixed arm does not beat the seeded selector by 0.001 or more (97.5% one-sided; development means: -0.00014, -0.00006, +0.00049, +0.00083). The test can only show 'not better' (a one-sided claim); if it fails the write-up says 'not shown'."
+  },
+  {
+   "id": "G5",
+   "title_en": "A table prior with a margin fixes monthly rounds at 30 people for a new log",
+   "title_zh": "表先验加阈值，修复新日志“每月一轮、30 人”",
+   "statement_en": "For a log without its own history, the selector guarded by a table prior (margin 0.005) beats the plain selector at 28-day rounds and 30 people.",
+   "statement_zh": "对没有自己历史的日志，加表先验和阈值（0.005）的选择器，在 28 天一轮、30 人时优于普通选择器。",
+   "prediction": "Region n30_28d: margin_table minus plain has mean <= -0.004 and CI upper bound < 0 (development: -0.0087)."
+  },
+  {
+   "id": "G6",
+   "title_en": "... with small harm from 100 people up",
+   "title_zh": "……100 人起代价很小",
+   "statement_en": "The table guard costs little from 100 people up.",
+   "statement_zh": "表保护在 100 人及以上时代价很小。",
+   "prediction": "Region n100plus_7d: mean over logs of (margin_table minus plain) <= +0.001; region n100plus_28d: <= +0.002 (development: +0.0004 and +0.0007)."
+  },
+  {
+   "id": "G7",
+   "title_en": "Fixed-share weights do not help",
+   "title_zh": "固定份额权重没有帮助",
+   "statement_en": "A standard tracking-the-best-expert method does not beat the plain selector (a registered null).",
+   "statement_zh": "标准的“追踪最佳专家”方法不优于普通选择器（登记的零假设）。",
+   "prediction": "In no region does fixedshare beat plain by 0.0005 or more (mean over logs of fixedshare minus plain > -0.0005 in all four regions; development: at most -0.0003)."
+  },
+  {
+   "id": "G8",
+   "title_en": "The oracle prior from other eras beats the selector again on a fresh window",
+   "title_zh": "来自其他时期的“先知”先验在新窗口上再次优于选择器",
+   "statement_en": "Replication of the doc 15 K12 reversal on window 3 at 7-day rounds (stability of the best memory across eras; uses ground truth, not deployable).",
+   "statement_zh": "在窗口 3、7 天一轮时复现文档 15 的 K12 反转（最佳记忆跨时代的稳定性；用了真实答案，不可部署）。",
+   "prediction": "7-day rounds, all n: own_oracle minus plain has mean <= -0.0005 and CI upper bound < 0."
+  },
+  {
+   "id": "G9",
+   "title_en": "Self-scores pick the fixed arm almost as well as the truth does",
+   "title_zh": "用自评分选固定选项，几乎和用真实答案一样好",
+   "statement_en": "The self-score-chosen fixed arm is within 0.001 of the oracle fixed arm in every region.",
+   "statement_zh": "用自评分选出的固定选项，在每个区域都与“先知”固定选项相差不到 0.001。",
+   "prediction": "In every region |mean over logs of (ownself minus own_oracle)| <= 0.001 (development: at most 0.0006)."
+  },
+  {
+   "id": "G10",
+   "title_en": "The history-seeded selector has no heavy tail at weekly rounds",
+   "title_zh": "热启动选择器在每周一轮时没有重尾",
+   "statement_en": "Few cells are bad and none is very bad.",
+   "statement_zh": "坏格子很少，且没有特别坏的。",
+   "prediction": "7-day rounds, all n, over cells: the share of cells with warm regret > 0.01 is <= 10% and the largest cell regret is <= 0.03."
+  },
+  {
+   "id": "G11",
+   "title_en": "More weight on the history is not worse",
+   "title_zh": "给历史更大权重不会更差",
+   "statement_en": "Seeding with 104 pseudo-steps is at least as good as with 38. Informative mainly at 28-day rounds: at 7-day rounds (about 155 steps) the history weight has decayed long before the end of the window, so the two seeded selectors differ only at the start.",
+   "statement_zh": "用 104 个伪步数做热启动不比 38 个差。",
+   "prediction": "In every region the mean over logs of (warm104 minus warm) is <= +0.0005 (development: -0.0004, -0.0011, -0.0001, 0.0000)."
+  }
+ ],
+ "decision_rules": {
+  "history_seeded_selector": "Seeding the selector with the self-score history of other eras is called an improvement over the plain selector if G1, G2 and G3 are all met.",
+  "table_guard": "A table-prior guard is called a cold-start fix for 30 people at monthly rounds if G5 and G6 are met.",
+  "negative": "G7 is a registered null; if it fails, the write-up says so and reports the size. The word 'deployable' is used only for the history-seeded selector, and only if the post hoc causal subset (logs whose history windows w1 and w2 both end before w3 starts) has at least min_logs = 8 logs in EVERY one of the four regions and warm minus plain is < 0 in every one of them (g_verdicts.json causal_gate_posthoc.history_seeded_selector); otherwise the write-up says the causal subset is too small or disagrees. No other rule is called deployable here (the table guard needs a table fitted on logs with known truth). Decisions are false as soon as one of their hypotheses is not met, null only if none failed and one is not evaluable.",
+  "freezing_not_better": "Freezing is called 'not better than seeding' if G4 is met."
+ },
+ "statistics": "Every hypothesis is reported, met or not; no multiplicity correction. an_guard.py rebuilds the plan from the registry and the stored rows, aborts if the cells are not exactly the planned cells, if a key is duplicated or does not match its content, if the arms, draws, n_win, log or round length of a row differ from the plan, if the errors file is not empty, if the plan file is missing or differs, or if a history file has a duplicated key; it stores the sha256 of this file, the confirmation registry, the scripts, the simulation code, the history files and the plan. Post hoc and labelled: the causal subset (history windows strictly earlier than w3), per-n splits, own prior from one window only.",
+ "after_the_verdicts": "Anything not listed is post hoc. Forecast combination (blending the arms' lists) is not tested here; it needs an in-engine arm and its own registry.",
+ "protocol": [
+  "1. Freeze: commit this registry, window3_core.py, run_guard.py, guard_core.py, tune_guard.py and an_guard.py before the run.",
+  "2. Run: nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_guard.py (rows to 02_runs/guard.jsonl, gitignored; the plan is written to 02_runs/guard_plan.json when the run starts).",
+  "3. Analyse: .venv/bin/python3 -W ignore scripts/ssp/an_guard.py (writes 03_tables/guard/g_*.csv and g_verdicts.json).",
+  "4. Report every verdict; do not edit this file after step 2 except to add a dated erratum.",
+  "5. If cells fail and are then re-run successfully, move the errors file aside (do not delete it), state in the write-up how many cells failed once, and never drop a cell."
+ ]
+}
