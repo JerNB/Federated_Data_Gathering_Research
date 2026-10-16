@@ -1,0 +1,360 @@
+{
+ "version": "selfsel-price-1",
+ "frozen_note": "Written after docs 16-17 and BEFORE any price test cell was run. The idea came from the failure of S9 and S11 in doc 16 (the price of privacy stayed large) and from the literature read-only round of doc 90, section 6, item 5 (bounding each person's contribution trades noise for bias: Amin et al. 2019, Epasto et al. 2020, Bagdasaryan et al. 2022). DEVELOPMENT: scripts/ssp/tune_price.py on the weekly-study windows w1, four grids of cells (17, 24 and 7 logs; hard caps c = 1, 2, 3, 5, 10 and norm clips C = 1, 1.4142, 2, 3.1623 at eps = 4 and 1,000 people; the registered cap and clips C = 1 and 2 at eps = 2, 4, 8 and 300, 1,000, 3,000 people; noise-free references; the hard cap c = 1 at eps = 2, 4, 8); the in-sample numbers are in 03_tables/price/p_dev_grid*.csv and in dev_numbers below, and they are optimistic and not results. DISCLOSURES: (1) a one-log smoke run (amazon-automotive, 1,000 people, eps = 4) preceded the development grids: the selector scored 0.175 with the 10-row cap and 0.553 with a unit-length clip; (2) the thresholds were set knowing all development numbers: about half of the development gains for P1-P5, P9, P10; P6 from the development prices with the margins stated; P7 from a development regret of 0.0016 and a difference to the pooled table of -0.032; P8 from a development loss of 0.0049; (3) C = 1 is the unit-length rule: every non-empty report has L2 norm >= 1, so for any C <= 1 every person is scaled to norm exactly C and the lists have the same distribution as for C = 1 (derived, not tested), so no smaller bound is tried; (4) design quantities computed before freezing: no repeated (user, item, week) row in any of the 27 test windows w2; the share of person-weeks with a single row is 72% on the 20 Amazon logs (mean L2 norm 1.20) and 50% on the 7 other logs (1.85; ml-latest 21%, ratebeer 26%, beeradvocate 38%, steam 92%); (5) the test windows w2 were used before (docs 14-16) but the DP samplers have never run on them; (6) the clipped sampler lives in scripts/ssp/price_core.py and patches deep_core.Sampler.round when imported; deep_core.py itself is unchanged since the freeze of the stress programme (9ab9190); (7) reviews of this file are same-provider models, not an outside audit. A same-provider design critic asked for the hard cap c = 1 comparison (P9, P10), a decision name that does not credit the clip for the effect of any tight bound, nominal-accounting caveats (replace-one neighbours, the released people count, the data domain), thresholds for P7 and P8 tied to development numbers, and the removal of an Amazon-only hypothesis that nearly repeated P1; all are adopted above.",
+ "literature_note": "Read-only background (doc 90, section 6, items 3 and 5; not independently re-verified beyond the fact-check there): Amin, Kulesza, Munoz Medina, Vassilvitskii 2019 show that limiting each user's contribution keeps noise low at the cost of bias and leave the private choice of the bound open; Epasto et al. 2020 bound contributions smoothly with weights on data points; Bagdasaryan et al. 2022 use weighted normalisation and note that a hard cap per user adds bias; the Gaussian mechanism's noise scale is proportional to the L2 sensitivity (Dwork and Roth, Thm 3.22; Balle and Wang 2018, Thm 8). The sensitivity of a report scaled to L2 norm <= C is C for neighbouring data that add or remove one person (arithmetic, not a statement of those sources). C = 1 is a public constant fixed before the test; it is not computed from the test data (it was chosen with non-private development data on other windows, which is outside the privacy accounting of the run).",
+ "design": {
+  "question": "Can a central-DP popularity server cut the price of privacy by bounding each person's contribution more tightly than the 10-row cap of docs 12 and 16, and does the selector keep working?",
+  "samplers": {
+   "std": "n random active people per round report all their rows, no noise (the stored confirmation cell; the non-private reference of every price)",
+   "cap10": "the registered baseline of doc 16: at most 10 random rows per person, Gaussian noise (analytic Gaussian, delta = 1e-5) with L2 sensitivity sqrt(10) on the count of every item already in the catalogue, eps per round",
+   "cap1": "at most 1 random row per person, L2 sensitivity 1 (hard cap), eps = 2, 4, 8 per round and the noise-free reference",
+   "clip1": "unit-length reports: every person's count vector (item -> number of rows in the round) is scaled to L2 norm <= 1 (i.e. exactly 1 for every non-empty person), sensitivity 1",
+   "clip2": "every person's vector is scaled to L2 norm <= 2, sensitivity 2 (persons with at most 4 single rows are unchanged)",
+   "ref": "the same samplers with eps = 1e6 (negligible noise): the loss of the bound alone"
+  },
+  "privacy_model": "As in doc 16: central model with a trusted server; eps is PER ROUND, no composition across rounds and no amplification by sampling; noise on every item already in the catalogue (public catalogue with known arrival dates assumed); a person MAY be drawn again in a later round. The bound C is a public constant fixed before the test. NOMINAL accounting, not a certified guarantee: (a) scaling a report to L2 norm <= C bounds the change of the summed vector by C when one person is added to or removed from a FIXED selected set; the simulation draws a fixed number of people from the active people of each round (everyone when n or fewer are active), so adding a person also changes who else is drawn, and without treating the draw as independent of the data the neighbour relation is 'replace one person' with a bound of 2C; the same factor applies to the 10-row cap and the hard cap, so the comparison between samplers is unaffected but the stated eps is nominal; (b) the number of people in a round is released without noise (it divides the counts); when n or fewer people are active it is the exact number of active people; (c) the data domain is one row per (user, item, round): the sensitivity sqrt(c) of the hard caps relies on it, no repeated row exists in the 27 test windows (checked), so none was removed.",
+  "price": "price of a rule = its value (mean nd100 over steady steps and draws) in the stored std cell minus its value under the sampler. The selector is the rule of docs 14-15 applied to the sampler's own arms; its self-score is computed against the sampler's own (noisy) next-round counts.",
+  "units": "The log is the unit (a log has one cell per n); paired differences are means over logs with a 95% bootstrap interval over logs (seed 7, 4,000 resamples). A comparison with fewer than min_logs = 8 logs is not evaluable (met = null).",
+  "caveats": "Same 27 logs and windows as docs 14-16 (20 Amazon); simulated reporters; intervals over logs overstate independence; the non-Amazon logs are few (7 logs; 3 or fewer at 1,000 people), so the bias of the bound on logs with many rows per person (ml-latest, ratebeer, beeradvocate) is NOT tested by any hypothesis and only reported post hoc; the privacy model is a simplification (privacy_model above; doc 16, section 5); only 7-day rounds; n = 3,000 has no confirmation cell and is not tested; single-use participants (fresh) are not supported by the clipped sampler and are not tested."
+ },
+ "stage": {
+  "window": "w2",
+  "round_days": 7,
+  "n": [
+   1000,
+   300,
+   100
+  ],
+  "eps": [
+   2,
+   4,
+   8
+  ],
+  "reference_eps": 1000000,
+  "schemes": [
+   "gauss:eps=2,c=10",
+   "gauss:eps=4,c=10",
+   "gauss:eps=8,c=10",
+   "gauss:eps=1000000,c=10",
+   "gaussn:eps=2,C=1",
+   "gaussn:eps=4,C=1",
+   "gaussn:eps=8,C=1",
+   "gaussn:eps=1000000,C=1",
+   "gaussn:eps=2,C=2",
+   "gaussn:eps=4,C=2",
+   "gaussn:eps=8,C=2",
+   "gaussn:eps=1000000,C=2",
+   "gauss:eps=2,c=1",
+   "gauss:eps=4,c=1",
+   "gauss:eps=8,c=1",
+   "gauss:eps=1000000,c=1"
+  ],
+  "seed_tag": "selfsel-confirm",
+  "note": "n = 100 cells are run for the price list only (no hypothesis); the cells are built from the stored confirmation rows; every sampler gets the days arms of the stored cell; the std arms are copied and replicate the stored cell exactly."
+ },
+ "dev_numbers": {
+  "note": "In-sample development means (w1 = the weekly-study windows, 7-day rounds; stored in 03_tables/price/p_dev_grid*.csv) known when the thresholds were set. Price = selector value without noise and without a bound (the stored std cell) minus selector value under the sampler; logs: 24 at 300 people, 17 at 1,000, 7 at 3,000.",
+  "price_selector": {
+   "n1000": {
+    "cap10": {
+     "eps2": 0.457,
+     "eps4": 0.308,
+     "eps8": 0.164
+    },
+    "clip2": {
+     "eps2": 0.355,
+     "eps4": 0.199,
+     "eps8": 0.084
+    },
+    "clip1": {
+     "eps2": 0.223,
+     "eps4": 0.095,
+     "eps8": 0.034
+    },
+    "cap1": {
+     "eps2": 0.259,
+     "eps4": 0.121,
+     "eps8": 0.052
+    }
+   },
+   "n300": {
+    "cap10": {
+     "eps2": 0.528,
+     "eps4": 0.456,
+     "eps8": 0.354
+    },
+    "clip2": {
+     "eps2": 0.48,
+     "eps4": 0.389,
+     "eps8": 0.259
+    },
+    "clip1": {
+     "eps2": 0.415,
+     "eps4": 0.287,
+     "eps8": 0.152
+    },
+    "cap1": {
+     "eps2": 0.457,
+     "eps4": 0.335,
+     "eps8": 0.199
+    }
+   },
+   "n3000": {
+    "cap10": {
+     "eps2": 0.262,
+     "eps4": 0.128,
+     "eps8": 0.051
+    },
+    "clip2": {
+     "eps2": 0.159,
+     "eps4": 0.066,
+     "eps8": 0.021
+    },
+    "clip1": {
+     "eps2": 0.073,
+     "eps4": 0.025,
+     "eps8": 0.01
+    },
+    "cap1": {
+     "eps2": 0.087,
+     "eps4": 0.034,
+     "eps8": 0.019
+    }
+   }
+  },
+  "hard_caps_at_n1000_eps4": {
+   "cap1": 0.121,
+   "cap2": 0.148,
+   "cap3": 0.177,
+   "cap5": 0.227,
+   "cap10": 0.308
+  },
+  "clips_at_n1000_eps4": {
+   "clip1": 0.095,
+   "clip1.4142": 0.136,
+   "clip2": 0.199,
+   "clip3.1623": 0.309
+  },
+  "bound_loss_without_noise": {
+   "n300": {
+    "cap10": 0.0017,
+    "clip1": 0.0061,
+    "clip2": 0.0005
+   },
+   "n1000": {
+    "cap10": 0.0006,
+    "clip1": 0.0049,
+    "clip2": 0.0006
+   },
+   "n3000": {
+    "cap10": -0.0001,
+    "clip1": 0.0029,
+    "clip2": -0.0001
+   }
+  },
+  "gain_clip1_over_cap10": {
+   "n300_eps2": 0.114,
+   "n300_eps4": 0.169,
+   "n300_eps8": 0.202,
+   "n1000_eps2": 0.234,
+   "n1000_eps4": 0.213,
+   "n1000_eps8": 0.13,
+   "n3000_eps2": 0.188,
+   "n3000_eps4": 0.103,
+   "n3000_eps8": 0.041
+  },
+  "gain_clip1_over_cap1": {
+   "n300_eps2": 0.043,
+   "n300_eps4": 0.048,
+   "n300_eps8": 0.047,
+   "n1000_eps2": 0.036,
+   "n1000_eps4": 0.027,
+   "n1000_eps8": 0.017,
+   "n3000_eps2": 0.014,
+   "n3000_eps4": 0.009,
+   "n3000_eps8": 0.008
+  },
+  "selector_versus_pooled_table_clip1_eps4_n1000": {
+   "selector_regret": 0.0016,
+   "pooled_table_regret": 0.0332,
+   "selector_minus_pooled": -0.0316,
+   "logs": 17
+  }
+ },
+ "criteria": {
+  "min_logs": 8,
+  "P1": {
+   "eps": 4,
+   "n": 1000,
+   "min_gain": 0.1
+  },
+  "P2": {
+   "eps": 4,
+   "n": 300,
+   "min_gain": 0.08
+  },
+  "P3": {
+   "eps": 2,
+   "n": 1000,
+   "min_gain": 0.1
+  },
+  "P4": {
+   "eps": 8,
+   "n": 1000,
+   "min_gain": 0.05
+  },
+  "P5": {
+   "eps": 4,
+   "n": 1000,
+   "min_gain": 0.05
+  },
+  "P6": {
+   "strong": {
+    "eps": 2,
+    "n": 1000,
+    "min_price": 0.1
+   },
+   "weak": {
+    "eps": 8,
+    "n": 1000,
+    "max_price": 0.06
+   }
+  },
+  "P7": {
+   "eps": 4,
+   "n": 1000,
+   "max_mean_regret": 0.01,
+   "max_diff_to_pooled": -0.01
+  },
+  "P8": {
+   "n": 1000,
+   "max_clip_loss": 0.015
+  },
+  "P9": {
+   "eps": 4,
+   "n": 1000,
+   "cap": 1,
+   "min_gain": 0.01
+  },
+  "P10": {
+   "eps": [
+    2,
+    8
+   ],
+   "n": 1000,
+   "cap": 1,
+   "min_gain": 0.008
+  },
+  "decisions": {
+   "unit_length_cuts_price_vs_10_row_cap": [
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+   ],
+   "unit_length_beats_hard_cap": [
+    "P9",
+    "P10"
+   ]
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "P1",
+   "title_en": "Unit-length reports cut the price at 1,000 people and eps = 4 (per round)",
+   "title_zh": "每个人的报告缩成单位长度，在 1,000 人、每轮 ε = 4 时降低隐私代价",
+   "statement_en": "At 1,000 people per week and eps = 4 per round, scaling every person's report to unit L2 length (clip C = 1) gives a better selector list than the 10-row cap of doc 16, by at least 0.10 NDCG. Development shows that most of this gain comes from bounding tightly at all (a hard cap of one row already gets most of it); P9 and P10 isolate what unit length adds.",
+   "statement_zh": "每周 1,000 人、每轮 ε = 4 时，把每个人的报告缩成单位 L2 长度（裁剪 C = 1），选择器的榜单比文档 16 的每人 10 行上限至少好 0.10 NDCG。开发阶段显示，这个增益大部分来自“把上界收紧”本身（硬上限只取一行就已拿到大部分）；P9 和 P10 单独检验单位长度额外带来的部分。",
+   "prediction": "Window w2, 7-day rounds, n = 1,000: mean over logs of (selector value under clip C = 1 minus under cap 10, both eps = 4) >= 0.10 and the 95% bootstrap CI lower bound > 0 (development: +0.213)."
+  },
+  {
+   "id": "P2",
+   "title_en": "... at 300 people and eps = 4",
+   "title_zh": "……在 300 人、ε = 4 时",
+   "statement_en": "The same at 300 people per week and eps = 4 per round.",
+   "statement_zh": "300 人、每轮 ε = 4 时同样成立。",
+   "prediction": "n = 300, eps = 4: mean gain >= 0.08, CI lower bound > 0 (development: +0.169)."
+  },
+  {
+   "id": "P3",
+   "title_en": "... at 1,000 people and eps = 2 per round",
+   "title_zh": "……在 1,000 人、每轮 ε = 2 时",
+   "statement_en": "The same at 1,000 people and eps = 2 per round.",
+   "statement_zh": "1,000 人、每轮 ε = 2 时同样成立。",
+   "prediction": "n = 1,000, eps = 2: mean gain >= 0.10, CI lower bound > 0 (development: +0.234)."
+  },
+  {
+   "id": "P4",
+   "title_en": "... and at eps = 8 per round",
+   "title_zh": "……在每轮 ε = 8 时也成立",
+   "statement_en": "The same at 1,000 people and eps = 8 per round (less noise).",
+   "statement_zh": "1,000 人、每轮 ε = 8 时同样成立（噪声更小）。",
+   "prediction": "n = 1,000, eps = 8: mean gain >= 0.05, CI lower bound > 0 (development: +0.130)."
+  },
+  {
+   "id": "P5",
+   "title_en": "Unit length beats a looser bound (C = 2)",
+   "title_zh": "单位长度优于较松的上界（C = 2）",
+   "statement_en": "At 1,000 people and eps = 4 a clip at C = 1 beats a clip at C = 2: bounding as tightly as possible is better than bounding loosely.",
+   "statement_zh": "1,000 人、ε = 4 时，C = 1 的裁剪优于 C = 2：上界收得越紧越好，而不是松一点。",
+   "prediction": "n = 1,000, eps = 4: mean over logs of (selector value under clip C = 1 minus under clip C = 2) >= 0.05, CI lower bound > 0 (development: +0.104)."
+  },
+  {
+   "id": "P6",
+   "title_en": "The new price list: eps = 2 per round still costs, eps = 8 per round is cheap",
+   "title_zh": "新的价格表：每轮 ε = 2 仍有代价，每轮 ε = 8 很便宜",
+   "statement_en": "With unit-length reports at 1,000 people: (i) eps = 2 per round still costs at least 0.10; (ii) eps = 8 per round costs at most 0.06 (doc 16, 10-row cap: 0.456 at eps = 2 and 1,000 people; 0.051 at eps = 8 and 3,000 people).",
+   "statement_zh": "单位长度报告、1,000 人时：（i）每轮 ε = 2 仍然至少损失 0.10；（ii）每轮 ε = 8 至多损失 0.06（文档 16，每人 10 行上限：1,000 人、ε = 2 为 0.456；3,000 人、ε = 8 为 0.051）。",
+   "prediction": "Mean over logs of the selector's price (selector value of the stored std cell minus the value under clip C = 1): (i) eps = 2, n = 1,000 >= 0.10; (ii) eps = 8, n = 1,000 <= 0.06 (development: 0.223 and 0.034). Both must hold."
+  },
+  {
+   "id": "P7",
+   "title_en": "The selector keeps working under unit-length reports",
+   "title_zh": "单位长度报告下选择器仍然有效",
+   "statement_en": "At 1,000 people and eps = 4 with C = 1, the selector's mean regret is small and it beats a pooled table by a clear margin.",
+   "statement_zh": "1,000 人、ε = 4、C = 1 时，选择器的平均遗憾很小，并明显优于合并表。",
+   "prediction": "n = 1,000, eps = 4, clip C = 1: mean selector regret over logs <= 0.01 and the paired per-log difference (selector regret minus pooled-table regret; the table is fitted leave-one-log-out on the other logs' cells of the same sampler and n) has mean <= -0.01 and CI upper bound < 0 (development: regret 0.0016, difference -0.032)."
+  },
+  {
+   "id": "P8",
+   "title_en": "The bound itself costs little without noise",
+   "title_zh": "没有噪声时，上界本身的代价很小",
+   "statement_en": "Without privacy noise, scaling reports to unit length loses little list quality against plain sampling with no bound.",
+   "statement_zh": "没有隐私噪声时，把报告缩成单位长度，相对于无上界的普通抽样，榜单质量损失很小。",
+   "prediction": "n = 1,000: mean over logs of (selector value of the stored std cell minus the value under clip C = 1 with eps = 10^6) <= 0.015 (development: 0.0049). The bias on logs with many rows per person is not covered by any hypothesis (only 3 or fewer such logs at 1,000 people); post hoc splits by group are reported."
+  },
+  {
+   "id": "P9",
+   "title_en": "A smooth bound beats a hard cap of equal sensitivity at eps = 4",
+   "title_zh": "在 ε = 4 时，平滑的上界优于灵敏度相同的硬上限",
+   "statement_en": "At the same sensitivity (1), scaling a person's report to unit length beats keeping one random row, at 1,000 people and eps = 4 per round.",
+   "statement_zh": "灵敏度相同（都是 1）时，1,000 人、每轮 ε = 4，把报告缩成单位长度优于只保留随机一行。",
+   "prediction": "n = 1,000, eps = 4: mean over logs of (selector value under clip C = 1 minus under hard cap c = 1) >= 0.01, CI lower bound > 0 (development: +0.027)."
+  },
+  {
+   "id": "P10",
+   "title_en": "... and at eps = 2 and eps = 8",
+   "title_zh": "……在 ε = 2 和 ε = 8 时也成立",
+   "statement_en": "The same comparison at eps = 2 and at eps = 8 per round (1,000 people); both must hold.",
+   "statement_zh": "同样的比较在每轮 ε = 2 和 ε = 8（1,000 人）时也成立；两者都要成立。",
+   "prediction": "n = 1,000, eps = 2 and eps = 8: in each, mean gain of clip C = 1 over hard cap c = 1 >= 0.008 and CI lower bound > 0 (development: +0.036 and +0.017)."
+  }
+ ],
+ "interpretation_rules": {
+  "bias_cost": "If P8 fails, the write-up says that the bound adds a bias that must be weighed against the noise it removes.",
+  "price_list": "The price list of the selector under clip C = 1 for every (n, eps) cell, the C = 2, hard-cap and cap-10 columns, the noise-free references and the group splits are post hoc (except the cells named in P6) and labelled so.",
+  "central_model": "Every price is a central-model price with a trusted server and a public catalogue (doc 16, section 5); the write-up repeats that caveat and does not call any setting 'private' in a certified sense.",
+  "unit_length_cuts_price_vs_10_row_cap": "Unit-length reports are called a way to cut the price of privacy relative to the 10-row cap of doc 16 if P1, P2, P3 and P4 are all met. The write-up says that this is mostly the effect of bounding tightly (P9 and P10 and the development numbers show how much a hard cap of one row already achieves), and not an effect specific to unit length.",
+  "unit_length_beats_hard_cap": "Unit length is called better than a hard cap of equal sensitivity if P9 and P10 are met."
+ },
+ "statistics": "Every hypothesis is reported, met or not; there is no multiplicity correction. 'Gain' = selector value under the first sampler minus under the second (positive: the first is better). A gain hypothesis is met when the mean over logs is at least the threshold and the 95% bootstrap interval lower bound is above 0; P6 and P8 use means; P7 uses the interval upper bound of the paired difference. an_price.py rebuilds the plan from the stored confirmation rows (run_price.build), aborts if the plan file differs, if the loaded cells are not exactly the planned cells, if a row key does not match its content, if a key is duplicated, if the errors file is not empty, if arrays have inconsistent shapes, or if the std arms of a price cell do not reproduce the stored confirmation cell they copy (exact equality). A partial analysis (--partial, --rows) is allowed only with --check-only and writes nothing. The verdict file stores the sha256 of this file, the scripts, the simulation code, the plan keys and the rows file.",
+ "after_the_verdicts": "Anything not listed (n = 100 cells, other (n, eps) combinations, group splits, C = 2 and cap-10 columns, noise-free references, hard cap c = 1 at other n) is post hoc. If the gain claims P1-P4 fail, the write-up says where and reports the size. Not tested here and left open: choosing C privately when most people have many rows (Amin et al. 2019 call it open), L1 against L2 normalisation, weights that decay smoothly with the number of rows (Epasto et al. 2020), single-use participants with unit-length reports (the clipped sampler ignores the fresh option), the bias of the bound on logs with many rows per person, composition when a person is drawn many times, local DP, private top-k with an unknown catalogue, n = 3,000, rounds other than 7 days.",
+ "protocol": [
+  "1. Freeze: commit this registry, price_core.py, run_price.py, an_price.py, tune_price.py and the development tables before the run.",
+  "2. Plan: .venv/bin/python3 -W ignore scripts/ssp/run_price.py --plan (writes 02_runs/price_plan.json).",
+  "3. Run: nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_price.py --workers 3 (resumable; rows to 02_runs/price.jsonl, gitignored; the cells with n = 1000 and 300 run first).",
+  "4. Analyse: .venv/bin/python3 -W ignore scripts/ssp/an_price.py (writes 03_tables/price/p_*.csv, p_verdicts.json and the post hoc tables).",
+  "5. Report every verdict; do not edit this file after step 3 except to add a dated erratum.",
+  "6. If cells fail and are then re-run successfully, move the errors file aside (do not delete it), state in the write-up how many cells failed once, and never drop a cell."
+ ]
+}
