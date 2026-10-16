@@ -1,0 +1,13 @@
+comparison,region,mean_diff,ci_lo,ci_hi,logs,dropped_cells
+warm_other minus plain,n30_7d,-0.001699,-0.002559,-0.000793,24,0
+warm_other minus plain,n30_28d,-0.00603,-0.008916,-0.003181,24,0
+warm_other minus plain,n100plus_7d,0.000364,-0.000148,0.000883,24,0
+warm_other minus plain,n100plus_28d,0.000769,-0.001225,0.002732,24,0
+warm minus plain,n30_7d,-0.001893,-0.002698,-0.001082,24,0
+warm minus plain,n30_28d,-0.007372,-0.009972,-0.004855,24,0
+warm minus plain,n100plus_7d,-0.000562,-0.000807,-0.000301,24,0
+warm minus plain,n100plus_28d,-0.000731,-0.002554,0.001522,24,0
+warm_other minus warm,n30_7d,0.000194,-0.000233,0.000619,24,0
+warm_other minus warm,n30_28d,0.001342,-0.000383,0.003155,24,0
+warm_other minus warm,n100plus_7d,0.000926,0.00051,0.001384,24,0
+warm_other minus warm,n100plus_28d,0.0015,-0.001299,0.004226,24,0

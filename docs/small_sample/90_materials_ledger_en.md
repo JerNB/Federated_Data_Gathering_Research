@@ -60,6 +60,40 @@ Opened by librarian agents on 2026-10-16. Their quotes were not independently re
 
 1. **Not opened (blocked or not verified):** ScienceDirect (Tashman 2000), JSTOR (Bates & Granger), ACM DL pages (HTTP 403), the Durfee–Rogers poster PDF, McSherry's PINQ paper. Claims that rest on these are marked unverified wherever they appear.
 2. **Papers already cited in docs 01–12** (Dyer–Owen, Mogstad et al., Horvitz–Thompson, Hansen–Hurwitz, Ji et al., Verachtert et al., Meng 2018, Salganik et al. 2006, Kish 1999, Gardner 2006, Cormack et al. 2009, ADWIN, Gama et al., Balle & Wang 2018, Webber et al. 2010 and others) are named without URLs or titles in those documents; none was re-verified for this ledger.
+3. **Fact-check of 16 quoted claims (2026-10-16).** Three read-only fact-checker agents (same provider, not an outside audit) opened each claim at its primary host and quoted the passage. Several caveats below concern glyphs lost in the PDF text layer, not content.
+
+   | Source | Claim checked | Result |
+   |---|---|---|
+   | Dwork & Roth (`cis.upenn.edu`) | Prop. 2.1: post-processing keeps (ε,δ)-DP; Example 3.2: histogram cells are disjoint, one person changes one cell | confirmed |
+   | Dwork, Naor, Pitassi, Rothblum 2010 | "initiate a study of differential privacy under continual observation"; Thm 4.2 event-level counting error Ω(log T) | confirmed; the Ω glyph is garbled in both PDF copies, so "Ω" is an inference |
+   | Bolot et al. 2013 (`openproceedings.org`) | accuracy on decayed sums while keeping DP "for the entire past" | confirmed; the paper's own name for the dual model is "privacy with expiration" ("decayed privacy" is only a section title) |
+   | Balle & Wang 2018 (`arxiv.org`, `proceedings.mlr.press/v80`) | Thm 8: the Gaussian mechanism is (ε,δ)-DP if and only if a condition with the normal CDF holds | confirmed (the formula was read in the PMLR PDF; the arXiv text layer garbles it) |
+   | Schnabel et al. 2016 (`proceedings.mlr.press/v48`) | "to estimate P(Y=r), we need a small sample of MCAR data" | confirmed |
+   | Marlin et al. 2007 | random ratings differ markedly from user-selected ratings | confirmed on the arXiv copy (1206.5267); the UAI-hosted URL returned 404 |
+   | Wu 2022 (`statcan.gc.ca`) | the bias of non-probability samples cannot be corrected by the sample itself | confirmed |
+   | Joulani et al. 2013 (`proceedings.mlr.press/v28`) | delay raises regret multiplicatively (adversarial) and additively (stochastic) | confirmed |
+   | Dawid slides (`statslab.cam.ac.uk`) | slide 3 "assess future predictive performance by past predictive performance"; slide 8 "forecast using the model that has performed best up to time i" | confirmed |
+   | Durfee & Rogers 2019 (`arxiv.org/abs/1905.04273`) | one-shot outputs may be fewer than k; ε must scale with √k (unrestricted setting) | first part confirmed; the dependence on k is in the text but the square-root glyph is lost, so "√k" is unverified |
+   | Qiao et al. 2021 (`proceedings.mlr.press/v139/qiao21b`) | one-shot Laplace top-k: pure ε-DP with λ = 2k s_f/ε, (ε,δ)-DP with λ = 8 s_f √(k log(m/δ))/ε | confirmed; the radical and conditions of the second formula are garbled in extraction |
+   | Gopi et al. 2020 (`proceedings.mlr.press/v119`) | release only items whose noisy counts exceed a threshold | confirmed |
+   | Swanberg, Desfontaines, Haney 2023 (`arxiv.org/abs/2301.01998`, `petsymposium.org`) | DP-SIPS iterates a naive partition-selection step | confirmed; the abstract says "compares favorably", not "improves" |
+   | McKenna & Sheldon 2020 (`arxiv.org/abs/2010.12603`) | permute-and-flip expected score at least the exponential mechanism's, up to a factor of 2 | confirmed |
+   | Herbster & Warmuth 1998 (`link.springer.com`) | the fixed-share update; the loss bound | **corrected** (see 4) |
+   | Gopi et al. 2020 | the exponential mechanism and an unbounded universe | **corrected** (see 4) |
+
+4. **Corrections from the fact-check. Quote these, not the earlier wording.** (a) Fixed share: "each expert 'shares' a portion of its weight with the other experts after the Loss Update" (not "mixed with a share of the total weight"); the bound is for a partition into k shifts (k+1 segments): L(S;A) ≤ c ln n + c L(P) + c(ℓ−k−1) ln 1/(1−α) + c k [ln 1/α + ln(n−1)] as extracted (symbols partly garbled), summarised in the introduction as O(c[(k+1) log n + k log(ℓ/k) + k]). Programme G uses the common simplified variant that mixes with the uniform distribution, (1−α)w + α/K; that is not the paper's exact update. (b) Gopi et al.: "it is not clear how to apply the exponential mechanism" to set union with an unbounded universe; it is not claimed to be inapplicable. (c) The Qiao et al. page that doc 90 listed first came from a PMLR mirror; the canonical page is `proceedings.mlr.press/v139/qiao21b`.
+5. **Second reading round (2026-10-16, three read-only librarian agents, same provider).** Opened for the privacy-lever and volunteer-weighting questions; every quote was taken from the page, but none was re-read by me.
+
+   | Source (host) | What was confirmed | Caution |
+   |---|---|---|
+   | Amin, Kulesza, Muñoz Medina, Vassilvitskii, "Bounding User Contributions: A Bias-Variance Trade-off in Differential Privacy", ICML 2019, PMLR 97:263–271 (`proceedings.mlr.press/v97/amin19a`) | limiting users to small contributions keeps the noise low but discards data and adds bias | the paper does not choose the bound privately: "this remains an open problem" (footnote 1). My first recalled author list ("Amin, Joseph, Mao") was wrong |
+   | Epasto, Mahdian, Mao, Mirrokni, Ren, "Smoothly Bounding User Contributions in Differential Privacy", NeurIPS 2020 (`proceedings.neurips.cc`) | "smoothly bounds user contributions by setting appropriate weights on data points"; claims to outperform sample limiting | the librarian read the body as a gain of at most a factor of 4 for mean estimation (Thm 3) and "limited" for ERM and quantiles; I did not re-read it |
+   | Wilson et al., "Differentially Private SQL with Bounded User Contribution", PoPETs 2020(2):230–250 (`petsymposium.org`, `arxiv.org/abs/1909.01917`) | aggregations "even when individuals can each be associated with arbitrarily many rows"; inputs are clamped | the word "bounding" and the clamp description are in the body, not the abstract |
+   | Zhu et al., "Federated Heavy Hitters Discovery with Differential Privacy", AISTATS 2020, PMLR 108 (`proceedings.mlr.press/v108/zhu20a`) | "sampling and thresholding properties ... inherently differentially private, without requiring additional noise" | what the system releases is not stated in the abstract (unverified) |
+   | Bagdasaryan, Kairouz, Mellem, Gascón, Bonawitz, Estrin, Gruteser, "Towards Sparse Federated Analytics: Location Heatmaps under Distributed Differential Privacy with Secure Aggregation", PoPETs 2022(4) (`petsymposium.org/popets/2022/popets-2022-0104.pdf`) | Sec. 5.7: a hard cap per user "can add bias and significantly undermine the utility"; they use "weighted normalization ... L1-sensitivity of 1"; pure central DP with distributed discrete Laplace noise | my first recalled author list was wrong; the abstract does not mention sparse histograms or thresholding |
+   | Dwork & Roth (`cis.upenn.edu`) | Def. 3.8 (ℓ2-sensitivity) and Thm 3.22 (Gaussian mechanism, σ ≥ cΔ₂/ε) | the value √c for a person who contributes c distinct items with count 1 is arithmetic (my inference), not a statement of the book |
+   | Efraimidis & Spirakis (author's arXiv restatement `arxiv.org/abs/1012.0256`; encyclopedia entry `utopia.duth.gr`) | key u^(1/w), the m largest keys form the sample; successive sampling without replacement | the IPL article page returned HTTP 403 (not opened). Final inclusion probabilities are not proportional to the weights (their Example 1: weights 1,1,1,2 and m = 2 give 0.433 and 0.7) |
+   | University notes (`math.montana.edu`, `maths.usyd.edu.au`, `stat.duke.edu`); arXiv:2204.14121 | Hansen–Hurwitz and Horvitz–Thompson estimators are unbiased; the Hájek estimator divides by the sum of weights | the bias caveat of the Hájek estimator rests on one preprint ("slightly biased"); no statistics-agency source was opened |
 
 ## 7. Working rules for agents and for me
 
@@ -72,3 +106,6 @@ Opened by librarian agents on 2026-10-16. Their quotes were not independently re
 ## 8. Change log (append-only)
 
 1. 2026-10-16: ledger created. 33 processed datasets hashed (`materials_ledger.csv`); sources taken from the repository's fetch scripts; software versions read from `.venv` metadata and the command line; no new downloads; literature read-only (section 6).
+2. 2026-10-16: 16 quoted claims fact-checked at their primary hosts (13 confirmed, 1 partly unverified because of a lost glyph, 2 corrected: Herbster & Warmuth wording and bound, Gopi et al. on the exponential mechanism). No new host was added to the authorized list; no download, install or execution.
+3. 2026-10-16: the stress run (162 cells) and the window-3 run (142 cells) used only datasets already hashed in `materials_ledger.csv`; `materials_ledger.py check` printed `LEDGER CHECK PASS (33 datasets)` after both runs.
+4. 2026-10-16: second reading round (privacy-lever and weighting sources, section 6 item 5): 9 source groups opened read-only on reputable hosts; two author lists that I had recalled were wrong and are corrected there; one publisher page (ScienceDirect) was blocked and not worked around.

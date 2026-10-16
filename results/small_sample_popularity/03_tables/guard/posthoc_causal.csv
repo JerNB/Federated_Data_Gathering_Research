@@ -1,0 +1,5 @@
+region,causal_logs,logs_in_region,warm_minus_plain,logs,ownself_minus_plain,logs2,margin_table_minus_plain,logs3
+n30_7d,3,3,-0.002164,3,-0.000975,3,0.000518,3
+n30_28d,3,3,-0.005222,3,-0.005192,3,-0.002856,3
+n100plus_7d,3,3,-0.000439,3,0.001783,3,0.001099,3
+n100plus_28d,3,3,-0.002769,3,-0.002418,3,-0.001141,3
