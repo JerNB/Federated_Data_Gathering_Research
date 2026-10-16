@@ -2,6 +2,8 @@
 
 *Exploratory and not pre-registered: written after the W1–W11 verdicts and after finding 6 of doc 13. Nothing here has been checked on data that were not already used. Script: `scripts/ssp/explore_selfsel_weekly.py`. Tables: `results/small_sample_popularity/03_tables/weekly/i_*.csv`.*
 
+*Update (2026-10-16): the confirmation of this selector was pre-registered and run on a second window; see [doc 15](15_selfsel_confirmation_en.md). Result: CONFIRMED at 7-day rounds (−0.0103 against the same-group table), not established at 30 people, and a fixed memory chosen on the log's own history did slightly better (K12). The advice in section 4, step 5 ("stop tuning the memory") therefore holds only in that scope: weekly rounds, 100 or more people, no history of the log's own.*
+
 ## 0. In one paragraph
 
 At 7-day rounds, a server that keeps several memories (half-lives) in parallel and each round publishes the one whose recent **self-score** is best (its own earlier list scored on the next round's reporters, so no ground truth is needed) loses 0.0027 NDCG against the best fixed memory chosen in hindsight. A table fitted on all other logs loses 0.0291, a table fitted on the other logs of the same group (Amazon or other) loses 0.0161, and "2 rounds" loses 0.1350 (95 cells from 27 logs; the tables are fitted leave-one-log-out). The selector has no fitted parameter. It can fail: at 28-day rounds with 30 people it is worse than the tables, and on the cells of the earlier self-tuning test (D29: n = 100, 20 to 90 rounds per log, Amazon rounds of about 3 to 16 months) it is worse than 2 rounds by more than 0.01 in 37% of Amazon cells (63% at 30 rounds per log). All of this is exploratory.

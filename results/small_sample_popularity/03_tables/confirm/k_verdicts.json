@@ -1,0 +1,151 @@
+{
+ "registry": "selfsel-confirm-1",
+ "cells": 187,
+ "sha256": {
+  "configs/selfsel_confirm_registry.json": "2b133bd27a6d9a67e763b3f41430dd87ce41c6b206a47d48c95d53e80a9abe86",
+  "scripts/ssp/confirm_core.py": "aaa9b1ec0ebaa0598e4f4df9b8f762b23d7aa4d77dc443d559feb3e1a4fd685f",
+  "scripts/ssp/run_confirm.py": "64aafb0ee55f4090068978bd2ceec7b3b55b1b8279cecf434b1848677f8834ef",
+  "scripts/ssp/an_confirm.py": "a5b404f8047470eefc7e3769a4c22978ed04048c076313649ff135f76e997a47",
+  "scripts/ssp/explore_selfsel_weekly.py": "c3278ecdbb10beff812a37ee9ccc9f2c88129e634621667d6e848c4f4bdf81cf",
+  "scripts/ssp/an_weekly.py": "8112d2c3104e64017a6d4afbe5a8523c7270bb0e514a63768b00261fff140da0"
+ },
+ "verdicts": {
+  "K1": {
+   "mean": -0.010311300987109308,
+   "lo": -0.01929698891378775,
+   "hi": -0.00386486440784547,
+   "share_negative": 0.7037037037037037,
+   "logs": 27,
+   "dropped_cells": 3,
+   "by_group": {
+    "amazon": {
+     "mean": -0.011670071294312773,
+     "lo": -0.023313209327891448,
+     "hi": -0.0029473757416642833,
+     "logs": 20
+    },
+    "other": {
+     "mean": -0.006429100109385129,
+     "lo": -0.00963206871169863,
+     "hi": -0.0031284729164177028,
+     "logs": 7
+    }
+   },
+   "met": true
+  },
+  "K2": {
+   "mean": -0.018499131985974634,
+   "lo": -0.028309516936440626,
+   "hi": -0.010434472785889213,
+   "share_negative": 0.8148148148148148,
+   "logs": 27,
+   "dropped_cells": 0,
+   "met": true
+  },
+  "K3": {
+   "cells": 90,
+   "share_over_0_01": 0.022222222222222223,
+   "largest": 0.010430433673469408,
+   "mean": 0.0023693849719364345,
+   "met": true
+  },
+  "K4": {
+   "cells": 90,
+   "share_over": 0.0,
+   "largest": 0.008968767006802714,
+   "cells_over": [],
+   "cells_without_table": 3,
+   "cells_worse_than_two_by_margin": 0,
+   "largest_vs_two": 0.0008542857142863625,
+   "met": true
+  },
+  "K5": {
+   "mean": -0.010161533146288712,
+   "lo": -0.019043338366214465,
+   "hi": -0.0035341149342040285,
+   "share_negative": 0.5925925925925926,
+   "logs": 27,
+   "dropped_cells": 0,
+   "met": true
+  },
+  "K6": {
+   "mean": -0.020320413852828904,
+   "lo": -0.02944846104919448,
+   "hi": -0.012385051642112354,
+   "share_negative": 0.8518518518518519,
+   "logs": 27,
+   "dropped_cells": 0,
+   "met": true
+  },
+  "K7": {
+   "cells": 90,
+   "pooled_w1": 0.022017838456342136,
+   "two": 0.14039790590508175,
+   "ratio": 0.156824550297977,
+   "met": true
+  },
+  "K8": {
+   "cells": 8,
+   "logs": 5,
+   "pooled": 0.026202802948234433,
+   "two": 0.004484410076530984,
+   "ratio": 5.843088054182636,
+   "gap": 0.02171839287170345,
+   "share_logs_pooled_worse": 0.4,
+   "per_log_mean_pooled_minus_two": {
+    "goodreads-children": -0.0033,
+    "goodreads-comics": -0.00306,
+    "goodreads-poetry": -0.00942,
+    "ratebeer": 0.12645,
+    "steam": 0.07885
+   },
+   "met": true
+  },
+  "K9": {
+   "mean": -0.006023549125514293,
+   "lo": -0.012413857555298299,
+   "hi": -0.0011312028742282237,
+   "share_negative": 0.6296296296296297,
+   "logs": 27,
+   "dropped_cells": 3,
+   "met": true
+  },
+  "K10": {
+   "mean": 0.008112620370370386,
+   "lo": 0.003285152970679014,
+   "hi": 0.013182135030864206,
+   "share_negative": 0.18518518518518517,
+   "logs": 27,
+   "dropped_cells": 0,
+   "share_positive": 0.8148148148148148,
+   "met": true
+  },
+  "K11": {
+   "cells": 7,
+   "cells_with_table": 7,
+   "share_selector_le_same": 0.7142857142857143,
+   "per_log_mean_selector_minus_same": {
+    "brightkite": -0.04629,
+    "gowalla": -0.0302
+   },
+   "cells_worse_than_two": 0,
+   "met": false
+  },
+  "K12": {
+   "mean": 0.0011349328545154323,
+   "lo": 0.00011361819895666898,
+   "hi": 0.002003717292418401,
+   "share_negative": 0.2962962962962963,
+   "logs": 27,
+   "dropped_cells": 0,
+   "met": false
+  },
+  "K13": {
+   "cells": 90,
+   "warm_selector": 0.00559013762626263,
+   "warm_pooled": 0.005888973379629622,
+   "met": true
+  },
+  "decision": "CONFIRMED"
+ }
+}

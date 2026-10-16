@@ -1,0 +1,5 @@
+windows,round_days,cells,two,pooled,same,selector
+old windows (exploration),7,95,0.134992,0.029139,0.016081,0.002689
+old windows (exploration),28,95,0.088925,0.016358,0.012429,0.007545
+new windows,7,90,0.140398,0.021035,0.013315,0.002369
+new windows,28,90,0.094444,0.012133,0.009165,0.006881

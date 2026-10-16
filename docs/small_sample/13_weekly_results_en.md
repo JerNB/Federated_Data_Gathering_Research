@@ -8,6 +8,8 @@ Earlier results (doc 12) said "half-life of 2 rounds is hard to beat". That was 
 
 **Caveat added after the first draft (finding 6, post hoc):** the table is Amazon-weighted (20 of 27 logs). On the other logs (7; 4 at n = 1,000), leave-one-log-out, a table fitted on the remaining logs is no better than 2 rounds at n = 100 and 3.3 and 4.9 times worse at n = 300 and 1,000; at n = 30 it still beats 2 rounds by about 0.09. Read the numbers above as pooled values, not as a starting point for every domain.
 
+**Update (2026-10-16, doc 15):** on a second window the registered check K8 repeated this on the mean (non-Amazon logs, 300+ people: pooled table 0.0262 against 0.0045 for 2 rounds, 8 cells from 5 logs) but in only 2 of the 5 logs (ratebeer, steam). It is a statement about the average, not about every log.
+
 ## 1. What was done (plain words)
 
 1. **Logs.** 27 of the 30 logs (20 Amazon, 7 other). Three logs (gowalla, brightkite, kuairand-pure) are shorter than 156 weeks and are excluded. Each log is cut to its densest 156 weeks (about 3 years). The median weekly number of active people is 4,550 (range 614 to 24,864).
