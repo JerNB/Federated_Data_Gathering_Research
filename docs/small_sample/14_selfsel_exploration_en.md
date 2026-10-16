@@ -2,7 +2,7 @@
 
 *Exploratory and not pre-registered: written after the W1–W11 verdicts and after finding 6 of doc 13. Nothing here has been checked on data that were not already used. Script: `scripts/ssp/explore_selfsel_weekly.py`. Tables: `results/small_sample_popularity/03_tables/weekly/i_*.csv`.*
 
-*Update (2026-10-16): the confirmation of this selector was pre-registered and run on a second window; see [doc 15](15_selfsel_confirmation_en.md). Result: CONFIRMED at 7-day rounds (−0.0103 against the same-group table), not established at 30 people, and a fixed memory chosen on the log's own history did slightly better (K12). The advice in section 4, step 5 ("stop tuning the memory") therefore holds only in that scope: weekly rounds, 100 or more people, no history of the log's own.*
+*Update (2026-10-16): the confirmation of this selector was pre-registered and run on a second window; see [doc 15](15_selfsel_confirmation_en.md). Result: CONFIRMED at 7-day rounds (−0.0103 against the same-group table), not established at 30 people, and a fixed memory taken from the log's other window with the TRUE NDCG (an oracle that a sampling-only server does not have) did slightly better (K12). The advice in section 4, step 5 ("stop tuning the memory") therefore holds only in that scope: weekly rounds, 100 or more people, no ground-truth history of the log's own.*
 
 ## 0. In one paragraph
 
