@@ -1,0 +1,202 @@
+{
+ "version": "selfsel-confirm-1",
+ "frozen_note": "Written after the post-hoc exploration in docs/small_sample/14 and after a critic review of an earlier draft of this file (a same-provider model, not an outside audit; its findings were adopted: window-2 tables as the primary comparator, a new K4, a three-level decision rule, a scoped licence sentence, completeness and hash checks), and BEFORE any confirmation cell was run. Thresholds were set from window-1 anchors printed by `an_confirm.py --selftest` (the exploration data standing in for window 2) with a safety margin; none was tuned on a confirmation result. A 4-cell smoke run on one small log wrote to /tmp; only its schema and finiteness were checked and no regret was printed or read.",
+ "margin_note": "Window-1 anchors (7-day rounds, 95 cells, tables fitted leave-one-log-out on the same window): K1 selector minus same-group table -0.0141 (CI -0.0241 to -0.0059; Amazon -0.0141, CI -0.0272 to -0.0033; other -0.0142, CI -0.0238 to -0.0056). K2 selector minus pooled table -0.0274 (CI -0.0418 to -0.0154). K3 selector regret above 0.01 in 3.2% of cells (3 of 95), largest 0.0144. K4 selector worse than the better of 2 rounds and the same-group table by more than 0.01 in 1 cell of 95 (1.1%), largest 0.0103; worse than 2 rounds alone: largest 0.0029. K7 pooled table regret 0.0291, ratio to 2 rounds 0.216 (the same-window table; the cross-time version has no anchor). K8 non-Amazon cells with n >= 300 (11 cells, 7 logs): pooled table 0.0406 vs 2 rounds 0.0058, ratio 7.0; only 4 of 7 logs have the pooled table worse than 2 rounds, so the claim is about the mean, not about every log. K9 (28-day, n >= 100) selector minus same-group table -0.0121 (CI -0.0200 to -0.0053). K10 (28-day, n = 30) selector minus same-group table +0.0106 (CI +0.0046 to +0.0164), selector worse in 85% of logs. K13 warm-up steps 8-20: selector 0.0067 vs pooled table 0.0112. K11 (new logs), K5, K6, K7 (cross-time) and K12 (own history) have no window-1 anchor. K12: a same-window analogue (fixed arm best on the first half) scored 0.0022 against the selector's 0.0016 on the second half, so the selector was ahead by 0.0006; the direction across windows is open.",
+ "design": {
+  "question": "Does the self-score selector of doc 14 still beat the fixed-memory tables on time spans and logs it was not developed on?",
+  "window_rule": "w2: the densest 156 consecutive weeks (most positive events) that do not overlap the span used by the weekly study (weekly_core.densest_start), searching the two free sides of the log; weeks are counted from the log's first positive event. whole: logs shorter than 156 weeks (gowalla, brightkite) use every complete week between their first and last positive event.",
+  "caveat": "The w2 windows come from the same 27 logs as the exploration (20 of them Amazon categories, which share one platform) and sit next to the old windows in time, so they test 'new time span, same logs', not new domains. The 95% intervals over logs treat the logs as independent, which overstates independence. The half-life 26 was fixed in advance by the author (no commit records this) and was also the best of the six values tried on window 1, by 0.00004, so some shrinkage on new data is expected; the -0.005 bar in K1 allows for it. Only gowalla and brightkite are new logs, and they are short. Every cell has at least 39 rounds of at most 28 days, so this design cannot reproduce the months-long-round failure of the D29 replay (doc 14); that region stays a limit of the result.",
+  "licence": "If the decision is CONFIRMED the write-up may say only: on a second, adjacent 156-week span of the same 27 logs (20 Amazon), with simulated random reporters, at 7-day rounds and 30 to 1,000 people per round, the self-score selector again had lower regret than tables fitted leave-one-log-out; this does not test new domains, rounds longer than 28 days, fewer than about 40 rounds, or real participants.",
+  "eligibility": "A log is used at sample size n when the median weekly number of active people in its confirmation window is at least 3 n (counted at 7-day rounds, applied to both round lengths).",
+  "planned_cells": "From run_confirm.py --plan (no simulation): 90 cells at 7-day rounds and 90 at 28-day rounds on the 27 w2 logs, plus 7 cells at 7-day rounds on gowalla (n=30,100,300,1000) and brightkite (n=30,100,300): 187 in total."
+ },
+ "logs": {
+  "w2": [
+   "amazon-arts-crafts-and-sewing",
+   "amazon-books",
+   "amazon-electronics",
+   "amazon-musical-instruments",
+   "amazon-office-products",
+   "amazon-patio-lawn-and-garden",
+   "amazon-pet-supplies",
+   "amazon-video-games",
+   "ml-latest",
+   "amazon-automotive",
+   "amazon-cell-phones-and-accessories",
+   "amazon-grocery-and-gourmet-food",
+   "amazon-health-and-household",
+   "amazon-movies-tv",
+   "amazon-sports-and-outdoors",
+   "amazon-toys-and-games",
+   "amazon-baby-products",
+   "amazon-cds-and-vinyl",
+   "amazon-industrial-and-scientific",
+   "amazon-beauty-and-personal-care",
+   "amazon-tools-and-home-improvement",
+   "beeradvocate",
+   "goodreads-children",
+   "ratebeer",
+   "goodreads-comics",
+   "goodreads-poetry",
+   "steam"
+  ],
+  "whole": [
+   "gowalla",
+   "brightkite"
+  ]
+ },
+ "stage": {
+  "n": [30, 100, 300, 1000],
+  "draws": 8,
+  "seed_tag": "selfsel-confirm",
+  "round_days": {"w2": [7, 28], "whole": [7]},
+  "days_by_n": {
+   "30": [7, 14, 28, 56, 112, 224, 448, 896, 1792],
+   "100": [7, 14, 28, 56, 112, 224, 448, 896],
+   "300": [7, 14, 28, 56, 112, 224, 448, 896, 1792],
+   "1000": [7, 14, 28, 56, 112, 224, 448, 896]
+  },
+  "note": "Arms: decay:h=2 plus decay:days at the listed half-lives. The grid per n is the one the weekly study used for that n (stage a for n=100 and 1,000, stage d for n=30 and 300), so cells are comparable with the exploration."
+ },
+ "rule": {
+  "selector": "At step t, per draw, among the decay:days arms publish the one with the highest exponentially weighted mean (half-life 26 rounds) of its stored self-scores at steps < t; when no score exists yet publish the arm nearest to 2 rounds. A self-score is the NDCG of the list published at step j against the sample of round j+1, so every score used at step t was available when the list for step t was made.",
+  "regret": "Mean NDCG@100 of the best fixed decay:days arm of the same cell (hindsight) minus the mean NDCG@100 of the rule, over steady rounds (round >= 8) and draws.",
+  "two_rounds": "The decay:days arm nearest to 2 rounds (14 days at 7-day rounds, 56 days at 28-day rounds).",
+  "pooled_table": "PRIMARY comparator (the exploration's contrast): the half-life in rounds r in {1,2,4,...,256} that minimises mean regret over the WINDOW-2 cells of all other w2 logs at the same n and round length (leave one log out); applied to the cell by snapping r x round length to the nearest arm. gowalla and brightkite are never used to fit a table; they are scored with the table fitted on all w2 logs eligible at that n and round length.",
+  "same_group_table": "PRIMARY comparator: the same, fitted only on w2 logs of the same group (Amazon: name starts with 'amazon'; other: everything else); needs at least 3 such logs after leaving the scored log out. gowalla and brightkite count as 'other' when they are scored but are not used to fit any table.",
+  "pooled_w1_and_same_w1": "DEPLOYMENT comparators: the same two tables fitted on the WINDOW-1 cells (the weekly study's cells, 02_runs/weekly.jsonl) of the other logs at the same n and round length, i.e. tables fitted on the past and applied to a later span.",
+  "own_history": "The decay:days arm with the highest value in the same log's WINDOW-1 cell at the same n and round length (w2 logs only), applied by snapping to the nearest arm of the window-2 cell.",
+  "best_simple_rule": "In K4: the lower regret of 2 rounds and the same-group table (2 rounds alone where the same-group table is missing, i.e. fewer than 3 same-group logs are left)."
+ },
+ "metric": "Regret as defined in 'rule'. One number per cell (log, n, round length); the log is the unit for paired tests (mean over the log's cells in the stated cell set, 95% bootstrap CI over logs, seed 7, 4,000 resamples).",
+ "criteria": {
+  "K1": {"max_mean_diff": -0.005, "ci_upper_below": 0.0, "both_groups_negative": true},
+  "K2": {"ci_upper_below": 0.0},
+  "K3": {"max_share_over_0.01": 0.10, "max_cell_regret": 0.03},
+  "K4": {"margin": 0.01, "max_share": 0.05},
+  "K5": {"ci_upper_below": 0.0},
+  "K6": {"ci_upper_below": 0.0},
+  "K7": {"max_regret": 0.04, "max_ratio": 0.3333333333333333},
+  "K8": {"min_n": 300, "min_ratio": 2.0, "min_gap": 0.005},
+  "K9": {"min_n": 100, "ci_upper_below": 0.0},
+  "K10": {"n": 30, "min_mean_diff": 0.0, "min_share_logs": 0.60},
+  "K11": {"min_share": 0.85, "margin": 0.01},
+  "K12": {"ci_upper_below": 0.0}
+ },
+ "hypotheses": [
+  {
+   "id": "K1",
+   "title_en": "Weekly rounds: the selector beats the same-group table on a new time span",
+   "title_zh": "每周一轮：在新时间窗上，选择器优于同类表",
+   "statement_en": "On a fresh 156-week window of the same logs, letting the server pick its memory from its own past self-scores gives lower regret than the same-group table fitted on the same window (leave one log out), in both log groups.",
+   "statement_zh": "在同一批日志的新 156 周窗口上，服务器按自己过去的自评分选记忆，遗憾低于同类表（同一窗口里用其他日志拟合，留一法），两类日志都如此。",
+   "prediction": "7-day rounds, window w2, paired per-log difference (selector minus same-group table): mean <= -0.005, 95% CI upper bound < 0, and the mean is negative for the Amazon logs and for the other logs separately."
+  },
+  {
+   "id": "K2",
+   "title_en": "Weekly rounds: the selector beats the pooled table on a new time span",
+   "title_zh": "每周一轮：在新时间窗上，选择器优于通用表",
+   "statement_en": "Same as K1 against the pooled table (all other logs, same window, leave one log out).",
+   "statement_zh": "同 K1，对照通用表（同一窗口里用全部其他日志拟合，留一法）。",
+   "prediction": "7-day rounds, window w2, paired per-log difference (selector minus pooled table): 95% CI upper bound < 0."
+  },
+  {
+   "id": "K3",
+   "title_en": "Weekly rounds: the selector has no heavy tail",
+   "title_zh": "每周一轮：选择器没有严重的坏格子",
+   "statement_en": "Few cells are bad and none is very bad.",
+   "statement_zh": "坏格子很少，且没有特别坏的。",
+   "prediction": "7-day rounds, window w2, over all cells: the share of cells with selector regret > 0.01 is <= 10%, and the largest cell regret is <= 0.03."
+  },
+  {
+   "id": "K4",
+   "title_en": "Weekly rounds: the selector is almost never clearly worse than the better of two simple rules",
+   "title_zh": "每周一轮：选择器几乎从不明显差于两种简单做法中较好的一种",
+   "statement_en": "Switching to the selector does not harm in practice: in a cell, the better of 'always 2 rounds' and 'the same-group table' is not clearly better than the selector.",
+   "statement_zh": "改用选择器基本不会造成损害：在每个格子里，“固定 2 轮”和“同类表”中较好的那个不会明显好于选择器。",
+   "prediction": "7-day rounds, window w2, over all cells: the share of cells where selector regret exceeds the regret of the better of 2 rounds and the same-group table by more than 0.01 is <= 5%. The largest excess over 2 rounds alone is reported."
+  },
+  {
+   "id": "K5",
+   "title_en": "Deployment contrast: the selector beats a same-group table fitted on the old window",
+   "title_zh": "部署对照：选择器优于用旧窗口拟合的同类表",
+   "statement_en": "A table fitted on the past (the old windows of the other logs) and applied to the new span is what a deployed table would be.",
+   "statement_zh": "表是用过去的数据（其他日志的旧窗口）拟合、再用到新时间段，这才是部署时的真实情形。",
+   "prediction": "7-day rounds, window w2, paired per-log difference (selector minus same-group table fitted on window 1): 95% CI upper bound < 0."
+  },
+  {
+   "id": "K6",
+   "title_en": "Deployment contrast: the selector beats a pooled table fitted on the old window",
+   "title_zh": "部署对照：选择器优于用旧窗口拟合的通用表",
+   "statement_en": "Same as K5 against the pooled table.",
+   "statement_zh": "同 K5，对照通用表。",
+   "prediction": "7-day rounds, window w2, paired per-log difference (selector minus pooled table fitted on window 1): 95% CI upper bound < 0."
+  },
+  {
+   "id": "K7",
+   "title_en": "The memory-by-n table fitted on the old windows still works on the new windows",
+   "title_zh": "旧窗口拟合的“按人数查记忆表”在新窗口上仍有效",
+   "statement_en": "The pooled table keeps its edge over the 2-round default when the span changes (the W9 criterion on a new window).",
+   "statement_zh": "时间窗换了，通用表对固定 2 轮的优势依然存在（W9 的标准用在新窗口上）。",
+   "prediction": "7-day rounds, window w2, over all cells: mean regret of the pooled table fitted on window 1 is <= 0.04 and <= one third of the mean regret of 2 rounds."
+  },
+  {
+   "id": "K8",
+   "title_en": "The domain caveat repeats: on non-Amazon logs with 300+ people the pooled table is at least twice as bad as 2 rounds",
+   "title_zh": "领域限定重现：在非亚马逊日志上，每轮 300 人以上时，通用表的遗憾至少是 2 轮的两倍",
+   "statement_en": "Post-hoc finding 6 of doc 13 (strata) is tested on a new window. The claim is about the mean over cells, not about every log.",
+   "statement_zh": "对 doc 13 的事后发现 6（分层）在新窗口上做检验。说的是格子平均值，不是每个日志都如此。",
+   "prediction": "7-day rounds, window w2, non-Amazon logs, cells with n >= 300: mean regret of the pooled table (fitted on window 2, leave one log out) is at least 2 times the mean regret of 2 rounds, and exceeds it by at least 0.005."
+  },
+  {
+   "id": "K9",
+   "title_en": "Monthly rounds, 100+ people: the selector beats the same-group table",
+   "title_zh": "每月一轮、100 人以上：选择器优于同类表",
+   "statement_en": "The selector is also better at 28-day rounds once there are enough people.",
+   "statement_zh": "每轮人数足够时，28 天一轮下选择器同样更好。",
+   "prediction": "28-day rounds, window w2, cells with n >= 100: paired per-log difference (selector minus same-group table), 95% CI upper bound < 0."
+  },
+  {
+   "id": "K10",
+   "title_en": "Monthly rounds, 30 people: the selector's weakness repeats",
+   "title_zh": "每月一轮、30 人：选择器的弱点重现",
+   "statement_en": "At 30 people and 28-day rounds the same-group table is better than the selector (a negative result registered in advance).",
+   "statement_zh": "每轮 30 人、28 天一轮时，同类表优于选择器（事先登记的负面预期）。",
+   "prediction": "28-day rounds, window w2, cells with n = 30: mean paired per-log difference (selector minus same-group table) > 0, and the difference is > 0 in at least 60% of logs."
+  },
+  {
+   "id": "K11",
+   "title_en": "New logs: the selector holds on gowalla and brightkite",
+   "title_zh": "新日志：选择器在 gowalla 和 brightkite 上依然成立",
+   "statement_en": "On two logs that were never in the weekly study (short check-in logs, whole span, 7-day rounds) the selector beats the same-group (other) table in at least 6 of the 7 cells, on average in each of the two logs, and never harms.",
+   "statement_zh": "在两个从未进入每周研究的短日志（签到数据，整段时间，7 天一轮）上，选择器在 7 个格子里至少 6 个优于同类（其他类）表，两个日志各自平均也更好，且不造成损害。",
+   "prediction": "7-day rounds, gowalla and brightkite cells: selector regret <= same-group-table regret in at least 85% of the cells (6 of 7), the mean selector-minus-table difference is negative in each of the two logs, and no cell has the selector worse than 2 rounds by more than 0.01."
+  },
+  {
+   "id": "K12",
+   "title_en": "A memory chosen once from the log's own previous window is not enough",
+   "title_zh": "只用同一日志上一个窗口选一次记忆还不够",
+   "statement_en": "Re-picking every week beats keeping the best memory of the same log's previous 156 weeks (the best memory moves over time). Open question: a same-window analogue favoured the selector by 0.0006; the direction across windows is open.",
+   "statement_zh": "每周重选优于沿用同一日志上一个 156 周窗口的最佳记忆（最佳记忆会随时间移动）。开放问题：同一窗口内的类似检验中选择器只领先 0.0006；跨窗口的方向未知。",
+   "prediction": "7-day rounds, window w2, paired per-log difference (selector minus own-history table), 95% CI upper bound < 0."
+  },
+  {
+   "id": "K13",
+   "title_en": "Warm-up (reported; outside the decision rule): in weeks 8-20 the selector is already better than the pooled table",
+   "title_zh": "热身期（只报告，不影响总判定）：第 8–20 周选择器已优于通用表",
+   "statement_en": "A server does not need a long history before the selector pays off.",
+   "statement_zh": "服务器不需要很长的历史，选择器就已经划算。",
+   "prediction": "7-day rounds, window w2, steps 8-20, regret against the cell's best fixed arm: mean selector regret < mean regret of the pooled table (fitted on window 2, leave one log out)."
+  }
+ ],
+ "decision_rule": "CONFIRMED if K1, K2, K3 and K4 are all met. WEAKENED if the K1 interval is below 0 (the 95% CI upper bound of selector minus same-group table is < 0, so the selector is better) but at least one of K1's size or group bars, K2, K3 or K4 is not met. NOT CONFIRMED if the K1 CI upper bound is 0 or more (the write-up then says whether the mean itself was 0 or more, i.e. the selector was not better on average). K5-K13 are reported as separate verdicts and do not change this rule.",
+ "statistics": "Every hypothesis is reported, met or not; there is no multiplicity correction. Share tests use cells (K3, K4, K11) or logs (K10) as stated; K7 and K8 are ratios or means over cells. Cells missing a comparator (no window-1 cell, fewer than 3 same-group logs left) are dropped from that comparison only and their number is reported (dropped_cells). This is structural, not a run failure: only 3 non-Amazon w2 logs are eligible at n = 1,000 (goodreads-children, -comics, -poetry), so with one left out no same-group table exists for those 3 cells at 7-day and 3 at 28-day rounds; they drop out of K1, K9 and the group-split intervals, and K4 falls back to 2 rounds there. an_confirm.py aborts if the loaded cells are not exactly the planned cells (confirm_logs.json) or if confirm.jsonl.errors is not empty, and stores the sha256 of this file and of the scripts with the verdicts.",
+ "after_the_verdicts": "Anything not listed above (which arms the selector picks, per-n breakdowns, interactions) is exploratory and is labelled post hoc in the write-up. No guard (a rule that falls back to a table under some conditions) will be designed on these windows; a guard needs its own registry and fresh data.",
+ "protocol": [
+  "1. Freeze: commit this registry, confirm_core.py, run_confirm.py and an_confirm.py before the run; the analysis reads its thresholds from this file.",
+  "2. Run: nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_confirm.py (quiet governor, 3 workers; rows to 02_runs/confirm.jsonl, gitignored).",
+  "3. Analyse: .venv/bin/python3 -W ignore scripts/ssp/an_confirm.py (writes 03_tables/confirm/k_*.csv and k_verdicts.json).",
+  "4. Report every verdict; do not edit this file after step 2 except to add a dated erratum.",
+  "5. If cells fail and are then re-run successfully, move the errors file aside (do not delete it), state in the write-up how many cells failed once, and never drop a cell."
+ ]
+}
