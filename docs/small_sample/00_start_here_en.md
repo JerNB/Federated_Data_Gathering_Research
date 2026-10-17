@@ -75,7 +75,7 @@ the fan measurements are in `results/small_sample_popularity/00_safety/`.
 - Federation is simulated; there are no devices, dropouts or real secure aggregation.
 - Personalized models were trained on at most 1,500 candidate items to keep the machine quiet; see amendment A15.
 
-## 7. Later work: the weekly-memory programme (docs 03–17 and 90)
+## 7. Later work: the weekly-memory programme (docs 03–19 and 90)
 
 The main study (docs 01–02) asked how many people are needed. Everything after it asks a server's practical question: **how long should its memory be, and can it choose that memory from its own data?** Every later document is numbered in the order it was written; "pre-registered" means the plan was committed before the run, "post hoc" means it was looked at after.
 
@@ -92,6 +92,16 @@ The main study (docs 01–02) asked how many people are needed. Everything after
 | 15 | [`15_selfsel_confirmation_en.md`](15_selfsel_confirmation_en.md) | pre-registered confirmation of doc 14 on a second window: confirmed, mainly from about 100 people per round |
 | 16 | [`16_selfsel_stress_en.md`](16_selfsel_stress_en.md) | pre-registered stress tests: volunteer bias, privacy noise, churn of the published list |
 | 17 | [`17_selfsel_guard_en.md`](17_selfsel_guard_en.md) | pre-registered test on a third window: a selector seeded with prior self-scores fixes the weak regions (30 people; monthly rounds) |
+| 18 | [`18_privacy_price_en.md`](18_privacy_price_en.md) | pre-registered: bounding each person's contribution (reports scaled to unit length) cuts the price of privacy a lot at 1,000 people (0.273 → 0.082 at ε = 4) and less at 100–300 people; central model, nominal accounting |
+| 19 | [`19_volunteer_weights_en.md`](19_volunteer_weights_en.md) | pre-registered: weights chosen on a small random audit give heavy volunteers a gain (+0.012 NDCG at 100–300 people) and do not bring light volunteers up to random people; 7 of 8 positive claims met; post hoc: random reporters of the same head count beat volunteers plus audit |
 | 90 | [`90_materials_ledger_en.md`](90_materials_ledger_en.md) | every dataset (with hashes), tool and literature source used, and the safety rules |
 
-Numbers and decision rules for docs 13–17 are in `results/small_sample_popularity/03_tables/{weekly,confirm,stress,guard}/` and in the registries `configs/*_registry.json`. All reviews of these documents by subagents are same-provider checks, not an outside audit.
+**What a server can take from docs 13–19 (plain reading; everything is a simulation on public logs).**
+
+1. **Memory.** With weekly rounds the best memory gets shorter as the number of people per round grows (about 32, 16, 8, 4, 2 rounds at 30, 100, 300, 1,000, 3,000 people; doc 13). A server can choose it from its own data (doc 14); doc 15 confirms this mainly from about 100 people per round.
+2. **Weak regions.** At 30 people or with monthly rounds, seeding the selector with prior self-scores helps (doc 17); the gain sits on the Amazon logs and doc 17 does not call it deployable.
+3. **Volunteers.** Who reports matters more than which memory is chosen: volunteer bias costs up to 0.025 NDCG against a selector regret below 0.006 (doc 16). Weights chosen on a small random audit give heavy volunteers a gain of about 0.012 and do not bring light volunteers up to random people; random reporters with the same head count beat volunteers plus audit (doc 19).
+4. **Privacy.** The price depends on how much one person may contribute: with every report scaled to unit length the selector's price at ε = 4 per round and 1,000 people falls from 0.273 (10-row cap) to 0.082; at 100 people the list still loses 61% of its quality (doc 18). Central model, nominal accounting, not a certified guarantee.
+5. **Evidence.** Every claim is a simulation on public logs, most are pre-registered, post hoc items are labelled, and all subagent reviews are same-provider checks.
+
+Numbers and decision rules for docs 13–19 are in `results/small_sample_popularity/03_tables/{weekly,confirm,stress,guard,price,volunteer}/` and in the registries `configs/*_registry.json`. All reviews of these documents by subagents are same-provider checks, not an outside audit.

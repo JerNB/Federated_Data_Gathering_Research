@@ -23,4 +23,6 @@ Start with the **start-here** page in your language. Everything else is numbered
 | 15 | [`15_selfsel_confirmation_en.md`](15_selfsel_confirmation_en.md) | [`15_selfsel_confirmation_zh.md`](15_selfsel_confirmation_zh.md) |
 | 16 | [`16_selfsel_stress_en.md`](16_selfsel_stress_en.md) | [`16_selfsel_stress_zh.md`](16_selfsel_stress_zh.md) |
 | 17 | [`17_selfsel_guard_en.md`](17_selfsel_guard_en.md) | [`17_selfsel_guard_zh.md`](17_selfsel_guard_zh.md) |
+| 18 | [`18_privacy_price_en.md`](18_privacy_price_en.md) | [`18_privacy_price_zh.md`](18_privacy_price_zh.md) |
+| 19 | [`19_volunteer_weights_en.md`](19_volunteer_weights_en.md) | [`19_volunteer_weights_zh.md`](19_volunteer_weights_zh.md) |
 | 90 | [`90_materials_ledger_en.md`](90_materials_ledger_en.md) | [`90_materials_ledger_zh.md`](90_materials_ledger_zh.md) |

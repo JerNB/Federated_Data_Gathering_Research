@@ -9,6 +9,7 @@ Writes into results/small_sample_popularity/03_tables/volunteer/:
   posthoc_leave_one_log_out.csv, posthoc_leave_one_log_out_flips.csv   every verdict recomputed with one log dropped; which single-log removals flip a verdict
   posthoc_rows_per_reporter.csv   mean rows per reporter of the unweighted 14-day arm of each sampler, per n; mean of the per-cell ratios to std and ratio of the means
   posthoc_audit_memory_only.csv   aud0 - rep0 (what the audit's choice of memory adds without weights), log-level mean over n_hyp with a 95% interval
+  posthoc_loss_split.csv          per volunteer rule: logs split by the observed sign of the loss (random minus volunteers, uncorrected): mean loss, mean audit-weighted gain (indicative only: selection on the outcome)
 Self-check: the chosen value recomputed here must equal the registered audw of an_vol.py for every cell (assertion).
 """
 from __future__ import annotations
@@ -162,7 +163,19 @@ def main() -> None:
         cw = csv.writer(f, lineterminator="\n")
         cw.writerow(["sampler", "logs", "aud0_minus_rep0_mean", "ci_lo", "ci_hi"])
         cw.writerows(rows_am)
-    print("wrote posthoc_chosen_beta.csv, posthoc_recovery.csv, posthoc_per_log.csv, posthoc_leave_one_log_out.csv, posthoc_leave_one_log_out_flips.csv, posthoc_rows_per_reporter.csv, posthoc_audit_memory_only.csv")
+    split = []                                         # heavy volunteers: logs split by the OBSERVED sign of the loss (selection on the outcome: indicative only)
+    for s in ("A+", "A-"):
+        loss = A.log_means(per, lambda rec, s=s: rec[s]["ref"] - rec[s]["rep0"], nl)
+        gain = A.log_means(per, lambda rec, s=s: rec[s]["audw"] - rec[s]["rep0"], nl)
+        for label, keep in (("loss > 0", [l for l in loss if loss[l] > 0]), ("loss <= 0", [l for l in loss if loss[l] <= 0])):
+            if keep:
+                split.append([s, label, len(keep), round(float(np.mean([loss[l] for l in keep])), 6), round(float(np.mean([gain[l] for l in keep])), 6),
+                              round(float(np.mean([gain[l] - loss[l] for l in keep])), 6)])
+    with open(f"{OUT}/posthoc_loss_split.csv", "w", newline="") as f:
+        cw = csv.writer(f, lineterminator="\n")
+        cw.writerow(["sampler", "logs_with", "logs", "mean_loss_ref_minus_rep0", "mean_gain_audw_minus_rep0", "mean_audw_minus_ref"])
+        cw.writerows(split)
+    print("wrote posthoc_chosen_beta.csv, posthoc_recovery.csv, posthoc_per_log.csv, posthoc_leave_one_log_out.csv, posthoc_leave_one_log_out_flips.csv, posthoc_rows_per_reporter.csv, posthoc_audit_memory_only.csv, posthoc_loss_split.csv")
 
 
 if __name__ == "__main__":
