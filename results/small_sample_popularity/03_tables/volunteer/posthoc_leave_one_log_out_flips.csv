@@ -1,0 +1,11 @@
+hypothesis,met_with_all_24_logs,single_log_removals_that_flip_it,logs_whose_removal_flips_it
+V1,True,0,
+V2,False,1,ml-latest
+V3,True,0,
+V4,True,0,
+V5,False,0,
+V6,True,0,
+V7,True,0,
+V8,True,0,
+V9,True,0,
+V10,True,0,

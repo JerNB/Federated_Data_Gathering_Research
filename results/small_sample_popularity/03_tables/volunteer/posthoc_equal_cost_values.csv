@@ -1,0 +1,9 @@
+quantity,logs,mean_selector_value
+"random people, 50 reporters (new cells)",24,0.568142
+"random people, 150 reporters (new cells)",23,0.64935
+"random people, 100 reporters (programme V std cells)",24,0.621105
+"A+ audit-weighted, 100 reporters + audit of 50",24,0.626377
+"A- audit-weighted, 100 reporters + audit of 50",24,0.600945
+"random people, 300 reporters (programme V std cells)",17,0.695553
+"A+ audit-weighted, 300 reporters + audit of 150",17,0.697811
+"A- audit-weighted, 300 reporters + audit of 150",17,0.681748

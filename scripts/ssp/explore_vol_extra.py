@@ -5,6 +5,10 @@
 Writes into results/small_sample_popularity/03_tables/volunteer/:
   posthoc_chosen_beta.csv    share of the audit selector's picks that fall on each weight exponent (per n and sampler; steady steps, draws, logs)
   posthoc_recovery.csv       how much of the loss caused by a volunteer rule (ref - rep0) the audit-weighted selector recovers (audw - rep0), per n and scope
+  posthoc_per_log.csv        per-log gains under A+ and A- (mean over the log's cells with n in n_hyp)
+  posthoc_leave_one_log_out.csv, posthoc_leave_one_log_out_flips.csv   every verdict recomputed with one log dropped; which single-log removals flip a verdict
+  posthoc_rows_per_reporter.csv   mean rows per reporter of the unweighted 14-day arm of each sampler, per n; mean of the per-cell ratios to std and ratio of the means
+  posthoc_audit_memory_only.csv   aud0 - rep0 (what the audit's choice of memory adds without weights), log-level mean over n_hyp with a 95% interval
 Self-check: the chosen value recomputed here must equal the registered audw of an_vol.py for every cell (assertion).
 """
 from __future__ import annotations
@@ -102,7 +106,63 @@ def main() -> None:
         cw = csv.writer(f, lineterminator="\n")
         cw.writerow(["n", "scope", "sampler", "logs", "audw_minus_rep0", "ref_minus_rep0", "recovered_share_ratio_of_means", "ci_lo", "ci_hi"])
         cw.writerows(out)
-    print("wrote posthoc_chosen_beta.csv and posthoc_recovery.csv")
+    logs = sorted({k[0] for k in per})
+    nl = A.CR["n_hyp"]
+    rows_pl = []
+    for L in logs:
+        for s in ("A+", "A-"):
+            vals = [per[k][s] for k in per if k[0] == L and k[1] in nl]
+            if not vals:
+                continue
+            m = lambda f: float(np.mean([f(v) for v in vals]))
+            rows_pl.append([L, E.stratum(L), s, len(vals), round(m(lambda v: v["bestw"] - v["best0"]), 6), round(m(lambda v: v["audw"] - v["rep0"]), 6),
+                            round(m(lambda v: v["audw"] - v["aud0"]), 6), round(m(lambda v: v["audw"] - v["ref"]), 6), round(m(lambda v: v["ref"] - v["rep0"]), 6)])
+    with open(f"{OUT}/posthoc_per_log.csv", "w", newline="") as f:
+        cw = csv.writer(f, lineterminator="\n")
+        cw.writerow(["log", "group", "sampler", "cells_n100_300", "bestw_minus_best0", "audw_minus_rep0", "audw_minus_aud0", "audw_minus_ref", "ref_minus_rep0"])
+        cw.writerows(rows_pl)
+    full = A.verdicts(per)
+    ids = [f"V{i}" for i in range(1, 11)]
+    loo = []
+    flips = {i: [] for i in ids}
+    for L in logs:
+        sub = A.verdicts({k: v for k, v in per.items() if k[0] != L})
+        for i in ids:
+            if sub[i]["met"] != full[i]["met"]:
+                flips[i].append(L)
+        loo.append([L] + [("" if i == "V9" else round(sub[i]["mean"], 6)) for i in ids] + [round(max(sub["V9"]["by_sampler"].values()), 6)] + [str(sub[i]["met"]) for i in ids])
+    with open(f"{OUT}/posthoc_leave_one_log_out.csv", "w", newline="") as f:
+        cw = csv.writer(f, lineterminator="\n")
+        cw.writerow(["dropped_log"] + [f"{i}_mean" for i in ids] + ["V9_max_gap"] + [f"{i}_met" for i in ids])
+        cw.writerows(loo)
+    with open(f"{OUT}/posthoc_leave_one_log_out_flips.csv", "w", newline="") as f:
+        cw = csv.writer(f, lineterminator="\n")
+        cw.writerow(["hypothesis", "met_with_all_24_logs", "single_log_removals_that_flip_it", "logs_whose_removal_flips_it"])
+        for i in ids:
+            cw.writerow([i, str(full[i]["met"]), len(flips[i]), ";".join(flips[i])])
+    rpr = {}
+    for r in sorted(rows.values(), key=lambda r: (r["log"], r["n"])):
+        rp, pp = np.array(r["rows_per_round"], float), np.array(r["people_per_round"], float)
+        for s in SAMPLERS:
+            arm = "decay:days=14" + ("" if s == "std" else "@" + A.scheme_of(s, 0.0))
+            i = r["arms"].index(arm)                           # the unweighted 14-day arm: its rows are real rows
+            rpr.setdefault((r["n"], s), {})[r["log"]] = float(rp[i] / pp[i])
+    with open(f"{OUT}/posthoc_rows_per_reporter.csv", "w", newline="") as f:
+        cw = csv.writer(f, lineterminator="\n")
+        cw.writerow(["n", "sampler", "cells", "mean_rows_per_reporter", "mean_of_cell_ratios_to_std", "ratio_of_means_to_std"])
+        for (n, s), d in sorted(rpr.items()):
+            cw.writerow([n, s, len(d), round(float(np.mean(list(d.values()))), 3), round(float(np.mean([d[l] / rpr[(n, "std")][l] for l in d])), 3),
+                         round(float(np.mean(list(d.values())) / np.mean(list(rpr[(n, "std")].values()))), 3)])
+    rows_am = []                                       # what the audit's choice of memory alone (no weights) adds: aud0 - rep0, log-level mean over n_hyp
+    for s in SAMPLERS:
+        d = A.log_means(per, lambda rec, s=s: rec[s]["aud0"] - rec[s]["rep0"], nl)
+        st_ = A.stat(d)
+        rows_am.append([s, st_["logs"], round(st_["mean"], 6), round(st_["lo"], 6), round(st_["hi"], 6)])
+    with open(f"{OUT}/posthoc_audit_memory_only.csv", "w", newline="") as f:
+        cw = csv.writer(f, lineterminator="\n")
+        cw.writerow(["sampler", "logs", "aud0_minus_rep0_mean", "ci_lo", "ci_hi"])
+        cw.writerows(rows_am)
+    print("wrote posthoc_chosen_beta.csv, posthoc_recovery.csv, posthoc_per_log.csv, posthoc_leave_one_log_out.csv, posthoc_leave_one_log_out_flips.csv, posthoc_rows_per_reporter.csv, posthoc_audit_memory_only.csv")
 
 
 if __name__ == "__main__":

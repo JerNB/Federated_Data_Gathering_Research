@@ -1,0 +1,37 @@
+n,sampler,comparison,logs,mean,ci_lo,ci_hi
+30,std,audw minus rep0,24,-0.00559,-0.007378,-0.003812
+30,std,bestw minus best0,24,0.000987,0.0,0.002238
+30,std,ref minus rep0 (loss from the volunteer rule),24,0.0,0.0,0.0
+30,std,audw minus ref,24,-0.00559,-0.007378,-0.003812
+30,A+,audw minus rep0,24,0.003016,-0.002568,0.009984
+30,A+,bestw minus best0,24,0.008069,0.003244,0.014257
+30,A+,ref minus rep0 (loss from the volunteer rule),24,-0.009805,-0.020541,0.001927
+30,A+,audw minus ref,24,0.012822,0.006696,0.019117
+30,A-,audw minus rep0,24,0.002647,-0.003829,0.013941
+30,A-,bestw minus best0,24,0.0041,0.000521,0.010365
+30,A-,ref minus rep0 (loss from the volunteer rule),24,0.03398,0.01725,0.05968
+30,A-,audw minus ref,24,-0.031333,-0.045379,-0.020022
+100,std,audw minus rep0,24,-0.002065,-0.00281,-0.00133
+100,std,bestw minus best0,24,0.000183,0.0,0.000549
+100,std,ref minus rep0 (loss from the volunteer rule),24,0.0,0.0,0.0
+100,std,audw minus ref,24,-0.002065,-0.00281,-0.00133
+100,A+,audw minus rep0,24,0.011527,0.006952,0.016885
+100,A+,bestw minus best0,24,0.012736,0.008268,0.017841
+100,A+,ref minus rep0 (loss from the volunteer rule),24,0.006254,-0.000572,0.013673
+100,A+,audw minus ref,24,0.005272,0.00184,0.008622
+100,A-,audw minus rep0,24,0.007071,-0.001684,0.02168
+100,A-,bestw minus best0,24,0.006475,9.8e-05,0.017283
+100,A-,ref minus rep0 (loss from the volunteer rule),24,0.02723,0.014004,0.048532
+100,A-,audw minus ref,24,-0.02016,-0.026779,-0.014628
+300,std,audw minus rep0,17,-0.000813,-0.001574,0.000141
+300,std,bestw minus best0,17,0.00034,0.0,0.001021
+300,std,ref minus rep0 (loss from the volunteer rule),17,0.0,0.0,0.0
+300,std,audw minus ref,17,-0.000813,-0.001574,0.000141
+300,A+,audw minus rep0,17,0.014106,0.009278,0.019507
+300,A+,bestw minus best0,17,0.015339,0.010845,0.020362
+300,A+,ref minus rep0 (loss from the volunteer rule),17,0.011847,0.005884,0.018245
+300,A+,audw minus ref,17,0.002258,0.000441,0.00407
+300,A-,audw minus rep0,17,0.009248,-0.000753,0.027075
+300,A-,bestw minus best0,17,0.007838,0.000374,0.02111
+300,A-,ref minus rep0 (loss from the volunteer rule),17,0.023053,0.010705,0.044064
+300,A-,audw minus ref,17,-0.013805,-0.017843,-0.009823

@@ -1,0 +1,16 @@
+"comparison (selector values, paired per log)",logs,mean,ci_lo,ci_hi,share_logs_positive
+"heavy volunteers, 100 reporters + audit of 50 (audit-weighted) minus the audit alone as 50 random reporters",24,0.058235,0.047467,0.06839,1.0
+"heavy volunteers, 100 reporters + audit of 50 (audit-weighted) minus 100 random reporters (no audit)",24,0.005272,0.00184,0.008622,0.75
+"heavy volunteers, 100 reporters + audit of 50 (audit-weighted) minus 150 random reporters (same head count)",23,-0.020309,-0.027571,-0.013838,0.0
+"light volunteers, 100 reporters + audit of 50 (audit-weighted) minus the audit alone as 50 random reporters",24,0.032803,0.018057,0.046859,0.833
+"light volunteers, 100 reporters + audit of 50 (audit-weighted) minus 100 random reporters (no audit)",24,-0.02016,-0.026779,-0.014628,0.083
+"light volunteers, 100 reporters + audit of 50 (audit-weighted) minus 150 random reporters (same head count)",23,-0.045561,-0.050795,-0.040084,0.0
+"random people, 100 reporters + audit of 50 (audit-weighted) minus the audit alone as 50 random reporters",24,0.050898,0.040652,0.060764,1.0
+"random people, 100 reporters + audit of 50 (audit-weighted) minus 100 random reporters (no audit)",24,-0.002065,-0.00281,-0.00133,0.167
+"random people, 100 reporters + audit of 50 (audit-weighted) minus 150 random reporters (same head count)",23,-0.027543,-0.033164,-0.021724,0.0
+"heavy volunteers, 300 reporters + audit of 150 (audit-weighted) minus the audit alone as 150 random reporters",17,0.040692,0.031758,0.048389,1.0
+"heavy volunteers, 300 reporters + audit of 150 (audit-weighted) minus 300 random reporters (no audit)",17,0.002258,0.000441,0.00407,0.824
+"light volunteers, 300 reporters + audit of 150 (audit-weighted) minus the audit alone as 150 random reporters",17,0.024629,0.012304,0.03616,0.882
+"light volunteers, 300 reporters + audit of 150 (audit-weighted) minus 300 random reporters (no audit)",17,-0.013805,-0.017843,-0.009823,0.059
+"random people, 300 reporters + audit of 150 (audit-weighted) minus the audit alone as 150 random reporters",17,0.03762,0.028304,0.04629,1.0
+"random people, 300 reporters + audit of 150 (audit-weighted) minus 300 random reporters (no audit)",17,-0.000813,-0.001574,0.000141,0.176
