@@ -1,0 +1,255 @@
+{
+ "version": "selfsel-vol-1",
+ "frozen_note": "Written after docs 16-18 and BEFORE any programme-V test cell of the final run was written. The idea comes from doc 16: volunteers who send all their rows bias the list (S2), the selector keeps working but the bias costs more than the selector can lose, and an audit sample of random people was not shown to help (S4); a deterministic check in doc 16 (section 4.3) puts the bias floor at -0.02 to -0.06 NDCG. The classical remedy is to weight each reporter by the inverse of the chance of reporting (Hansen-Hurwitz / Horvitz-Thompson, or the self-normalised Hajek form); the server does not know the chance, but an unbiased audit sample can tell which weights predict the audit sample's next round best. DEVELOPMENT: scripts/ssp/tune_weights.py on the weekly-study windows w1 (stage a, 100 people, 27 logs; stage d, 300 people, 24 logs; 51 cells), in-sample, in 03_tables/volunteer/v_dev_grid.csv and in dev_numbers below; they are optimistic and not results. DISCLOSURES: (1) two window-3 cells of amazon-video-games (30 and 100 people, 7-day rounds) were run as a smoke test of the code before this file was frozen and their values were seen (100 people: std reporter selector 0.4270; heavy volunteers 0.4291 uncorrected and 0.4353 audit-weighted; light volunteers 0.4145 and 0.4135); the 100-people cell is one of the 41 cells that carry hypotheses; (2) the thresholds were set from the development numbers: about half of the development gains for V1, V4, V5 and V10 (V10 about a third); the registered nulls and the non-inferiority margins at 0.005; (3) the std arms of every window-3 cell replicate programme G's stored cell exactly (checked on the smoke cells); (4) the weighted samplers live in scripts/ssp/weight_core.py and patch deep_core.Sampler when imported; deep_core.py is unchanged since the freeze of the stress programme (9ab9190); (5) the governor limits were relaxed during the programme-P run (docs 18); they decide only when workers run; (6) reviews of this file are same-provider models, not an outside audit. A same-provider design critic asked for V10 (to separate the weights from the audit), a wording of V7 that does not claim more than 'not worse than random people with the same number of reporters', the Hajek remark and the best-case caveat below, and four further disclosures: (7) the smoke log amazon-video-games carries about 1/24 of the log-level weight and its audit-weighted minus reporter-selector gain (+0.0062) is below V4's threshold; (8) the 'ref' values (programme G's stored window-3 cells, std arms) were seen before, so V7 and V8 are not blind on that side; (9) development on w1 is a hold-out in time, not in logs (the same logs, other windows); (10) rows_per_round of a weighted arm adds up weights, not rows, and is not quoted as rows.",
+ "literature_note": "Read-only background (doc 90, section 6, item 5; Hansen-Hurwitz and Horvitz-Thompson estimators are unbiased for a population total when each unit is weighted by 1 / (its probability); the Hajek estimator divides by the sum of weights and is slightly biased; the Efraimidis-Spirakis draw is a successive sampling without replacement whose final inclusion probabilities are NOT proportional to the weights; Schnabel et al. 2016: estimating propensities needs a small sample of random (MCAR) data, which is the role of the audit sample here). The lists use the per-round self-normalised (Hajek-type) form (design.hajek). The weight used here, rows^(-beta), is exact for a small sampling fraction when the chance of reporting is proportional to rows^beta; with larger fractions the right exponent is smaller in size, which is why beta is chosen on data.",
+ "design": {
+  "question": "Can a server that also receives an unbiased audit sample of random people repair the bias of volunteer reporters by weighting each reporter's rows by rows^(-beta) with beta chosen on the audit sample?",
+  "samplers": {
+   "std": "n random active people per round report all their rows (the stored window-3 cell is the beta = 0 arm set)",
+   "A+": "same-week heavy volunteers: the chance of being picked is proportional to the person's rows in the round (Efraimidis-Spirakis keys; an oracle rule as in doc 16)",
+   "A-": "light volunteers: the chance is proportional to 1 / rows",
+   "weights": "each reporter's rows are weighted by rows^(-beta), rows = the reporter's rows in the round (known to the server from the report); beta in {-1, -0.5, 0, 0.5, 1}; beta = 0 is the plain count of docs 14-16. The selection stream of a volunteer rule does not depend on beta, so all beta see the same reporters (paired)."
+  },
+  "audit": "In every cell an independent audit sample of max(10, n/2) random active people is drawn each round (as in doc 16); the audit self-score of a list is its NDCG against the audit sample's next-round counts (unbiased for the row-weighted truth). The audit never enters a list; it only scores lists.",
+  "rules": {
+   "rep0": "the selector of docs 14-15 on the reporters' self-score, over the days arms at beta = 0 (the uncorrected baseline; fallback arm nearest 14 days)",
+   "aud0": "the same selector on the audit self-score (doc 16's audit selector)",
+   "audw": "the proposal: the same selector over ALL (beta, days) arms, scored on the audit self-score; fallback = the beta = 0 arm nearest 14 days; weight half-life 26 steps",
+   "best0": "REFERENCE, hindsight: best fixed days arm at beta = 0 (chosen with the truth)",
+   "bestw": "REFERENCE, hindsight: best fixed arm over all (beta, days)",
+   "ref": "REFERENCE: rep0 under std (random people): the value an uncorrected server would have without bias"
+  },
+  "units": "The log is the unit; a log's cells with n = 100 and 300 are averaged first; paired differences are means over logs with a 95% bootstrap interval over logs (seed 7, 4,000 resamples; logs in sorted order of the rows file). A comparison with fewer than min_logs = 8 logs is not evaluable (met = null). n = 30 is run and reported post hoc only.",
+  "caveats": "Same 24 logs of window w3 as doc 17 (18 Amazon); simulated reporters; the volunteer rules use activity only; A+ is an oracle rule; the audit sample is assumed unbiased and costs extra reports that are not counted; weights are a diagnostic of bias, not a privacy mechanism; intervals over logs overstate independence; only 7-day rounds. V1 and V4 are a best case: under A+ and A- the chance of reporting is an exact power of the reporter's rows, which the server observes, so the weight family is correctly specified; at 300 people the chances saturate (median 3,650 active people per week), so the exact weight 1/chance is not a power of rows and the 0.5 step of beta is coarse. A real server would have to estimate the chance (for example from the audit's distribution of rows per person), which is open. V3 (a null on a maximum over more arms) says nothing about harm; the safety claim rests on V6. V2 and V8 are registered negatives; a 'met' V8 is a failure of the method and is read next to the bias-only floor of doc 16 (section 4.3: about -0.02 for light volunteers).",
+  "hajek": "The lists already use the per-round self-normalised (Hajek-type) form: every round's weighted counts are normalised to shares before they enter the decayed memory (deep_core Obs.share = norm(cnt)). The Hansen-Hurwitz / Horvitz-Thompson 'unbiased' property is a statement about expected item counts up to scale, not about the top-100 list or NDCG."
+ },
+ "stage": {
+  "window": "w3",
+  "round_days": 7,
+  "n": [
+   30,
+   100,
+   300
+  ],
+  "betas": [
+   -1,
+   -0.5,
+   0,
+   0.5,
+   1
+  ],
+  "samplers": {
+   "std": "vstd:w={b}",
+   "A+": "vpps:a=1,w={b}",
+   "A-": "vpps:a=-1,w={b}"
+  },
+  "seed_tag": "guard-w3",
+  "note": "cells are built from programme G's stored window-3 rows (02_runs/guard.jsonl, 7-day rounds, n = 30, 100, 300; n = 1,000 has only 6 logs and is not run); every sampler gets the days arms of the stored cell; the std arms at beta = 0 are the stored arms and replicate the stored cell exactly."
+ },
+ "dev_numbers": {
+  "note": "In-sample development means on w1 (27 logs at 100 people, 24 at 300); gains in NDCG@100; volunteer_loss = ref minus rep0 under the sampler.",
+  "n100_std": {
+   "best_gain": 0.0002,
+   "audit_weighted_minus_reporter_selector": -0.002,
+   "volunteer_loss": 0.0,
+   "audit_weighted_minus_ref": -0.002,
+   "logs": 27
+  },
+  "n100_A+": {
+   "best_gain": 0.0195,
+   "audit_weighted_minus_reporter_selector": 0.0193,
+   "volunteer_loss": 0.0121,
+   "audit_weighted_minus_ref": 0.0072,
+   "logs": 27
+  },
+  "n100_A-": {
+   "best_gain": 0.002,
+   "audit_weighted_minus_reporter_selector": 0.0043,
+   "volunteer_loss": 0.0235,
+   "audit_weighted_minus_ref": -0.0191,
+   "logs": 27
+  },
+  "n300_std": {
+   "best_gain": 0.0006,
+   "audit_weighted_minus_reporter_selector": -0.0003,
+   "volunteer_loss": 0.0,
+   "audit_weighted_minus_ref": -0.0003,
+   "logs": 24
+  },
+  "n300_A+": {
+   "best_gain": 0.0236,
+   "audit_weighted_minus_reporter_selector": 0.0232,
+   "volunteer_loss": 0.0217,
+   "audit_weighted_minus_ref": 0.0014,
+   "logs": 24
+  },
+  "n300_A-": {
+   "best_gain": 0.0025,
+   "audit_weighted_minus_reporter_selector": 0.0058,
+   "volunteer_loss": 0.0192,
+   "audit_weighted_minus_ref": -0.0134,
+   "logs": 24
+  }
+ },
+ "criteria": {
+  "min_logs": 8,
+  "n_hyp": [
+   100,
+   300
+  ],
+  "V1": {
+   "sampler": "A+",
+   "min_gain": 0.01
+  },
+  "V2": {
+   "sampler": "A-",
+   "max_gain": 0.005
+  },
+  "V3": {
+   "sampler": "std",
+   "max_gain": 0.005
+  },
+  "V4": {
+   "sampler": "A+",
+   "min_gain": 0.01
+  },
+  "V5": {
+   "sampler": "A-",
+   "min_gain": 0.002
+  },
+  "V6": {
+   "sampler": "std",
+   "ci_lower_above": -0.005
+  },
+  "V7": {
+   "sampler": "A+",
+   "ci_lower_above": -0.005
+  },
+  "V8": {
+   "sampler": "A-",
+   "max_mean_diff": -0.01
+  },
+  "V9": {
+   "max_gap": 0.01
+  },
+  "decisions": {
+   "audit_weights_repair_heavy_volunteers": [
+    "V1",
+    "V4",
+    "V7",
+    "V10"
+   ],
+   "audit_weights_safe_under_random_sampling": [
+    "V3",
+    "V6"
+   ],
+   "light_volunteers_not_repaired": [
+    "V2",
+    "V8"
+   ]
+  },
+  "V10": {
+   "sampler": "A+",
+   "min_gain": 0.007
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "V1",
+   "title_en": "Under heavy volunteers, weights help in hindsight",
+   "title_zh": "重度自愿者时，加权在事后最优选择中有帮助",
+   "statement_en": "Under same-week heavy volunteers, the best (weight exponent, memory) arm, chosen with the truth, beats the best memory without weights by a clear margin (an upper bound on what weighting can do).",
+   "statement_zh": "同周重度自愿者时，用真实答案选出的最佳（权重指数，记忆）选项，明显优于不加权时的最佳记忆（这是加权所能达到的上限）。",
+   "prediction": "Window w3, 7-day rounds, n = 100 and 300 (log-level mean over the log's cells): mean of (best fixed value over all (beta, days) arms minus best fixed value over the days arms at beta = 0) under A+ >= 0.01 and the 95% bootstrap CI lower bound > 0 (development: +0.0195 at 100 people, +0.0236 at 300)."
+  },
+  {
+   "id": "V2",
+   "title_en": "Under light volunteers, weights do not help much in hindsight (a registered null)",
+   "title_zh": "轻度自愿者时，加权在事后最优选择中帮助不大（登记的零假设）",
+   "statement_en": "Under light volunteers the correcting weights are large for the few heavy people who volunteer, and their variance eats the gain: the hindsight gain is below 0.005.",
+   "statement_zh": "轻度自愿者时，被抽到的少数重度用户需要很大的权重，方差把增益吃掉：事后增益低于 0.005。",
+   "prediction": "Same quantity under A-: mean < 0.005 (development: +0.0020 and +0.0025)."
+  },
+  {
+   "id": "V3",
+   "title_en": "Under random people, weights do not help (a registered null)",
+   "title_zh": "随机抽人时，加权没有帮助（登记的零假设）",
+   "statement_en": "When the reporters are random people there is no bias to correct: the hindsight gain of weighting is below 0.005.",
+   "statement_zh": "报告者是随机抽取的人时没有偏差可纠正：加权的事后增益低于 0.005。",
+   "prediction": "Same quantity under std: mean < 0.005 (development: +0.0002 and +0.0006)."
+  },
+  {
+   "id": "V4",
+   "title_en": "The audit-weighted selector repairs heavy volunteers",
+   "title_zh": "审计加权选择器能修复重度自愿者的偏差",
+   "statement_en": "A selector that picks the (weight exponent, memory) arm by the self-score against an unbiased audit sample of n/2 random people beats today's selector (reporters' self-score, no weights) under heavy volunteers.",
+   "statement_zh": "用 n/2 个随机的人组成的无偏审计样本的自评分来选（权重指数，记忆）选项的选择器，在重度自愿者下优于现行选择器（用汇报者的自评分、不加权）。",
+   "prediction": "n = 100 and 300: mean over logs of (audit-weighted selector value minus reporter selector value at beta = 0) under A+ >= 0.01 and CI lower bound > 0 (development: +0.0193 and +0.0232)."
+  },
+  {
+   "id": "V5",
+   "title_en": "... and light volunteers get a small gain, mostly from the audit, not from the weights",
+   "title_zh": "……轻度自愿者得到一点增益，主要来自审计本身，而不是权重",
+   "statement_en": "The same comparison under light volunteers: a small but positive gain of the audit-weighted selector over today's selector. In development this gain is larger than the hindsight gain of weighting under light volunteers (V2), so it comes mostly from the audit choosing the memory (doc 16, S4c), not from the weights; V10 separates the two for heavy volunteers.",
+   "statement_zh": "轻度自愿者下的同一比较：审计加权选择器相对现行选择器有一点正增益。开发阶段这个增益大于轻度自愿者下加权的事后增益（V2），所以主要来自审计帮忙选记忆（文档 16 的 S4c），而不是权重；V10 在重度自愿者下把两者分开。",
+   "prediction": "Under A-: mean >= 0.002 and CI lower bound > 0 (development: +0.0043 and +0.0058)."
+  },
+  {
+   "id": "V6",
+   "title_en": "Under random people the audit-weighted selector does no harm",
+   "title_zh": "随机抽人时，审计加权选择器没有害处",
+   "statement_en": "The extra arms and the smaller audit sample must not cost much when nothing is biased (non-inferiority).",
+   "statement_zh": "没有偏差时，多出来的选项和较小的审计样本不应带来多大损失（非劣效）。",
+   "prediction": "Under std: CI lower bound of (audit-weighted selector minus reporter selector) > -0.005 (development: -0.0020 and -0.0003)."
+  },
+  {
+   "id": "V7",
+   "title_en": "Heavy volunteers with audit-chosen weights are not worse than random people",
+   "title_zh": "用审计选出的权重，重度自愿者不比随机抽人差",
+   "statement_en": "With audit-chosen weights, heavy volunteers give a list that is not worse than today's selector under random people with the same number of reporters. This comparison is generous to the proposal: heavy reporters bring more rows per person, and the audit of n/2 random people is an extra, uncounted cost; V10 shows how much the weights themselves add.",
+   "statement_zh": "用审计选出的权重，重度自愿者给出的榜单，不比同样汇报人数的随机抽人下的现行选择器差。这个比较对该方案是宽松的：重度汇报者每人带来更多的行，而 n/2 个随机的人组成的审计是额外的、没有计入的成本；V10 显示权重本身加了多少。",
+   "prediction": "Under A+: CI lower bound of (audit-weighted selector value minus reporter selector value under std) > -0.005 (development: +0.0072 and +0.0014)."
+  },
+  {
+   "id": "V8",
+   "title_en": "Light volunteers stay clearly worse than random people (a registered negative)",
+   "title_zh": "轻度自愿者仍然明显比随机抽人差（登记的负面预期）",
+   "statement_en": "Weights do not make light volunteers as good as random people.",
+   "statement_zh": "加权没能让轻度自愿者和随机抽人一样好。",
+   "prediction": "Under A-: mean of (audit-weighted selector value minus reporter selector value under std) <= -0.01 (development: -0.0191 and -0.0134)."
+  },
+  {
+   "id": "V9",
+   "title_en": "The audit's choice is close to the best in hindsight",
+   "title_zh": "审计的选择接近事后最优",
+   "statement_en": "For every sampler the audit-weighted selector is within 0.01 of the best fixed (weight exponent, memory) arm.",
+   "statement_zh": "对每种抽样方式，审计加权选择器与事后最佳固定（权重指数，记忆）选项相差不超过 0.01。",
+   "prediction": "Mean over logs of (best fixed value over all arms minus audit-weighted selector value) <= 0.01 for each of std, A+, A- (development: at most 0.0058)."
+  },
+  {
+   "id": "V10",
+   "title_en": "Under heavy volunteers the weights add to the audit",
+   "title_zh": "重度自愿者下，权重在审计之外还有增益",
+   "statement_en": "Against the audit selector WITHOUT weights (doc 16's audit selector), the audit-weighted selector is better under same-week heavy volunteers: the gain is due to the weights, not to the audit alone.",
+   "statement_zh": "与不加权的审计选择器（文档 16 的审计选择器）相比，审计加权选择器在同周重度自愿者下更好：这个增益来自权重，而不只是审计。",
+   "prediction": "n = 100 and 300: mean over logs of (audit-weighted selector value minus audit selector value at beta = 0) under A+ >= 0.007 and CI lower bound > 0 (development: +0.0145 at 100 people, +0.0217 at 300)."
+  }
+ ],
+ "interpretation_rules": {
+  "audit_weights_repair_heavy_volunteers": "Audit-chosen weights are called a repair for heavy volunteers if V1, V4, V7 and V10 are all met (V10 shows that the weights, not the audit alone, carry the gain).",
+  "audit_weights_safe_under_random_sampling": "They are called safe under random sampling if V3 and V6 are met.",
+  "light_volunteers_not_repaired": "Light volunteers are called not repaired if V2 and V8 are met (two registered negative expectations).",
+  "scope": "Every claim is about simulated activity-driven volunteers on 24 logs, relative to the uncorrected selector; none is a claim about real volunteers, taste differences or privacy.",
+  "expected_negatives": "V2 and V8 are registered negative expectations: the write-up reports them apart from the count of met claims, and reads V8 next to the bias-only floor of doc 16."
+ },
+ "statistics": "Every hypothesis is reported, met or not; there is no multiplicity correction. 'Gain' = first value minus second (positive: the first is better). a gain hypothesis is met when the mean over logs is at least the threshold and the 95% bootstrap interval lower bound is above 0; nulls use the mean; non-inferiority uses the interval lower bound. an_vol.py rebuilds the plan from the stored window-3 rows (run_vol.build) and aborts if the plan file differs, if the loaded cells are not exactly the planned cells, if a key is duplicated or does not match its content, if the errors file is not empty, if arrays have inconsistent shapes, or if the std arms of a cell do not reproduce the stored window-3 cell they copy. A partial analysis (--partial, --rows) is allowed only with --check-only and writes nothing. The verdict file stores the sha256 of this file, the scripts, the simulation code, the plan keys and the rows file.",
+ "after_the_verdicts": "Anything not listed (n = 30, by-beta tables, group splits, the weights chosen, the audit selector without weights) is post hoc and labelled so. Not tested and left open: trimmed or capped weights, an audit-only list at equal cost (pooling the audit with the reporters, 1.5 n random people), pi-based weights estimated from the audit's distribution of rows per person, the cost of the audit sample itself, volunteers who differ in taste, trimmed or smoothed weights (Epasto et al. 2020 style), estimating the exponent from the distribution of rows per reporter instead of the audit, person-weighted truth, privacy.",
+ "protocol": [
+  "1. Freeze: commit this registry, weight_core.py, run_vol.py, an_vol.py, tune_weights.py and the development table before the run.",
+  "2. Plan: .venv/bin/python3 -W ignore scripts/ssp/run_vol.py --plan (writes 02_runs/vol_plan.json).",
+  "3. Run: nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_vol.py --workers 3 (resumable; rows to 02_runs/vol.jsonl, gitignored; n = 300 and 100 first).",
+  "4. Analyse: .venv/bin/python3 -W ignore scripts/ssp/an_vol.py (writes 03_tables/volunteer/v_*.csv, v_verdicts.json and the post hoc tables).",
+  "5. Report every verdict; do not edit this file after step 3 except to add a dated erratum.",
+  "6. If cells fail and are then re-run successfully, move the errors file aside (do not delete it), state in the write-up how many cells failed once, and never drop a cell."
+ ]
+}
