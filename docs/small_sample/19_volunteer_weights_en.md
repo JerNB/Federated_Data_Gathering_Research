@@ -134,7 +134,7 @@ Written by `scripts/ssp/explore_vol_extra.py` (tables `posthoc_*.csv`), `scripts
 ## 6. What next
 
 1. **Estimate the chance of reporting instead of picking an exponent** (π-estimated weights from the audit's distribution of rows per person, or the exponent from the distribution of rows per reporter) — the step from a best case to something a server could do.
-2. **A pre-registered equal-cost test with explicit costs**: volunteers at a fraction of the price of a random reporter, an audit sized for the gain, and a pooled list (audit plus reporters) as a competitor.
+2. **A pre-registered equal-cost test with explicit costs**: volunteers at a fraction of the price of a random reporter, an audit sized for the gain, and a pooled list (audit plus reporters) as a competitor. A development pilot of the pooled list is in doc 20 (window w1, not registered): the break-even rises from about 0.6 to about 0.9 of a random reporter's cost.
 3. **Light volunteers**: trimmed or smoothed weights (Epasto et al. 2020 style) against the variance problem; or a different lever, asking different people (doc 16). A test on logs where people differ in their number of rows, with more logs of that kind.
 4. **Volunteers who differ in taste**, person-weighted popularity, and the combination with privacy (doc 18's unit-length reports are already a weight; both change the same counts).
 

@@ -3,7 +3,7 @@
 Chinese version: [`02_results_zh.md`](02_results_zh.md). Pre-registered plan: [`01_preregistration_en.md`](01_preregistration_en.md).
 All numbers below come from `results/small_sample_popularity/03_tables/`; every figure is in `04_figures/`.
 Run on 11 public datasets, 117,069 small tasks plus 1,220 fresh-seed replications, overnight on one laptop with the fans kept at idle.
-Later work (docs 03–19: weekly memory, self-chosen memory, volunteers, privacy) is indexed in [`00_start_here_en.md`](00_start_here_en.md) section 7; this page covers the main study only.
+Later work (docs 03–20: weekly memory, self-chosen memory, volunteers, privacy) is indexed in [`00_start_here_en.md`](00_start_here_en.md) section 7; this page covers the main study only.
 
 ## 1. The answer in one paragraph
 
