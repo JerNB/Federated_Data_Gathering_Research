@@ -1,14 +1,14 @@
 {
-  "max_workers": 4,
-  "fan_soft": 1750,
-  "fan_hard": 2100,
-  "temp_soft": 72.0,
-  "temp_hard": 78.0,
+  "max_workers": 5,
+  "fan_soft": 2400,
+  "fan_hard": 2800,
+  "temp_soft": 90.0,
+  "temp_hard": 98.0,
   "ram_budget_gb": 8.0,
-  "swap_growth_gb": 6.0,
-  "swap_frac_max": 0.85,
+  "swap_growth_gb": 12.0,
+  "swap_frac_max": 0.97,
   "min_free_disk_gb": 10.0,
-  "up_after_s": 120,
-  "cool_after_s": 45,
+  "up_after_s": 30,
+  "cool_after_s": 30,
   "poll_s": 3.0
 }

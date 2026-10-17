@@ -68,3 +68,24 @@ for s in an_confirm2 an_window an_explore_a an_explore_b an_extra an_stoprule an
 - 数据是公开的自愿评分或平台日志；结论是"在这些数据上看到的趋势"。
 - 联邦是模拟的；没有设备、掉线或真实的安全聚合。
 - 为了让机器保持安静，个性化模型最多只在 1,500 个候选物品上训练；见修订 A15。
+
+## 7. 后续工作：每周一轮的记忆长度计划（文档 03–17 和 90）
+
+主研究（文档 01–02）问的是需要多少人。之后的一切问的是服务器的实际问题：**它的记忆应该多长，它能不能只靠自己的数据来选这个记忆？** 后面每份文档都按写作顺序编号；“预登记”指计划在运行之前就已提交，“事后”指看过结果以后才分析。
+
+| 文档 | 中文 | 你会得到什么 |
+| ---: | --- | --- |
+| 03 | [`03_conclusions_zh.md`](03_conclusions_zh.md) | 用白话讲主研究：八个术语、三个预测以及结果 |
+| 04 | [`04_next_hypotheses_zh.md`](04_next_hypotheses_zh.md) | 主研究结束时候选的下一批想法 |
+| 05 | [`05_refresh_and_two_round_zh.md`](05_refresh_and_two_round_zh.md) | 季节性和“两轮提问”：两个想法都没有帮助 |
+| 06–07 | [`06_tracking_design_zh.md`](06_tracking_design_zh.md)、[`07_tracking_results_zh.md`](07_tracking_results_zh.md) | 在 22 份带时间戳的日志上逐轮跟踪热门榜：每轮 100 人给出的榜，和 1.3 到 8 轮之前的全量计数差不多好 |
+| 08–09 | [`08_tournament_design_zh.md`](08_tournament_design_zh.md)、[`09_tournament_results_zh.md`](09_tournament_results_zh.md) | 用固定的误差预算筛查 12 个候选想法 |
+| 10–12 | [`10_deep_plan_zh.md`](10_deep_plan_zh.md)、[`11_deep_cards_zh.md`](11_deep_cards_zh.md)、[`12_deep_results_zh.md`](12_deep_results_zh.md) | 30 份日志上的 30 个预登记问题：没有任何一个替代方案胜过简单的衰减求和；服务器可以不靠真实答案给自己的榜打分；隐私代价很大 |
+| 13 | [`13_weekly_results_zh.md`](13_weekly_results_zh.md) | 每周一轮：最佳记忆长得多，并取决于每轮人数（30、100、300、1,000、3,000 人时分别约为 32、16、8、4、2 轮） |
+| 14 | [`14_selfsel_exploration_zh.md`](14_selfsel_exploration_zh.md) | 事后分析：服务器每轮发布近期自评分最好的那个记忆，相对最佳固定记忆损失很小 |
+| 15 | [`15_selfsel_confirmation_zh.md`](15_selfsel_confirmation_zh.md) | 在第二个窗口上对文档 14 的预登记确认：成立，主要从每轮约 100 人起 |
+| 16 | [`16_selfsel_stress_zh.md`](16_selfsel_stress_zh.md) | 预登记的压力测试：自愿者偏差、隐私噪声、已发布榜单的抖动 |
+| 17 | [`17_selfsel_guard_zh.md`](17_selfsel_guard_zh.md) | 在第三个窗口上的预登记检验：用先验自评分预置的选择器，能补上薄弱区域（30 人；每月一轮） |
+| 90 | [`90_materials_ledger_zh.md`](90_materials_ledger_zh.md) | 用到的每个数据集（含哈希）、工具和文献来源，以及安全规则 |
+
+文档 13–17 的数字和判定规则在 `results/small_sample_popularity/03_tables/{weekly,confirm,stress,guard}/` 和登记文件 `configs/*_registry.json` 里。子代理对这些文档的所有评审都是同一提供方的检查，不是外部审计。

@@ -1,0 +1,131 @@
+{
+ "registry": "selfsel-price-1",
+ "cells": 63,
+ "sha256": {
+  "configs/selfsel_price_registry.json": "299973b0bc85a21ff4c7ed52d305c089e42dbc23efc40f255209b2eda4457be3",
+  "scripts/ssp/price_core.py": "85dd9852827c6ab1a8a286397d44e03ab12266a20966ba07d27cd6a231860485",
+  "scripts/ssp/run_price.py": "c323f473cab54d1b73cbe2b21e51ff9105bf82b3ee8c464972741655a987bff6",
+  "scripts/ssp/an_price.py": "0ad06c921b0964bbd3a24f4cb53db82346369b53d5f05e71f42150edbf3e1c1a",
+  "scripts/ssp/tune_price.py": "58861e2fa8b58def82839424c3c4180baad3719b9dc2229846b824107effe6c4",
+  "scripts/ssp/stress_core.py": "87987e84b732ec958c59ee6f822ae1d3465f590975f0347b818cc194efe73690",
+  "scripts/ssp/an_stress.py": "5587830271d98ce7776439a56a565cc8f75c9b02c477570e80de13fe633e5b93",
+  "scripts/ssp/explore_selfsel_weekly.py": "c3278ecdbb10beff812a37ee9ccc9f2c88129e634621667d6e848c4f4bdf81cf",
+  "scripts/ssp/an_weekly.py": "8112d2c3104e64017a6d4afbe5a8523c7270bb0e514a63768b00261fff140da0",
+  "scripts/ssp/deep_core.py": "20fd5db82e657ce602217bb23dae73cd3fb9ccbf354fdee662100da69b4366a2",
+  "scripts/ssp/track_core.py": "8c1018c638ade96e29902e1101455f714ce01e9ee17224ece710b2bbbf6afd24",
+  "scripts/ssp/weekly_core.py": "e178510cb1dcd044ce05cb0eb6a5ca9091082978c09528b12b4623a3decb8c57",
+  "scripts/ssp/confirm_core.py": "aaa9b1ec0ebaa0598e4f4df9b8f762b23d7aa4d77dc443d559feb3e1a4fd685f",
+  "scripts/ssp/quiet.py": "0ae60da22c5247371cfd2aace5f303a0d17f8de6ca761bc6311059c2b7675815",
+  "price.jsonl": "baa2bebba3a363c38354621549fbe36ca8ee752c67d98b8b8395fe9a183320ee",
+  "plan_keys": "19723a29642256f9ab1d0a9f6e1d69eb2b55b867f1e240fe1d2ab9eb649773b7",
+  "results/small_sample_popularity/02_runs/confirm.jsonl": "a95e50f38efce245abff2366af60501375ff5d2cb32e1d25de4282ced74e74d3",
+  "results/small_sample_popularity/02_runs/price_plan.json": "765bea5a8e7cbb03ff1191fa4da3f4a73560e53a2494c26dc75bc21407215449"
+ },
+ "verdicts": {
+  "P1": {
+   "mean": 0.19097732142857143,
+   "lo": 0.133396718664966,
+   "hi": 0.24461937501417239,
+   "logs": 15,
+   "share_positive": 0.8666666666666667,
+   "eps": 4,
+   "n": 1000,
+   "met": true
+  },
+  "P2": {
+   "mean": 0.1845055181333786,
+   "lo": 0.14176979197916528,
+   "hi": 0.22427354206146746,
+   "logs": 21,
+   "share_positive": 1.0,
+   "eps": 4,
+   "n": 300,
+   "met": true
+  },
+  "P3": {
+   "mean": 0.2228889824263039,
+   "lo": 0.16353967814625844,
+   "hi": 0.273847927111678,
+   "logs": 15,
+   "share_positive": 1.0,
+   "eps": 2,
+   "n": 1000,
+   "met": true
+  },
+  "P4": {
+   "mean": 0.10293800170068028,
+   "lo": 0.06615198276643988,
+   "hi": 0.14150035291950117,
+   "logs": 15,
+   "share_positive": 0.8,
+   "eps": 8,
+   "n": 1000,
+   "met": true
+  },
+  "P5": {
+   "mean": 0.08418609240362812,
+   "lo": 0.05553083463718821,
+   "hi": 0.11307317478741499,
+   "logs": 15,
+   "share_positive": 0.8,
+   "met": true
+  },
+  "P6": {
+   "price_strong": 0.19866192346938777,
+   "price_weak": 0.03143191043083898,
+   "logs": 15,
+   "met": true
+  },
+  "P7": {
+   "mean": -0.024531693310657663,
+   "lo": -0.04755858662131522,
+   "hi": -0.007119430031179233,
+   "share_negative": 0.7333333333333333,
+   "logs": 15,
+   "dropped_cells": 0,
+   "mean_selector_regret_over_logs": 0.001662746031745969,
+   "mean_pooled_table_regret": 0.02619443934240363,
+   "met": true
+  },
+  "P8": {
+   "mean": 0.008098531746031737,
+   "lo": 0.0051353955073696,
+   "hi": 0.01198835749716551,
+   "logs": 15,
+   "share_positive": 1.0,
+   "met": true
+  },
+  "P9": {
+   "mean": 0.03188964512471657,
+   "lo": 0.024853072576530612,
+   "hi": 0.03975290327380952,
+   "logs": 15,
+   "share_positive": 1.0,
+   "met": true
+  },
+  "P10": {
+   "by_eps": {
+    "2": {
+     "mean": 0.042523596371882064,
+     "lo": 0.034132341340702914,
+     "hi": 0.05034603939909295,
+     "logs": 15,
+     "share_positive": 1.0
+    },
+    "8": {
+     "mean": 0.021828727324263063,
+     "lo": 0.017146061238662174,
+     "hi": 0.027070817956349223,
+     "logs": 15,
+     "share_positive": 1.0
+    }
+   },
+   "logs": 15,
+   "met": true
+  },
+  "decisions": {
+   "unit_length_cuts_price_vs_10_row_cap": true,
+   "unit_length_beats_hard_cap": true
+  }
+ }
+}
