@@ -12,6 +12,7 @@
 6. **A caveat the registered tests hide (post hoc; three logs are too few for an interval, so these are descriptions).** At 1,000 people the gain comes from the 12 Amazon logs (+0.274, +0.239, +0.131 at ε = 2, 4, 8). On the 3 Goodreads logs, where people have many rows, unit length gives +0.018 at ε = 2, −0.003 at ε = 4 and −0.009 at ε = 8 against the 10-row cap, and the looser bound C = 2 does best there. At 300 people the 5 non-Amazon logs gain (+0.128, +0.074, +0.040 at ε = 2, 4, 8).
 7. **A tight bound shortens the best memory at 1,000 people** (post hoc; medians on a doubling grid, no interval): 112 days with unit length against 896 days with the 10-row cap at ε = 4, 56 against 224 at ε = 8 (56 days without privacy). At 300 people and ε = 4 it is 896 days with either bound. The finding of doc 16 that noise lengthens the memory depends on how much noise the bound lets in.
 8. **All prices are central-model prices with nominal accounting, not certified guarantees** (section 5, point 1). A trusted server sees every person's rows; ε is per round and adds up over repeated rounds (a person drawn often loses a multiple of it); a replace-one reading of "neighbouring" doubles the sensitivity, so a cell labelled ε is roughly 2ε in replace-one terms (my inference from σ ∝ sensitivity/ε) and the ε = 2 column is the nearest tested to a replace-one ε = 4 (0.199 at 1,000 people, 26% of the list quality); the number of people in a round is released without noise; the selector's self-score and arm choice are post-processing of the noisy release; C = 1 was chosen with non-private development data from earlier windows of the same logs.
+9. **List length (post hoc; best fixed memory chosen in hindsight at each cutoff; a first look at the stored rows made while choosing the next programme, not a test).** With unit-length reports at ε = 4, a top 10 keeps 0.49, 0.79 and 0.96 of its noise-free quality at 100, 300 and 1,000 people, against 0.42, 0.64 and 0.89 for a top 100 (section 4, point 6). A private weekly list that keeps about 80% needs about 300 people for a top 10 (ε = 4 to 8) and 1,000 people for a top 100 at ε = 4 (or 300 people at ε = 8); 100 people never reach it (best 0.70, a top 10 at ε = 8). Longer rounds were not looked at.
 
 ## 1. What was done
 
@@ -58,7 +59,7 @@ Decisions: unit-length reports cut the price of privacy relative to the 10-row c
 
 ## 4. Post-hoc extras (not registered)
 
-Written by `scripts/ssp/explore_price_extra.py` (tables `posthoc_*.csv`) and `scripts/ssp/an_price.py` (`posthoc_gain_by_scope.csv`, `posthoc_bound_loss_without_noise.csv`).
+Written by `scripts/ssp/explore_price_extra.py` (tables `posthoc_*.csv`) and `scripts/ssp/an_price.py` (`posthoc_gain_by_scope.csv`, `posthoc_bound_loss_without_noise.csv`); point 6 by `scripts/ssp/explore_price_k.py` (`posthoc_list_length.csv`, `posthoc_list_length_head_vs_tail.csv`), which reads the raw rows.
 
 1. **Price list: the selector's price (list quality lost against the same selector without noise; mean over logs; 15, 21 and 27 logs at 1,000, 300 and 100 people).**
 
@@ -94,6 +95,21 @@ Written by `scripts/ssp/explore_price_extra.py` (tables `posthoc_*.csv`) and `sc
    The 3 "other" logs at 1,000 people are the three Goodreads logs; at 300 people the other logs are the three Goodreads logs, ratebeer and steam; at 100 people they add beeradvocate and ml-latest.
 4. **Loss of the bound alone (ε = 10⁶; selector value against plain sampling), by group at 1,000 people.** Unit length: Amazon 0.0056 (0.0041 to 0.0071; 12 logs), Goodreads 0.0181 (3 logs); one row: Amazon 0.0215, Goodreads 0.0492; at 300 people unit length 0.0052 (Amazon, 16 logs) and 0.0109 (other, 5 logs).
 5. **Median best fixed memory (days)** per (sampler, people, ε), over logs; the grid top is 1,792 days at 300 people and 896 days at 100 and 1,000 people (so values at the top are censored): at 1,000 people without privacy 56; ε = 8: 224 with the 10-row cap, 56 with unit length; ε = 4: 896 and 112; ε = 2: 896 and 448. At 300 people without privacy 112; ε = 2: 1,792 and 1,792; ε = 4: 896 and 896; ε = 8: 896 and 448. At 100 people every private cell is at 896 days.
+6. **List length: a shorter list keeps more of its noise-free quality, but only more people or a larger ε make a private list good (post hoc; best fixed memory chosen in hindsight at each cutoff; a first look made while choosing the next programme, not a test).** `scripts/ssp/explore_price_k.py` reads the stored rows of `price.jsonl`, which keep the NDCG at cutoffs 10, 30, 100 and 300 for every arm. "Kept" is the value under unit-length reports divided by the value of plain sampling (no bound, no noise); ratio of the means over logs (27, 21 and 15 logs at 100, 300 and 1,000 people); ε per round, central model, nominal accounting. Without noise unit length keeps 0.987 to 0.992 at every cutoff.
+
+   | People | ε per round | top 10 | top 30 | top 100 | top 300 |
+   |---:|---:|---:|---:|---:|---:|
+   | 100 | 2 | 0.335 | 0.310 | 0.287 | 0.287 |
+   | 100 | 4 | 0.488 | 0.455 | 0.418 | 0.401 |
+   | 100 | 8 | 0.696 | 0.638 | 0.585 | 0.546 |
+   | 300 | 2 | 0.559 | 0.506 | 0.455 | 0.418 |
+   | 300 | 4 | 0.794 | 0.722 | 0.642 | 0.580 |
+   | 300 | 8 | 0.934 | 0.893 | 0.822 | 0.746 |
+   | 1,000 | 2 | 0.893 | 0.832 | 0.743 | 0.661 |
+   | 1,000 | 4 | 0.961 | 0.939 | 0.894 | 0.824 |
+   | 1,000 | 8 | 0.982 | 0.975 | 0.960 | 0.928 |
+
+   At ε = 4, cutting the list to the top 10 helps most at 300 people: per log, kept at the top 10 minus kept at the top 100 is +0.158 (+0.122 to +0.193; positive in all 21 logs; interval over logs, seed 7), against +0.068 (+0.039 to +0.098; positive in 18 of 27 logs) at 100 people and +0.075 (+0.047 to +0.106; positive in all 15) at 1,000 people; the largest of the nine (people, ε) cells is 1,000 people at ε = 2 with +0.161 (+0.114 to +0.204). A rule of thumb from the table, not a registered threshold: about 80% of the noise-free quality needs 300 people for a top 10 at ε = 4 to 8 (0.794, 0.934), 1,000 people for a top 100 at ε = 4 (0.894) or 300 people for a top 100 at ε = 8 (0.822); 100 people never reach it (best 0.696, a top 10 at ε = 8). On the mean over logs the 10-row cap keeps less in every cell (0.464 at the top 10 and 0.393 at the top 100 for 300 people and ε = 4). Longer rounds (listed in section 6) were not looked at.
 
 ## 5. Limits and disclosures
 
@@ -109,15 +125,16 @@ Written by `scripts/ssp/explore_price_extra.py` (tables `posthoc_*.csv`) and `sc
 10. **No new material.** No download, install or execution beyond the repository's own code (doc 90).
 11. **Two test cells were run before the freeze (disclosure; no hypothesis uses them).** My smoke run of the code (amazon-video-games, 100 people, window w2, 15 of the 16 samplers; it showed 0.159 for the 10-row cap and 0.378 for unit length at ε = 4) and a probe by the code reviewer on one draw of amazon-musical-instruments at 100 people. Both are at 100 people, which carries no hypothesis, and neither is in `price.jsonl`. The registry's note that the DP samplers never ran on w2 is therefore slightly too strong (the frozen file was not edited; this is the erratum), and the header of this document says "before the test cells of the final run were written".
 12. **The bootstrap intervals depend slightly on the order of the rows in `price.jsonl`.** The analysis resamples logs in the order in which cells finished. With the logs sorted instead, the interval ends move by at most 0.002 (P1 upper end 0.2446 → 0.2426, P3 lower end 0.1635 → 0.1628, P4 lower end 0.0662 → 0.0658, P5 upper end 0.1131 → 0.1115); no verdict changes. The frozen analysis was not edited.
+13. **The list-length look (section 4, point 6) is a first look, reviewed once.** An Opus reviewer rebuilt all 36 private cells of its table and the head-minus-tail intervals from the raw rows without the project code (every value matches; no NaN, the same day arms for every sampler, steady means from step 8); two wording points were applied (which cell gains most; the 100-people scope in doc 00). It was made on the window that carries programme P's tests, after those tests were read, so a registered test of it needs a fresh window.
 
 ## 6. What comes next
 
 1. **Doc 19 (programme V):** correct the volunteer bias with weights whose exponent is chosen on an audit sample.
-2. **Open:** choosing C privately; L1 against L2 normalisation; weights that decay smoothly with the number of rows (Epasto et al. 2020); single-use participants with unit-length reports; n = 3,000 and longer rounds on a confirmation window; the bias of the bound on logs with many rows per person.
+2. **Open:** choosing C privately; L1 against L2 normalisation; weights that decay smoothly with the number of rows (Epasto et al. 2020); single-use participants with unit-length reports; n = 3,000 and longer rounds on a confirmation window; the bias of the bound on logs with many rows per person; the list-length reading of section 4, point 6 on a fresh window.
 
 ## 7. Files
 
-1. Plan and code: `configs/selfsel_price_registry.json`, `scripts/ssp/price_core.py` (the norm-clipped sampler, patched into the engine without editing `deep_core.py`), `run_price.py`, `an_price.py`, `tune_price.py` (development); post hoc: `explore_price_extra.py`.
-2. Tables: `results/small_sample_popularity/03_tables/price/` (`p_verdicts.json` with the file hashes, `p_cells.csv`, `p_summary.csv`; post hoc: `posthoc_gain_by_scope.csv`, `posthoc_bound_loss_without_noise.csv`, `posthoc_price_list.csv`, `posthoc_hard_cap_k.csv`, `posthoc_share_of_gain.csv`, `posthoc_best_memory.csv`; development, in-sample: `p_dev_grid.csv`, `p_dev_grid2.csv`, `p_dev_grid3.csv`, `p_dev_grid4.csv`).
+1. Plan and code: `configs/selfsel_price_registry.json`, `scripts/ssp/price_core.py` (the norm-clipped sampler, patched into the engine without editing `deep_core.py`), `run_price.py`, `an_price.py`, `tune_price.py` (development); post hoc: `explore_price_extra.py`, `explore_price_k.py` (reads the raw rows).
+2. Tables: `results/small_sample_popularity/03_tables/price/` (`p_verdicts.json` with the file hashes, `p_cells.csv`, `p_summary.csv`; post hoc: `posthoc_gain_by_scope.csv`, `posthoc_bound_loss_without_noise.csv`, `posthoc_price_list.csv`, `posthoc_hard_cap_k.csv`, `posthoc_share_of_gain.csv`, `posthoc_best_memory.csv`, `posthoc_list_length.csv`, `posthoc_list_length_head_vs_tail.csv`; development, in-sample: `p_dev_grid.csv`, `p_dev_grid2.csv`, `p_dev_grid3.csv`, `p_dev_grid4.csv`).
 3. Raw rows (not committed): `results/small_sample_popularity/02_runs/price.jsonl` (63 rows), `price_plan.json`; development rows `price_dev*.jsonl`.
-4. Rerun: `.venv/bin/python3 -W ignore scripts/ssp/run_price.py --plan`, then `nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_price.py --workers 3`; analysis `.venv/bin/python3 -W ignore scripts/ssp/an_price.py` and `explore_price_extra.py`.
+4. Rerun: `.venv/bin/python3 -W ignore scripts/ssp/run_price.py --plan`, then `nice -n 10 caffeinate -i .venv/bin/python3 -W ignore scripts/ssp/run_price.py --workers 3`; analysis `.venv/bin/python3 -W ignore scripts/ssp/an_price.py`, `explore_price_extra.py` and `explore_price_k.py` (the last needs the raw rows).
