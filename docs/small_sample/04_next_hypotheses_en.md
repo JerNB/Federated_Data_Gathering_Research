@@ -1,7 +1,7 @@
 # Next hypotheses worth testing (plain version)
 
 Chinese version: [`04_next_hypotheses_zh.md`](04_next_hypotheses_zh.md). Source: 5 subagents (3 literature scans, 1 scan of what this repo did not test, 1 cross-field analogies).
-**Status: candidates only, none has been run.** Every numeric prediction is an inference; "no prior work found" comes from search summaries, not an exhaustive survey.
+**Status when written: candidates only, none had been run.** Every numeric prediction is an inference; "no prior work found" comes from search summaries, not an exhaustive survey. **Update (2026-10-16):** later documents (05–19, see `00_start_here_en.md` section 7) ran other questions, mostly about memory, volunteers and privacy. This list is left as it was written; unless a later document names a candidate below, treat it as untested.
 
 ## 1. New storyline: from "how many people" to "who to ask, how many records, how often, when to stop"
 

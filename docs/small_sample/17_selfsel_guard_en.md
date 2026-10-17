@@ -112,8 +112,8 @@ Written by `scripts/ssp/explore_guard_extra.py`; tables `posthoc_warm_by_n.csv`,
 ## 6. What comes next
 
 1. **Recipe (for simulated use; not a deployment claim):** at 30 people, seed the selector with the self-scores of other logs at the same group size and round length (or, with a log's own earlier windows, with its own); keep 38 pseudo-rounds. From 100 people up the plain selector is already good; on the 18 Amazon logs the log's own history gains 0.0006 (weekly) and 0.0027 (monthly) on top of it, on the 6 other logs it loses 0.0053 at monthly rounds. The table prior (needs truth) is only worth it at 30 people and monthly rounds when no self-score history exists. Untested: earlier-only history beyond 3 logs; the 6 non-Amazon logs at 30 people (no gain) and at monthly rounds from 100 people (a loss).
-2. **Programme P** (planned): cut the price of privacy by bounding each person's contribution (doc 16, section 6).
-3. **Programme V** (planned): correct volunteer bias with inverse-probability weights (doc 16, section 6).
+2. **Programme P (done, doc 18):** cut the price of privacy by bounding each person's contribution (doc 16, section 6); all 10 registered hypotheses met (unit-length reports: 0.273 → 0.082 at ε = 4 and 1,000 people; central model, nominal accounting).
+3. **Programme V (done, doc 19):** correct volunteer bias with weights chosen on an audit sample (doc 16, section 6); 7 of the 8 positive claims met; heavy volunteers gain, light volunteers are not brought up to random people.
 4. **A causal test of the seeded selector** needs logs with at least three 156-week windows in time order; only 3 of the 24 qualify.
 5. **Forecast combination** (blending the lists of the memories, weighted by recent self-scores) was left for its own registry.
 

@@ -141,6 +141,8 @@ Suggested title: *"Small samples are enough for popularity. The list going stale
 3. Remove the "choose among only 1,500 candidates" limit (on some datasets it covers only 6-37% of real choices).
 4. Two things we wanted to test (X4, X13) cannot be tested with the current data.
 
+**Update (2026-10-16):** the time question was taken up later in docs 05–19 (how long a server's memory should be, whether it can choose it from its own data, volunteer bias, privacy); see `00_start_here_en.md` section 7. This list is left as it was written.
+
 ## 8. Reading order
 
 1. `00_start_here_en.md` → 2. `01_preregistration_en.md` → 3. `02_results_en.md` → 4. this file

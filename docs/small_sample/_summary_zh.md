@@ -3,6 +3,7 @@
 英文版：[`02_results_en.md`](02_results_en.md)。预登记的计划：[`01_preregistration_zh.md`](01_preregistration_zh.md)。
 下面所有数字都来自 `results/small_sample_popularity/03_tables/`；所有图都在 `04_figures/`。
 在 11 个公开数据集上跑了 117,069 个小任务，外加 1,220 个新种子复现任务，通宵在一台笔记本上完成，风扇始终保持空闲转速。
+后续工作（文档 03–19：每周记忆、自选记忆、自愿者、隐私）见 [`00_start_here_zh.md`](00_start_here_zh.md) 第 7 节；本页只讲主研究。
 
 ## 1. 一段话的答案
 
