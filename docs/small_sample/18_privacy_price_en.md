@@ -131,6 +131,7 @@ Written by `scripts/ssp/explore_price_extra.py` (tables `posthoc_*.csv`) and `sc
 
 1. **Doc 19 (programme V):** correct the volunteer bias with weights whose exponent is chosen on an audit sample.
 2. **Open:** choosing C privately; L1 against L2 normalisation; weights that decay smoothly with the number of rows (Epasto et al. 2020); single-use participants with unit-length reports; n = 3,000 and longer rounds on a confirmation window; the bias of the bound on logs with many rows per person; the list-length reading of section 4, point 6 on a fresh window.
+3. **Pointer:** doc 21 (development, not registered) took up "L1 against L2" with pure-DP Laplace noise at the same ε per round and found much lower prices (100 people at ε = 4: 66% → 41% of the plain value lost on window w1); the guarantees differ in type and a lifetime-matched comparison is open. The prices in this document remain Gaussian prices.
 
 ## 7. Files
 

@@ -1,0 +1,34 @@
+n,"eps_per_round (Laplace vs Gaussian where two values are given; Gaussian delta 1e-5, Laplace delta 0)","contrast (selector value, first minus second; positive = first better)",logs,mean,ci_lo,ci_hi,logs_positive
+100,2,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),27,0.0933,0.05557,0.1308,26
+100,2,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",27,0.13059,0.0907,0.17444,27
+100,2,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",27,-0.00323,-0.00587,-0.00073,11
+100,4,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),27,0.15051,0.11461,0.18293,26
+100,4,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",27,0.19008,0.15859,0.22174,27
+100,4,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",27,-0.00126,-0.00467,0.00195,16
+100,8,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),27,0.19357,0.14897,0.23517,26
+100,8,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",27,0.22801,0.19389,0.2627,27
+100,8,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",27,0.00553,0.00286,0.00843,21
+300,2,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),24,0.16891,0.12452,0.20865,23
+300,2,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",24,0.2115,0.17856,0.2451,24
+300,2,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",24,0.00012,-0.0031,0.00323,13
+300,4,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),24,0.18406,0.13385,0.23078,23
+300,4,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",24,0.22815,0.18495,0.27036,24
+300,4,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",24,0.00364,0.00138,0.00593,20
+300,8,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),24,0.10926,0.06861,0.15017,22
+300,8,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",24,0.14849,0.11217,0.18508,23
+300,8,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",24,0.00777,0.0047,0.01199,24
+1000,2,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),17,0.15314,0.10619,0.19667,16
+1000,2,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",17,0.1874,0.136,0.23471,17
+1000,2,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",17,0.00154,0.00063,0.00239,14
+1000,4,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),17,0.06726,0.04067,0.09401,14
+1000,4,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",17,0.09071,0.06092,0.12147,17
+1000,4,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",17,0.00318,0.00224,0.00417,17
+1000,8,lapn - gaussn (L1 unit + Laplace vs L2 unit + Gaussian),17,0.01703,0.00651,0.02793,14
+1000,8,"lap c=1 - gauss c=1 (same one-row signal, Laplace vs Gaussian)",17,0.03076,0.02001,0.04209,17
+1000,8,"lapn - lap c=1 (L1 unit vs one row, both Laplace)",17,0.00372,0.00289,0.00461,17
+100,2 vs 4,"lapn - gaussn at about equal lifetime epsilon for k = 5 participations (Laplace eps 2.08 needed for Gaussian 4, 4.43 for Gaussian 8; the grid values are slightly smaller)",27,0.01793,-0.0083,0.03761,22
+100,4 vs 8,"lapn - gaussn at about equal lifetime epsilon for k = 5 participations (Laplace eps 2.08 needed for Gaussian 4, 4.43 for Gaussian 8; the grid values are slightly smaller)",27,0.05711,0.03336,0.07704,25
+300,2 vs 4,"lapn - gaussn at about equal lifetime epsilon for k = 5 participations (Laplace eps 2.08 needed for Gaussian 4, 4.43 for Gaussian 8; the grid values are slightly smaller)",24,0.04162,0.01703,0.06249,20
+300,4 vs 8,"lapn - gaussn at about equal lifetime epsilon for k = 5 participations (Laplace eps 2.08 needed for Gaussian 4, 4.43 for Gaussian 8; the grid values are slightly smaller)",24,0.04836,0.02083,0.07322,18
+1000,2 vs 4,"lapn - gaussn at about equal lifetime epsilon for k = 5 participations (Laplace eps 2.08 needed for Gaussian 4, 4.43 for Gaussian 8; the grid values are slightly smaller)",17,0.02505,0.01267,0.03695,14
+1000,4 vs 8,"lapn - gaussn at about equal lifetime epsilon for k = 5 participations (Laplace eps 2.08 needed for Gaussian 4, 4.43 for Gaussian 8; the grid values are slightly smaller)",17,0.00664,-0.00039,0.01364,14
