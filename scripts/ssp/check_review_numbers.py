@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
-"""Recompute the headline numbers and spot checks of docs/small_sample/23_review_package_en.md.
+"""Recompute the table-derived numbers of docs/small_sample/23_review_package_en.md.
 
 Standard library only. Reads only the committed tables under
 results/small_sample_popularity/03_tables/ (no raw data, no network).
 
 Every check compares a value computed from a table with the value as printed on the page.
-The page prints each number rounded, so a number passes only if the table value rounds to what the
-page shows: to the last printed decimal, or to the nearest integer (half up) for an integer. A
-percent printed as "17" is passed as the share times 100.
+The page prints each number rounded, so a number passes only if the table value rounds to what
+the page shows: to the last printed decimal, or to the nearest integer (half up) for an integer.
+A percent printed as "17" is passed as the share times 100. Row lookups are strict: a lookup
+that matches no row or more than one row is a failure.
 
-This shows that the page quotes the tables correctly. It does not re-derive any table from the
-raw run rows.
+What this covers: the headline column, the spot checks and the table figures of the ten cards.
+What it does not cover: numbers quoted from the text of docs 02-22 (for example the 2 rounds
+at 3,000 people of RH2 is checked only as the median of the stored per-log best values), commit
+times, and statements about the process. It shows that the page quotes the tables correctly;
+it does not re-derive any table from the raw run rows.
 
 Usage (from anywhere): python3 scripts/ssp/check_review_numbers.py
 Exit status: 0 if every number matches, 1 if any differs or a table is missing.
@@ -69,6 +73,17 @@ def pick(rs, **kw):
     return hits[0]
 
 
+def index(rs, *keys):
+    """Dict from a tuple of column values to the row; a repeated key is a failure."""
+    out = {}
+    for r in rs:
+        key = tuple(r[k] for k in keys)
+        if key in out:
+            raise KeyError("repeated key %r in %s" % (key, keys))
+        out[key] = r
+    return out
+
+
 def rh1():
     a = rows("an_explore_a_x10_drift_vs_sampling.csv")
     lists = [r for r in a if r["measure"] == "ndcg_vs_truth_lists"]
@@ -76,16 +91,16 @@ def rh1():
     chk("RH1", "ml-latest drift gap", num(row["drift_gap_B_minus_A"]), "0.65803")
     chk("RH1", "ml-latest sampling gap at 1,000", num(row["sampling_gap_N1000"]), "0.000909333")
     chk("RH1", "median drift gap, list level", statistics.median(num(r["drift_gap_B_minus_A"]) for r in lists), "0.658")
-    samp = [num(r["sampling_gap_N1000"]) for r in lists if num(r["sampling_gap_N1000"]) is not None]
-    chk("RH1", "median sampling gap at 1,000", statistics.median(samp), "0.003")
-    chk("RH1", "datasets with a 1,000-person cell", len(samp), "10")
-    chk("RH1", "drift larger than sampling gap at 1,000", sum(r["drift_exceeds_sampling_gap_N1000"] == "True" for r in lists), "10")
+    both = [r for r in lists if num(r["sampling_gap_N1000"]) is not None]
+    chk("RH1", "median sampling gap at 1,000", statistics.median(num(r["sampling_gap_N1000"]) for r in both), "0.003")
+    chk("RH1", "datasets with a 1,000-person cell", len(both), "10")
+    chk("RH1", "drift larger than sampling gap at 1,000", sum(num(r["drift_gap_B_minus_A"]) > num(r["sampling_gap_N1000"]) for r in both), "10")
     panel = [r for r in a if r["measure"] == "panel_ndcg"]
     chk("RH1", "median panel drift", statistics.median(num(r["drift_gap_B_minus_A"]) for r in panel), "0.021")
     chk("RH1", "median panel sampling gap", statistics.median(num(r["sampling_gap_N1000"]) for r in panel if num(r["sampling_gap_N1000"]) is not None), "0.0003")
     x7 = [r for r in rows("an_explore_b_x7_datasets.csv") if r["arm"] == "recent_window"]
     chk("RH1", "recent_window datasets", len(x7), "11")
-    chk("RH1", "recent_window sign flips", sum(r["flip_B"] == "True" for r in x7), "10")
+    chk("RH1", "recent_window sign flips (worse on Truth A, better on Truth B)", sum(num(r["dA"]) < 0 < num(r["dB"]) for r in x7), "10")
     chk("RH1", "recent_window dataset median, Truth B", statistics.median(num(r["dB"]) for r in x7), "0.037")
     chk("RH1", "recent_window dataset median, Truth A", statistics.median(num(r["dA"]) for r in x7), "-0.186")
     allk = [r for r in rows("an_window_x12_win_share.csv") if r["k"] == "all-k"]
@@ -100,23 +115,28 @@ def rh1():
 
 
 def rh2():
-    g = {r["n"]: r for r in rows("weekly/g_memory_table.csv")}
-    chk("RH2", "n=100 half-life", num(g["100"]["table_half_life_rounds"]), "16")
-    chk("RH2", "n=100 table regret", num(g["100"]["holdout_regret_table"]), "0.01827")
-    chk("RH2", "n=100 2-rounds regret", num(g["100"]["holdout_regret_2rounds"]), "0.17057")
+    g = index(rows("weekly/g_memory_table.csv"), "n")
+    for n, half in (("30", "32"), ("100", "16"), ("300", "8"), ("1000", "4")):
+        chk("RH2", "n=%s fitted half-life in rounds" % n, num(g[(n,)]["table_half_life_rounds"]), half)
+    best = [num(r["best_rounds_7d"]) for r in rows("weekly/f_best_rounds_by_round_length.csv") if r["n"] == "3000"]
+    chk("RH2", "n=3000 median of the per-log best half-life, 7-day rounds", statistics.median(best), "2")
+    chk("RH2", "n=3000 logs behind that median", len(best), "7")
+    chk("RH2", "n=100 table regret", num(g[("100",)]["holdout_regret_table"]), "0.01827")
+    chk("RH2", "n=100 2-rounds regret", num(g[("100",)]["holdout_regret_2rounds"]), "0.17057")
     for n, table, two in (("30", "0.012", "0.149"), ("100", "0.018", "0.171"), ("300", "0.024", "0.106"), ("1000", "0.019", "0.047")):
-        chk("RH2", "n=%s table regret" % n, num(g[n]["holdout_regret_table"]), table)
-        chk("RH2", "n=%s 2-rounds regret" % n, num(g[n]["holdout_regret_2rounds"]), two)
+        chk("RH2", "n=%s table regret" % n, num(g[(n,)]["holdout_regret_table"]), table)
+        chk("RH2", "n=%s 2-rounds regret" % n, num(g[(n,)]["holdout_regret_2rounds"]), two)
     w = js("weekly/weekly_verdicts.json")
     chk("RH2", "W9 table regret", w["W9"]["holdout_regret_table"], "0.018")
     chk("RH2", "W9 2-rounds regret", w["W9"]["holdout_regret_2rounds"], "0.118")
     chk("RH2", "W9 ratio", w["W9"]["ratio"], "0.15")
     chk("RH2", "W1 logs with best half-life >= 28 days", w["W1"]["share_ge28"]["share"] * w["W1"]["share_ge28"]["n"], "27")
+    chk("RH2", "W1 logs in total", w["W1"]["share_ge28"]["n"], "27")
     chk("RH2", "W4 gain", w["W4"]["all"]["mean"], "0.0042")
     chk("RH2", "W7 gain at 100 people", w["W7"]["n100"]["best"]["all"]["mean"], "0.012")
     chk("RH2", "W11 gain at 100 people", w["W11"]["n100"]["all"]["mean"], "0.022")
     chk("RH2", "W11 gain at 300 people", w["W11"]["n300"]["all"]["mean"], "0.028")
-    s = {(r["stratum"], r["n"]): r for r in rows("weekly/h_strata_loo_regret.csv")}
+    s = index(rows("weekly/h_strata_loo_regret.csv"), "stratum", "n")
     for n, pooled, two in (("30", "0.014", "0.104"), ("100", "0.036", "0.030"), ("300", "0.047", "0.014"), ("1000", "0.010", "0.002")):
         chk("RH2", "non-Amazon n=%s pooled-table regret" % n, num(s[("other", n)]["regret_pooled_table_loo"]), pooled)
         chk("RH2", "non-Amazon n=%s 2-rounds regret" % n, num(s[("other", n)]["regret_2rounds"]), two)
@@ -140,6 +160,7 @@ def rh3():
     chk("RH3", "W5 median (spot check)", w["W5"]["median_rho"], "0.6813")
     chk("RH3", "W5 lower quartile", w["W5"]["q25"], "0.56")
     chk("RH3", "W5 upper quartile", w["W5"]["q75"], "0.75")
+    chk("RH3", "W5 logs", w["W5"]["n"], "27")
     chk("RH3", "W5 logs at or above 0.5", w["W5"]["share_ge_05"] * w["W5"]["n"], "22")
     chk("RH3", "W5 logs positive", w["W5"]["share_positive"] * w["W5"]["n"], "27")
     chk("RH3", "W6 alarm weeks", w["W6"]["alarms"], "405")
@@ -149,7 +170,7 @@ def rh3():
 
 
 def rh4():
-    k = {(r["round_days"], r["scope"], r["comparison"]): r for r in rows("confirm/k_paired.csv")}
+    k = index(rows("confirm/k_paired.csv"), "round_days", "scope", "comparison")
     same = k[("7", "w2 all", "selector minus same")]
     chk("RH4", "selector minus same-group table", num(same["mean_diff"]), "-0.010311")
     chk("RH4", "  lower end", num(same["ci_lo"]), "-0.019297")
@@ -157,6 +178,7 @@ def rh4():
     chk("RH4", "  headline (4 dp)", num(same["mean_diff"]), "-0.0103")
     chk("RH4", "  headline lower end (4 dp)", num(same["ci_lo"]), "-0.0193")
     chk("RH4", "  headline upper end (4 dp)", num(same["ci_hi"]), "-0.0039")
+    chk("RH4", "  logs in the comparison", num(same["logs"]), "27")
     chk("RH4", "  logs where the selector is better", num(same["share_logs_selector_better"]) * int(same["logs"]), "19")
     pooled = k[("7", "w2 all", "selector minus pooled")]
     chk("RH4", "selector minus pooled table", num(pooled["mean_diff"]), "-0.0185")
@@ -164,17 +186,21 @@ def rh4():
     chk("RH4", "  upper end", num(pooled["ci_hi"]), "-0.0104")
     chk("RH4", "  logs where the selector is better", num(pooled["share_logs_selector_better"]) * int(pooled["logs"]), "22")
     chk("RH4", "selector minus 2 rounds", num(k[("7", "w2 all", "selector minus two")]["mean_diff"]), "-0.134")
+    rules = index(rows("weekly/i_selfsel_rules.csv"), "round_days", "group", "n", "rule")
+    for rule, printed in (("selector", "0.0027"), ("same", "0.0161"), ("pooled", "0.0291"), ("two", "0.1350")):
+        chk("RH4", "doc 14 exploration, 7-day rounds, regret of %s" % rule, num(rules[("7", "all", "all", rule)]["mean_regret"]), printed)
     kv = js("confirm/k_verdicts.json")["verdicts"]
     chk("RH4", "K3 cells", kv["K3"]["cells"], "90")
     chk("RH4", "K3 cells with regret above 0.01", kv["K3"]["share_over_0_01"] * kv["K3"]["cells"], "2")
     chk("RH4", "K10 selector minus same-group table at 30 people, 28 days", kv["K10"]["mean"], "0.0081")
     chk("RH4", "K10 share of logs where the selector is worse (percent)", kv["K10"]["share_positive"] * 100, "81")
+    chk("RH4", "K11 cells", kv["K11"]["cells"], "7")
     chk("RH4", "K11 cells with selector <= same-group table", kv["K11"]["share_selector_le_same"] * kv["K11"]["cells"], "5")
     chk("RH4", "K12 re-picking minus other-window memory", kv["K12"]["mean"], "0.0011")
 
 
 def rh5():
-    g = {(r["comparison"], r["region"]): r for r in rows("guard/g_paired.csv")}
+    g = index(rows("guard/g_paired.csv"), "comparison", "region")
     m = g[("warm minus plain", "n30_28d")]
     chk("RH5", "seeded minus plain, 30 people monthly", num(m["mean_diff"]), "-0.007372")
     chk("RH5", "  lower end", num(m["ci_lo"]), "-0.009972")
@@ -194,8 +220,9 @@ def rh5():
     chk("RH5", "100+ people monthly", num(mo["mean_diff"]), "-0.0007")
     chk("RH5", "  upper end", num(mo["ci_hi"]), "0.0015")
     gv = js("guard/g_verdicts.json")["verdicts"]
-    chk("RH5", "G1 logs better (of 24)", gv["G1"]["share_negative"] * 24, "22")
-    chk("RH5", "G2 logs better (of 24)", gv["G2"]["share_negative"] * 24, "19")
+    chk("RH5", "G1 logs better", gv["G1"]["share_negative"] * gv["G1"]["logs"], "22")
+    chk("RH5", "G1 logs", gv["G1"]["logs"], "24")
+    chk("RH5", "G2 logs better", gv["G2"]["share_negative"] * gv["G2"]["logs"], "19")
 
 
 def rh6():
@@ -215,11 +242,12 @@ def rh6():
 
 
 def rh7():
-    p = {(r["block"], r["contrast"]): r for r in rows("volunteer/pilot_pool_summary.csv")}
+    p = index(rows("volunteer/pilot_pool_summary.csv"), "block", "contrast")
     pooled = p[("all 27 logs", "c_aud - a150_sel")]
     chk("RH7", "pooled minus 150 random reporters", num(pooled["mean"]), "-0.0037")
     chk("RH7", "  lower end", num(pooled["ci_lo"]), "-0.0068")
     chk("RH7", "  upper end", num(pooled["ci_hi"]), "-0.0009")
+    chk("RH7", "  logs", num(pooled["logs"]), "27")
     chk("RH7", "  logs positive", num(pooled["logs_positive"]), "8")
     chk("RH7", "  logs within -0.005", num(pooled["logs_within_0.005"]), "18")
     chk("RH7", "audit-only shortfall", num(p[("all 27 logs", "b_aud - a150_sel")]["mean"]), "-0.0241")
@@ -247,14 +275,14 @@ def rh8():
     chk("RH8", "P10 gain at eps 2", pv["P10"]["by_eps"]["2"]["mean"], "0.0425")
     chk("RH8", "P10 gain at eps 8", pv["P10"]["by_eps"]["8"]["mean"], "0.0218")
     chk("RH8", "P6 price at eps 2, 1,000 people", pv["P6"]["price_strong"], "0.199")
-    pl = {(r["n"], r["eps"], r["bound"]): r for r in rows("price/posthoc_price_list.csv")}
+    pl = index(rows("price/posthoc_price_list.csv"), "n", "eps", "bound")
     for n, cap10, unit in (("1000", "0.2734", "0.0824"), ("300", "0.4455", "0.261"), ("100", "0.4837", "0.3836")):
         chk("RH8", "n=%s price, 10-row cap" % n, num(pl[(n, "4", "cap10")]["price_mean"]), cap10)
         chk("RH8", "n=%s price, unit length" % n, num(pl[(n, "4", "clip1")]["price_mean"]), unit)
     for n, hi, lo in (("1000", "0.273", "0.082"), ("300", "0.446", "0.261"), ("100", "0.484", "0.384")):
         chk("RH8", "n=%s headline price, 10-row cap" % n, num(pl[(n, "4", "cap10")]["price_mean"]), hi)
         chk("RH8", "n=%s headline price, unit length" % n, num(pl[(n, "4", "clip1")]["price_mean"]), lo)
-    share = [r for r in rows("price/posthoc_share_of_gain.csv")]
+    share = rows("price/posthoc_share_of_gain.csv")
     for n, low, high in (("1000", "79", "83"), ("300", "65", "77"), ("100", "39", "63")):
         vals = [num(r["share_reached_by_cap1"]) * 100 for r in share if r["n"] == n]
         chk("RH8", "n=%s one-row cap share of the gain, lowest over eps" % n, min(vals), low)
@@ -267,13 +295,13 @@ def rh9():
     def lost(n, scheme):
         return num(pick(grid, n=n, scheme=scheme)["lost_share_of_std_selector"])
 
-    for n, g_one, l_one, g_five, l_five in (
-        ("100", "gaussn:eps=8,C=1,kmax=1", "lapn:eps=8,C=1,kmax=1", "gaussn:eps=4,C=1,kmax=5", "lapn:eps=2,C=1,kmax=5"),
-        ("300", "gaussn:eps=8,C=1,kmax=1", "lapn:eps=8,C=1,kmax=1", "gaussn:eps=4,C=1,kmax=5", "lapn:eps=2,C=1,kmax=5"),
-        ("1000", "gaussn:eps=8,C=1,kmax=1", "lapn:eps=8,C=1,kmax=1", "gaussn:eps=4,C=1,kmax=5", "lapn:eps=2,C=1,kmax=5"),
-    ):
-        chk_true("RH9", "n=%s one draw beats five draws, Gaussian (%.3f < %.3f)" % (n, lost(n, g_one), lost(n, g_five)), lost(n, g_one) < lost(n, g_five))
-        chk_true("RH9", "n=%s one draw beats five draws, Laplace (%.3f < %.3f)" % (n, lost(n, l_one), lost(n, l_five)), lost(n, l_one) < lost(n, l_five))
+    pairs = (
+        ("Gaussian", "gaussn:eps=8,C=1,kmax=1", "gaussn:eps=4,C=1,kmax=5"),
+        ("Laplace", "lapn:eps=8,C=1,kmax=1", "lapn:eps=2,C=1,kmax=5"),
+    )
+    for n in ("100", "300", "1000"):
+        for name, one, five in pairs:
+            chk_true("RH9", "n=%s one draw beats five draws, %s (%.3f < %.3f)" % (n, name, lost(n, one), lost(n, five)), lost(n, one) < lost(n, five))
     chk("RH9", "100 people, one draw, eps 8, Laplace lost share (percent)", lost("100", "lapn:eps=8,C=1,kmax=1") * 100, "17")
     chk("RH9", "100 people, one draw, eps 8, Gaussian lost share (percent)", lost("100", "gaussn:eps=8,C=1,kmax=1") * 100, "49")
     chk("RH9", "100 people, five draws, Laplace eps 2 lost share (percent)", lost("100", "lapn:eps=2,C=1,kmax=5") * 100, "63")
@@ -285,29 +313,28 @@ def rh9():
         chk("RH9", "n=%s per round eps 4, Laplace lost share (percent)" % n, lost(n, "lapn:eps=4,C=1") * 100, l_pct)
     paired = rows("price/cap_dev_paired.csv")
     ckey = [k for k in paired[0] if k.startswith("contrast")][0]
-
-    def pc(kind, contrast, n):
-        return pick([dict(r, c=r[ckey]) for r in paired], kind=kind, c=contrast, n=n)
-
+    flat = [dict(r, c=r[ckey]) for r in paired]
     for n, mean, lo, hi in (("100", "0.156", "0.124", "0.187"), ("300", "0.187", "0.142", "0.229"), ("1000", "0.064", "0.038", "0.092")):
-        r = pc("equal_lifetime_capped", "k=1: Laplace eps 4 minus Gaussian eps 4", n)
+        r = pick(flat, kind="equal_lifetime_capped", c="k=1: Laplace eps 4 minus Gaussian eps 4", n=n)
         chk("RH9", "one draw, Laplace minus Gaussian, n=%s" % n, num(r["mean"]), mean)
         chk("RH9", "  lower end", num(r["ci_lo"]), lo)
         chk("RH9", "  upper end", num(r["ci_hi"]), hi)
-    r = pc("equal_lifetime_capped", "k=1: Laplace eps 4 minus Gaussian eps 4", "100")
+    r = pick(flat, kind="equal_lifetime_capped", c="k=1: Laplace eps 4 minus Gaussian eps 4", n="100")
     chk("RH9", "spot check mean", num(r["mean"]), "0.15635")
     chk("RH9", "spot check lower end", num(r["ci_lo"]), "0.1244")
     chk("RH9", "spot check upper end", num(r["ci_hi"]), "0.18739")
+    chk("RH9", "spot check logs", num(r["logs"]), "27")
     chk("RH9", "spot check logs positive", num(r["logs_positive"]), "26")
-    five = [r for r in paired if r["kind"] == "equal_lifetime_capped" and r[ckey].startswith("k=5")]
-    ten = [r for r in paired if r["kind"] == "equal_lifetime_capped" and r[ckey].startswith("k=10")]
+    five = [r for r in flat if r["kind"] == "equal_lifetime_capped" and r["c"].startswith("k=5")]
+    ten = [r for r in flat if r["kind"] == "equal_lifetime_capped" and r["c"].startswith("k=10")]
     chk("RH9", "five-draw contrasts", len(five), "6")
     chk("RH9", "five-draw smallest", min(num(r["mean"]) for r in five), "0.007")
     chk("RH9", "five-draw largest", max(num(r["mean"]) for r in five), "0.058")
     chk("RH9", "five-draw intervals above 0", sum(num(r["ci_lo"]) > 0 for r in five), "4")
+    chk("RH9", "ten-draw contrasts", len(ten), "6")
     chk("RH9", "ten-draw smallest", min(num(r["mean"]) for r in ten), "-0.019")
     chk("RH9", "ten-draw largest", max(num(r["mean"]) for r in ten), "0.030")
-    cost = [r for r in paired if r["kind"] == "cap_cost"]
+    cost = [r for r in flat if r["kind"] == "cap_cost"]
     chk("RH9", "cap-cost contrasts", len(cost), "36")
     chk("RH9", "cap-cost smallest", min(num(r["mean"]) for r in cost), "-0.016")
     chk("RH9", "cap-cost largest", max(num(r["mean"]) for r in cost), "0.011")
@@ -317,26 +344,28 @@ def rh9():
     for n, printed in (("100", "0.190"), ("300", "0.228"), ("1000", "0.091")):
         hit = [r for r in lap if r["n"] == n and r[ekey] == "4" and r[lkey].startswith("lap c=1 - gauss c=1")]
         chk("RH9", "same one-row signal, Laplace minus Gaussian, n=%s" % n, num(hit[0]["mean"]) if len(hit) == 1 else None, printed)
-    eq = {(r["contrast"], r["people_per_round_laplace"]): r for r in rows("price/cap_dev_equivalents.csv")}
+    eq = index(rows("price/cap_dev_equivalents.csv"), "contrast", "people_per_round_laplace")
     chk("RH9", "people-equivalent, one draw, eps 4, 100 people", num(eq[("cap 1: Laplace eps 4 vs Gaussian eps 4", "100")]["ratio"]), "3.1")
     chk("RH9", "people-equivalent, one draw, eps 4, 300 people", num(eq[("cap 1: Laplace eps 4 vs Gaussian eps 4", "300")]["ratio"]), "3.0")
     five_eq = [num(r["ratio"]) for (c, n), r in eq.items() if c.startswith("cap 5")]
     ten_eq = [num(r["ratio"]) for (c, n), r in eq.items() if c.startswith("cap 10")]
-    chk_true("RH9", "five-draw people-equivalents within 1.2-1.5 (%.2f to %.2f)" % (min(five_eq), max(five_eq)), min(five_eq) >= 1.2 - 0.005 and max(five_eq) <= 1.5 + 0.005)
-    chk_true("RH9", "ten-draw people-equivalents within 1.0-1.25 (%.2f to %.2f)" % (min(ten_eq), max(ten_eq)), min(ten_eq) >= 1.0 - 0.015 and max(ten_eq) <= 1.25 + 0.005)
+    chk("RH9", "five-draw people-equivalents, smallest", min(five_eq), "1.2")
+    chk("RH9", "five-draw people-equivalents, largest", max(five_eq), "1.5")
+    chk("RH9", "ten-draw people-equivalents, smallest", min(ten_eq), "1.0")
+    chk_true("RH9", "ten-draw people-equivalents, largest within 1.25 (%.2f)" % max(ten_eq), max(ten_eq) <= 1.25)
     people = rows("price/cap_dev_people.csv")
     rb = pick(people, n="300", log="ratebeer", kmax="1")
     chk("RH9", "ratebeer keeps this share of people at one draw, 300 people (percent)", num(rb["ratio"]) * 100, "28")
 
 
 def rh10():
-    ll = {(r["n"], r["eps"], r["sampler"], r["k"]): r for r in rows("price/posthoc_list_length.csv")}
+    ll = index(rows("price/posthoc_list_length.csv"), "n", "eps", "sampler", "k")
     for n, top10, top100 in (("100", "0.49", "0.42"), ("300", "0.79", "0.64"), ("1000", "0.96", "0.89")):
         chk("RH10", "n=%s top 10 kept quality" % n, num(ll[(n, "4", "clip1", "10")]["retained"]), top10)
         chk("RH10", "n=%s top 100 kept quality" % n, num(ll[(n, "4", "clip1", "100")]["retained"]), top100)
     chk("RH10", "spot check top 10 at 300 people", num(ll[("300", "4", "clip1", "10")]["retained"]), "0.794")
     chk("RH10", "spot check top 100 at 300 people", num(ll[("300", "4", "clip1", "100")]["retained"]), "0.642")
-    ht = {(r["n"], r["eps"], r["sampler"]): r for r in rows("price/posthoc_list_length_head_vs_tail.csv")}
+    ht = index(rows("price/posthoc_list_length_head_vs_tail.csv"), "n", "eps", "sampler")
     r = ht[("300", "4", "clip1")]
     chk("RH10", "top 10 minus top 100 kept quality at 300 people", num(r["retained10_minus_retained100"]), "0.158")
     chk("RH10", "  lower end", num(r["ci_lo"]), "0.122")
@@ -349,7 +378,7 @@ def main():
     for fn in (rh1, rh2, rh3, rh4, rh5, rh6, rh7, rh8, rh9, rh10):
         try:
             fn()
-        except (OSError, KeyError, IndexError, ValueError) as exc:
+        except Exception as exc:  # a missing table, a changed header or a repeated key is a failure, not a crash
             results.append(False)
             print("FAIL %s: %s: %s" % (fn.__name__.upper(), type(exc).__name__, exc))
     failed = results.count(False)
