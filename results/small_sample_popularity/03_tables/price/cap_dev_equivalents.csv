@@ -1,0 +1,21 @@
+contrast,people_per_round_laplace,logs_common_to_all_sizes,laplace_lost_share,gaussian_people_needed_for_the_same_lost_share,ratio,flag
+"per round, eps 2: Laplace vs Gaussian, no cap",100,17,0.6424,284.3,2.84,
+"per round, eps 2: Laplace vs Gaussian, no cap",300,17,0.3619,729.2,2.43,
+"per round, eps 4: Laplace vs Gaussian, no cap",100,17,0.4382,307.1,3.07,
+"per round, eps 4: Laplace vs Gaussian, no cap",300,17,0.1424,890.8,2.97,
+"per round, eps 8: Laplace vs Gaussian, no cap",100,17,0.1835,367.0,3.67,
+"per round, eps 8: Laplace vs Gaussian, no cap",300,17,0.0479,963.2,3.21,
+cap 1: Laplace eps 2 vs Gaussian eps 2,100,17,0.6417,274.6,2.75,
+cap 1: Laplace eps 2 vs Gaussian eps 2,300,17,0.3548,737.0,2.46,
+cap 1: Laplace eps 4 vs Gaussian eps 4,100,17,0.4318,309.5,3.09,
+cap 1: Laplace eps 4 vs Gaussian eps 4,300,17,0.141,906.7,3.02,
+cap 1: Laplace eps 8 vs Gaussian eps 8,100,17,0.1807,369.9,3.7,
+cap 1: Laplace eps 8 vs Gaussian eps 8,300,17,0.0485,1017.6,3.39,extrapolated beyond the largest size
+cap 5: Laplace eps 2 vs Gaussian eps 4,100,17,0.6451,122.0,1.22,
+cap 5: Laplace eps 2 vs Gaussian eps 4,300,17,0.3598,372.4,1.24,
+cap 5: Laplace eps 4 vs Gaussian eps 8,100,17,0.4338,138.6,1.39,
+cap 5: Laplace eps 4 vs Gaussian eps 8,300,17,0.1429,437.4,1.46,
+cap 10: Laplace eps 1.6 vs Gaussian eps 4,100,17,0.6954,98.7,0.99,extrapolated below the smallest size
+cap 10: Laplace eps 1.6 vs Gaussian eps 4,300,17,0.4397,308.2,1.03,
+cap 10: Laplace eps 3.5 vs Gaussian eps 8,100,17,0.4767,121.4,1.21,
+cap 10: Laplace eps 3.5 vs Gaussian eps 8,300,17,0.1765,373.1,1.24,

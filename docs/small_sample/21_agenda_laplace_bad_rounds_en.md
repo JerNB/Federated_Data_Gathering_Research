@@ -2,6 +2,8 @@
 
 Chinese version: [`21_agenda_laplace_bad_rounds_zh.md`](21_agenda_laplace_bad_rounds_zh.md). Follows doc 20 (Leo asked "what else is worth studying?"). **Status: development on window w1 (and, for months-long rounds, the stored plan cells of doc 12). Nothing was registered; none of this is a verdict; the numbers decide what to register (section 5).** Same-provider reviews only. No download, install or execution beyond the repository's own code; the literature was read by read-only agents (doc 90, section 6, item 6).
 
+**Follow-up (doc 22, development):** the lifetime-matched cells at larger k, single-use participants, a participation cap and the L1 bound C = 2 and 4, listed below as not run (limits 2, 4 and 5; section 5, point 2), were run in [`22_lifetime_cap_en.md`](22_lifetime_cap_en.md): with nobody drawn twice the Laplace advantage holds (about 3 times the people at ε = 4); at five draws per person it is about 1.2–1.5 times and at ten about 1.0–1.25 times.
+
 ## 0. Summary
 
 1. **At the same ε per round, pure-DP Laplace noise costs far less list quality than the Gaussian noise used since doc 16 (development, w1).** Share of the plain-sampling selector value lost (mean price ÷ mean plain value over logs; central model, nominal per-round accounting; Gaussian = doc 18's unit-length reports with analytic Gaussian noise, δ = 10⁻⁵; Laplace = every person's vector scaled to L1 norm 1, scale 1/ε, δ = 0):

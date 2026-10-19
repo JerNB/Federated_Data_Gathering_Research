@@ -1,0 +1,94 @@
+kind,"contrast (selector value, first minus second; positive = first better)",n,first,second,logs,mean,ci_lo,ci_hi,logs_positive
+equal_lifetime_capped,k=1: Laplace eps 2 minus Gaussian eps 2,100,"lapn:eps=2,C=1,kmax=1","gaussn:eps=2,C=1,kmax=1",27,0.09759,0.06301,0.13277,26
+equal_lifetime_capped,k=1: Laplace eps 2 minus Gaussian eps 2,300,"lapn:eps=2,C=1,kmax=1","gaussn:eps=2,C=1,kmax=1",24,0.17751,0.14105,0.21405,23
+equal_lifetime_capped,k=1: Laplace eps 2 minus Gaussian eps 2,1000,"lapn:eps=2,C=1,kmax=1","gaussn:eps=2,C=1,kmax=1",17,0.14761,0.10122,0.19064,16
+equal_lifetime_capped,k=1: Laplace eps 4 minus Gaussian eps 4,100,"lapn:eps=4,C=1,kmax=1","gaussn:eps=4,C=1,kmax=1",27,0.15635,0.1244,0.18739,26
+equal_lifetime_capped,k=1: Laplace eps 4 minus Gaussian eps 4,300,"lapn:eps=4,C=1,kmax=1","gaussn:eps=4,C=1,kmax=1",24,0.18714,0.14229,0.22929,23
+equal_lifetime_capped,k=1: Laplace eps 4 minus Gaussian eps 4,1000,"lapn:eps=4,C=1,kmax=1","gaussn:eps=4,C=1,kmax=1",17,0.06422,0.03783,0.09175,14
+equal_lifetime_capped,k=1: Laplace eps 8 minus Gaussian eps 8,100,"lapn:eps=8,C=1,kmax=1","gaussn:eps=8,C=1,kmax=1",27,0.19252,0.15074,0.23406,26
+equal_lifetime_capped,k=1: Laplace eps 8 minus Gaussian eps 8,300,"lapn:eps=8,C=1,kmax=1","gaussn:eps=8,C=1,kmax=1",24,0.11371,0.08084,0.14824,22
+equal_lifetime_capped,k=1: Laplace eps 8 minus Gaussian eps 8,1000,"lapn:eps=8,C=1,kmax=1","gaussn:eps=8,C=1,kmax=1",17,0.01578,0.0053,0.02703,14
+equal_lifetime_capped,k=5: Laplace eps 2 minus Gaussian eps 4,100,"lapn:eps=2,C=1,kmax=5","gaussn:eps=4,C=1,kmax=5",27,0.01732,-0.00825,0.03659,22
+equal_lifetime_capped,k=5: Laplace eps 2 minus Gaussian eps 4,300,"lapn:eps=2,C=1,kmax=5","gaussn:eps=4,C=1,kmax=5",24,0.04982,0.02912,0.06833,21
+equal_lifetime_capped,k=5: Laplace eps 2 minus Gaussian eps 4,1000,"lapn:eps=2,C=1,kmax=5","gaussn:eps=4,C=1,kmax=5",17,0.02586,0.01327,0.03837,14
+equal_lifetime_capped,k=5: Laplace eps 4 minus Gaussian eps 8,100,"lapn:eps=4,C=1,kmax=5","gaussn:eps=8,C=1,kmax=5",27,0.05829,0.03471,0.0796,24
+equal_lifetime_capped,k=5: Laplace eps 4 minus Gaussian eps 8,300,"lapn:eps=4,C=1,kmax=5","gaussn:eps=8,C=1,kmax=5",24,0.05255,0.03053,0.07323,20
+equal_lifetime_capped,k=5: Laplace eps 4 minus Gaussian eps 8,1000,"lapn:eps=4,C=1,kmax=5","gaussn:eps=8,C=1,kmax=5",17,0.00693,-9e-05,0.01418,14
+equal_lifetime_capped,k=10: Laplace eps 1.6 minus Gaussian eps 4,100,"lapn:eps=1.6,C=1,kmax=10","gaussn:eps=4,C=1,kmax=10",27,-0.01856,-0.04695,-0.00028,13
+equal_lifetime_capped,k=10: Laplace eps 1.6 minus Gaussian eps 4,300,"lapn:eps=1.6,C=1,kmax=10","gaussn:eps=4,C=1,kmax=10",24,-0.00513,-0.02041,0.00828,14
+equal_lifetime_capped,k=10: Laplace eps 1.6 minus Gaussian eps 4,1000,"lapn:eps=1.6,C=1,kmax=10","gaussn:eps=4,C=1,kmax=10",17,-0.00096,-0.00655,0.00503,6
+equal_lifetime_capped,k=10: Laplace eps 3.5 minus Gaussian eps 8,100,"lapn:eps=3.5,C=1,kmax=10","gaussn:eps=8,C=1,kmax=10",27,0.03044,0.0078,0.04867,23
+equal_lifetime_capped,k=10: Laplace eps 3.5 minus Gaussian eps 8,300,"lapn:eps=3.5,C=1,kmax=10","gaussn:eps=8,C=1,kmax=10",24,0.02674,0.00667,0.04423,18
+equal_lifetime_capped,k=10: Laplace eps 3.5 minus Gaussian eps 8,1000,"lapn:eps=3.5,C=1,kmax=10","gaussn:eps=8,C=1,kmax=10",17,0.00222,-0.0033,0.00777,11
+cap_cost,k=1: Gaussian eps 2 capped minus uncapped,100,"gaussn:eps=2,C=1,kmax=1","gaussn:eps=2,C=1",27,0.00664,0.00218,0.01268,18
+cap_cost,k=1: Gaussian eps 2 capped minus uncapped,300,"gaussn:eps=2,C=1,kmax=1","gaussn:eps=2,C=1",24,-0.01089,-0.03502,0.0061,14
+cap_cost,k=1: Gaussian eps 2 capped minus uncapped,1000,"gaussn:eps=2,C=1,kmax=1","gaussn:eps=2,C=1",17,0.00323,-0.00371,0.00839,14
+cap_cost,k=1: Gaussian eps 4 capped minus uncapped,100,"gaussn:eps=4,C=1,kmax=1","gaussn:eps=4,C=1",27,0.00426,0.00045,0.00853,16
+cap_cost,k=1: Gaussian eps 4 capped minus uncapped,300,"gaussn:eps=4,C=1,kmax=1","gaussn:eps=4,C=1",24,-0.01246,-0.03829,0.00575,12
+cap_cost,k=1: Gaussian eps 4 capped minus uncapped,1000,"gaussn:eps=4,C=1,kmax=1","gaussn:eps=4,C=1",17,-0.00098,-0.00892,0.00423,11
+cap_cost,k=1: Gaussian eps 8 capped minus uncapped,100,"gaussn:eps=8,C=1,kmax=1","gaussn:eps=8,C=1",27,0.00457,4e-05,0.00932,17
+cap_cost,k=1: Gaussian eps 8 capped minus uncapped,300,"gaussn:eps=8,C=1,kmax=1","gaussn:eps=8,C=1",24,-0.0156,-0.04918,0.00674,17
+cap_cost,k=1: Gaussian eps 8 capped minus uncapped,1000,"gaussn:eps=8,C=1,kmax=1","gaussn:eps=8,C=1",17,-0.00314,-0.01025,0.00117,11
+cap_cost,k=5: Gaussian eps 4 capped minus uncapped,100,"gaussn:eps=4,C=1,kmax=5","gaussn:eps=4,C=1",27,0.00148,-0.0015,0.00485,13
+cap_cost,k=5: Gaussian eps 4 capped minus uncapped,300,"gaussn:eps=4,C=1,kmax=5","gaussn:eps=4,C=1",24,-0.00254,-0.00755,0.00245,8
+cap_cost,k=5: Gaussian eps 4 capped minus uncapped,1000,"gaussn:eps=4,C=1,kmax=5","gaussn:eps=4,C=1",17,0.00016,-0.00172,0.00177,10
+cap_cost,k=5: Gaussian eps 8 capped minus uncapped,100,"gaussn:eps=8,C=1,kmax=5","gaussn:eps=8,C=1",27,0.00245,-0.00108,0.00624,16
+cap_cost,k=5: Gaussian eps 8 capped minus uncapped,300,"gaussn:eps=8,C=1,kmax=5","gaussn:eps=8,C=1",24,-0.00512,-0.01976,0.00397,12
+cap_cost,k=5: Gaussian eps 8 capped minus uncapped,1000,"gaussn:eps=8,C=1,kmax=5","gaussn:eps=8,C=1",17,0.0001,-0.0011,0.0012,8
+cap_cost,k=10: Gaussian eps 4 capped minus uncapped,100,"gaussn:eps=4,C=1,kmax=10","gaussn:eps=4,C=1",27,0.00169,-0.0004,0.00402,15
+cap_cost,k=10: Gaussian eps 4 capped minus uncapped,300,"gaussn:eps=4,C=1,kmax=10","gaussn:eps=4,C=1",24,-0.00038,-0.00316,0.00242,11
+cap_cost,k=10: Gaussian eps 4 capped minus uncapped,1000,"gaussn:eps=4,C=1,kmax=10","gaussn:eps=4,C=1",17,-0.00105,-0.00273,0.00027,8
+cap_cost,k=10: Gaussian eps 8 capped minus uncapped,100,"gaussn:eps=8,C=1,kmax=10","gaussn:eps=8,C=1",27,0.00223,-6e-05,0.00449,18
+cap_cost,k=10: Gaussian eps 8 capped minus uncapped,300,"gaussn:eps=8,C=1,kmax=10","gaussn:eps=8,C=1",24,-0.00033,-0.00838,0.00511,13
+cap_cost,k=10: Gaussian eps 8 capped minus uncapped,1000,"gaussn:eps=8,C=1,kmax=10","gaussn:eps=8,C=1",17,4e-05,-0.00042,0.00048,9
+cap_cost,k=1: Laplace eps 2 capped minus uncapped,100,"lapn:eps=2,C=1,kmax=1","lapn:eps=2,C=1",27,0.01093,0.00132,0.02381,19
+cap_cost,k=1: Laplace eps 2 capped minus uncapped,300,"lapn:eps=2,C=1,kmax=1","lapn:eps=2,C=1",24,-0.00229,-0.02648,0.0183,16
+cap_cost,k=1: Laplace eps 2 capped minus uncapped,1000,"lapn:eps=2,C=1,kmax=1","lapn:eps=2,C=1",17,-0.00229,-0.01062,0.00283,12
+cap_cost,k=1: Laplace eps 4 capped minus uncapped,100,"lapn:eps=4,C=1,kmax=1","lapn:eps=4,C=1",27,0.0101,0.00285,0.02035,22
+cap_cost,k=1: Laplace eps 4 capped minus uncapped,300,"lapn:eps=4,C=1,kmax=1","lapn:eps=4,C=1",24,-0.00938,-0.03713,0.01437,13
+cap_cost,k=1: Laplace eps 4 capped minus uncapped,1000,"lapn:eps=4,C=1,kmax=1","lapn:eps=4,C=1",17,-0.00402,-0.01194,0.00063,9
+cap_cost,k=1: Laplace eps 8 capped minus uncapped,100,"lapn:eps=8,C=1,kmax=1","lapn:eps=8,C=1",27,0.00352,-0.00436,0.01486,13
+cap_cost,k=1: Laplace eps 8 capped minus uncapped,300,"lapn:eps=8,C=1,kmax=1","lapn:eps=8,C=1",24,-0.01114,-0.0413,0.01352,12
+cap_cost,k=1: Laplace eps 8 capped minus uncapped,1000,"lapn:eps=8,C=1,kmax=1","lapn:eps=8,C=1",17,-0.00439,-0.0124,0.00027,9
+cap_cost,k=5: Laplace eps 2 capped minus uncapped,100,"lapn:eps=2,C=1,kmax=5","lapn:eps=2,C=1",27,0.00087,-0.00251,0.00458,16
+cap_cost,k=5: Laplace eps 2 capped minus uncapped,300,"lapn:eps=2,C=1,kmax=5","lapn:eps=2,C=1",24,0.00566,5e-05,0.01397,15
+cap_cost,k=5: Laplace eps 2 capped minus uncapped,1000,"lapn:eps=2,C=1,kmax=5","lapn:eps=2,C=1",17,0.00098,-0.00016,0.00218,10
+cap_cost,k=5: Laplace eps 4 capped minus uncapped,100,"lapn:eps=4,C=1,kmax=5","lapn:eps=4,C=1",27,0.00362,-0.00082,0.00851,14
+cap_cost,k=5: Laplace eps 4 capped minus uncapped,300,"lapn:eps=4,C=1,kmax=5","lapn:eps=4,C=1",24,-0.00093,-0.01213,0.00967,7
+cap_cost,k=5: Laplace eps 4 capped minus uncapped,1000,"lapn:eps=4,C=1,kmax=5","lapn:eps=4,C=1",17,0.00039,-0.00036,0.00115,11
+cap_cost_noise_free,"k=1: Gaussian unit signal, capped minus uncapped (eps 1e6)",100,"gaussn:eps=1000000,C=1,kmax=1","gaussn:eps=1000000,C=1",27,-0.00798,-0.02419,0.00281,13
+cap_cost_noise_free,"k=1: Gaussian unit signal, capped minus uncapped (eps 1e6)",300,"gaussn:eps=1000000,C=1,kmax=1","gaussn:eps=1000000,C=1",24,-0.01904,-0.0517,0.00233,12
+cap_cost_noise_free,"k=1: Gaussian unit signal, capped minus uncapped (eps 1e6)",1000,"gaussn:eps=1000000,C=1,kmax=1","gaussn:eps=1000000,C=1",17,-0.00401,-0.01113,8e-05,8
+cap_cost_noise_free,"k=1: Laplace unit signal, capped minus uncapped (eps 1e6)",100,"lapn:eps=1000000,C=1,kmax=1","lapn:eps=1000000,C=1",27,0.00021,-0.01178,0.0134,13
+cap_cost_noise_free,"k=1: Laplace unit signal, capped minus uncapped (eps 1e6)",300,"lapn:eps=1000000,C=1,kmax=1","lapn:eps=1000000,C=1",24,-0.01097,-0.04133,0.01388,12
+cap_cost_noise_free,"k=1: Laplace unit signal, capped minus uncapped (eps 1e6)",1000,"lapn:eps=1000000,C=1,kmax=1","lapn:eps=1000000,C=1",17,-0.00464,-0.0127,2e-05,7
+cap_cost_noise_free,"k=5: Gaussian unit signal, capped minus uncapped (eps 1e6)",100,"gaussn:eps=1000000,C=1,kmax=5","gaussn:eps=1000000,C=1",27,-0.00195,-0.00639,0.00074,12
+cap_cost_noise_free,"k=5: Gaussian unit signal, capped minus uncapped (eps 1e6)",300,"gaussn:eps=1000000,C=1,kmax=5","gaussn:eps=1000000,C=1",24,-0.00821,-0.02671,0.00248,10
+cap_cost_noise_free,"k=5: Gaussian unit signal, capped minus uncapped (eps 1e6)",1000,"gaussn:eps=1000000,C=1,kmax=5","gaussn:eps=1000000,C=1",17,0.00022,-0.00033,0.0008,9
+cap_cost_noise_free,"k=5: Laplace unit signal, capped minus uncapped (eps 1e6)",100,"lapn:eps=1000000,C=1,kmax=5","lapn:eps=1000000,C=1",27,-0.00031,-0.00304,0.00192,13
+cap_cost_noise_free,"k=5: Laplace unit signal, capped minus uncapped (eps 1e6)",300,"lapn:eps=1000000,C=1,kmax=5","lapn:eps=1000000,C=1",24,-0.00323,-0.01936,0.01062,10
+cap_cost_noise_free,"k=5: Laplace unit signal, capped minus uncapped (eps 1e6)",1000,"lapn:eps=1000000,C=1,kmax=5","lapn:eps=1000000,C=1",17,0.00033,-0.00028,0.00096,11
+cap_cost_noise_free,"k=10: Gaussian unit signal, capped minus uncapped (eps 1e6)",100,"gaussn:eps=1000000,C=1,kmax=10","gaussn:eps=1000000,C=1",27,-0.0003,-0.00087,9e-05,14
+cap_cost_noise_free,"k=10: Gaussian unit signal, capped minus uncapped (eps 1e6)",300,"gaussn:eps=1000000,C=1,kmax=10","gaussn:eps=1000000,C=1",24,-0.00478,-0.01554,0.00129,11
+cap_cost_noise_free,"k=10: Gaussian unit signal, capped minus uncapped (eps 1e6)",1000,"gaussn:eps=1000000,C=1,kmax=10","gaussn:eps=1000000,C=1",17,9e-05,-0.00023,0.00044,8
+cap_cost_noise_free,"k=10: Laplace unit signal, capped minus uncapped (eps 1e6)",100,"lapn:eps=1000000,C=1,kmax=10","lapn:eps=1000000,C=1",27,-0.00023,-0.00061,4e-05,11
+cap_cost_noise_free,"k=10: Laplace unit signal, capped minus uncapped (eps 1e6)",300,"lapn:eps=1000000,C=1,kmax=10","lapn:eps=1000000,C=1",24,-0.00207,-0.01042,0.00435,8
+cap_cost_noise_free,"k=10: Laplace unit signal, capped minus uncapped (eps 1e6)",1000,"lapn:eps=1000000,C=1,kmax=10","lapn:eps=1000000,C=1",17,0.00012,-0.00029,0.0006,8
+l1_bound,"C=2 minus C=1, Laplace eps 4 (noise scale C / eps)",100,"lapn:eps=4,C=2","lapn:eps=4,C=1",27,-0.08812,-0.10817,-0.06827,1
+l1_bound,"C=2 minus C=1, Laplace eps 4 (noise scale C / eps)",300,"lapn:eps=4,C=2","lapn:eps=4,C=1",24,-0.08774,-0.11227,-0.06285,2
+l1_bound,"C=2 minus C=1, Laplace eps 4 (noise scale C / eps)",1000,"lapn:eps=4,C=2","lapn:eps=4,C=1",17,-0.02028,-0.03269,-0.00885,3
+l1_bound_noise_free,"C=2 minus C=1, signal only (eps 1e6)",100,"lapn:eps=1000000,C=2","lapn:eps=1000000,C=1",27,0.01872,0.01472,0.02388,27
+l1_bound_noise_free,"C=2 minus C=1, signal only (eps 1e6)",300,"lapn:eps=1000000,C=2","lapn:eps=1000000,C=1",24,0.01409,0.01065,0.01838,24
+l1_bound_noise_free,"C=2 minus C=1, signal only (eps 1e6)",1000,"lapn:eps=1000000,C=2","lapn:eps=1000000,C=1",17,0.00899,0.00705,0.0109,17
+l1_bound_vs_gaussian,Laplace eps 4 with C=2 minus Gaussian eps 4 unit length,100,"lapn:eps=4,C=2","gaussn:eps=4,C=1",27,0.06239,0.04265,0.08043,26
+l1_bound_vs_gaussian,Laplace eps 4 with C=2 minus Gaussian eps 4 unit length,300,"lapn:eps=4,C=2","gaussn:eps=4,C=1",24,0.09632,0.06926,0.12037,23
+l1_bound_vs_gaussian,Laplace eps 4 with C=2 minus Gaussian eps 4 unit length,1000,"lapn:eps=4,C=2","gaussn:eps=4,C=1",17,0.04698,0.0307,0.06339,16
+l1_bound,"C=4 minus C=1, Laplace eps 4 (noise scale C / eps)",100,"lapn:eps=4,C=4","lapn:eps=4,C=1",27,-0.16723,-0.20116,-0.13162,1
+l1_bound,"C=4 minus C=1, Laplace eps 4 (noise scale C / eps)",300,"lapn:eps=4,C=4","lapn:eps=4,C=1",24,-0.214,-0.26435,-0.16044,1
+l1_bound,"C=4 minus C=1, Laplace eps 4 (noise scale C / eps)",1000,"lapn:eps=4,C=4","lapn:eps=4,C=1",17,-0.09467,-0.13152,-0.05896,3
+l1_bound_noise_free,"C=4 minus C=1, signal only (eps 1e6)",100,"lapn:eps=1000000,C=4","lapn:eps=1000000,C=1",27,0.02759,0.02081,0.03644,27
+l1_bound_noise_free,"C=4 minus C=1, signal only (eps 1e6)",300,"lapn:eps=1000000,C=4","lapn:eps=1000000,C=1",24,0.02122,0.01452,0.03018,24
+l1_bound_noise_free,"C=4 minus C=1, signal only (eps 1e6)",1000,"lapn:eps=1000000,C=4","lapn:eps=1000000,C=1",17,0.01281,0.00979,0.01587,17
+l1_bound_vs_gaussian,Laplace eps 4 with C=4 minus Gaussian eps 4 unit length,100,"lapn:eps=4,C=4","gaussn:eps=4,C=1",27,-0.01672,-0.02629,-0.00871,3
+l1_bound_vs_gaussian,Laplace eps 4 with C=4 minus Gaussian eps 4 unit length,300,"lapn:eps=4,C=4","gaussn:eps=4,C=1",24,-0.02994,-0.03863,-0.02166,2
+l1_bound_vs_gaussian,Laplace eps 4 with C=4 minus Gaussian eps 4 unit length,1000,"lapn:eps=4,C=4","gaussn:eps=4,C=1",17,-0.02741,-0.03831,-0.01741,2

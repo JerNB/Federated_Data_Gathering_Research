@@ -27,4 +27,5 @@ Start with the **start-here** page in your language. Everything else is numbered
 | 19 | [`19_volunteer_weights_en.md`](19_volunteer_weights_en.md) | [`19_volunteer_weights_zh.md`](19_volunteer_weights_zh.md) |
 | 20 | [`20_pooled_audit_pilot_en.md`](20_pooled_audit_pilot_en.md) | [`20_pooled_audit_pilot_zh.md`](20_pooled_audit_pilot_zh.md) |
 | 21 | [`21_agenda_laplace_bad_rounds_en.md`](21_agenda_laplace_bad_rounds_en.md) | [`21_agenda_laplace_bad_rounds_zh.md`](21_agenda_laplace_bad_rounds_zh.md) |
+| 22 | [`22_lifetime_cap_en.md`](22_lifetime_cap_en.md) | [`22_lifetime_cap_zh.md`](22_lifetime_cap_zh.md) |
 | 90 | [`90_materials_ledger_en.md`](90_materials_ledger_en.md) | [`90_materials_ledger_zh.md`](90_materials_ledger_zh.md) |
