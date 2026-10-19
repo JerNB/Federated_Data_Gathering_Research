@@ -3,6 +3,9 @@
 Start with the **start-here** page in your language. Everything else is numbered in reading order.
 先读你的语言的"从这里开始"。其余文件按阅读顺序编号。
 
+Reviewing from outside? Go straight to doc 23, the review package: ten hypotheses, their data links, spot checks and known weaknesses.
+从外部评审？直接看文档 23 评审包：十个假设、数据链接、抽查数字和已知弱点。
+
 | Order | English | 中文 |
 | ---: | --- | --- |
 | 0 | [`00_start_here_en.md`](00_start_here_en.md) | [`00_start_here_zh.md`](00_start_here_zh.md) |
@@ -28,4 +31,5 @@ Start with the **start-here** page in your language. Everything else is numbered
 | 20 | [`20_pooled_audit_pilot_en.md`](20_pooled_audit_pilot_en.md) | [`20_pooled_audit_pilot_zh.md`](20_pooled_audit_pilot_zh.md) |
 | 21 | [`21_agenda_laplace_bad_rounds_en.md`](21_agenda_laplace_bad_rounds_en.md) | [`21_agenda_laplace_bad_rounds_zh.md`](21_agenda_laplace_bad_rounds_zh.md) |
 | 22 | [`22_lifetime_cap_en.md`](22_lifetime_cap_en.md) | [`22_lifetime_cap_zh.md`](22_lifetime_cap_zh.md) |
+| 23 | [`23_review_package_en.md`](23_review_package_en.md) | [`23_review_package_zh.md`](23_review_package_zh.md) |
 | 90 | [`90_materials_ledger_en.md`](90_materials_ledger_en.md) | [`90_materials_ledger_zh.md`](90_materials_ledger_zh.md) |
